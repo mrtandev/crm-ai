@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หน้าหลัก | คู่มือ CRM AI Bootcamp 5 ชั่วโมง</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+        .gradient-text { background-image: linear-gradient(90deg, #4F46E5, #3B82F6, #10B981); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800; }
+        .header-bg { background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%); }
+        .card-link { transition: all 0.3s ease-in-out; }
+        .card-link:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <!-- Header Section -->
+    <header class="header-bg text-white p-6 sm:p-8 rounded-xl shadow-lg mb-8">
+        <div class="flex items-center space-x-4">
+            <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                 alt="อ.แทน โปรไฟล์" 
+                 onerror="this.onerror=null; this.src='https://placehold.co/80x80/2563eb/ffffff?text=อ.แทน';"
+                 class="w-16 h-16 rounded-full border-4 border-white object-cover shadow-md">
+            <div>
+                <h1 class="text-xl sm:text-2xl font-bold">อ.แทน [ธีรชัย โฉมทัพ]</h1>
+                <p class="text-sm opacity-90">คู่มือปฏิบัติการ: CRM AI Automation สำหรับ SMEs</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto">
+        
+        <!-- Main Title -->
+        <h2 class="text-3xl sm:text-4xl mb-6">
+            <span class="gradient-text">แผนการเรียนรู้เร่งรัด: CRM AI Bootcamp 5 ชั่วโมง</span>
+        </h2>
+        <p class="text-gray-600 mb-10 text-lg">
+            หลักสูตรนี้มุ่งเน้นการลงมือปฏิบัติจริง เพื่อสร้าง **ระบบ AI Automation** ด้วยเครื่องมือหลัก 3 ตัว (n8n, Gemini Pro, GitHub) ภายใน **5 ชั่วโมง**
+        </p>
+
+        <!-- Tool Summary -->
+        <div class="bg-indigo-50 p-6 rounded-xl shadow-inner mb-10 border-l-4 border-indigo-500">
+            <h3 class="text-xl font-bold text-indigo-700 mb-3"><i class="fas fa-hand-holding-usd mr-2"></i> สรุปเครื่องมือหลัก ($870/ปี)</h3>
+            <ul class="list-disc list-inside text-gray-700 ml-4 space-y-1">
+                <li>**n8n Pro:** $510/ปี (Automation Core)</li>
+                <li>**Gemini AI Pro:** $360/ปี (AI Power & Coding Support)</li>
+                <li>**GitHub:** Free Plan (Version Control)</li>
+            </ul>
+        </div>
+
+        <!-- 5-Day Roadmap Cards -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
+
+            <!-- Hour 1 -->
+            <a href="crmai-d1.html" class="card-link block bg-white p-6 rounded-xl shadow-md border-t-4 border-pink-500 hover:border-pink-700">
+                <h4 class="text-lg font-bold text-pink-700 mb-2 flex items-center"><i class="fas fa-hourglass-start mr-2"></i> ชั่วโมงที่ 1</h4>
+                <p class="font-semibold text-gray-800">การเตรียมโครงสร้างพื้นฐาน</p>
+                <p class="text-sm text-gray-500 mt-2">ติดตั้ง n8n, GitHub, และ Gemini API พร้อมใช้งาน</p>
+            </a>
+
+            <!-- Hour 2-3 -->
+            <a href="crmai-d2-3.html" class="card-link block bg-white p-6 rounded-xl shadow-md border-t-4 border-orange-500 hover:border-orange-700">
+                <h4 class="text-lg font-bold text-orange-700 mb-2 flex items-center"><i class="fas fa-funnel-dollar mr-2"></i> ชั่วโมงที่ 2-3</h4>
+                <p class="font-semibold text-gray-800">สร้างระบบ Lead Generation & AI Scoring</p>
+                <p class="text-sm text-gray-500 mt-2">รับข้อมูลลูกค้า, ใช้ AI วิเคราะห์คุณภาพ Lead, บันทึกผล</p>
+            </a>
+
+            <!-- Hour 4 -->
+            <a href="crmai-d4.html" class="card-link block bg-white p-6 rounded-xl shadow-md border-t-4 border-cyan-500 hover:border-cyan-700">
+                <h4 class="text-lg font-bold text-cyan-700 mb-2 flex items-center"><i class="fas fa-file-contract mr-2"></i> ชั่วโมงที่ 4</h4>
+                <p class="font-semibold text-gray-800">Sales & Document Automation</p>
+                <p class="text-sm text-gray-500 mt-2">Workflow ร่างใบเสนอราคา/สัญญาด้วย Gemini และส่งออก</p>
+            </a>
+
+            <!-- Hour 5 -->
+            <a href="crmai-d5.html" class="card-link block bg-white p-6 rounded-xl shadow-md border-t-4 border-purple-500 hover:border-purple-700">
+                <h4 class="text-lg font-bold text-purple-700 mb-2 flex items-center"><i class="fas fa-rocket mr-2"></i> ชั่วโมงที่ 5</h4>
+                <p class="font-semibold text-gray-800">Testing, Debugging & Scale</p>
+                <p class="text-sm text-gray-500 mt-2">ทดสอบระบบ, แก้ไขข้อผิดพลาด, วางแผนอัปเกรด Copilot</p>
+            </a>
+            
+            <!-- Link to Full Manual -->
+            <a href="crmai-index.html" class="card-link block bg-gray-200 p-6 rounded-xl shadow-md border-t-4 border-gray-400 hover:border-gray-600 lg:col-span-1">
+                <h4 class="text-lg font-bold text-gray-700 mb-2 flex items-center"><i class="fas fa-book-open mr-2"></i> คู่มือหลัก</h4>
+                <p class="font-semibold text-gray-800">เอกสารนี้</p>
+                <p class="text-sm text-gray-500 mt-2">กลับสู่หน้าสารบัญหลัก</p>
+            </a>
+
+        </div>
+
+    </main>
+
+    <footer class="mt-12 text-center text-gray-500 text-sm p-4">
+        &copy; 2568 MrTan: ผู้ช่วยระดมสมอง - คู่มือนี้สร้างขึ้นเพื่อเป็นแนวทางปฏิบัติและสามารถนำไปต่อยอดได้
+    </footer>
+</body>
+</html>

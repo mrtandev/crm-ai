@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ชั่วโมงที่ 4 | Sales Automation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+        .gradient-text { background-image: linear-gradient(90deg, #4F46E5, #3B82F6, #10B981); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800; }
+        .header-bg { background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%); }
+        .step-card { background-color: white; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); padding: 1.5rem; margin-bottom: 1.5rem; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <header class="header-bg text-white p-6 sm:p-8 rounded-xl shadow-lg mb-8">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                     alt="อ.แทน โปรไฟล์" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/80x80/2563eb/ffffff?text=อ.แทน';"
+                     class="w-16 h-16 rounded-full border-4 border-white object-cover shadow-md">
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold">อ.แทน [ธีรชัย โฉมทัพ]</h1>
+                    <p class="text-sm opacity-90">คู่มือปฏิบัติการ: CRM AI Automation สำหรับ SMEs</p>
+                </div>
+            </div>
+             <a href="crmai-index.html" class="bg-white text-indigo-600 font-semibold py-2 px-4 rounded-full shadow-md hover:bg-gray-100 transition"><i class="fas fa-home mr-2"></i> สารบัญหลัก</a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto">
+        
+        <h2 class="text-4xl font-extrabold text-cyan-600 mb-4 flex items-center">
+            <i class="fas fa-file-contract mr-3"></i> ชั่วโมงที่ 4: Sales & Document Automation (1 ชั่วโมง)
+        </h2>
+        <p class="text-gray-600 text-lg mb-8">
+            ชั่วโมงนี้เราจะเปลี่ยน **Lead คุณภาพสูง** ให้กลายเป็นการปิดการขาย โดยใช้ AI ร่างเอกสารและส่งต่อให้ลูกค้าโดยอัตโนมัติ เพื่อเพิ่ม **ST (Save Time)** ให้กับทีมเซลส์
+        </p>
+
+        <!-- Step 4.1 Filter Hot Lead -->
+        <div class="step-card border-l-4 border-cyan-500">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">4.1 กรอง Lead คุณภาพสูง (Hot Lead) (15 นาที)</h3>
+            <p class="mb-4 text-gray-600">เราจะใช้คะแนน `is_hot` ที่ได้จาก Gemini Pro ในชั่วโมงที่ 2-3 มาเป็นเงื่อนไขในการทำงานต่อ</p>
+
+            <h4 class="font-bold text-lg text-cyan-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
+            <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
+                <li>เพิ่ม Node ชื่อ **"IF"** ต่อจาก Node ที่บันทึก Google Sheets (จากชั่วโมงที่ 2-3)</li>
+                <li>ตั้งค่าเงื่อนไข: **If** `is_hot` **is equal to** `true` ให้ทำงานใน Branch True (Hot Lead)</li>
+                <li>Branch False (Cold Lead) อาจส่งไป Workflow ติดตามผลอัตโนมัติ (Assignment: ลองทำเอง)</li>
+            </ol>
+             <!-- Mock Screenshot 4.1 -->
+            <div style="background-color: #e0f7fa; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #00bcd4;">
+                <h4 style="font-weight: bold; font-size: 1.25rem; color: #00838f; margin-bottom: 10px;"><i class="fas fa-filter" style="margin-right: 8px;"></i> หน้าจอจำลอง: IF Node (Filtering)</h4>
+                <div style="border: 1px solid #ccc; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px; text-align: center;">
+                    <p style="font-weight: bold;">Condition:</p>
+                    <p style="font-family: monospace; font-size: 0.9rem; background-color: #f0f0f0; padding: 5px; border-radius: 4px;">{{ $json.is_hot }} == true</p>
+                    <div style="display: flex; justify-content: space-around; margin-top: 10px;">
+                        <span style="color: #10b981; font-weight: bold;">✅ Branch True (Hot Lead)</span>
+                        <span style="color: #ef4444; font-weight: bold;">❌ Branch False (Cold Lead)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4.2 Generate Quotation -->
+        <div class="step-card border-l-4 border-orange-500">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">4.2 ใช้ Gemini Pro ร่างใบเสนอราคาเบื้องต้น (25 นาที)</h3>
+            <p class="mb-4 text-gray-600">เราจะส่งข้อมูล Lead คุณภาพสูงกลับไปให้ AI เพื่อร่างเอกสารที่ปรับเนื้อหาให้เข้ากับลูกค้าแต่ละรายทันที</p>
+
+            <h4 class="font-bold text-lg text-orange-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
+            <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
+                <li>เพิ่ม Node **"Google Gemini"** ต่อจาก Branch True ของ IF Node</li>
+                <li>สร้าง **Prompt** สำหรับร่างใบเสนอราคา โดยอ้างอิงข้อมูลลูกค้าจาก Webhook</li>
+            </ol>
+             <!-- Mock Screenshot 4.2 -->
+            <div style="background-color: #fef3c7; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #fbbf24;">
+                <h4 style="font-weight: bold; font-size: 1.25rem; color: #92400e; margin-bottom: 10px;"><i class="fas fa-pen-fancy" style="margin-right: 8px;"></i> หน้าจอจำลอง: Prompt ร่างใบเสนอราคา</h4>
+                <div style="border: 1px solid #fde68a; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px;">
+                    <p style="font-weight: bold;">Prompt (สั่งให้ AI เป็นนักเขียน):</p>
+                    <pre style="background-color: #f9f9f9; padding: 8px; border-radius: 4px; font-size: 0.8rem; overflow-x: auto; white-space: pre-wrap;">Act as a professional Sales Manager. Draft a preliminary quotation for {{ $json.name }}'s need for "{{ $json.interest }}". Include a suggested price range (e.g., 80,000 - 120,000 THB) and 3 key benefits. Write in formal Thai.</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4.3 Email Automation -->
+        <div class="step-card border-l-4 border-pink-500">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">4.3 ส่งใบเสนอราคาทางอีเมล (20 นาที)</h3>
+            <p class="mb-4 text-gray-600">เราจะใช้ Node สำหรับส่งอีเมลเพื่อส่งเนื้อหาที่ Gemini ร่างไว้ไปยังลูกค้าโดยอัตโนมัติ</p>
+
+            <h4 class="font-bold text-lg text-pink-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
+            <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
+                <li>เพิ่ม Node ชื่อ **"Gmail"** หรือ **"Send Email"** อื่นๆ (เช่น Outlook, SendGrid)</li>
+                <li>ตั้งค่า **Recipient** เป็นอีเมลของลูกค้า (`{{ $json.email }}`)</li>
+                <li>นำข้อความที่ได้จาก Gemini มาใส่ในช่อง **Body** ของอีเมล</li>
+                <li>(Assignment) เพิ่ม Node **"Google Drive"** เพื่อบันทึกไฟล์ PDF/เอกสารที่สร้างขึ้น</li>
+            </ol>
+             <!-- Mock Screenshot 4.3 -->
+            <div style="background-color: #ffe4e6; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #f43f5e;">
+                <h4 style="font-weight: bold; font-size: 1.25rem; color: #be185d; margin-bottom: 10px;"><i class="fas fa-envelope" style="margin-right: 8px;"></i> หน้าจอจำลอง: Gmail Node (Send Email)</h4>
+                <div style="border: 1px solid #fecaca; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px;">
+                    <p style="font-weight: bold;">To:</p>
+                    <p style="font-family: monospace; font-size: 0.9rem; background-color: #f0f0f0; padding: 5px; border-radius: 4px;">{{ $json.email }}</p>
+                    <p style="font-weight: bold; margin-top: 10px;">Subject:</p>
+                    <p style="font-size: 0.9rem; color: #374151;">ใบเสนอราคาเบื้องต้นสำหรับคุณ {{ $json.name }}</p>
+                    <p style="font-weight: bold; margin-top: 10px;">Body:</p>
+                    <p style="font-family: monospace; font-size: 0.8rem; background-color: #f0f0f0; padding: 5px; border-radius: 4px;">{{ $json.gemini_output.text }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation/Summary -->
+        <div class="mt-10 p-6 bg-cyan-100 rounded-xl border-t-4 border-cyan-500">
+             <h4 class="text-2xl font-bold text-cyan-700 mb-4 flex items-center"><i class="fas fa-check-circle mr-2"></i> สรุปท้ายชั่วโมงที่ 4: การปิดการขายอัตโนมัติเสร็จสมบูรณ์!</h4>
+             <p class="text-lg text-gray-700">คุณได้สร้าง Workflow ที่จัดการ Lead, กรองคุณภาพ, ร่างใบเสนอราคา, และส่งอีเมลออกไปหาลูกค้าโดยไม่ต้องมีคนเข้ามาแทรกแซง</p>
+             <a href="crmai-d5.html" class="mt-4 inline-flex items-center bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                ไปต่อ: ชั่วโมงที่ 5 (Testing & Scale) <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+
+        <div class="flex justify-between mt-8">
+            <a href="crmai-d2-3.html" class="inline-flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-full transition"><i class="fas fa-arrow-left mr-2"></i> ย้อนกลับ: ชั่วโมงที่ 2-3</a>
+        </div>
+
+    </main>
+</body>
+</html>

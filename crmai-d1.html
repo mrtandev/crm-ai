@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ชั่วโมงที่ 1 | โครงสร้างพื้นฐาน</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+        .gradient-text { background-image: linear-gradient(90deg, #4F46E5, #3B82F6, #10B981); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800; }
+        .header-bg { background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%); }
+        .step-card { background-color: white; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); padding: 1.5rem; margin-bottom: 1.5rem; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <header class="header-bg text-white p-6 sm:p-8 rounded-xl shadow-lg mb-8">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                     alt="อ.แทน โปรไฟล์" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/80x80/2563eb/ffffff?text=อ.แทน';"
+                     class="w-16 h-16 rounded-full border-4 border-white object-cover shadow-md">
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold">อ.แทน [ธีรชัย โฉมทัพ]</h1>
+                    <p class="text-sm opacity-90">คู่มือปฏิบัติการ: CRM AI Automation สำหรับ SMEs</p>
+                </div>
+            </div>
+             <a href="crmai-index.html" class="bg-white text-indigo-600 font-semibold py-2 px-4 rounded-full shadow-md hover:bg-gray-100 transition"><i class="fas fa-home mr-2"></i> สารบัญหลัก</a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto">
+        
+        <h2 class="text-4xl font-extrabold text-indigo-600 mb-4 flex items-center">
+            <i class="fas fa-cogs mr-3"></i> ชั่วโมงที่ 1: การเตรียมโครงสร้างพื้นฐาน (1 ชั่วโมง)
+        </h2>
+        <p class="text-gray-600 text-lg mb-8">
+            ชั่วโมงแรกคือการสร้างรากฐานของโปรเจกต์ CRM AI โดยการติดตั้งเครื่องมือหลัก 3 ตัว ได้แก่ n8n, GitHub และ Gemini API
+        </p>
+
+        <!-- Step 1.1 n8n Setup -->
+        <div class="step-card border-l-4 border-indigo-500">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">1.1 สมัคร n8n Pro และติดตั้งเบื้องต้น (20 นาที)</h3>
+            <p class="mb-4 text-gray-600">n8n คือ **"ท่อประปาอัจฉริยะ"** ที่จะเชื่อม AI และระบบทั้งหมดเข้าด้วยกัน การเลือกแผน Pro ให้ความยืดหยุ่นที่เราต้องการ</p>
+
+            <h4 class="font-bold text-lg text-indigo-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
+            <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
+                <li>ไปที่ Pricing ของ n8n และเลือกแผน **Pro** เพื่อให้ได้ Executions 10,000 ครั้ง/เดือน</li>
+                <li>เลือกชำระแบบ **Annual** เพื่อรับส่วนลด **20%** (ประหยัดได้จาก €50/เดือน เหลือประมาณ €40/เดือน หรือประมาณ $510 ต่อปี)</li>
+                <li>ดำเนินการชำระเงินและตั้งค่าบัญชี Cloud Hosting ของ n8n</li>
+            </ol>
+
+            <!-- Mock Screenshot 1.1 -->
+            <div style="background-color: #e0f7fa; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #3b82f6;">
+                <h4 style="font-weight: bold; font-size: 1.25rem; color: #1e40af; margin-bottom: 10px;"><i class="fas fa-sitemap" style="margin-right: 8px;"></i> หน้าจอจำลอง: การเลือกแผน n8n Pro</h4>
+                <div style="border: 1px solid #ccc; border-radius: 8px; overflow: hidden;">
+                    <div style="display: flex; font-size: 0.875rem;">
+                        <div style="width: 33%; padding: 10px; text-align: center; border-right: 1px solid #eee; background-color: #f8f8f8;">
+                            <p style="font-weight: bold;">Starter</p>
+                            <p style="font-size: 1.5rem; font-weight: bold; color: #3b82f6;">€20 / month</p>
+                            <p style="font-size: 0.75rem; color: #6b7280;">2.5K Executions</p>
+                        </div>
+                        <div style="width: 33%; padding: 10px; text-align: center; border-right: 1px solid #eee; background-color: #e0f0ff;">
+                            <p style="font-weight: bold; color: #1e40af;">⭐ Pro (Recommended)</p>
+                            <p style="font-size: 1.5rem; font-weight: bold; color: #1e40af;">€50 / month</p>
+                            <p style="font-size: 0.75rem; color: #1e40af;">10K Executions, Global Variables</p>
+                        </div>
+                        <div style="width: 33%; padding: 10px; text-align: center; background-color: #f8f8f8;">
+                            <p style="font-weight: bold;">Enterprise</p>
+                            <p style="font-size: 1.5rem; font-weight: bold;">Custom</p>
+                            <p style="font-size: 0.75rem; color: #6b7280;">Unlimited, SSO, Git Control</p>
+                        </div>
+                    </div>
+                    <p style="background-color: #fffbeb; padding: 8px; font-size: 0.8rem; text-align: center; color: #92400e;">**เคล็ดลับ:** อย่าลืมเลือกชำระแบบ **Annual** เพื่อรับส่วนลด 20%</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1.2 GitHub Setup -->
+        <div class="step-card border-l-4 border-green-500">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">1.2 สร้าง GitHub Repo (Free) สำหรับโปรเจกต์ CRM (20 นาที)</h3>
+            <p class="mb-4 text-gray-600">GitHub จะเป็นที่เก็บโค้ด (ถ้ามีการใช้ Node Code ใน n8n) และใช้เป็นเครื่องมือจัดการเวอร์ชันของโปรเจกต์</p>
+
+            <h4 class="font-bold text-lg text-green-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
+            <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
+                <li>ไปที่เว็บไซต์ GitHub และสมัคร/เข้าสู่ระบบบัญชีของคุณ</li>
+                <li>สร้าง Repository ใหม่ (New Repository) ตั้งชื่อว่า `crm-ai-sme`</li>
+                <li>เลือก **Private** (เพื่อเก็บโค้ดเป็นความลับ) และเลือก License เป็น `MIT`</li>
+                <li>ทำการ Clone Repo นี้ลงในเครื่องคอมพิวเตอร์ของคุณเพื่อเตรียมทำงานต่อไป</li>
+            </ol>
+
+            <!-- Mock Screenshot 1.2 -->
+            <div style="background-color: #ecfdf5; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #10b981;">
+                <h4 style="font-weight: bold; font-size: 1.25rem; color: #065f46; margin-bottom: 10px;"><i class="fas fa-code-branch" style="margin-right: 8px;"></i> หน้าจอจำลอง: สร้าง GitHub Repository</h4>
+                <div style="border: 1px solid #ccc; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px;">
+                    <p style="font-weight: bold; margin-bottom: 5px;">Repository Name:</p>
+                    <input type="text" value="crm-ai-sme" readonly style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; background-color: #f9f9f9;">
+                    <div style="margin-top: 10px;">
+                        <input type="checkbox" id="private" checked disabled>
+                        <label for="private" style="font-weight: bold; color: #374151;"> Private</label>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 0.8rem; color: #6b7280;">*ใช้แผน Free ก็สามารถสร้าง Private Repository ได้</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1.3 Gemini API Setup -->
+        <div class="step-card border-l-4 border-yellow-500">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">1.3 เชื่อมต่อ Gemini API และทดสอบการเรียกใช้ (20 นาที)</h3>
+            <p class="mb-4 text-gray-600">เราจะตั้งค่า Gemini Pro เพื่อให้ n8n สามารถเรียกใช้พลัง AI สำหรับ Lead Scoring และ Document Generation ได้</p>
+
+            <h4 class="font-bold text-lg text-yellow-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
+            <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
+                <li>ไปที่ Google AI Studio หรือ Console เพื่อสร้าง **API Key** สำหรับ Gemini (ห้ามเปิดเผยคีย์นี้!)</li>
+                <li>ใน n8n Dashboard ให้ไปที่ **Credentials** แล้วสร้าง Credential ใหม่สำหรับ **Google Gemini**</li>
+                <li>ใส่ API Key ที่ได้มา และตั้งชื่อ Credential ว่า `Gemini Pro CRM`</li>
+                <li>**ทดสอบ Node:** สร้าง Workflow ชั่วคราว เพิ่ม Node Gemini และลอง Prompt ง่ายๆ เช่น "Summarize the benefits of AI for SMEs" เพื่อยืนยันว่าเชื่อมต่อสำเร็จ</li>
+            </ol>
+            
+            <!-- Mock Screenshot 1.3 -->
+            <div style="background-color: #fffbeb; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #fbbf24;">
+                <h4 style="font-weight: bold; font-size: 1.25rem; color: #92400e; margin-bottom: 10px;"><i class="fas fa-key" style="margin-right: 8px;"></i> หน้าจอจำลอง: การตั้งค่า Gemini API Key</h4>
+                <div style="border: 1px solid #fde68a; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px;">
+                    <p style="font-weight: bold; margin-bottom: 5px;">Credential Name (n8n):</p>
+                    <input type="text" value="Gemini Pro CRM" readonly style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; background-color: #f9f9f9;">
+                    <p style="font-weight: bold; margin-top: 10px; margin-bottom: 5px;">API Key:</p>
+                    <input type="password" value="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" readonly style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; background-color: #f9f9f9;">
+                </div>
+                <p style="margin-top: 10px; font-size: 0.875rem; color: #92400e;">**ข้อควรระวัง:** ห้ามเปิดเผย API Key นี้เด็ดขาด! ให้เก็บไว้ใน Credential Manager ของ n8n เท่านั้น</p>
+            </div>
+        </div>
+
+        <!-- Navigation/Summary -->
+        <div class="mt-10 p-6 bg-indigo-100 rounded-xl border-t-4 border-indigo-500">
+             <h4 class="text-2xl font-bold text-indigo-700 mb-4 flex items-center"><i class="fas fa-check-circle mr-2"></i> สรุปท้ายชั่วโมงที่ 1: โครงสร้างพร้อม!</h4>
+             <p class="text-lg text-gray-700">คุณได้เตรียมเครื่องมือและโครงสร้างพื้นฐานสำหรับโปรเจกต์ CRM AI สำเร็จแล้ว! เราพร้อมที่จะเริ่มสร้าง Workflow ในชั่วโมงถัดไป</p>
+             <a href="crmai-d2-3.html" class="mt-4 inline-flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                ไปต่อ: ชั่วโมงที่ 2-3 (Lead AI) <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+
+    </main>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ชั่วโมงที่ 2-3 | สร้างระบบ Lead AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+        .gradient-text { background-image: linear-gradient(90deg, #4F46E5, #3B82F6, #10B981); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800; }
+        .header-bg { background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%); }
+        .step-card { background-color: white; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); padding: 1.5rem; margin-bottom: 1.5rem; }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <header class="header-bg text-white p-6 sm:p-8 rounded-xl shadow-lg mb-8">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                     alt="อ.แทน โปรไฟล์" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/80x80/2563eb/ffffff?text=อ.แทน';"
+                     class="w-16 h-16 rounded-full border-4 border-white object-cover shadow-md">
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold">อ.แทน [ธีรชัย โฉมทัพ]</h1>
+                    <p class="text-sm opacity-90">คู่มือปฏิบัติการ: CRM AI Automation สำหรับ SMEs</p>
+                </div>
+            </div>
+             <a href="crmai-index.html" class="bg-white text-indigo-600 font-semibold py-2 px-4 rounded-full shadow-md hover:bg-gray-100 transition"><i class="fas fa-home mr-2"></i> สารบัญหลัก</a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto">
+        
+        <h2 class="text-4xl font-extrabold text-orange-600 mb-4 flex items-center">
+            <i class="fas fa-funnel-dollar mr-3"></i> ชั่วโมงที่ 2-3: สร้างระบบ Lead Generation & AI Scoring (2 ชั่วโมง)
+        </h2>
+        <p class="text-gray-600 text-lg mb-8">
+            ใน 2 ชั่วโมงนี้ เราจะเปลี่ยน n8n ให้เป็น **เครื่องวิเคราะห์คุณภาพลูกค้า** โดยใช้พลังของ Gemini Pro เพื่อคัดกรอง Lead อัตโนมัติ นี่คือหัวใจของการประหยัดเวลาเซลส์และเพิ่ม **MM (Make Money)**
+        </p>
+
+        <!-- Step 2.1 Webhook & Test Data -->
+        <div class="step-card border-l-4 border-orange-500">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">2.1 สร้าง Webhook เพื่อรับข้อมูล Lead (45 นาที)</h3>
+            <p class="mb-4 text-gray-600">Webhook คือจุดเริ่มต้นของ Workflow ทำหน้าที่รับข้อมูลลูกค้าที่กรอกมาจากแบบฟอร์ม (เช่น Google Form หรือเว็บไซต์)</p>
+
+            <h4 class="font-bold text-lg text-orange-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
+            <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
+                <li>ใน n8n Dashboard สร้าง Workflow ใหม่ แล้วเพิ่ม Node ชื่อ **"Webhook"**</li>
+                <li>ตั้งค่า **Webhook URL** และเลือก **Method** เป็น `POST`</li>
+                <li>คลิก **"Listen for Test Event"** แล้วจำลองการส่งข้อมูล Lead (ชื่อ, เบอร์โทร, ความต้องการ) เข้าไปใน URL นั้น</li>
+            </ol>
+            
+            <!-- Mock Screenshot 2.1 -->
+            <div style="background-color: #f7fee7; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #84cc16;">
+                <h4 style="font-weight: bold; font-size: 1.25rem; color: #4d7c0f; margin-bottom: 10px;"><i class="fas fa-link" style="margin-right: 8px;"></i> หน้าจอจำลอง: Webhook Node (n8n)</h4>
+                <div style="border: 1px solid #ccc; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px;">
+                    <p style="font-weight: bold;">Webhook URL:</p>
+                    <div style="background-color: #f0f0f0; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 0.9rem;">
+                        https://yourn8n.cloud/webhook/lead-form-01
+                    </div>
+                    <p style="margin-top: 10px; font-weight: bold;">Incoming Data (Test):</p>
+                    <pre style="background-color: #f9f9f9; padding: 8px; border-radius: 4px; font-size: 0.8rem; overflow-x: auto;">{ "name": "สมชาย", "interest": "ต้องการระบบ ERP, งบประมาณ 500k", "company_size": "15 คน" }</pre>
+                </div>
+                <p style="margin-top: 10px; font-size: 0.875rem; color: #4d7c0f;">**ผลลัพธ์:** Webhook จะจับข้อมูล Lead และส่งต่อไปยัง Node ถัดไป</p>
+            </div>
+        </div>
+
+        <!-- Step 2.2 Gemini Pro Scoring -->
+        <div class="step-card border-l-4 border-cyan-500">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">2.2 สร้าง Prompt และให้ Gemini Pro ทำ Lead Scoring (60 นาที)</h3>
+            <p class="mb-4 text-gray-600">เราจะใช้ **Gemini Node** เพื่อส่งข้อมูล Lead ไปให้ AI วิเคราะห์ และให้คะแนนความน่าสนใจ (Scoring)</p>
+
+            <h4 class="font-bold text-lg text-cyan-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
+            <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
+                <li>เพิ่ม Node ชื่อ **"Google Gemini"** ต่อจาก Webhook</li>
+                <li>เลือก Credential ที่สร้างไว้ในชั่วโมงที่ 1 และตั้งค่า **Model** เป็น `Gemini 2.5 Pro`</li>
+                <li>**สร้าง Prompt (คำสั่ง):** นี่คือหัวใจของ AI Scoring! เราจะสั่งให้ AI วิเคราะห์และส่งผลลัพธ์เป็นโครงสร้าง JSON</li>
+            </ol>
+            
+            <!-- Mock Screenshot 2.2 -->
+            <div style="background-color: #e0f7fa; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #00bcd4;">
+                <h4 style="font-weight: bold; font-size: 1.25rem; color: #00838f; margin-bottom: 10px;"><i class="fas fa-brain" style="margin-right: 8px;"></i> หน้าจอจำลอง: Prompt สำหรับ AI Scoring</h4>
+                <div style="border: 1px solid #ccc; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px;">
+                    <p style="font-weight: bold;">User Prompt (ในช่อง Gemini Node):</p>
+                    <pre style="background-color: #f9f9f9; padding: 8px; border-radius: 4px; font-size: 0.8rem; overflow-x: auto; white-space: pre-wrap;">Act as a Senior Sales Analyst. Analyze the following lead data: Name: {{ $json.name }}, Interest: {{ $json.interest }}, Size: {{ $json.company_size }}.
+**Output ONLY a JSON object** with the following keys:
+1. `score` (1-10, where 10 is highest quality)
+2. `reason` (concise reason for the score in Thai)
+3. `is_hot` (boolean: true if score >= 7)</pre>
+                    <p style="margin-top: 10px; font-size: 0.875rem; color: #00838f;">**เคล็ดลับ:** การกำหนดให้ AI ส่งผลลัพธ์เป็น JSON จะช่วยให้เรานำไปประมวลผลต่อใน n8n ได้ง่ายมาก</p>
+                </div>
+            </div>
+            
+            <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700" start="4">
+                <li>**ทดสอบรัน Node:** รัน Node Gemini เพื่อให้ AI ประมวลผลและดูผลลัพธ์ที่ได้ (ควรออกมาเป็น JSON)</li>
+            </ol>
+        </div>
+
+        <!-- Step 2.3 Data Storage -->
+        <div class="step-card border-l-4 border-purple-500">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">2.3 บันทึกผลการวิเคราะห์ลง Google Sheet (15 นาที)</h3>
+            <p class="mb-4 text-gray-600">เราจะเก็บข้อมูล Lead และคะแนน AI ลงใน Google Sheet ซึ่งทำหน้าที่เป็น Database ชั่วคราว</p>
+
+            <h4 class="font-bold text-lg text-purple-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
+            <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
+                <li>เพิ่ม Node ชื่อ **"Google Sheets"** ต่อจาก Node Gemini</li>
+                <li>ตั้งค่า Credential สำหรับ Google Sheet</li>
+                <li>เลือก **Operation** เป็น `Append Row`</li>
+                <li>**Map ข้อมูล:** นำข้อมูลจาก Webhook (ชื่อ, Interest) และผลลัพธ์จาก Gemini (Score, Reason, is_hot) มาใส่ในคอลัมน์ที่เกี่ยวข้องใน Sheet</li>
+            </ol>
+             <!-- Mock Screenshot 2.3 -->
+            <div style="background-color: #f3e8ff; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #a855f7;">
+                <h4 style="font-weight: bold; font-size: 1.25rem; color: #6b21a8; margin-bottom: 10px;"><i class="fas fa-table" style="margin-right: 8px;"></i> หน้าจอจำลอง: Google Sheets Node</h4>
+                <div style="border: 1px solid #ccc; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px;">
+                    <p style="font-weight: bold;">Spreadsheet:</p>
+                    <p style="margin-bottom: 10px;">Leads_CRM_AI_Database</p>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                        <thead>
+                            <tr style="background-color: #ede9fe;">
+                                <th style="border: 1px solid #dcdcdc; padding: 8px; text-align: left;">Column</th>
+                                <th style="border: 1px solid #dcdcdc; padding: 8px; text-align: left;">Value (Expression)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border: 1px solid #dcdcdc; padding: 8px;">Name</td>
+                                <td style="border: 1px solid #dcdcdc; padding: 8px;"><code style="background-color: #f0f0f0;">{{ $json.name }}</code></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #dcdcdc; padding: 8px;">AI_Score</td>
+                                <td style="border: 1px solid #dcdcdc; padding: 8px;"><code style="background-color: #f0f0f0;">{{ $json.score }}</code></td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #dcdcdc; padding: 8px;">Is_Hot</td>
+                                <td style="border: 1px solid #dcdcdc; padding: 8px;"><code style="background-color: #f0f0f0;">{{ $json.is_hot }}</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation/Summary -->
+        <div class="mt-10 p-6 bg-orange-100 rounded-xl border-t-4 border-orange-500">
+             <h4 class="text-2xl font-bold text-orange-700 mb-4 flex items-center"><i class="fas fa-check-circle mr-2"></i> สรุปท้ายชั่วโมงที่ 2-3: ระบบ Lead AI พร้อมใช้งาน!</h4>
+             <p class="text-lg text-gray-700">คุณได้สร้าง Workflow ที่รับ Lead, วิเคราะห์ด้วย AI, และจัดเก็บข้อมูลสำเร็จแล้ว ระบบนี้จะช่วยให้เซลส์ทราบว่าควรติดต่อลูกค้าคนไหนก่อน</p>
+             <a href="crmai-d4.html" class="mt-4 inline-flex items-center bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-6 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                ไปต่อ: ชั่วโมงที่ 4 (Sales Automation) <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+
+         <div class="flex justify-between mt-8">
+            <a href="crmai-d1.html" class="inline-flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-full transition"><i class="fas fa-arrow-left mr-2"></i> ย้อนกลับ: ชั่วโมงที่ 1</a>
+        </div>
+
+    </main>
+</body>
+</html>
