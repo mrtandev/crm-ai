@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หน้าหลัก | คู่มือ CRM AI Bootcamp 5 ชั่วโมง</title>
+    <title>CRM AI Bootcamp 5 ชั่วโมง | อ.แทน</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
@@ -11,13 +11,13 @@
         body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
         .gradient-text { background-image: linear-gradient(90deg, #4F46E5, #3B82F6, #10B981); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800; }
         .header-bg { background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%); }
-        .card-link { transition: all 0.3s ease-in-out; }
-        .card-link:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); }
+        .card { background-color: white; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); padding: 1.5rem; margin-bottom: 1.5rem; }
+        .step-box { background-color: #f0f4f8; border-radius: 0.75rem; padding: 1rem; text-align: center; }
+        .step-icon { color: #4F46E5; }
     </style>
 </head>
 <body class="p-4 sm:p-8">
 
-    <!-- Header Section -->
     <header class="header-bg text-white p-6 sm:p-8 rounded-xl shadow-lg mb-8">
         <div class="flex items-center space-x-4">
             <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
@@ -26,75 +26,124 @@
                  class="w-16 h-16 rounded-full border-4 border-white object-cover shadow-md">
             <div>
                 <h1 class="text-xl sm:text-2xl font-bold">อ.แทน [ธีรชัย โฉมทัพ]</h1>
-                <p class="text-sm opacity-90">คู่มือปฏิบัติการ: CRM AI Automation สำหรับ SMEs</p>
+                <p class="text-sm opacity-90">ผู้เชี่ยวชาญด้าน CRM AI Automation สำหรับ SMEs</p>
             </div>
         </div>
     </header>
 
     <main class="max-w-6xl mx-auto">
         
-        <!-- Main Title -->
-        <h2 class="text-3xl sm:text-4xl mb-6">
-            <span class="gradient-text">แผนการเรียนรู้เร่งรัด: CRM AI Bootcamp 5 ชั่วโมง</span>
-        </h2>
-        <p class="text-gray-600 mb-10 text-lg">
-            หลักสูตรนี้มุ่งเน้นการลงมือปฏิบัติจริง เพื่อสร้าง **ระบบ AI Automation** ด้วยเครื่องมือหลัก 3 ตัว (n8n, Gemini Pro, GitHub) ภายใน **5 ชั่วโมง**
-        </p>
+        <!-- START: EXECUTIVE SUMMARY SECTION (ส่วนบทสรุปสำหรับผู้บริหาร) -->
+        <div class="card bg-indigo-50 border-t-4 border-indigo-600 mb-10">
+            <h2 class="text-3xl font-extrabold text-indigo-700 mb-4 flex items-center">
+                <i class="fas fa-chart-line mr-3"></i> บทสรุปโครงการ: CRM AI Automation (5 ชั่วโมง)
+            </h2>
+            <p class="text-gray-700 mb-6">
+                โปรเจกต์นี้คือการสร้าง **ระบบ CRM อัจฉริยะแบบ Low-Code** เพื่อให้ SMEs สามารถเปลี่ยน Lead ธรรมดาให้เป็นโอกาสทางธุรกิจที่มีมูลค่าสูงได้โดยอัตโนมัติ ด้วยการผสานพลังของ **AI Scoring** และ **Workflow Automation**
+            </p>
 
-        <!-- Tool Summary -->
-        <div class="bg-indigo-50 p-6 rounded-xl shadow-inner mb-10 border-l-4 border-indigo-500">
-            <h3 class="text-xl font-bold text-indigo-700 mb-3"><i class="fas fa-hand-holding-usd mr-2"></i> สรุปเครื่องมือหลัก ($870/ปี)</h3>
-            <ul class="list-disc list-inside text-gray-700 ml-4 space-y-1">
-                <li>**n8n Pro:** $510/ปี (Automation Core)</li>
-                <li>**Gemini AI Pro:** $360/ปี (AI Power & Coding Support)</li>
-                <li>**GitHub:** Free Plan (Version Control)</li>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                
+                <!-- 1. Objectives -->
+                <div class="p-4 bg-white rounded-lg shadow-md border-b-4 border-blue-500">
+                    <i class="fas fa-bullseye text-4xl text-blue-500 mb-2"></i>
+                    <h3 class="font-bold text-xl text-gray-800">1. วัตถุประสงค์หลัก</h3>
+                    <p class="text-sm text-gray-600 mt-2">
+                        สร้างระบบ **MM (Make Money)** ที่ช่วย **ประหยัดเวลา (ST)** ทีมงานขาย ด้วยการให้ AI คัดกรองและให้คะแนน Lead คุณภาพสูงก่อนส่งต่อ
+                    </p>
+                </div>
+
+                <!-- 2. System Flow -->
+                <div class="p-4 bg-white rounded-lg shadow-md border-b-4 border-purple-500">
+                    <i class="fas fa-sitemap text-4xl text-purple-500 mb-2"></i>
+                    <h3 class="font-bold text-xl text-gray-800">2. Flow การทำงาน</h3>
+                    <p class="text-sm text-gray-600 mt-2">
+                        **Form &rarr; Webhook (n8n) &rarr; AI Scoring (Gemini Pro) &rarr; Data Storage (Google Sheet) &rarr; Document Gen & Email Send**
+                    </p>
+                </div>
+
+                <!-- 3. Key Value -->
+                <div class="p-4 bg-white rounded-lg shadow-md border-b-4 border-green-500">
+                    <i class="fas fa-star text-4xl text-green-500 mb-2"></i>
+                    <h3 class="font-bold text-xl text-gray-800">3. คุณค่าหลัก (Value)</h3>
+                    <p class="text-sm text-gray-600 mt-2">
+                        ลดงานซ้ำซ้อน **(AE)** และเพิ่มโอกาสการปิดการขาย (Conversion Rate) ด้วยการเน้นความพยายามไปที่ Lead ที่ **'Hot'** จริงๆ
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        <!-- END: EXECUTIVE SUMMARY SECTION -->
+
+        <h2 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">
+            แผนการเรียนรู้เร่งรัด: <span class="gradient-text">CRM AI Bootcamp 5 ชั่วโมง</span>
+        </h2>
+
+        <!-- Budget Summary -->
+        <div class="card mb-8 p-6 bg-green-50 border-l-4 border-green-500">
+            <h3 class="text-2xl font-bold text-green-800 mb-3 flex items-center"><i class="fas fa-coins mr-2"></i> สรุปงบประมาณเริ่มต้น (Budget Summary)</h3>
+            <p class="text-gray-700 mb-2">
+                หลักสูตรนี้ใช้เครื่องมือ AI & Automation ที่มีประสิทธิภาพสูงสุด 3 ตัวเลือกหลัก โดยมีค่าใช้จ่ายเริ่มต้นรวมทั้งสิ้น **$870 USD ต่อปี** เพื่อให้ระบบทำงานได้เต็มรูปแบบ:
+            </p>
+            <ul class="list-disc list-inside ml-4 space-y-1 text-gray-700 font-semibold">
+                <li>**n8n Pro** (Automation Core) ~ $510 USD/ปี (รวมส่วนลดจ่ายรายปี)</li>
+                <li>**Gemini AI Pro** (AI Power & Coding Support) ~ $360 USD/ปี (Google One AI Premium)</li>
+                <li>**GitHub Free Plan** (Version Control) ~ $0 USD/ปี</li>
             </ul>
         </div>
 
-        <!-- 5-Day Roadmap Cards -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
-
-            <!-- Hour 1 -->
-            <a href="crmai-d1.html" class="card-link block bg-white p-6 rounded-xl shadow-md border-t-4 border-pink-500 hover:border-pink-700">
-                <h4 class="text-lg font-bold text-pink-700 mb-2 flex items-center"><i class="fas fa-hourglass-start mr-2"></i> ชั่วโมงที่ 1</h4>
-                <p class="font-semibold text-gray-800">การเตรียมโครงสร้างพื้นฐาน</p>
-                <p class="text-sm text-gray-500 mt-2">ติดตั้ง n8n, GitHub, และ Gemini API พร้อมใช้งาน</p>
-            </a>
-
-            <!-- Hour 2-3 -->
-            <a href="crmai-d2-3.html" class="card-link block bg-white p-6 rounded-xl shadow-md border-t-4 border-orange-500 hover:border-orange-700">
-                <h4 class="text-lg font-bold text-orange-700 mb-2 flex items-center"><i class="fas fa-funnel-dollar mr-2"></i> ชั่วโมงที่ 2-3</h4>
-                <p class="font-semibold text-gray-800">สร้างระบบ Lead Generation & AI Scoring</p>
-                <p class="text-sm text-gray-500 mt-2">รับข้อมูลลูกค้า, ใช้ AI วิเคราะห์คุณภาพ Lead, บันทึกผล</p>
-            </a>
-
-            <!-- Hour 4 -->
-            <a href="crmai-d4.html" class="card-link block bg-white p-6 rounded-xl shadow-md border-t-4 border-cyan-500 hover:border-cyan-700">
-                <h4 class="text-lg font-bold text-cyan-700 mb-2 flex items-center"><i class="fas fa-file-contract mr-2"></i> ชั่วโมงที่ 4</h4>
-                <p class="font-semibold text-gray-800">Sales & Document Automation</p>
-                <p class="text-sm text-gray-500 mt-2">Workflow ร่างใบเสนอราคา/สัญญาด้วย Gemini และส่งออก</p>
-            </a>
-
-            <!-- Hour 5 -->
-            <a href="crmai-d5.html" class="card-link block bg-white p-6 rounded-xl shadow-md border-t-4 border-purple-500 hover:border-purple-700">
-                <h4 class="text-lg font-bold text-purple-700 mb-2 flex items-center"><i class="fas fa-rocket mr-2"></i> ชั่วโมงที่ 5</h4>
-                <p class="font-semibold text-gray-800">Testing, Debugging & Scale</p>
-                <p class="text-sm text-gray-500 mt-2">ทดสอบระบบ, แก้ไขข้อผิดพลาด, วางแผนอัปเกรด Copilot</p>
-            </a>
+        <!-- 5-Hour Learning Plan -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
             
-            <!-- Link to Full Manual -->
-            <a href="crmai-index.html" class="card-link block bg-gray-200 p-6 rounded-xl shadow-md border-t-4 border-gray-400 hover:border-gray-600 lg:col-span-1">
-                <h4 class="text-lg font-bold text-gray-700 mb-2 flex items-center"><i class="fas fa-book-open mr-2"></i> คู่มือหลัก</h4>
-                <p class="font-semibold text-gray-800">เอกสารนี้</p>
-                <p class="text-sm text-gray-500 mt-2">กลับสู่หน้าสารบัญหลัก</p>
+            <!-- HOUR 1 -->
+            <a href="crmai-d1.html" class="card hover:shadow-xl transition duration-300 transform hover:scale-[1.02] border-t-4 border-red-500">
+                <div class="flex items-center text-red-600 mb-2">
+                    <i class="fas fa-cog text-xl mr-2"></i><span class="text-lg font-bold">ชั่วโมงที่ 1</span>
+                </div>
+                <h4 class="font-extrabold text-gray-800 text-xl">การเตรียมโครงสร้างพื้นฐาน</h4>
+                <p class="text-sm text-gray-500 mt-2">ติดตั้ง n8n, GitHub, Gemini API เพื่อเตรียมพร้อมใช้งาน</p>
             </a>
 
-        </div>
+            <!-- HOUR 2-3 -->
+            <a href="crmai-d2-3.html" class="card hover:shadow-xl transition duration-300 transform hover:scale-[1.02] border-t-4 border-orange-500">
+                <div class="flex items-center text-orange-600 mb-2">
+                    <i class="fas fa-chart-pie text-xl mr-2"></i><span class="text-lg font-bold">ชั่วโมงที่ 2-3</span>
+                </div>
+                <h4 class="font-extrabold text-gray-800 text-xl">สร้างระบบ Lead Generation & AI Scoring</h4>
+                <p class="text-sm text-gray-500 mt-2">รับข้อมูล Lead, ใช้ AI Score และบันทึกใน Google Sheets</p>
+            </a>
 
+            <!-- HOUR 4 -->
+            <a href="crmai-d4.html" class="card hover:shadow-xl transition duration-300 transform hover:scale-[1.02] border-t-4 border-teal-500">
+                <div class="flex items-center text-teal-600 mb-2">
+                    <i class="fas fa-handshake text-xl mr-2"></i><span class="text-lg font-bold">ชั่วโมงที่ 4</span>
+                </div>
+                <h4 class="font-extrabold text-gray-800 text-xl">Sales & Document Automation</h4>
+                <p class="text-sm text-gray-500 mt-2">Workflow ในการปิดการขายอัตโนมัติ ร่างเอกสาร และส่งอีเมล</p>
+            </a>
+
+            <!-- HOUR 5 -->
+            <a href="crmai-d5.html" class="card hover:shadow-xl transition duration-300 transform hover:scale-[1.02] border-t-4 border-indigo-500">
+                <div class="flex items-center text-indigo-600 mb-2">
+                    <i class="fas fa-bug text-xl mr-2"></i><span class="text-lg font-bold">ชั่วโมงที่ 5</span>
+                </div>
+                <h4 class="font-extrabold text-gray-800 text-xl">Testing, Debugging & Scale</h4>
+                <p class="text-sm text-gray-500 mt-2">ทดสอบระบบ, แก้ไขจุดบกพร่อง, วางแผน Copilot และ AppSheet</p>
+            </a>
+
+            <!-- Reference Link -->
+            <div class="card bg-gray-100 p-4 flex items-center justify-center">
+                <a href="input-lead-form.html" class="text-indigo-600 font-bold hover:underline">
+                    <i class="fas fa-file-alt mr-2"></i> คู่มือเสริม: Input Lead Form
+                </a>
+            </div>
+        </div>
+        
     </main>
 
-    <footer class="mt-12 text-center text-gray-500 text-sm p-4">
-        &copy; 2568 MrTan: ผู้ช่วยระดมสมอง - คู่มือนี้สร้างขึ้นเพื่อเป็นแนวทางปฏิบัติและสามารถนำไปต่อยอดได้
+    <footer class="text-center text-gray-500 text-xs mt-12 p-4">
+        &copy; 2568 MrTan: ผู้ช่วยระดมสมอง. ข้อมูลในหลักสูตรนี้เป็นแนวทางปฏิบัติเพื่อการศึกษาเท่านั้น
     </footer>
+
 </body>
 </html>
