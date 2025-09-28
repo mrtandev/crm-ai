@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ชั่วโมงที่ 2-3 | สร้างระบบ Lead AI</title>
+    <title>ชั่วโมงที่ 2-3 | Lead AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
@@ -35,109 +35,326 @@
     <main class="max-w-6xl mx-auto">
         
         <h2 class="text-4xl font-extrabold text-orange-600 mb-4 flex items-center">
-            <i class="fas fa-funnel-dollar mr-3"></i> ชั่วโมงที่ 2-3: สร้างระบบ Lead Generation & AI Scoring (2 ชั่วโมง)
+            <i class="fas fa-funnel-dollar mr-3"></i> ชั่วโมงที่ 2-3: ระบบ Lead Generation & AI Scoring (2 ชั่วโมง)
         </h2>
         <p class="text-gray-600 text-lg mb-8">
-            ใน 2 ชั่วโมงนี้ เราจะเปลี่ยน n8n ให้เป็น **เครื่องวิเคราะห์คุณภาพลูกค้า** โดยใช้พลังของ Gemini Pro เพื่อคัดกรอง Lead อัตโนมัติ นี่คือหัวใจของการประหยัดเวลาเซลส์และเพิ่ม **MM (Make Money)**
+            ชั่วโมงนี้คือหัวใจของระบบ! เราจะสร้าง **Workflow** ใน n8n ที่ใช้ **Gemini Pro** วิเคราะห์ข้อมูลลูกค้าและให้คะแนน (Scoring) เพื่อเพิ่ม **MM (Make Money)** จาก Lead ที่มีคุณภาพ
         </p>
 
-        <!-- Step 2.1 Webhook & Test Data -->
+        <!-- NEW INTRODUCTORY SECTION FOR THE FORM -->
+        <div class="step-card bg-yellow-50 border-l-4 border-yellow-600 mb-8">
+            <h3 class="text-2xl font-bold mb-4 text-yellow-800 flex items-center"><i class="fas fa-file-code mr-3"></i> เตรียมเครื่องมือ: Input Lead Form (10 นาที)</h3>
+            <p class="mb-4 text-gray-700">
+                ในการทดสอบระบบ Workflow นี้ เราจะใช้ไฟล์ **<span class="font-bold text-yellow-900">`input-lead-form.html`</span>** ที่คุณได้เตรียมไว้แล้ว ซึ่งทำหน้าที่เป็นช่องทางในการป้อนข้อมูล Lead เข้าสู่ n8n ผ่าน Webhook
+            </p>
+            <h4 class="font-bold text-lg text-yellow-700 mb-2">สิ่งที่ต้องทำก่อนเริ่ม:</h4>
+            <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
+                <li>สร้างไฟล์ HTML ชื่อ <span class="font-mono bg-gray-100 p-1 rounded">`input-lead-form.html`</span> แล้ววางโค้ดที่ให้ไว้ด้านล่างนี้</li>
+                <li>เตรียมพร้อมที่จะนำ **Webhook URL** จาก n8n ไปใส่ในโค้ด JavaScript ของ Form นี้ (ตามขั้นตอนที่ 2.1) เพื่อให้ Form สามารถส่งข้อมูลไปยัง n8n ได้</li>
+            </ol>
+            
+            <!-- CODE BLOCK FOR INPUT LEAD FORM -->
+            <details class="mt-4">
+                <summary class="cursor-pointer font-bold text-indigo-600 hover:text-indigo-800 transition">
+                    คลิกเพื่อดูและคัดลอกโค้ด Input Lead Form (<span class="font-mono">input-lead-form.html</span>)
+                </summary>
+                <div class="mt-3 p-4 bg-gray-900 text-white rounded-lg overflow-x-auto text-sm">
+<pre>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="th"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;สมาคม IDEA | บันทึกข้อมูล&lt;/title&gt;
+    &lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;
+    &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" /&gt;
+    &lt;style&gt;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f0f4f8; }
+        .card { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
+        .input-group label { font-weight: 600; color: #374151; }
+        .input-group input, .input-group select, .input-group textarea {
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 1px #4F46E5;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class="flex justify-center items-center min-h-screen p-4"&gt;
+
+    &lt;div class="max-w-3xl w-full bg-white card rounded-2xl p-6 sm:p-10"&gt;
+        &lt;div class="text-center mb-8"&gt;
+            &lt;h1 class="text-3xl font-bold text-red-500"&gt;สมาคม IDEA&lt;/h1&gt;
+            &lt;p class="text-gray-500 text-sm mt-1"&gt;Innovation and Digital Economy Development Association&lt;/p&gt;
+            &lt;div class="mt-4 flex items-center justify-center space-x-3"&gt;
+                &lt;img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                     alt="อ.แทน โปรไฟล์" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/50x50/3b82f6/ffffff?text=อ.แทน';"
+                     class="w-12 h-12 rounded-full border-2 border-indigo-500 object-cover"&gt;
+                &lt;p class="text-sm text-gray-600"&gt; &lt;i class="fas fa-smile text-yellow-500 mr-1"&gt;&lt;/i&gt; สวัสดีครับ MrTan:HappyLife&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;form id="leadForm" class="space-y-6"&gt;
+            
+            &lt;h2 class="text-xl font-bold text-indigo-600 border-b-2 border-indigo-200 pb-2 flex items-center"&gt;
+                &lt;i class="fas fa-user-circle mr-2"&gt;&lt;/i&gt; ข้อมูลทั่วไปของสมาชิก
+            &lt;/h2&gt;
+
+            &lt;div class="grid grid-cols-1 sm:grid-cols-2 gap-6"&gt;
+                
+                &lt;div class="input-group"&gt;
+                    &lt;label for="full_name"&gt;ชื่อ-นามสกุล&lt;/label&gt;
+                    &lt;input type="text" id="full_name" name="full_name" value="ธีรชัย โฉมทัพ" required&gt;
+                &lt;/div&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;label for="email"&gt;ชื่อเล่น&lt;/label&gt;
+                    &lt;input type="text" id="nickname" name="nickname" value="แทน"&gt;
+                &lt;/div&gt;
+                
+                &lt;div class="input-group"&gt;
+                    &lt;label for="phone"&gt;เบอร์มือถือ&lt;/label&gt;
+                    &lt;input type="tel" id="phone" name="phone" value="0829889695"&gt;
+                &lt;/div&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;label for="email_contact"&gt;Email&lt;/label&gt;
+                    &lt;input type="email" id="email_contact" name="email_contact" value="mrtan.dev@gmail.com" required&gt;
+                &lt;/div&gt;
+
+                &lt;div class="input-group"&gt;
+                    &lt;label for="line_id"&gt;Line ID&lt;/label&gt;
+                    &lt;input type="text" id="line_id" name="line_id" value="mrtantawin"&gt;
+                &lt;/div&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;label for="location_type"&gt;สถานะในสมาคม&lt;/label&gt;
+                    &lt;select id="location_type" name="location_type"&gt;
+                        &lt;option value="member"&gt;สมาชิก&lt;/option&gt;
+                        &lt;option value="guest" selected&gt;เยาวชน&lt;/option&gt;
+                    &lt;/select&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="input-group"&gt;
+                &lt;label for="address"&gt;ที่อยู่&lt;/label&gt;
+                &lt;textarea id="address" name="address" rows="2" class="resize-none"&gt;66/7 ซอยประชาอุทิศ 69 แขวงบางมด เขตทุ่งครุ กรุงเทพมหานคร 10140&lt;/textarea&gt;
+            &lt;/div&gt;
+
+            &lt;h2 class="text-xl font-bold text-indigo-600 border-b-2 border-indigo-200 pb-2 flex items-center mt-8"&gt;
+                &lt;i class="fas fa-briefcase mr-2"&gt;&lt;/i&gt; ข้อมูลธุรกิจของสมาชิก
+            &lt;/h2&gt;
+            
+            &lt;div class="grid grid-cols-1 sm:grid-cols-2 gap-6"&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;label for="business_type"&gt;ประเภทธุรกิจ&lt;/label&gt;
+                    &lt;input type="text" id="business_type" name="business_type" value="AI Software Developer"&gt;
+                &lt;/div&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;label for="company_name"&gt;บริษัท / แบรนด์&lt;/label&gt;
+                    &lt;input type="text" id="company_name" name="company_name" value="บริษัท นวัตกรรมเพื่อชีวิต จำกัด"&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class="input-group"&gt;
+                &lt;label for="core_skills"&gt;ความเชี่ยวชาญ (Skills / Expertise)&lt;/label&gt;
+                &lt;textarea id="core_skills" name="core_skills" rows="2" class="resize-none"&gt;PHP, MySQL/MS-SQL, AI Workflow, AI Automation, GGS, GGF, GGD, GAS, AppSheet, Notion, กูเกิล&lt;/textarea&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="input-group"&gt;
+                &lt;label for="interest"&gt;รายการสินค้า/ความสนใจ (Products/Services/Interests) &lt;span class="text-red-500"&gt;(สำคัญสำหรับ AI Scoring)&lt;/span&gt;&lt;/label&gt;
+                &lt;textarea id="interest" name="interest" rows="2" class="resize-none"&gt;ช่วยเหลือให้ SME เข้าถึงเทคโนโลยีและ AI Automation, ให้คำปรึกษาด้าน Workflow.&lt;/textarea&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="grid grid-cols-1 sm:grid-cols-2 gap-6"&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;label for="website"&gt;เว็บไซต์ / Facebook&lt;/label&gt;
+                    &lt;input type="url" id="website" name="website" value="https://www.facebook.com/profile.php?id=61575"&gt;
+                &lt;/div&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;label for="province"&gt;จังหวัดที่ดำเนินธุรกิจ&lt;/label&gt;
+                    &lt;input type="text" id="province" name="province" value="กรุงเทพมหานคร"&gt;
+                &lt;/div&gt;
+
+                &lt;div class="input-group"&gt;
+                    &lt;label for="size"&gt;ขนาดพื้นที่ (ไร่)&lt;/label&gt;
+                    &lt;input type="number" id="size" name="size" value=""&gt;
+                &lt;/div&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;label for="contact_method"&gt;ช่องทางการติดต่อ&lt;/label&gt;
+                    &lt;input type="text" id="contact_method" name="contact_method" value="Line ID และ Email"&gt;
+                &lt;/div&gt;
+
+                &lt;div class="input-group sm:col-span-2"&gt;
+                    &lt;label for="note"&gt;หมายเหตุ&lt;/label&gt;
+                    &lt;input type="text" id="note" name="note" value="ต้องการเข้าร่วมกิจกรรม AI Bootcamp"&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+
+            &lt;div class="flex justify-center mt-8 space-x-4"&gt;
+                &lt;button type="submit" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-105"&gt;
+                    &lt;i class="fas fa-save mr-2"&gt;&lt;/i&gt; บันทึกข้อมูล
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/form&gt;
+
+        &lt;div id="messageBox" class="mt-4 p-3 bg-green-100 text-green-700 rounded-lg hidden"&gt;
+            &lt;p id="messageText"&gt;&lt;/p&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        // 🚨 สำคัญมาก: ผู้เรียนต้องเปลี่ยน URL นี้เป็น Webhook URL จริงจาก n8n
+        const WEBHOOK_URL = "WEBHOOK_URL_PLACEHOLDER"; 
+
+        document.getElementById('leadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (WEBHOOK_URL === "WEBHOOK_URL_PLACEHOLDER" || !WEBHOOK_URL.startsWith("http")) {
+                showMessage("🚨 กรุณาเปลี่ยน WEBHOOK_URL ในโค้ด JavaScript เป็น URL จริงจาก n8n", 'bg-red-100 text-red-700');
+                return;
+            }
+
+            const formData = new FormData(e.target);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok || response.status === 200) {
+                    showMessage("✅ ข้อมูลถูกส่งไปยัง n8n Webhook สำเร็จแล้ว! ตรวจสอบผลลัพธ์ใน Workflow ของคุณ", 'bg-green-100 text-green-700');
+                    e.target.reset(); // Clear form on success
+                } else {
+                    const errorText = await response.text();
+                    showMessage(`⚠️ การส่งข้อมูลล้มเหลว: Webhook ตอบกลับด้วยสถานะ ${response.status}. ข้อความ: ${errorText}`, 'bg-yellow-100 text-yellow-700');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage(`❌ เกิดข้อผิดพลาดในการเชื่อมต่อ: ${error.message}`, 'bg-red-100 text-red-700');
+            }
+        });
+
+        function showMessage(text, className) {
+            const messageBox = document.getElementById('messageBox');
+            const messageText = document.getElementById('messageText');
+            messageText.textContent = text;
+            messageBox.className = `mt-4 p-3 rounded-lg ${className}`;
+            messageBox.style.display = 'block';
+        }
+    &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+&lt;/code&gt;
+</pre>
+                </div>
+            </details>
+        </div>
+        <!-- END NEW INTRODUCTORY SECTION -->
+
+        <!-- Step 2.1 Webhook Setup -->
         <div class="step-card border-l-4 border-orange-500">
-            <h3 class="text-2xl font-bold mb-4 text-gray-800">2.1 สร้าง Webhook เพื่อรับข้อมูล Lead (45 นาที)</h3>
-            <p class="mb-4 text-gray-600">Webhook คือจุดเริ่มต้นของ Workflow ทำหน้าที่รับข้อมูลลูกค้าที่กรอกมาจากแบบฟอร์ม (เช่น Google Form หรือเว็บไซต์)</p>
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">2.1 สร้าง Webhook ใน n8n และรับข้อมูล Lead (45 นาที)</h3>
+            <p class="mb-4 text-gray-600">Webhook จะทำหน้าที่เป็นปลายทางในการรับข้อมูลจาก **Input Lead Form** (ไฟล์ `input-lead-form.html`) หรือ Form อื่นๆ</p>
 
             <h4 class="font-bold text-lg text-orange-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
             <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
-                <li>ใน n8n Dashboard สร้าง Workflow ใหม่ แล้วเพิ่ม Node ชื่อ **"Webhook"**</li>
+                <li>ใน n8n ให้สร้าง Workflow ใหม่ แล้วเพิ่ม Node ชื่อ **"Webhook"**</li>
                 <li>ตั้งค่า **Webhook URL** และเลือก **Method** เป็น `POST`</li>
-                <li>คลิก **"Listen for Test Event"** แล้วจำลองการส่งข้อมูล Lead (ชื่อ, เบอร์โทร, ความต้องการ) เข้าไปใน URL นั้น</li>
+                <li>**สำคัญมาก!** คัดลอก Webhook URL ที่ได้จาก n8n แล้วนำไปแทนที่ `WEBHOOK_URL_PLACEHOLDER` ในโค้ด JavaScript ของไฟล์ **`input-lead-form.html`** (ที่คัดลอกไว้ในขั้นตอนก่อนหน้า)</li>
+                <li>**ทดสอบ:** เปิดไฟล์ `input-lead-form.html` ที่แก้ไข URL แล้ว กรอกข้อมูล แล้วกด **"บันทึกข้อมูล"** เพื่อส่งข้อมูลชุดแรกเข้า n8n และตรวจสอบว่า n8n ได้รับข้อมูล JSON ครบถ้วน</li>
             </ol>
-            
-            <!-- Mock Screenshot 2.1 -->
-            <div style="background-color: #f7fee7; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #84cc16;">
-                <h4 style="font-weight: bold; font-size: 1.25rem; color: #4d7c0f; margin-bottom: 10px;"><i class="fas fa-link" style="margin-right: 8px;"></i> หน้าจอจำลอง: Webhook Node (n8n)</h4>
-                <div style="border: 1px solid #ccc; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px;">
-                    <p style="font-weight: bold;">Webhook URL:</p>
-                    <div style="background-color: #f0f0f0; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 0.9rem;">
-                        https://yourn8n.cloud/webhook/lead-form-01
-                    </div>
-                    <p style="margin-top: 10px; font-weight: bold;">Incoming Data (Test):</p>
-                    <pre style="background-color: #f9f9f9; padding: 8px; border-radius: 4px; font-size: 0.8rem; overflow-x: auto;">{ "name": "สมชาย", "interest": "ต้องการระบบ ERP, งบประมาณ 500k", "company_size": "15 คน" }</pre>
+             <!-- Mock Screenshot 2.1 -->
+            <div style="background-color: #fef3c7; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #fbbf24;">
+                <h4 style="font-weight: bold; font-size: 1.25rem; color: #92400e; margin-bottom: 10px;"><i class="fas fa-link" style="margin-right: 8px;"></i> หน้าจอจำลอง: Webhook Node และ URL</h4>
+                <div style="border: 1px solid #fde68a; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px; text-align: center;">
+                    <p style="font-weight: bold;">Webhook URL (ใช้สำหรับวางในโค้ด Form):</p>
+                    <pre style="background-color: #f9f9f9; padding: 8px; border-radius: 4px; font-size: 0.8rem; overflow-x: auto;">https://n8n.cloud/webhook/YOUR_UNIQUE_ID_FROM_N8N</pre>
+                    <p style="margin-top: 10px; font-weight: bold;">Webhook Test Input (จะได้รับข้อมูลจาก Form):</p>
+                    <pre style="background-color: #f9f9f9; padding: 8px; border-radius: 4px; font-size: 0.8rem; overflow-x: auto;">{"full_name": "ธีรชัย โฉมทัพ", "interest": "AI Automation, AppSheet..."}</pre>
                 </div>
-                <p style="margin-top: 10px; font-size: 0.875rem; color: #4d7c0f;">**ผลลัพธ์:** Webhook จะจับข้อมูล Lead และส่งต่อไปยัง Node ถัดไป</p>
+                <p class="mt-4 text-sm text-red-600 font-bold">🚨 **คำเตือน:** ต้องเปิดใช้งาน (Activate) Workflow ใน n8n ก่อนทำการทดสอบ</p>
             </div>
         </div>
 
-        <!-- Step 2.2 Gemini Pro Scoring -->
-        <div class="step-card border-l-4 border-cyan-500">
-            <h3 class="text-2xl font-bold mb-4 text-gray-800">2.2 สร้าง Prompt และให้ Gemini Pro ทำ Lead Scoring (60 นาที)</h3>
-            <p class="mb-4 text-gray-600">เราจะใช้ **Gemini Node** เพื่อส่งข้อมูล Lead ไปให้ AI วิเคราะห์ และให้คะแนนความน่าสนใจ (Scoring)</p>
+        <!-- Step 2.2 Gemini Scoring -->
+        <div class="step-card border-l-4 border-red-500">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">2.2 ใช้ Gemini Pro วิเคราะห์ Lead และให้คะแนน (AI Scoring) (60 นาที)</h3>
+            <p class="mb-4 text-gray-600">เราจะใช้ Prompt Engineering ชั้นสูงเพื่อให้ Gemini วิเคราะห์ความสนใจ (Interest) ของ Lead เทียบกับบริการที่เราจะนำเสนอ</p>
 
-            <h4 class="font-bold text-lg text-cyan-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
+            <h4 class="font-bold text-lg text-red-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
             <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
-                <li>เพิ่ม Node ชื่อ **"Google Gemini"** ต่อจาก Webhook</li>
-                <li>เลือก Credential ที่สร้างไว้ในชั่วโมงที่ 1 และตั้งค่า **Model** เป็น `Gemini 2.5 Pro`</li>
-                <li>**สร้าง Prompt (คำสั่ง):** นี่คือหัวใจของ AI Scoring! เราจะสั่งให้ AI วิเคราะห์และส่งผลลัพธ์เป็นโครงสร้าง JSON</li>
+                <li>เพิ่ม Node **"Google Gemini"** ต่อจาก Webhook Node</li>
+                <li>ตั้งค่า **Model** เป็น `Gemini 2.5 Pro` และใช้ Credential `Gemini Pro CRM`</li>
+                <li>**Prompt Engineering:** สร้าง Prompt ที่ให้ AI ส่งผลลัพธ์เป็น JSON (ใช้ JSON Schema) โดยมี **2 fields** สำคัญ: <br>
+                    <ul class="list-disc list-inside ml-4 text-sm">
+                        <li>`score`: คะแนน 1-10 (ยิ่งตรงกับบริการเรายิ่งสูง)</li>
+                        <li>`is_hot`: `true` หรือ `false` (ถ้าคะแนน > 7 ถือเป็น Hot Lead)</li>
+                    </ul>
+                </li>
             </ol>
-            
-            <!-- Mock Screenshot 2.2 -->
-            <div style="background-color: #e0f7fa; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #00bcd4;">
-                <h4 style="font-weight: bold; font-size: 1.25rem; color: #00838f; margin-bottom: 10px;"><i class="fas fa-brain" style="margin-right: 8px;"></i> หน้าจอจำลอง: Prompt สำหรับ AI Scoring</h4>
-                <div style="border: 1px solid #ccc; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px;">
-                    <p style="font-weight: bold;">User Prompt (ในช่อง Gemini Node):</p>
-                    <pre style="background-color: #f9f9f9; padding: 8px; border-radius: 4px; font-size: 0.8rem; overflow-x: auto; white-space: pre-wrap;">Act as a Senior Sales Analyst. Analyze the following lead data: Name: {{ $json.name }}, Interest: {{ $json.interest }}, Size: {{ $json.company_size }}.
-**Output ONLY a JSON object** with the following keys:
-1. `score` (1-10, where 10 is highest quality)
-2. `reason` (concise reason for the score in Thai)
-3. `is_hot` (boolean: true if score >= 7)</pre>
-                    <p style="margin-top: 10px; font-size: 0.875rem; color: #00838f;">**เคล็ดลับ:** การกำหนดให้ AI ส่งผลลัพธ์เป็น JSON จะช่วยให้เรานำไปประมวลผลต่อใน n8n ได้ง่ายมาก</p>
+             <!-- Mock Screenshot 2.2 -->
+            <div style="background-color: #fee2e2; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #ef4444;">
+                <h4 style="font-weight: bold; font-size: 1.25rem; color: #b91c1c; margin-bottom: 10px;"><i class="fas fa-robot" style="margin-right: 8px;"></i> หน้าจอจำลอง: Gemini JSON Output Setup</h4>
+                <div style="border: 1px solid #fca5a5; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px;">
+                    <p style="font-weight: bold;">JSON Output Schema (ใน Node Gemini):</p>
+                    <pre style="background-color: #f9f9f9; padding: 8px; border-radius: 4px; font-size: 0.8rem; overflow-x: auto;">{
+  "type": "object",
+  "properties": {
+    "score": {"type": "integer"},
+    "is_hot": {"type": "boolean"},
+    "reason": {"type": "string"}
+  }
+}</pre>
+                    <p style="margin-top: 10px; font-weight: bold;">ตัวอย่าง Prompt (User Message):</p>
+                    <pre style="background-color: #f9f9f9; padding: 8px; border-radius: 4px; font-size: 0.8rem; overflow-x: auto;">"วิเคราะห์ความสนใจของลูกค้า: {{ $json.interest }}. ให้คะแนน 1-10 ว่า Lead นี้มีคุณภาพสูงแค่ไหนสำหรับการขาย AI Automation. สรุปผลเป็น JSON"</pre>
                 </div>
             </div>
-            
-            <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700" start="4">
-                <li>**ทดสอบรัน Node:** รัน Node Gemini เพื่อให้ AI ประมวลผลและดูผลลัพธ์ที่ได้ (ควรออกมาเป็น JSON)</li>
-            </ol>
         </div>
 
-        <!-- Step 2.3 Data Storage -->
-        <div class="step-card border-l-4 border-purple-500">
-            <h3 class="text-2xl font-bold mb-4 text-gray-800">2.3 บันทึกผลการวิเคราะห์ลง Google Sheet (15 นาที)</h3>
-            <p class="mb-4 text-gray-600">เราจะเก็บข้อมูล Lead และคะแนน AI ลงใน Google Sheet ซึ่งทำหน้าที่เป็น Database ชั่วคราว</p>
+        <!-- Step 2.3 Google Sheets Integration -->
+        <div class="step-card border-l-4 border-green-500">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">2.3 บันทึกผลการวิเคราะห์ลงใน Google Sheet (15 นาที)</h3>
+            <p class="mb-4 text-gray-600">บันทึกข้อมูลทั้งหมด (ข้อมูล Lead + คะแนน AI) เพื่อให้ทีมงานสามารถตรวจสอบและนำไปใช้งานต่อได้</p>
 
-            <h4 class="font-bold text-lg text-purple-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
+            <h4 class="font-bold text-lg text-green-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
             <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
-                <li>เพิ่ม Node ชื่อ **"Google Sheets"** ต่อจาก Node Gemini</li>
-                <li>ตั้งค่า Credential สำหรับ Google Sheet</li>
-                <li>เลือก **Operation** เป็น `Append Row`</li>
-                <li>**Map ข้อมูล:** นำข้อมูลจาก Webhook (ชื่อ, Interest) และผลลัพธ์จาก Gemini (Score, Reason, is_hot) มาใส่ในคอลัมน์ที่เกี่ยวข้องใน Sheet</li>
+                <li>เพิ่ม Node **"Google Sheets"** ต่อจาก Gemini Node</li>
+                <li>เลือก **Operation** เป็น `Append Row` (เพิ่มแถวใหม่)</li>
+                <li>Map ข้อมูล: ดึงข้อมูลจาก Webhook Node และ Gemini Node มาใส่ใน Columns ของ Sheet</li>
             </ol>
              <!-- Mock Screenshot 2.3 -->
-            <div style="background-color: #f3e8ff; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #a855f7;">
-                <h4 style="font-weight: bold; font-size: 1.25rem; color: #6b21a8; margin-bottom: 10px;"><i class="fas fa-table" style="margin-right: 8px;"></i> หน้าจอจำลอง: Google Sheets Node</h4>
-                <div style="border: 1px solid #ccc; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px;">
-                    <p style="font-weight: bold;">Spreadsheet:</p>
-                    <p style="margin-bottom: 10px;">Leads_CRM_AI_Database</p>
-                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
-                        <thead>
-                            <tr style="background-color: #ede9fe;">
-                                <th style="border: 1px solid #dcdcdc; padding: 8px; text-align: left;">Column</th>
-                                <th style="border: 1px solid #dcdcdc; padding: 8px; text-align: left;">Value (Expression)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="border: 1px solid #dcdcdc; padding: 8px;">Name</td>
-                                <td style="border: 1px solid #dcdcdc; padding: 8px;"><code style="background-color: #f0f0f0;">{{ $json.name }}</code></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid #dcdcdc; padding: 8px;">AI_Score</td>
-                                <td style="border: 1px solid #dcdcdc; padding: 8px;"><code style="background-color: #f0f0f0;">{{ $json.score }}</code></td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid #dcdcdc; padding: 8px;">Is_Hot</td>
-                                <td style="border: 1px solid #dcdcdc; padding: 8px;"><code style="background-color: #f0f0f0;">{{ $json.is_hot }}</code></td>
-                            </tr>
-                        </tbody>
+            <div style="background-color: #ecfdf5; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #10b981;">
+                <h4 style="font-weight: bold; font-size: 1.25rem; color: #065f46; margin-bottom: 10px;"><i class="fas fa-table" style="margin-right: 8px;"></i> หน้าจอจำลอง: Mapping ข้อมูลใน Google Sheets Node</h4>
+                <div style="border: 1px solid #a7f3d0; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px;">
+                    <p style="font-weight: bold;">Columns ใน Google Sheet (ตัวอย่าง):</p>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+                        <tr style="background-color: #f0fdf4;">
+                            <td style="border: 1px solid #ddd; padding: 6px;">Name</td>
+                            <td style="border: 1px solid #ddd; padding: 6px;">Email</td>
+                            <td style="border: 1px solid #ddd; padding: 6px;">AI Score</td>
+                            <td style="border: 1px solid #ddd; padding: 6px;">Is Hot</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 6px;"><code>{{ $json["full_name"] }}</code></td>
+                            <td style="border: 1px solid #ddd; padding: 6px;"><code>{{ $json["email"] }}</code></td>
+                            <td style="border: 1px solid #ddd; padding: 6px;"><code>{{ $json["score"] }}</code></td>
+                            <td style="border: 1px solid #ddd; padding: 6px;"><code>{{ $json["is_hot"] }}</code></td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -145,17 +362,16 @@
         
         <!-- Navigation/Summary -->
         <div class="mt-10 p-6 bg-orange-100 rounded-xl border-t-4 border-orange-500">
-             <h4 class="text-2xl font-bold text-orange-700 mb-4 flex items-center"><i class="fas fa-check-circle mr-2"></i> สรุปท้ายชั่วโมงที่ 2-3: ระบบ Lead AI พร้อมใช้งาน!</h4>
-             <p class="text-lg text-gray-700">คุณได้สร้าง Workflow ที่รับ Lead, วิเคราะห์ด้วย AI, และจัดเก็บข้อมูลสำเร็จแล้ว ระบบนี้จะช่วยให้เซลส์ทราบว่าควรติดต่อลูกค้าคนไหนก่อน</p>
+             <h4 class="text-2xl font-bold text-orange-700 mb-4 flex items-center"><i class="fas fa-check-circle mr-2"></i> สรุปท้ายชั่วโมงที่ 2-3: ระบบ AI Scoring สำเร็จ!</h4>
+             <p class="text-lg text-gray-700">คุณได้สร้างระบบอัตโนมัติที่เปลี่ยนข้อมูลลูกค้าที่ป้อนใน Form ให้เป็น Lead ที่มีคะแนนคุณภาพพร้อมใช้งานแล้ว</p>
              <a href="crmai-d4.html" class="mt-4 inline-flex items-center bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-6 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
                 ไปต่อ: ชั่วโมงที่ 4 (Sales Automation) <i class="fas fa-arrow-right ml-2"></i>
             </a>
         </div>
 
-         <div class="flex justify-between mt-8">
+        <div class="flex justify-between mt-8">
             <a href="crmai-d1.html" class="inline-flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-full transition"><i class="fas fa-arrow-left mr-2"></i> ย้อนกลับ: ชั่วโมงที่ 1</a>
         </div>
-
     </main>
 </body>
 </html>
