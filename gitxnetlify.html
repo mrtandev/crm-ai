@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คู่มือฉบับสมบูรณ์: Git และ Netlify Deployment</title>
+    <!-- โหลด Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- โหลด Lucide Icons (ใช้สำหรับไอคอน) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* กำหนดค่าเริ่มต้นของ Tailwind */
+        @layer base {
+            :root {
+                font-family: 'Inter', sans-serif;
+            }
+        }
+        /* CSS สำหรับ Gradient Text ตามคำขอ */
+        .gradient-text {
+            background-image: linear-gradient(45deg, #00A389, #4C60E7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* สำหรับปุ่ม Add to Calendar */
+        .btn-calendar {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+        }
+        .btn-calendar:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        /* Custom Toast/Alert Style */
+        #toast-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            background-color: #00A389;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            z-index: 1000;
+        }
+        #toast-message.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        /* Custom Table Style for Commands */
+        .command-table td, .command-table th {
+            padding: 12px 24px;
+        }
+        /* Styling for URL references */
+        .url-ref {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            background-color: #f0f4ff;
+            border: 1px solid #c7d2fe;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            color: #4338ca;
+            font-weight: 600;
+        }
+        /* Custom Screenshot Box Styles */
+        .screenshot-box {
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            color: #1f2937;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* Added inset shadow for depth */
+        }
+        .github-element { background-color: #24292e; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold; display: inline-block; }
+        .netlify-element { background-color: #00c7b7; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold; display: inline-block; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-4 sm:p-8">
+
+    <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        
+        <!-- ส่วนหัว (Header) -->
+        <header class="bg-gray-800 text-white p-6 sm:p-8 flex flex-col items-center">
+            <img 
+                src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                alt="โปรไฟล์ อ.แทน" 
+                class="w-24 h-24 rounded-full border-4 border-teal-400 object-cover mb-4 shadow-lg"
+                onerror="this.onerror=null; this.src='https://placehold.co/96x96/4C60E7/FFFFFF?text=อ.+แทน';"
+            >
+            <h1 class="text-xl font-light">อ.แทน <span class="font-bold">[ธีรชัย โฉมทัพ]</span></h1>
+            <p class="text-sm text-gray-400">โค้ชด้านการเรียนรู้ AI</p>
+        </header>
+
+        <!-- หัวข้อหลัก -->
+        <main class="p-6 sm:p-10">
+            <h2 class="text-4xl sm:text-5xl font-extrabold mb-2 text-center gradient-text">
+                แผนการเรียนรู้ 💻 Git และ Netlify
+            </h2>
+            <p class="text-lg text-gray-600 text-center mb-10">
+                คู่มือฉบับสมบูรณ์: การควบคุมเวอร์ชันและการเผยแพร่อัตโนมัติ (Continuous Deployment)
+            </p>
+
+            <!-- แผนงานเป็น Card -->
+            <div class="space-y-12">
+                
+                <!-- หัวข้อย่อยที่ 1: Git พื้นฐาน -->
+                <div class="card p-6 bg-white rounded-xl shadow-2xl border-t-4 border-teal-500">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🌳</span> 
+                            <h3 class="text-2xl font-bold gradient-text">
+                                1. การทำความเข้าใจพื้นฐานของ Git และ GitHub
+                            </h3>
+                        </div>
+                        <input type="checkbox" id="step1-check" class="w-6 h-6 text-teal-600 bg-gray-100 border-gray-300 rounded focus:ring-teal-500">
+                    </div>
+                    
+                    <!-- คำอธิบายเชิงลึก -->
+                    <div class="mt-4 pt-4 border-t border-gray-200 space-y-4">
+                        <h4 class="text-xl font-bold mt-6 mb-4 text-gray-800 border-b pb-2">👨‍💻 Git Workflow: จากเครื่องสู่คลาวด์ (Step-by-Step)</h4>
+                        
+                        <!-- ตารางคำสั่ง Git -->
+                        <div class="overflow-x-auto shadow-lg rounded-xl">
+                            <table class="min-w-full divide-y divide-gray-200 bg-white command-table">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-1/12">#</th>
+                                        <th class="text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-3/12">สิ่งที่ทำ / คำสั่ง</th>
+                                        <th class="text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-8/12">คำอธิบายและภาพจำลองหน้าจอ (Output)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <!-- 1. init -->
+                                    <tr>
+                                        <td class="whitespace-nowrap text-sm font-medium text-gray-900">1.</td>
+                                        <td class="text-sm text-blue-600 font-mono bg-blue-50">`git init`</td>
+                                        <td class="text-xs font-mono text-gray-700 bg-gray-50">
+                                            <p class="font-bold text-teal-700">เริ่มต้น Git ในโฟลเดอร์โปรเจกต์ (ทำแค่ครั้งเดียว)</p>
+                                            <p class="text-red-500 mt-1">user@pc:~/my-project$</p>
+                                            Initialized empty Git repository in /path/to/my-project/.git/
+                                        </td>
+                                    </tr>
+                                    <!-- 2. add -->
+                                    <tr>
+                                        <td class="whitespace-nowrap text-sm font-medium text-gray-900">2.</td>
+                                        <td class="text-sm text-blue-600 font-mono bg-blue-50">`git add .`</td>
+                                        <td class="text-xs font-mono text-gray-700 bg-gray-50">
+                                            <p class="font-bold text-teal-700">เตรียมไฟล์ทั้งหมดที่แก้ไข/เพิ่ม (Staging Area)</p>
+                                            (ไม่แสดงผลลัพธ์: การเปลี่ยนแปลงจะถูกย้ายจาก Working Directory ไป Staging Area)
+                                        </td>
+                                    </tr>
+                                    <!-- 3. commit -->
+                                    <tr>
+                                        <td class="whitespace-nowrap text-sm font-medium text-gray-900">3.</td>
+                                        <td class="text-sm text-blue-600 font-mono bg-blue-50">`git commit -m "ข้อความอธิบาย"`</td>
+                                        <td class="text-xs font-mono text-gray-700 bg-gray-50">
+                                            <p class="font-bold text-teal-700">บันทึกเวอร์ชัน (Commit) พร้อมคำอธิบาย</p>
+                                            [main (root-commit) a1b2c3d] เพิ่มโครงสร้าง HTML พื้นฐาน <br> 2 files changed, 45 insertions(+)
+                                        </td>
+                                    </tr>
+                                    <!-- 4. GitHub Setup (Web) -->
+                                    <tr>
+                                        <td class="whitespace-nowrap text-sm font-medium text-gray-900">4.</td>
+                                        <td class="text-sm text-gray-900 font-bold">สร้าง Repo บน GitHub</td>
+                                        <td class="text-xs font-mono text-gray-700 bg-gray-50">
+                                            <p class="font-bold text-teal-700">เข้าสู่ <a href="https://github.com/new" target="_blank" class="text-blue-500 underline">https://github.com/new</a> เพื่อสร้าง Repository ใหม่ (ชื่อเดียวกับโปรเจกต์)</p>
+                                            <div class="screenshot-box mt-2 space-y-2">
+                                                <p class="font-bold">🖥️ หน้าจอ GitHub: Create a new repository</p>
+                                                <p><span class="github-element">Owner / Repository name</span>: user-name / my-project-name</p>
+                                                <p><span class="github-element">Description</span>: (Optional)</p>
+                                                <p><span class="github-element">Visibility</span>: (O) Public | ( ) Private</p>
+                                                <button class="bg-green-500 text-white p-1 rounded font-bold text-xs">Create repository</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- 5. remote add -->
+                                    <tr>
+                                        <td class="whitespace-nowrap text-sm font-medium text-gray-900">5.</td>
+                                        <td class="text-sm text-blue-600 font-mono bg-blue-50">`git remote add origin [URL]`</td>
+                                        <td class="text-xs font-mono text-gray-700 bg-gray-50">
+                                            <p class="font-bold text-teal-700">เชื่อมโยง Git Local เข้ากับ GitHub Remote</p>
+                                            (คัดลอกคำสั่ง `git remote add origin <URL ของ Repository>` ที่ GitHub แนะนำมาวาง)
+                                        </td>
+                                    </tr>
+                                    <!-- 6. push -->
+                                    <tr>
+                                        <td class="whitespace-nowrap text-sm font-medium text-gray-900">6.</td>
+                                        <td class="text-sm text-blue-600 font-mono bg-blue-50">`git push -u origin main`</td>
+                                        <td class="text-xs font-mono text-gray-700 bg-gray-50">
+                                            <p class="font-bold text-teal-700">อัพโหลดโค้ดทั้งหมดขึ้น GitHub</p>
+                                            To https://github.com/user/project.git <br> [new branch] main -> main
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- กลยุทธ์การรู้คิด -->
+                        <div class="mt-6 p-4 bg-yellow-50 rounded-lg border border-yellow-300">
+                            <p class="font-semibold text-lg text-yellow-700">🧠 เทคนิค: วงจร 3-Step ในชีวิตจริง</p>
+                            <p class="mt-1 text-gray-700">หลังจากขั้นตอนที่ 6 แล้ว ทุกครั้งที่ทำงานเสร็จสิ้นส่วนหนึ่ง ให้ทำ 3 ขั้นตอนนี้ซ้ำๆ: **`add` → `commit` → `push`** เพื่ออัปเดตงานบน GitHub</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end">
+                        <button onclick="addToCalendar('1. Git พื้นฐาน')" class="btn-calendar bg-teal-500 text-white font-bold py-2 px-4 rounded-lg flex items-center hover:bg-teal-600">
+                            <i data-lucide="calendar-plus" class="w-5 h-5 mr-2"></i>
+                            <span class="text-sm">เพิ่มในปฏิทิน</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- หัวข้อย่อยที่ 2: Netlify Setup -->
+                <div class="card p-6 bg-white rounded-xl shadow-2xl border-t-4 border-indigo-500">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🔗</span> 
+                            <h3 class="text-2xl font-bold gradient-text">
+                                2. การเตรียมโปรเจกต์และการเชื่อมต่อกับ Netlify
+                            </h3>
+                        </div>
+                        <input type="checkbox" id="step2-check" class="w-6 h-6 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500">
+                    </div>
+                    
+                    <!-- คำอธิบายเชิงลึก -->
+                    <div class="mt-4 pt-4 border-t border-gray-200 space-y-4">
+                        <p class="text-gray-700 mb-4">ขั้นตอนนี้คือการนำโค้ดที่อยู่ใน GitHub มาทำให้เป็นเว็บไซต์ออนไลน์ที่คนทั่วโลกเข้าถึงได้โดยใช้ Netlify</p>
+
+                        <h4 class="text-xl font-bold mt-6 mb-4 text-gray-800 border-b pb-2">ขั้นตอนการ Deploy เว็บไซต์บน Netlify (Step-by-Step)</h4>
+                        
+                        <div class="space-y-6">
+                            
+                            <!-- Step 2.1: เข้าสู่ Netlify -->
+                            <div class="p-4 bg-gray-50 rounded-lg border">
+                                <p class="font-semibold text-lg text-gray-800">2.1 เข้าสู่ Netlify Dashboard</p>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    ไปที่ <a href="https://app.netlify.com/" target="_blank" class="url-ref">https://app.netlify.com/</a> และเข้าสู่ระบบด้วยบัญชี **GitHub** ของคุณ
+                                </p>
+                                <div class="screenshot-box mt-3 space-y-2">
+                                    <p class="font-bold">🖥️ หน้าจอ Netlify: Log in</p>
+                                    <button class="bg-gray-800 text-white p-1 rounded block w-full text-center font-bold text-xs">Continue with GitHub</button>
+                                    <p class="text-center text-gray-500 text-xs">Netlify จะขออนุญาตเข้าถึง GitHub ของคุณ (คลิก Authorize)</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 2.2: Import Project (ปรับปรุงให้ตรงกับ UI ปัจจุบัน) -->
+                            <div class="p-4 bg-gray-50 rounded-lg border">
+                                <p class="font-semibold text-lg text-gray-800">2.2 หาปุ่ม "Add site" และเลือก Import from Git</p>
+                                <p class="text-sm text-gray-600 mt-1">ไปที่หน้า **Sites** หรือ **Projects** (เมนูซ้ายมือ) แล้วคลิกปุ่ม <span class="netlify-element">Add site</span> ที่มุมขวาบน</p>
+                                <div class="screenshot-box mt-3 space-y-2">
+                                    <p class="font-bold">🖥️ หน้าจอ Netlify Dashboard (Sites/Projects)</p>
+                                    <button class="bg-green-500 text-white p-1 rounded font-bold text-xs float-right">Add site</button> 
+                                    <div class="clear-both"></div>
+                                    <p class="text-xs text-gray-700 mt-2">เมื่อคลิก **Add site** ให้เลือก:</p>
+                                    <ul class="list-disc list-inside ml-4 text-sm">
+                                        <li class="font-bold text-teal-600">Import from Git (คลิกตรงนี้)</li>
+                                        <li>Deploy manually</li>
+                                        <li>Start from a template</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 2.3: เลือก Git Provider -->
+                            <div class="p-4 bg-gray-50 rounded-lg border">
+                                <p class="font-semibold text-lg text-gray-800">2.3 เลือก GitHub (Git Provider)</p>
+                                <p class="text-sm text-gray-600 mt-1">ในขั้นตอน **Connect to Git provider** ให้คลิกที่โลโก้ **GitHub** เพื่อเชื่อมต่อบัญชี</p>
+                                <div class="screenshot-box mt-3 space-y-2 text-center">
+                                    <p class="font-bold">🖥️ หน้าจอ Netlify: Connect to Git provider</p>
+                                    <img src="https://placehold.co/100x40/000000/FFFFFF?text=GitHub" alt="GitHub Logo" class="inline-block mx-2">
+                                    <img src="https://placehold.co/100x40/f37a27/FFFFFF?text=GitLab" alt="GitLab Logo" class="inline-block mx-2 opacity-50">
+                                </div>
+                            </div>
+                            
+                            <!-- Step 2.4: เลือก Repository -->
+                            <div class="p-4 bg-gray-50 rounded-lg border">
+                                <p class="font-semibold text-lg text-gray-800">2.4 ค้นหาและเลือก Repository ของคุณ</p>
+                                <p class="text-sm text-gray-600 mt-1">Netlify จะแสดงรายการ Repository ทั้งหมดที่คุณมี <span class="font-bold text-indigo-700">ให้พิมพ์ชื่อโปรเจกต์ของคุณลงในช่องค้นหา</span> แล้วคลิกเลือกชื่อ Repository นั้น</p>
+                                <div class="screenshot-box mt-3 space-y-2">
+                                    <p class="font-bold">🖥️ หน้าจอ Netlify: Pick a repository</p>
+                                    <input type="text" placeholder="Search repositories..." class="border p-1 w-full rounded text-black">
+                                    <p class="text-indigo-600 font-bold mt-2">✅ [my-project-name] - (คลิกตรงชื่อ Repository)</p>
+                                    <p class="text-gray-500 text-xs">Owner: user-name</p>
+                                </div>
+                            </div>
+
+                            <!-- Step 2.5: ตั้งค่า Deploy -->
+                            <div class="p-4 bg-gray-50 rounded-lg border">
+                                <p class="font-semibold text-lg text-gray-800">2.5 ตั้งค่า Deploy และคลิก "Deploy site"</p>
+                                <p class="text-sm text-gray-600 mt-1">สำหรับการ Deploy เว็บไซต์ HTML ธรรมดา **ให้ใช้การตั้งค่าเริ่มต้นทั้งหมด** ดังภาพจำลองด้านล่าง</p>
+                                <div class="screenshot-box mt-3 space-y-2">
+                                    <p class="font-bold">🖥️ หน้าจอ Netlify: Deploy settings</p>
+                                    <p><span class="font-bold">Branch to deploy:</span> <span class="font-mono bg-yellow-100 p-1 rounded">main</span></p>
+                                    <p><span class="font-bold">Build command:</span> (ว่างเปล่า)</p>
+                                    <p><span class="font-bold">Publish directory:</span> (ว่างเปล่า หรือพิมพ์ `.`) </p>
+                                    <button class="bg-green-500 text-white p-1 rounded font-bold text-xs">Deploy site</button>
+                                </div>
+                                <p class="mt-2 text-sm text-indigo-700 font-bold">🎉 Netlify จะทำการ Deploy เว็บไซต์ของคุณและสร้าง URL สาธารณะให้ทันที! เมื่อเสร็จจะแสดงผล <span class="text-green-600">Site is live</span></p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end">
+                        <button onclick="addToCalendar('2. ตั้งค่า Netlify')" class="btn-calendar bg-indigo-500 text-white font-bold py-2 px-4 rounded-lg flex items-center hover:bg-indigo-600">
+                            <i data-lucide="calendar-plus" class="w-5 h-5 mr-2"></i>
+                            <span class="text-sm">เพิ่มในปฏิทิน</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- หัวข้อย่อยที่ 3: Continuous Deployment -->
+                <div class="card p-6 bg-white rounded-xl shadow-2xl border-t-4 border-pink-500">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🚀</span> 
+                            <h3 class="text-2xl font-bold gradient-text">
+                                3. การจัดการการเปลี่ยนแปลงและการอัพเดตอัตโนมัติ (CD)
+                            </h3>
+                        </div>
+                        <input type="checkbox" id="step3-check" class="w-6 h-6 text-pink-600 bg-gray-100 border-gray-300 rounded focus:ring-pink-500">
+                    </div>
+                    
+                    <!-- คำอธิบายเชิงลึก -->
+                    <div class="mt-4 pt-4 border-t border-gray-200 space-y-4">
+                        <p class="text-gray-700 mb-4">คุณสมบัติที่น่าทึ่งที่สุดคือ **Continuous Deployment (CD)** ซึ่งจะอัพเดตเว็บไซต์ของคุณโดยอัตโนมัติทุกครั้งที่คุณส่งโค้ดใหม่ขึ้น GitHub โดยไม่ต้องกดปุ่มใดๆ ใน Netlify อีก!</p>
+
+                        <h4 class="text-xl font-bold mt-6 mb-4 text-gray-800 border-b pb-2">🔄 วงจร Continuous Deployment: อัปเดตงานอัตโนมัติ</h4>
+                        
+                        <ol class="list-decimal list-inside ml-4 space-y-3 text-gray-700">
+                            <li class="font-bold">แก้ไขโค้ด (Local Machine)
+                                <p class="font-normal text-sm text-gray-600 mt-1">คุณแก้ไขไฟล์ เช่น เปลี่ยนสีพื้นหลังใน `style.css` หรือเพิ่มเนื้อหาใน `index.html`</p>
+                            </li>
+                            <li class="font-bold">บันทึกและซิงค์ (Git Push)
+                                <p class="font-normal text-sm text-gray-600 mt-1">คุณใช้ 3 คำสั่งหลัก: <code class="bg-gray-200 p-1 rounded font-mono">git add .</code> → <code class="bg-gray-200 p-1 rounded font-mono">git commit</code> → <code class="bg-gray-200 p-1 rounded font-mono">git push</code></p>
+                            </li>
+                            <li class="font-bold">Netlify ตรวจจับ (Webhooks)
+                                <p class="font-normal text-sm text-pink-700 mt-1">ทันทีที่โค้ดไปถึง GitHub, Netlify จะตรวจจับการเปลี่ยนแปลงและเริ่มกระบวนการ Deploy ใหม่</p>
+                                <div class="screenshot-box mt-3 p-3 bg-gray-800 text-white rounded-md text-xs font-mono">
+                                    <p class="font-bold text-yellow-300">🖥️ หน้าจอ Netlify Deploy Log</p>
+                                    <p>[Deploy Status: Building...]</p>
+                                    <p>[Deploy Status: Published!]</p>
+                                    <p class="text-pink-300">Deploy ID: #53887 - Started by Push to GitHub</p>
+                                </div>
+                            </li>
+                            <li class="font-bold">Deploy ใหม่โดยอัตโนมัติ (Live Site Update)
+                                <p class="font-normal text-sm text-gray-600 mt-1">เมื่อ Deploy เสร็จสมบูรณ์ เว็บไซต์ของคุณบน URL สาธารณะจะได้รับการอัปเดตเป็นเวอร์ชันล่าสุดโดยอัตโนมัติ</p>
+                            </li>
+                        </ol>
+
+                        <h5 class="text-xl font-bold mt-8 mb-2 text-pink-800">🎯 ประโยชน์ของ CD:</h5>
+                        <ul class="list-disc list-inside ml-4 space-y-1 text-gray-700">
+                            <li>**ลดงานซ้ำซ้อน:** ไม่ต้องอัพโหลดไฟล์ด้วยมืออีกต่อไป ประหยัดเวลา 90%</li>
+                            <li>**เวอร์ชันย้อนกลับ:** ถ้ามีปัญหา คุณสามารถใช้ Git ย้อนกลับไป Commit ที่ดี และ Netlify ก็จะ Deploy ใหม่อัตโนมัติ</li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-6 flex justify-end">
+                        <button onclick="addToCalendar('3. Continuous Deployment')" class="btn-calendar bg-pink-500 text-white font-bold py-2 px-4 rounded-lg flex items-center hover:bg-pink-600">
+                            <i data-lucide="calendar-plus" class="w-5 h-5 mr-2"></i>
+                            <span class="text-sm">เพิ่มในปฏิทิน</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- Custom Toast Message Element -->
+    <div id="toast-message" role="alert"></div>
+
+    <script>
+        // ใช้ Lucide Icons
+        lucide.createIcons();
+
+        // ฟังก์ชันสำหรับจำลองการเพิ่มลงในปฏิทิน
+        function addToCalendar(taskName) {
+            const toast = document.getElementById('toast-message');
+            toast.textContent = `🎉 เพิ่ม "${taskName}" ลงในแผนการเรียนรู้เรียบร้อยแล้ว!`;
+            toast.classList.add('show');
+            
+            // ซ่อนข้อความหลังจาก 3 วินาที
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // โค้ดสำหรับทำให้ Checkbox สามารถทำงานได้ (บันทึกสถานะ)
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            
+            checkboxes.forEach(checkbox => {
+                const storageKey = `checklist-${checkbox.id}`;
+                
+                // โหลดสถานะจาก localStorage (จำลองการบันทึก)
+                if (localStorage.getItem(storageKey) === 'checked') {
+                    checkbox.checked = true;
+                }
+
+                // บันทึกสถานะเมื่อมีการเปลี่ยนแปลง
+                checkbox.addEventListener('change', (event) => {
+                    if (event.target.checked) {
+                        localStorage.setItem(storageKey, 'checked');
+                    } else {
+                        localStorage.removeItem(storageKey);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
