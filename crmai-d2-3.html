@@ -45,7 +45,7 @@
         <div class="step-card bg-yellow-50 border-l-4 border-yellow-600 mb-8">
             <h3 class="text-2xl font-bold mb-4 text-yellow-800 flex items-center"><i class="fas fa-file-code mr-3"></i> เตรียมเครื่องมือ: Input Lead Form (10 นาที)</h3>
             <p class="mb-4 text-gray-700">
-                ในการทดสอบระบบ Workflow นี้ เราจะใช้ไฟล์ **<span class="font-bold text-yellow-900">`input-lead-form.html`</span>** ที่คุณได้เตรียมไว้แล้ว ซึ่งทำหน้าที่เป็นช่องทางในการป้อนข้อมูล Lead เข้าสู่ n8n ผ่าน Webhook
+                ในการทดสอบระบบ Workflow นี้ เราจะใช้ไฟล์ **<span class="font-bold text-yellow-900">`input-lead-form.html`</span>** ซึ่งทำหน้าที่เป็นช่องทางในการป้อนข้อมูล Lead เข้าสู่ n8n ผ่าน Webhook
             </p>
             <h4 class="font-bold text-lg text-yellow-700 mb-2">สิ่งที่ต้องทำก่อนเริ่ม:</h4>
             <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
@@ -237,7 +237,7 @@
 
                 if (response.ok || response.status === 200) {
                     showMessage("✅ ข้อมูลถูกส่งไปยัง n8n Webhook สำเร็จแล้ว! ตรวจสอบผลลัพธ์ใน Workflow ของคุณ", 'bg-green-100 text-green-700');
-                    e.target.reset(); // Clear form on success
+                    // Keep the form data for easy re-submission during testing
                 } else {
                     const errorText = await response.text();
                     showMessage(`⚠️ การส่งข้อมูลล้มเหลว: Webhook ตอบกลับด้วยสถานะ ${response.status}. ข้อความ: ${errorText}`, 'bg-yellow-100 text-yellow-700');
@@ -259,7 +259,6 @@
 
 &lt;/body&gt;
 &lt;/html&gt;
-&lt;/code&gt;
 </pre>
                 </div>
             </details>
@@ -269,7 +268,7 @@
         <!-- Step 2.1 Webhook Setup -->
         <div class="step-card border-l-4 border-orange-500">
             <h3 class="text-2xl font-bold mb-4 text-gray-800">2.1 สร้าง Webhook ใน n8n และรับข้อมูล Lead (45 นาที)</h3>
-            <p class="mb-4 text-gray-600">Webhook จะทำหน้าที่เป็นปลายทางในการรับข้อมูลจาก **Input Lead Form** (ไฟล์ `input-lead-form.html`) หรือ Form อื่นๆ</p>
+            <p class="mb-4 text-gray-600">Webhook จะทำหน้าที่เป็นปลายทางในการรับข้อมูลจาก **Input Lead Form** (ไฟล์ `input-lead-form.html`) ที่ผู้เรียนได้สร้างไว้</p>
 
             <h4 class="font-bold text-lg text-orange-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
             <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
@@ -294,7 +293,7 @@
         <!-- Step 2.2 Gemini Scoring -->
         <div class="step-card border-l-4 border-red-500">
             <h3 class="text-2xl font-bold mb-4 text-gray-800">2.2 ใช้ Gemini Pro วิเคราะห์ Lead และให้คะแนน (AI Scoring) (60 นาที)</h3>
-            <p class="mb-4 text-gray-600">เราจะใช้ Prompt Engineering ชั้นสูงเพื่อให้ Gemini วิเคราะห์ความสนใจ (Interest) ของ Lead เทียบกับบริการที่เราจะนำเสนอ</p>
+            <p class="mb-4 text-gray-600">เราจะใช้ Prompt Engineering ชั้นสูงเพื่อให้ Gemini วิเคราะห์ความสนใจ (Interest) ของ Lead ที่ได้รับจาก Form เทียบกับบริการที่เราจะนำเสนอ</p>
 
             <h4 class="font-bold text-lg text-red-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
             <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
@@ -302,7 +301,7 @@
                 <li>ตั้งค่า **Model** เป็น `Gemini 2.5 Pro` และใช้ Credential `Gemini Pro CRM`</li>
                 <li>**Prompt Engineering:** สร้าง Prompt ที่ให้ AI ส่งผลลัพธ์เป็น JSON (ใช้ JSON Schema) โดยมี **2 fields** สำคัญ: <br>
                     <ul class="list-disc list-inside ml-4 text-sm">
-                        <li>`score`: คะแนน 1-10 (ยิ่งตรงกับบริการเรายิ่งสูง)</li>
+                        <li>`score`: คะแนน 1-10 (ยิ่งตรงกับบริการของเรายิ่งสูง)</li>
                         <li>`is_hot`: `true` หรือ `false` (ถ้าคะแนน > 7 ถือเป็น Hot Lead)</li>
                     </ul>
                 </li>
@@ -325,34 +324,75 @@
                 </div>
             </div>
         </div>
+        
+        <!-- NEW STEP 2.3a: Code Node for Running ID -->
+        <div class="step-card border-l-4 border-blue-500">
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">2.3a สร้าง Running ID สำหรับ AppSheet (20 นาที)</h3>
+            <p class="mb-4 text-gray-600">เนื่องจากเราจะใช้ AppSheet ในขั้นตอนถัดไป เราจำเป็นต้องมีคอลัมน์ **ID** ที่เป็นตัวเลขรันนิ่งสำหรับเป็น Primary Key</p>
 
-        <!-- Step 2.3 Google Sheets Integration -->
+            <h4 class="font-bold text-lg text-blue-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
+            <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
+                <li>เพิ่ม Node **"Code"** ต่อจาก Gemini Node</li>
+                <li>ใช้โค้ด JavaScript เพื่อสร้างตัวแปร `id` ที่เป็นตัวเลขที่ไม่ซ้ำกัน (เช่น ใช้ Timestamp) และรวมเข้ากับข้อมูลเดิม</li>
+            </ol>
+            <!-- Mock Screenshot 2.3a -->
+            <div style="background-color: #eff6ff; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #3b82f6;">
+                <h4 style="font-weight: bold; font-size: 1.25rem; color: #1e40af; margin-bottom: 10px;"><i class="fas fa-code" style="margin-right: 8px;"></i> หน้าจอจำลอง: Code Node สำหรับ Running ID</h4>
+                <div style="border: 1px solid #bfdbfe; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px;">
+                    <p style="font-weight: bold;">โค้ด JavaScript สำหรับสร้าง ID:</p>
+                    <pre style="background-color: #f9f9f9; padding: 8px; border-radius: 4px; font-size: 0.8rem; overflow-x: auto;">
+const now = new Date();
+const runningId = now.getTime(); // ใช้ Timestamp เป็น ID
+return [{ 
+    json: {
+        ...$json, // ข้อมูล Lead และ AI Score เดิม
+        id: runningId // เพิ่ม ID ใหม่
+    } 
+}];</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW STEP 2.3b: Google Sheets Integration -->
         <div class="step-card border-l-4 border-green-500">
-            <h3 class="text-2xl font-bold mb-4 text-gray-800">2.3 บันทึกผลการวิเคราะห์ลงใน Google Sheet (15 นาที)</h3>
-            <p class="mb-4 text-gray-600">บันทึกข้อมูลทั้งหมด (ข้อมูล Lead + คะแนน AI) เพื่อให้ทีมงานสามารถตรวจสอบและนำไปใช้งานต่อได้</p>
+            <h3 class="text-2xl font-bold mb-4 text-gray-800">2.3b บันทึกผลการวิเคราะห์ลงใน Google Sheet (25 นาที)</h3>
+            <p class="mb-4 text-gray-600">สร้าง Sheet สำหรับจัดเก็บ Lead และ Mapping ข้อมูลทั้งหมด (รวมถึง ID และ AI Score) เข้าไปในแถวใหม่</p>
 
             <h4 class="font-bold text-lg text-green-700 mb-2">ขั้นตอนการปฏิบัติ:</h4>
             <ol class="list-decimal list-inside ml-4 space-y-2 text-gray-700">
-                <li>เพิ่ม Node **"Google Sheets"** ต่อจาก Gemini Node</li>
+                <li>**สร้าง Sheet:** ใน Google Drive สร้าง Google Sheet ใหม่ แล้วคัดลอกชื่อคอลัมน์ด้านล่างไปวางในแถวแรก (แถว Header)</li>
+                <li>เพิ่ม Node **"Google Sheets"** ต่อจาก Code Node</li>
                 <li>เลือก **Operation** เป็น `Append Row` (เพิ่มแถวใหม่)</li>
-                <li>Map ข้อมูล: ดึงข้อมูลจาก Webhook Node และ Gemini Node มาใส่ใน Columns ของ Sheet</li>
+                <li>Map ข้อมูล: ดึงข้อมูลจาก Code Node มาใส่ใน Columns ของ Sheet</li>
             </ol>
-             <!-- Mock Screenshot 2.3 -->
+             <!-- Mock Screenshot 2.3b -->
             <div style="background-color: #ecfdf5; padding: 20px; border-radius: 12px; margin: 20px 0; border: 2px solid #10b981;">
+                <h4 class="font-bold text-lg text-green-700 mb-2 flex items-center"><i class="fas fa-copy mr-2"></i> คัดลอกชื่อคอลัมน์สำหรับ Google Sheet (Header Row)</h4>
+                <p class="text-sm text-gray-700 mb-2">คัดลอกทั้งหมดนี้ไปวางในแถวแรกของ Google Sheet ของคุณ:</p>
+                <pre class="bg-gray-900 text-white p-3 rounded-lg overflow-x-auto text-sm font-mono mb-4">ID,full_name,nickname,phone,email_contact,line_id,address,location_type,business_type,company_name,core_skills,interest,website,province,size,contact_method,note,ai_score,is_hot,ai_reason,created_at</pre>
+
                 <h4 style="font-weight: bold; font-size: 1.25rem; color: #065f46; margin-bottom: 10px;"><i class="fas fa-table" style="margin-right: 8px;"></i> หน้าจอจำลอง: Mapping ข้อมูลใน Google Sheets Node</h4>
                 <div style="border: 1px solid #a7f3d0; border-radius: 8px; overflow: hidden; background-color: white; padding: 15px;">
-                    <p style="font-weight: bold;">Columns ใน Google Sheet (ตัวอย่าง):</p>
+                    <p style="font-weight: bold;">ตัวอย่างการ Map ข้อมูล (ต้อง Map ครบทุกคอลัมน์ที่สร้างไว้):</p>
                     <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
                         <tr style="background-color: #f0fdf4;">
-                            <td style="border: 1px solid #ddd; padding: 6px;">Name</td>
-                            <td style="border: 1px solid #ddd; padding: 6px;">Email</td>
-                            <td style="border: 1px solid #ddd; padding: 6px;">AI Score</td>
-                            <td style="border: 1px solid #ddd; padding: 6px;">Is Hot</td>
+                            <td style="border: 1px solid #ddd; padding: 6px; font-weight: bold;">Column</td>
+                            <td style="border: 1px solid #ddd; padding: 6px; font-weight: bold;">Value (จาก Code Node)</td>
                         </tr>
                         <tr>
+                            <td style="border: 1px solid #ddd; padding: 6px;">ID</td>
+                            <td style="border: 1px solid #ddd; padding: 6px;"><code>{{ $json["id"] }}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 6px;">full_name</td>
                             <td style="border: 1px solid #ddd; padding: 6px;"><code>{{ $json["full_name"] }}</code></td>
-                            <td style="border: 1px solid #ddd; padding: 6px;"><code>{{ $json["email"] }}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 6px;">ai_score</td>
                             <td style="border: 1px solid #ddd; padding: 6px;"><code>{{ $json["score"] }}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 6px;">is_hot</td>
                             <td style="border: 1px solid #ddd; padding: 6px;"><code>{{ $json["is_hot"] }}</code></td>
                         </tr>
                     </table>
