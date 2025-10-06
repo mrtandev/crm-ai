@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตัวอย่างแบบทดสอบความรู้</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0; /* REMOVED default padding */
+        }
+        .form-card {
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-top: -30px; /* Overlap with banner a bit */
+            background-color: #ffffff;
+        }
+        .text-gradient {
+            background: linear-gradient(45deg, #a78bfa, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo Banner -->
+        <header class="w-full">
+            <img src="https://lh3.googleusercontent.com/d/1E7Z5y-T2KR0sfkfrBMNbd_QAILy29a0F" 
+                 alt="โลโก้พันธมิตรโครงการ" 
+                 class="w-full h-auto"
+                 style="max-height: 150px; object-fit: cover;">
+        </header>
+
+        <div class="form-card mx-4 sm:mx-0">
+            <h1 class="text-3xl font-extrabold text-gradient mb-4 text-center">
+                แบบทดสอบความรู้ (Pre/Post Test Mock)
+            </h1>
+            <p class="text-sm text-gray-500 mb-6 text-center border-b pb-3">
+                ตัวอย่างหน้าตาของ Google Form สำหรับการประเมินผลความรู้
+            </p>
+
+            <!-- Form Section -->
+            <form class="space-y-6">
+                <!-- Question 1: Text Input -->
+                <div>
+                    <label class="block text-md font-medium text-gray-700 mb-1">
+                        1. รหัสผู้เรียน/อีเมล <span class="text-red-500">*</span>
+                    </label>
+                    <input type="email" value="AX2025@email.com" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2 border" required readonly>
+                </div>
+
+                <!-- Question 2: Multiple Choice (Radio) -->
+                <div>
+                    <label class="block text-md font-medium text-gray-700 mb-2">
+                        2. เครื่องมือใดเป็นแพลตฟอร์ม No-Code สำหรับสร้าง Web/Mobile App? <span class="text-red-500">*</span>
+                    </label>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center">
+                            <input id="q2-opt1" name="q2" type="radio" class="h-4 w-4 text-pink-600 border-gray-300 focus:ring-pink-500" checked>
+                            <label for="q2-opt1" class="ml-3 block text-gray-700">AppSheet</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="q2-opt2" name="q2" type="radio" class="h-4 w-4 text-pink-600 border-gray-300 focus:ring-pink-500">
+                            <label for="q2-opt2" class="ml-3 block text-gray-700">PyTorch</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="q2-opt3" name="q2" type="radio" class="h-4 w-4 text-pink-600 border-gray-300 focus:ring-pink-500">
+                            <label for="q2-opt3" class="ml-3 block text-gray-700">Django</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3: Checkboxes -->
+                <div>
+                    <label class="block text-md font-medium text-gray-700 mb-2">
+                        3. หัวข้อใดที่เกี่ยวข้องกับ Camera AI Master? (เลือกได้มากกว่า 1 ข้อ) <span class="text-red-500">*</span>
+                    </label>
+                    <div class="space-y-2 text-sm">
+                        <div class="relative flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="q3-opt1" name="q3" type="checkbox" class="focus:ring-pink-500 h-4 w-4 text-pink-600 border-gray-300 rounded" checked>
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="q3-opt1" class="font-medium text-gray-700">YOLO (You Only Look Once)</label>
+                            </div>
+                        </div>
+                        <div class="relative flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="q3-opt2" name="q3" type="checkbox" class="focus:ring-pink-500 h-4 w-4 text-pink-600 border-gray-300 rounded">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="q3-opt2" class="font-medium text-gray-700">การทำ Data Transformation ด้วย N8N</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4">
+                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        ส่งคำตอบ
+                    </button>
+                    <p class="text-xs text-gray-400 mt-2 text-center">
+                        *หน้านี้เป็นตัวอย่างจำลอง (Mockup) เท่านั้น
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="mt-8 pt-4 border-t border-gray-300 text-center text-sm text-gray-500">
+            จัดทำโดย อ.แทน [ธีรชัย โฉมทัพ] 👨‍💻 Head of Digital Transformation
+        </footer>
+    </div>
+</body>
+</html>
