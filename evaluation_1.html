@@ -7,12 +7,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #f8fafc; font-family: 'Inter', Tahoma, sans-serif; padding: 1rem; }
-        .form-container { max-width: 700px; margin: 2rem auto; background-color: white; border-top: 8px solid #5b21b6; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 1.5rem; }
+        .form-container { max-width: 700px; margin: 1rem auto; background-color: white; border-top: 8px solid #5b21b6; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 1.5rem; }
         .question-card { border: 1px solid #e5e7eb; padding: 1rem; margin-bottom: 1rem; border-radius: 0.5rem; background-color: #fdfdff; }
         .gradient-text { background-image: linear-gradient(45deg, #1e40af, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-container { max-width: 700px; margin: 0 auto 1.5rem; padding: 0.5rem; background-color: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
     </style>
 </head>
 <body>
+    <!-- Logo Header Added -->
+    <div class="logo-container text-center">
+        <img src="https://lh3.googleusercontent.com/d/1E7Z5y-T2KR0sfkfrBMNbd_QAILy29a0F" 
+             alt="Partner Logos" 
+             class="max-w-full h-auto mx-auto rounded-lg"
+             style="max-height: 100px; width: auto;">
+    </div>
+
     <div class="form-container">
         <h1 class="text-2xl font-bold mb-1 gradient-text">แบบทดสอบความรู้พื้นฐาน (Pre-Test Mock)</h1>
         <p class="text-sm text-gray-500 mb-6">หลักสูตร AI Automation & Data Integration Master</p>
@@ -51,5 +60,10 @@
             *ตัวอย่างจำลองเพื่อแสดงหน้าตาของแบบทดสอบเท่านั้น
         </p>
     </div>
+    
+    <!-- Footer Added -->
+    <footer class="mt-8 pt-4 border-t border-gray-200 text-center text-xs text-gray-500 max-w-700px mx-auto">
+        จัดทำโดย อ.แทน [ธีรชัย โฉมทัพ] 👨‍💻 Head of Digital Transformation
+    </footer>
 </body>
 </html>

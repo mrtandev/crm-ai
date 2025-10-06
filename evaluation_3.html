@@ -7,7 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #f8fafc; font-family: 'Inter', Tahoma, sans-serif; padding: 1rem; }
-        .checkin-container { max-width: 500px; margin: 3rem auto; background-color: white; border-top: 8px solid #ec4899; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 1.5rem; text-align: center; }
+        .logo-container { max-width: 500px; margin: 0 auto 1.5rem; padding: 0.5rem; background-color: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+        .checkin-container { max-width: 500px; margin: 1rem auto; background-color: white; border-top: 8px solid #ec4899; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 1.5rem; text-align: center; }
         /* Custom colors defined in presentation_agenda.html */
         .text-secondary-purple { color: #5b21b6; }
         .bg-accent-pink { background-color: #ec4899; }
@@ -15,6 +16,14 @@
     </style>
 </head>
 <body>
+    <!-- Logo Header Added -->
+    <div class="logo-container text-center">
+        <img src="https://lh3.googleusercontent.com/d/1E7Z5y-T2KR0sfkfrBMNbd_QAILy29a0F" 
+             alt="Partner Logos" 
+             class="max-w-full h-auto mx-auto rounded-lg"
+             style="max-height: 100px; width: auto;">
+    </div>
+    
     <div class="checkin-container">
         <h1 class="text-2xl font-bold mb-2 text-secondary-purple">ระบบลงทะเบียนเข้าเรียน (Check-in)</h1>
         <p class="text-sm text-gray-500 mb-6">ใช้สำหรับบันทึกเวลาเข้าเรียนในแต่ละหัวข้อ</p>
@@ -81,6 +90,10 @@
         </p>
     </div>
     
+    <!-- Footer Added -->
+    <footer class="mt-8 pt-4 border-t border-gray-200 text-center text-xs text-gray-500 max-w-500px mx-auto">
+        จัดทำโดย อ.แทน [ธีรชัย โฉมทัพ] 👨‍💻 Head of Digital Transformation
+    </footer>
     <script>
         function simulateCheckIn() {
             const studentId = document.getElementById('student_id').value;
