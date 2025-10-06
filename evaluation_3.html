@@ -9,6 +9,8 @@
         body { background-color: #f8fafc; font-family: 'Inter', Tahoma, sans-serif; padding: 1rem; }
         .logo-container { max-width: 500px; margin: 0 auto 1.5rem; padding: 0.5rem; background-color: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
         .checkin-container { max-width: 500px; margin: 1rem auto; background-color: white; border-top: 8px solid #ec4899; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 1.5rem; text-align: center; }
+        /* history-container will be hidden by default using the 'hidden' class from Tailwind */
+        .history-container { max-width: 500px; margin: 1.5rem auto; background-color: white; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 1.5rem; text-align: left; } 
         /* Custom colors defined in presentation_agenda.html */
         .text-secondary-purple { color: #5b21b6; }
         .bg-accent-pink { background-color: #ec4899; }
@@ -30,7 +32,7 @@
         
         <div class="mb-4 text-left">
             <label class="block text-sm font-medium mb-1 text-gray-700" for="student_id">รหัสผู้เรียน/อีเมล <span class="text-red-500">*</span></label>
-            <input type="text" id="student_id" class="w-full p-2 border border-gray-300 rounded-md focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="AXXX@email.com">
+            <input type="text" id="student_id" onkeyup="checkIfUserCanViewHistory()" class="w-full p-2 border border-gray-300 rounded-md focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="A123@email.com หรือ B456@email.com (สำหรับทดสอบ)">
         </div>
 
         <div class="mb-6 text-left">
@@ -80,6 +82,11 @@
         <button onclick="simulateCheckIn()" class="w-full bg-accent-pink text-white p-3 rounded-md font-bold hover:bg-pink-700 transition flex items-center justify-center">
             <span class="mr-2">⏰</span> ลงนามเข้าร่วมเรียน
         </button>
+        
+        <!-- Toggle History Button -->
+        <button id="toggle-history-btn" onclick="toggleHistory()" class="mt-4 w-full text-sm font-semibold text-secondary-purple bg-indigo-100 p-2 rounded-md hover:bg-indigo-200 transition hidden">
+            แสดงประวัติการเข้าร่วมเรียน
+        </button>
 
         <p id="checkin-status" class="mt-4 text-sm text-green-600 font-semibold hidden p-2 bg-green-50 rounded-lg">
             ✅ ลงทะเบียนสำเร็จ! เวลาเข้าเรียนของคุณถูกบันทึกในระบบแล้ว
@@ -89,37 +96,147 @@
             *หน้าจอนี้จำลองการทำงานของ Google App Script (GAS) เพื่อบันทึกข้อมูลไปยัง Google Sheet
         </p>
     </div>
+
+    <!-- New Check-in History Section - Hidden by default -->
+    <div id="checkin-history" class="history-container hidden">
+        <h2 class="text-xl font-bold mb-3 text-secondary-purple flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            ประวัติการเข้าร่วมเรียน (Check-in History)
+        </h2>
+        <p class="text-sm text-gray-600 mb-4" id="history-user-info"></p>
+        
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">วันที่/เวลา</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">หัวข้อที่ลงทะเบียน</th>
+                    </tr>
+                </thead>
+                <tbody id="history-table-body" class="bg-white divide-y divide-gray-200 text-sm">
+                    <!-- History rows will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        <p class="mt-4 text-xs text-gray-400 text-center">
+            *ข้อมูลนี้จำลองขึ้นเพื่อแสดงรูปแบบเท่านั้น หากเป็นระบบจริง ข้อมูลจะถูกดึงมาจาก Google Sheet.
+        </p>
+    </div>
     
     <!-- Footer Added -->
     <footer class="mt-8 pt-4 border-t border-gray-200 text-center text-xs text-gray-500 max-w-500px mx-auto">
         จัดทำโดย อ.แทน [ธีรชัย โฉมทัพ] 👨‍💻 Head of Digital Transformation
     </footer>
     <script>
+        // Mock data structure: This simulates data fetched from Google Sheet based on student ID
+        const mockHistory = {
+            'A123@EMAIL.COM': [
+                { date: '1 พ.ย. 68 (เช้า, 09:00)', topic: 'หัวข้อ 1: ปรัชญา No-Code/Low-Code' },
+                { date: '1 พ.ย. 68 (บ่าย, 13:00)', topic: 'หัวข้อ 2: การออกแบบฐานข้อมูล' },
+                { date: '2 พ.ย. 68 (เช้า, 09:00)', topic: 'หัวข้อ 3: การวิเคราะห์ Logic/Flow' },
+            ],
+            'B456@EMAIL.COM': [
+                { date: '22 พ.ย. 68 (เช้า, 09:00)', topic: 'หัวข้อ 1: พื้นฐาน Pytorch' },
+                { date: '29 พ.ย. 68 (บ่าย, 13:00)', topic: 'หัวข้อ 3: โครงข่ายประสาทแบบ CNN (ปฏิบัติ)' },
+            ]
+        };
+
+        const historyContainer = document.getElementById('checkin-history');
+        const toggleBtn = document.getElementById('toggle-history-btn');
+
+        function toggleHistory() {
+            historyContainer.classList.toggle('hidden');
+            if (historyContainer.classList.contains('hidden')) {
+                toggleBtn.textContent = 'แสดงประวัติการเข้าร่วมเรียน';
+            } else {
+                toggleBtn.textContent = 'ซ่อนประวัติการเข้าร่วมเรียน';
+            }
+        }
+
+        function checkIfUserCanViewHistory() {
+            const studentId = document.getElementById('student_id').value;
+            // Check if the input value is a mock user ID
+            const isMockUser = mockHistory[studentId.toUpperCase().trim()];
+            
+            if (isMockUser) {
+                // If a known user ID is entered, show the toggle button and populate data
+                toggleBtn.classList.remove('hidden');
+                displayCheckInHistory(studentId);
+            } else {
+                // If not a known user ID, hide the toggle button and history
+                toggleBtn.classList.add('hidden');
+                historyContainer.classList.add('hidden');
+            }
+            // Reset button text to default state (Show)
+            toggleBtn.textContent = 'แสดงประวัติการเข้าร่วมเรียน';
+        }
+
+        function displayCheckInHistory(studentId) {
+            const tableBody = document.getElementById('history-table-body');
+            const userHistory = mockHistory[studentId.toUpperCase().trim()] || [];
+            
+            tableBody.innerHTML = ''; // Clear previous history
+            
+            document.getElementById('history-user-info').textContent = `แสดงประวัติการ Check-in สำหรับ: ${studentId}`;
+
+            if (userHistory.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="2" class="px-3 py-3 text-center text-gray-500">ไม่พบประวัติการเข้าร่วมเรียนสำหรับรหัสนี้</td></tr>';
+                return;
+            }
+
+            userHistory.forEach(item => {
+                const row = tableBody.insertRow();
+                row.classList.add('hover:bg-indigo-50');
+                
+                const dateCell = row.insertCell(0);
+                dateCell.textContent = item.date;
+                dateCell.classList.add('px-3', 'py-2', 'whitespace-nowrap', 'font-medium', 'text-gray-900');
+
+                const topicCell = row.insertCell(1);
+                topicCell.textContent = item.topic;
+                topicCell.classList.add('px-3', 'py-2', 'text-gray-700');
+            });
+            // Note: We don't call historyContainer.classList.remove('hidden') here. 
+            // The visibility is controlled only by the toggleButton.
+        }
+
         function simulateCheckIn() {
             const studentId = document.getElementById('student_id').value;
             const module = document.getElementById('module').value;
             const status = document.getElementById('checkin-status');
             
-            // Check if required fields are filled
+            // 1. Check if required fields are filled
             if (studentId.trim() === "" || module.trim() === "") {
-                status.classList.remove('hidden');
-                status.classList.remove('text-green-600', 'bg-green-50');
+                // Handle error state
+                status.classList.remove('hidden', 'text-green-600', 'bg-green-50');
                 status.classList.add('text-red-600', 'bg-red-50');
                 status.textContent = '❌ กรุณากรอกรหัสผู้เรียน/อีเมล และเลือกหัวข้อให้ครบถ้วนก่อนลงทะเบียน';
+                
+                // Hide history when error occurs
+                toggleBtn.classList.add('hidden');
+                historyContainer.classList.add('hidden');
+                
                 return; 
             }
             
-            // Success simulation
-            // In a real GAS deployment, this would trigger an API call to Google Sheets
-            status.classList.remove('hidden');
-            status.classList.remove('text-red-600', 'bg-red-50');
+            // 2. Success simulation 
+            status.classList.remove('hidden', 'text-red-600', 'bg-red-50');
             status.classList.add('text-green-600', 'bg-green-50');
             
-            // Get selected text for detailed message
             const selectedText = document.getElementById('module').options[document.getElementById('module').selectedIndex].text;
             
             status.innerHTML = `✅ ลงทะเบียนสำเร็จ! หัวข้อ: <strong>${selectedText}</strong> ถูกบันทึกแล้ว (${new Date().toLocaleTimeString('th-TH')})`;
+            
+            // 3. Update/Display history controls
+            checkIfUserCanViewHistory(); // To update history data and show toggle button
+            historyContainer.classList.remove('hidden'); // Show history after successful check-in
+            toggleBtn.textContent = 'ซ่อนประวัติการเข้าร่วมเรียน'; // Change button to Hide
         }
+        
+        // Initial check on load (for testing with pre-filled values, though typically empty in a real app)
+        window.onload = checkIfUserCanViewHistory;
     </script>
 </body>
 </html>
