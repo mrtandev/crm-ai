@@ -45,6 +45,11 @@
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
+        /* Custom card hover effect for better distinction */
+        .course-card:hover {
+            transform: scale(1.01);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
         .timeline-item {
             display: flex;
             align-items: flex-start;
@@ -205,7 +210,7 @@
 
         <!-- MAIN TITLE -->
         <div class="text-center mb-10">
-            <!-- ADJUSTED: Reduced h1 size to text-2xl md:text-3xl -->
+            <!-- Font size is kept for the project title as previously agreed -->
             <h1 class="text-2xl md:text-3xl font-extrabold text-gradient leading-tight mb-2">
                 โครงการพัฒนากำลังคนสมรรถนะสูงด้านปัญญาประดิษฐ์
             </h1>
@@ -231,22 +236,25 @@
             </h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Module 1: AI Automation & Data Integration Master -->
-                <div class="card p-4 bg-gray-50 border border-indigo-200">
-                    <h3 class="text-lg font-bold text-secondary-purple mb-3">AI Automation & Data Integration Master</h3>
-                    <div class="text-sm space-y-2 text-gray-700">
-                        <p><strong>ชื่อเต็ม (ไทย):</strong> ปัญญาประดิษฐ์สำหรับระบบอัตโนมัติและการบูรณาการข้อมูลระดับสูง</p>
-                        <p><strong>วัตถุประสงค์:</strong> สร้างระบบอัตโนมัติ (Automation Workflow) และการเชื่อมโยงข้อมูล (Data Integration) ด้วยเครื่องมือ No-Code/Low-Code เพื่อยกระดับผู้ประกอบการ SMEs</p>
-                        <p><strong>ระยะเวลา:</strong> ไม่น้อยกว่า 30 ชั่วโมง (5 วัน)</p>
-                        <p><strong>เครื่องมือหลัก:</strong> AppSheet, N8N, Google Sheets/Airtable</p>
+                <!-- Module 1: AI Automation & Data Integration Master - THEME: INDIGO/BLUE -->
+                <div class="course-card p-5 bg-indigo-50 border-4 border-indigo-500 rounded-xl">
+                    <h3 class="text-xl font-extrabold text-indigo-700 mb-3 flex items-center">
+                        <span class="mr-3 text-2xl">💡</span> AI Automation & Data Integration Master
+                    </h3>
+                    <div class="text-base space-y-2 text-gray-700">
+                        <!-- Adjusted text size for readability -->
+                        <p class="text-sm"><strong class="text-indigo-600">ชื่อเต็ม (ไทย):</strong> ปัญญาประดิษฐ์สำหรับระบบอัตโนมัติและการบูรณาการข้อมูลระดับสูง</p>
+                        <p class="text-sm"><strong class="text-indigo-600">วัตถุประสงค์:</strong> สร้างระบบอัตโนมัติ (Automation Workflow) และการเชื่อมโยงข้อมูล (Data Integration) ด้วยเครื่องมือ No-Code/Low-Code เพื่อยกระดับผู้ประกอบการ SMEs</p>
+                        <p class="text-sm"><strong class="text-indigo-600">ระยะเวลา:</strong> ไม่น้อยกว่า 30 ชั่วโมง (5 วัน)</p>
+                        <p class="text-sm"><strong class="text-indigo-600">เครื่องมือหลัก:</strong> AppSheet, N8N, Google Sheets/Airtable</p>
                         
                         <!-- Collapsible Outline -->
-                        <div class="border-t pt-2 mt-2">
+                        <div class="border-t border-indigo-200 pt-3 mt-3">
                             <button onclick="toggleCollapsible('automation-outline')" class="w-full text-left font-semibold text-indigo-600 hover:text-pink-500 transition focus:outline-none flex items-center">
                                 <span id="automation-outline-icon" class="mr-2">&#9658;</span> หัวข้อหลัก (คลิกเพื่อดู)
                             </button>
                             <div id="automation-outline" class="collapsible-content">
-                                <ul class="list-disc list-inside mt-2 space-y-1 text-xs">
+                                <ul class="list-disc list-inside mt-2 space-y-1 text-sm text-gray-600">
                                     <li>**หัวข้อ 1 & 2:** ปรัชญา No-Code/Low-Code และการออกแบบฐานข้อมูลที่ยืดหยุ่น (5 ชม.)</li>
                                     <li>**หัวข้อ 3:** การวิเคราะห์และออกแบบ Logic/Flow Automation ขั้นสูง (5 ชม.)</li>
                                     <li>**หัวข้อ 4:** Workshop: สร้าง Web/Mobile App ด้วย AppSheet (6 ชม.)</li>
@@ -257,12 +265,12 @@
                         </div>
 
                         <!-- Collapsible Description -->
-                        <div class="border-t pt-2 mt-2">
+                        <div class="border-t border-indigo-200 pt-3 mt-3">
                             <button onclick="toggleCollapsible('automation-description')" class="w-full text-left font-semibold text-indigo-600 hover:text-pink-500 transition focus:outline-none flex items-center">
                                 <span id="automation-description-icon" class="mr-2">&#9658;</span> คำอธิบายหัวข้อหลัก (Outline)
                             </button>
                             <div id="automation-description" class="collapsible-content">
-                                <p class="text-xs pt-2">
+                                <p class="text-sm pt-2 text-gray-600">
                                     หลักสูตรนี้มุ่งเน้นการสร้าง "กำลังคนทักษะสูง" ที่สามารถนำ AI Automation มาใช้เพิ่มประสิทธิภาพธุรกิจ SMEs ได้อย่างรวดเร็วและประหยัดต้นทุน ผ่านเครื่องมือ No-Code/Low-Code ซึ่งช่วยลดข้อจำกัดในการเขียนโค้ด ทำให้บุคลากรนอกสาย IT สามารถเข้าถึงและสร้างระบบอัตโนมัติเพื่อลดความผิดพลาดและงานซ้ำซ้อนได้อย่างเป็นรูปธรรม หัวข้อต่างๆ ครอบคลุมตั้งแต่หลักการออกแบบฐานข้อมูลไปจนถึงการสร้าง MVP ที่ใช้งานได้จริง.
                                 </p>
                             </div>
@@ -270,22 +278,25 @@
                     </div>
                 </div>
 
-                <!-- Module 2: Camera AI Master -->
-                <div class="card p-4 bg-gray-50 border border-indigo-200">
-                    <h3 class="text-lg font-bold text-secondary-purple mb-3">Camera AI Master</h3>
-                    <div class="text-sm space-y-2 text-gray-700">
-                        <p><strong>ชื่อเต็ม (ไทย):</strong> ปัญญาประดิษฐ์สำหรับการประมวลผลจากกล้อง</p>
-                        <p><strong>วัตถุประสงค์:</strong> พัฒนาศักยภาพด้านการสร้างโมเดล Deep Learning สำหรับงานประมวลผลภาพ (Computer Vision) และโครงข่ายประสาทเทียม เพื่อนำไปประยุกต์ใช้ในอุตสาหกรรม/เกษตรกรรม</p>
-                        <p><strong>ระยะเวลา:</strong> ไม่น้อยกว่า 30 ชั่วโมง (5 วัน)</p>
-                        <p><strong>เครื่องมือหลัก:</strong> Pytorch, YOLO, CNN, NumPy, Pandas</p>
+                <!-- Module 2: Camera AI Master - THEME: PINK/RED -->
+                <div class="course-card p-5 bg-pink-50 border-4 border-pink-500 rounded-xl">
+                    <h3 class="text-xl font-extrabold text-pink-700 mb-3 flex items-center">
+                        <span class="mr-3 text-2xl">📸</span> Camera AI Master
+                    </h3>
+                    <div class="text-base space-y-2 text-gray-700">
+                         <!-- Adjusted text size for readability -->
+                        <p class="text-sm"><strong class="text-pink-600">ชื่อเต็ม (ไทย):</strong> ปัญญาประดิษฐ์สำหรับการประมวลผลจากกล้อง</p>
+                        <p class="text-sm"><strong class="text-pink-600">วัตถุประสงค์:</strong> พัฒนาศักยภาพด้านการสร้างโมเดล Deep Learning สำหรับงานประมวลผลภาพ (Computer Vision) และโครงข่ายประสาทเทียม เพื่อนำไปประยุกต์ใช้ในอุตสาหกรรม/เกษตรกรรม</p>
+                        <p class="text-sm"><strong class="text-pink-600">ระยะเวลา:</strong> ไม่น้อยกว่า 30 ชั่วโมง (5 วัน)</p>
+                        <p class="text-sm"><strong class="text-pink-600">เครื่องมือหลัก:</strong> Pytorch, YOLO, CNN, NumPy, Pandas</p>
                         
                          <!-- Collapsible Outline -->
-                         <div class="border-t pt-2 mt-2">
-                            <button onclick="toggleCollapsible('camera-outline')" class="w-full text-left font-semibold text-indigo-600 hover:text-pink-500 transition focus:outline-none flex items-center">
+                         <div class="border-t border-pink-200 pt-3 mt-3">
+                            <button onclick="toggleCollapsible('camera-outline')" class="w-full text-left font-semibold text-pink-600 hover:text-indigo-500 transition focus:outline-none flex items-center">
                                 <span id="camera-outline-icon" class="mr-2">&#9658;</span> หัวข้อหลัก (คลิกเพื่อดู)
                             </button>
                             <div id="camera-outline" class="collapsible-content">
-                                <ul class="list-disc list-inside mt-2 space-y-1 text-xs">
+                                <ul class="list-disc list-inside mt-2 space-y-1 text-sm text-gray-600">
                                     <li>**หัวข้อ 1:** พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (3 ทฤษฎี / 3 ปฏิบัติ)</li>
                                     <li>**หัวข้อ 2:** โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก (3 ทฤษฎี / 3 ปฏิบัติ)</li>
                                     <li>**หัวข้อ 3:** โครงข่ายประสาทแบบคอนโวลูชัน (CNN) (3 ทฤษฎี / 3 ปฏิบัติ)</li>
@@ -296,12 +307,12 @@
                         </div>
                         
                         <!-- Collapsible Description -->
-                        <div class="border-t pt-2 mt-2">
-                            <button onclick="toggleCollapsible('camera-description')" class="w-full text-left font-semibold text-indigo-600 hover:text-pink-500 transition focus:outline-none flex items-center">
+                        <div class="border-t border-pink-200 pt-3 mt-3">
+                            <button onclick="toggleCollapsible('camera-description')" class="w-full text-left font-semibold text-pink-600 hover:text-indigo-500 transition focus:outline-none flex items-center">
                                 <span id="camera-description-icon" class="mr-2">&#9658;</span> คำอธิบายหัวข้อหลัก (Outline)
                             </button>
                             <div id="camera-description" class="collapsible-content">
-                                <p class="text-xs pt-2">
+                                <p class="text-sm pt-2 text-gray-600">
                                     หลักสูตรนี้เน้นรายละเอียดเชิงเทคนิคเพื่อให้ผู้เรียนสามารถสร้างโมเดล AI สำหรับใช้งานกับกล้องได้ด้วยตนเอง การใช้งานโมเดล AI กับกล้องมีความสำคัญและแพร่หลายในอุตสาหกรรมและเกษตรกรรม เช่น การตรวจสอบชิ้นงาน การคัดแยก หรือการเฝ้าระวังเหตุการณ์ ผู้เรียนจะได้เจาะลึกการใช้ Pytorch และ YOLO เพื่อพัฒนา, ปรับแต่ง, และประยุกต์ใช้โมเดลในงานจริงของ SMEs ให้เหมาะสมและแม่นยำ.
                                 </p>
                             </div>
