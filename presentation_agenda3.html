@@ -3,535 +3,370 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เอกสารนำเสนอ: หลักสูตร AI Automation & Camera AI</title>
+    <title>นำเสนอแผนงานหลักสูตร AI & Automation</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Configure Tailwind for custom gradient text utility -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'Tahoma', 'sans-serif'],
-                    },
-                    colors: {
-                        'primary-blue': '#1e3a8a',
-                        'secondary-purple': '#5b21b6',
-                        'accent-pink': '#ec4899',
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        /* Custom CSS for gradient text effect */
-        .gradient-text {
-            background-color: #f3ec78;
-            background-image: linear-gradient(45deg, #1e40af, #7c3aed, #ec4899);
-            background-size: 100%;
-            -webkit-background-clip: text;
-            -moz-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            -moz-text-fill-color: transparent;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* blue-50 */
+            color: #1e293b; /* slate-800 */
         }
-
-        /* Styling for the main content container */
         .presentation-container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 2rem 1rem;
-            min-height: 100vh;
-            background: #f8fafc; /* Light gray background */
+            padding: 1.5rem 1rem;
         }
-
-        /* Specific card style */
+        .text-secondary-purple {
+            color: #5b21b6; /* indigo-700 */
+        }
+        .bg-gradient-header {
+            background: linear-gradient(90deg, #e0f2fe, #f0e6ff); /* Light Blue to Light Purple */
+        }
+        .border-accent-pink {
+            border-color: #ec4899; /* pink-500 */
+        }
+        .bg-accent-pink {
+            background-color: #ec4899; /* pink-500 */
+        }
+        .text-gradient {
+            background: linear-gradient(45deg, #a78bfa, #ec4899); /* Violet to Pink */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
         .card {
-            background-color: white;
-            border-radius: 1.5rem; /* Rounded corners */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Soft drop shadow */
-            padding: 1.5rem;
-            transition: transform 0.3s ease;
-            height: 100%; /* Ensure uniform height in grid */
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
         .card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
-
-        /* Styling for details/summary */
-        details summary {
-            cursor: pointer;
-            padding: 0.5rem 0;
-            font-weight: 600;
-            color: #1e40af; /* Blue */
-            transition: color 0.3s;
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 0.75rem 0;
+            border-bottom: 1px dashed #e5e7eb;
         }
-        details summary:hover {
-             color: #7c3aed; /* Purple */
-        }
-        details[open] summary {
-            border-bottom: 1px solid #e5e7eb;
-            margin-bottom: 0.5rem;
-        }
-        
-        /* Table Style for Course Structure (Kept for reference but not in the final output section) */
-        .course-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-top: 1rem;
-            border-radius: 1rem;
-            overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        .course-table th, .course-table td {
-            padding: 0.75rem 1rem;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .course-table th {
-            background-color: #eef2ff; /* Blue-50 */
-            color: #1e3a8a; /* Primary Blue */
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-        }
-        .course-table tr:last-child td {
+        .timeline-item:last-child {
             border-bottom: none;
         }
-        .course-table tr:nth-child(even) {
-            background-color: #f9fafb; /* Lightest background for zebra effect */
+        .timeline-checkbox {
+            margin-right: 0.75rem;
+            min-width: 1.25rem;
+            min-height: 1.25rem;
         }
-
-
-        /* Responsive layout adjustments */
-        @media (min-width: 1024px) {
-            .presentation-container {
-                padding: 3rem 2rem;
-            }
+        .timeline-text {
+            flex-grow: 1;
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-
-        /* Custom style for partner logos display */
-        .partner-logo {
-            max-width: 700px;
-            height: auto;
-            border-radius: 0.5rem;
-            margin: 0 auto;
+        .add-calendar-btn {
+            padding: 0.5rem 0.75rem;
+            border-radius: 9999px; /* Full rounded */
+            transition: all 0.2s;
+            line-height: 1;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-
-        /* Responsive font size adjustments */
-        @media (max-width: 767px) {
-            .agenda-title {
-                font-size: 1.75rem; /* text-3xl */
-            }
-            .agenda-subtitle {
-                font-size: 1.125rem; /* text-lg */
-            }
-            .main-title {
-                font-size: 2.25rem; /* text-4xl */
-            }
-            .course-card-title {
-                font-size: 1.5rem; /* text-2xl */
-            }
-            /* Further reduction for timeline text to fit one line on smaller screens */
-            .timeline-text {
-                font-size: 0.75rem; /* text-xs */
-            }
-            .timeline-date {
-                 font-size: 0.875rem; /* text-sm */
-            }
+        .add-calendar-btn:hover {
+            transform: scale(1.05);
+        }
+        /* Style for Collapsible Content */
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out;
+            padding: 0 1rem;
+        }
+        .collapsible-content.open {
+            max-height: 800px; /* Large enough value to show all content */
         }
     </style>
+    <script>
+        function toggleCollapsible(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(id + '-icon');
+            
+            content.classList.toggle('open');
+            if (content.classList.contains('open')) {
+                icon.innerHTML = '&#9660;'; // Down arrow
+            } else {
+                icon.innerHTML = '&#9658;'; // Right arrow
+            }
+        }
+
+        function createGoogleCalendarLink(title, details, location, startDate, endDate) {
+            const baseUrl = 'https://www.google.com/calendar/render?action=TEMPLATE';
+            const dates = `${startDate.replace(/:|-|\./g, '')}/${endDate.replace(/:|-|\./g, '')}`;
+            
+            const url = `${baseUrl}&text=${encodeURIComponent(title)}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(location)}&dates=${dates}`;
+            
+            window.open(url, '_blank');
+        }
+
+        // --- Calendar Events Data ---
+        const eventsAutomation = [
+            { date: '1 พ.ย. 68 (เสาร์)', title: 'หัวข้อ 1 & 2: ปรัชญา No-Code/Low-Code และการออกแบบฐานข้อมูล', start: '20251101T090000', end: '20251101T160000', loc: 'Online/Onsite' },
+            { date: '2 พ.ย. 68 (อาทิตย์)', title: 'หัวข้อ 3 & 4: Logic/Flow Automation และ Workshop AppSheet (ปฏิบัติ)-1', start: '20251102T090000', end: '20251102T160000', loc: 'Online/Onsite' },
+            { date: '8 พ.ย. 68 (เสาร์)', title: 'หัวข้อ 4 & 5: Workshop AppSheet (ปฏิบัติ)-2 และ Workshop N8N (ปฏิบัติ)-1', start: '20251108T090000', end: '20251108T160000', loc: 'Online/Onsite' },
+            { date: '9 พ.ย. 68 (อาทิตย์)', title: 'หัวข้อ 5: Workshop N8N (ปฏิบัติ)-2 & -3', start: '20251109T090000', end: '20251109T160000', loc: 'Online/Onsite' },
+            { date: '15 พ.ย. 68 (เสาร์)', title: 'หัวข้อ 6: Project: พัฒนา AI Automation MVP สำหรับ SMEs และสรุปผล', start: '20251115T090000', end: '20251115T160000', loc: 'Online/Onsite' }
+        ];
+
+        const eventsCamera = [
+            { date: '22 พ.ย. 68 (เสาร์)', title: 'หัวข้อ 1: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch', start: '20251122T090000', end: '20251122T160000', loc: 'Online/Onsite' },
+            { date: '23 พ.ย. 68 (อาทิตย์)', title: 'หัวข้อ 2: โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก', start: '20251123T090000', end: '20251123T160000', loc: 'Online/Onsite' },
+            { date: '29 พ.ย. 68 (เสาร์)', title: 'หัวข้อ 3: โครงข่ายประสาทแบบคอนโวลูชัน (CNN)', start: '20251129T090000', end: '20251129T160000', loc: 'Online/Onsite' },
+            { date: '30 พ.ย. 68 (อาทิตย์)', title: 'หัวข้อ 4: การเรียนรู้แบบถ่ายโอน & Object Detection', start: '20251130T090000', end: '20251130T160000', loc: 'Online/Onsite' },
+            { date: '6 ธ.ค. 68 (เสาร์)', title: 'หัวข้อ 5: การตรวจจับแบบเวลาจริงด้วย YOLO', start: '20251206T090000', end: '20251206T160000', loc: 'Online/Onsite' }
+        ];
+
+        function createAutomationTimeline() {
+            const container = document.getElementById('automation-timeline');
+            eventsAutomation.forEach((event, index) => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                item.innerHTML = `
+                    <input type="checkbox" id="check-auto-${index}" class="timeline-checkbox rounded text-pink-500 border-gray-300 focus:ring-pink-500">
+                    <div class="timeline-text">
+                        <label for="check-auto-${index}" class="flex-grow text-gray-700 text-sm">
+                            <strong>${event.date}:</strong> ${event.title} (09.00-16.00 น.)
+                        </label>
+                        <button onclick="createGoogleCalendarLink('${event.title}', 'หลักสูตร AI Automation & Data Integration Master', '${event.loc}', '${event.start}', '${event.end}')"
+                                class="add-calendar-btn bg-green-500 text-white hover:bg-green-600 ml-3 text-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function createCameraTimeline() {
+            const container = document.getElementById('camera-timeline');
+            eventsCamera.forEach((event, index) => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                item.innerHTML = `
+                    <input type="checkbox" id="check-cam-${index}" class="timeline-checkbox rounded text-pink-500 border-gray-300 focus:ring-pink-500">
+                    <div class="timeline-text">
+                        <label for="check-cam-${index}" class="flex-grow text-gray-700 text-sm">
+                            <strong>${event.date}:</strong> ${event.title} (09.00-16.00 น.)
+                        </label>
+                        <button onclick="createGoogleCalendarLink('${event.title}', 'หลักสูตร Camera AI Master', '${event.loc}', '${event.start}', '${event.end}')"
+                                class="add-calendar-btn bg-green-500 text-white hover:bg-green-600 ml-3 text-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        window.onload = function() {
+            createAutomationTimeline();
+            createCameraTimeline();
+        };
+    </script>
 </head>
-<body class="font-sans antialiased">
-
+<body>
     <div class="presentation-container">
-
-        <!-- Header Section: Partner Logo and Main Title -->
-        <header class="text-center mb-12 p-6 bg-white rounded-3xl shadow-lg">
-            <!-- Partner Logo/Header Image -->
-            <div class="flex flex-col items-center mb-6">
-                <img 
-                    src="https://lh3.googleusercontent.com/d/1E7Z5y-T2KR0sfkfrBMNbd_QAILy29a0F" 
-                    alt="โลโก้พันธมิตรโครงการ" 
-                    class="partner-logo mb-3 border border-gray-100"
-                    onerror="this.onerror=null; this.src='https://placehold.co/700x120/E0F2F1/0F172A?text=Partner+Logos';"
-                >
-            </div>
-
-            <!-- Main Title -->
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 main-title">
-                <span class="gradient-text">
-                    โครงการพัฒนากำลังคนสมรรถนะสูงด้านปัญญาประดิษฐ์
-                </span>
-            </h1>
-            <p class="text-lg text-gray-500 max-w-3xl mx-auto">
-                สำหรับระบบอัตโนมัติและการประมวลผลจากกล้องด้วยเครื่องมือ No-Code/Low-Code
-            </p>
+        <!-- HEADER / LOGO BAR -->
+        <header class="bg-white p-4 rounded-xl shadow-md mb-8">
+            <img src="https://lh3.googleusercontent.com/d/1E7Z5y-T2KR0sfkfrBMNbd_QAILy29a0F" 
+                 alt="โลโก้พันธมิตรโครงการ" 
+                 class="max-w-full h-auto mx-auto rounded-lg"
+                 style="max-height: 150px; width: auto;">
         </header>
 
-        <!-- Agenda Section -->
-        <section class="mb-12">
-            <h2 class="text-3xl md:text-4xl font-extrabold mb-6 pb-2 border-b-4 border-accent-pink inline-block agenda-title">
-                <span class="gradient-text">วาระที่ 3: เรื่องที่เสนอให้ที่ประชุมทราบ</span>
+        <!-- MAIN TITLE -->
+        <div class="text-center mb-10">
+            <!-- ADJUSTED: Reduced h1 size from text-3xl md:text-4xl to text-2xl md:text-3xl -->
+            <h1 class="text-2xl md:text-3xl font-extrabold text-gradient leading-tight mb-2">
+                โครงการพัฒนากำลังคนสมรรถนะสูงด้านปัญญาประดิษฐ์
+            </h1>
+            <p class="text-md text-gray-600">
+                สำหรับระบบอัตโนมัติและการประมวลผลจากกล้องด้วยเครื่องมือ No-Code/Low-Code
+            </p>
+        </div>
+
+        <!-- AGENDA ITEM 3 -->
+        <div class="card bg-white p-6 mb-10">
+            <h2 class="text-xl md:text-2xl font-bold text-secondary-purple pb-1 border-b-2 border-accent-pink inline-block mb-6">
+                วาระที่ 3: เรื่องที่เสนอเพื่อให้ที่ประชุมทราบ
             </h2>
-            <div class="bg-white p-6 rounded-2xl shadow-xl">
-                <p class="text-xl md:text-2xl font-semibold text-primary-blue agenda-subtitle">
-                    3.1 การนำเสนอการออกแบบหลักสูตรและกระบวนการประเมินผลด้านปัญญาประดิษฐ์สำหรับระบบอัตโนมัติและการประมวลผลจากกล้องด้วยเครื่องมือ No-Code/ Low-Code
-                </p>
+            <div class="pl-4">
+                <h3 class="text-lg md:text-xl font-semibold text-gray-800 mb-6">
+                    3.1 การนำเสนอการออกแบบหลักสูตรและกระบวนการประเมินผลด้านปัญญาประดิษฐ์สำหรับระบบอัตโนมัติและการประมวลผลจากกล้องด้วยเครื่องมือ No-Code/Low-Code
+                </h3>
             </div>
-        </section>
 
-        <!-- Course Summary Section (Cards) -->
-        <section class="mb-12">
-            <h3 class="text-3xl font-bold mb-6">
-                <span class="gradient-text">หลักสูตรที่เสนอ (2 Modules)</span> 🚀
-            </h3>
+            <!-- COURSE MODULES SUMMARY -->
+            <h2 class="text-xl md:text-2xl font-bold text-secondary-purple mb-6 mt-8 flex items-center">
+                หลักสูตรที่เสนอ (2 Modules) <span class="ml-2 text-2xl">🚀</span>
+            </h2>
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
-                <!-- Card 1: AI Automation & Data Integration Master -->
-                <div class="card">
-                    <div class="h-3 bg-gradient-to-r from-primary-blue to-secondary-purple rounded-t-xl -m-4 mb-4"></div>
-                    <h4 class="text-xl md:text-2xl font-extrabold text-primary-blue mb-3 flex items-center course-card-title">
-                        <span class="mr-2 text-2xl md:text-3xl">🤖</span> AI Automation & Data Integration Master
-                    </h4>
-                    <p class="text-base font-medium text-gray-600 mb-4">
-                        <span class="font-bold">ชื่อหลักสูตร (ไทย):</span> ปัญญาประดิษฐ์สำหรับระบบอัตโนมัติและการบูรณาการข้อมูลระดับสูง
-                    </p>
-                    
-                    <ul class="space-y-2 text-sm text-gray-700">
-                        <li class="flex items-start">
-                            <span class="text-xl mr-2 text-secondary-purple">🎯</span>
-                            <span class="flex-1">
-                                <span class="font-semibold">วัตถุประสงค์:</span> สร้างระบบอัตโนมัติ (Automation Workflow) และการเชื่อมโยงข้อมูล (Data Integration) ด้วยเครื่องมือ No-Code/Low-Code เพื่อยกระดับประสิทธิภาพ SMEs
-                            </span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-xl mr-2 text-secondary-purple">⏳</span>
-                            <span class="flex-1">
-                                <span class="font-semibold">ระยะเวลา:</span> ไม่น้อยกว่า 30 ชั่วโมง (5 วัน)
-                            </span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-xl mr-2 text-secondary-purple">🛠️</span>
-                            <span class="flex-1">
-                                <span class="font-semibold">เครื่องมือหลัก:</span> AppSheet, N8N, Google Sheets/Airtable
-                            </span>
-                        </li>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Module 1: AI Automation & Data Integration Master -->
+                <div class="card p-4 bg-gray-50 border border-indigo-200">
+                    <h3 class="text-lg font-bold text-secondary-purple mb-3">AI Automation & Data Integration Master</h3>
+                    <div class="text-sm space-y-2 text-gray-700">
+                        <p><strong>ชื่อเต็ม (ไทย):</strong> ปัญญาประดิษฐ์สำหรับระบบอัตโนมัติและการบูรณาการข้อมูลระดับสูง</p>
+                        <p><strong>วัตถุประสงค์:</strong> สร้างระบบอัตโนมัติ (Automation Workflow) และการเชื่อมโยงข้อมูล (Data Integration) ด้วยเครื่องมือ No-Code/Low-Code เพื่อยกระดับผู้ประกอบการ SMEs</p>
+                        <p><strong>ระยะเวลา:</strong> ไม่น้อยกว่า 30 ชั่วโมง (5 วัน)</p>
+                        <p><strong>เครื่องมือหลัก:</strong> AppSheet, N8N, Google Sheets/Airtable</p>
+                        
+                        <!-- Collapsible Outline -->
+                        <div class="border-t pt-2 mt-2">
+                            <button onclick="toggleCollapsible('automation-outline')" class="w-full text-left font-semibold text-indigo-600 hover:text-pink-500 transition focus:outline-none flex items-center">
+                                <span id="automation-outline-icon" class="mr-2">&#9658;</span> หัวข้อหลัก (คลิกเพื่อดู)
+                            </button>
+                            <div id="automation-outline" class="collapsible-content">
+                                <ul class="list-disc list-inside mt-2 space-y-1 text-xs">
+                                    <li>**หัวข้อ 1 & 2:** ปรัชญา No-Code/Low-Code และการออกแบบฐานข้อมูลที่ยืดหยุ่น (5 ชม.)</li>
+                                    <li>**หัวข้อ 3:** การวิเคราะห์และออกแบบ Logic/Flow Automation ขั้นสูง (5 ชม.)</li>
+                                    <li>**หัวข้อ 4:** Workshop: สร้าง Web/Mobile App ด้วย AppSheet (6 ชม.)</li>
+                                    <li>**หัวข้อ 5:** Workshop: เชื่อมต่อและทำงานอัตโนมัติด้วย N8N (8 ชม.)</li>
+                                    <li>**หัวข้อ 6:** Project: พัฒนา AI Automation MVP สำหรับ SMEs (6 ชม.)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Collapsible Description -->
+                        <div class="border-t pt-2 mt-2">
+                            <button onclick="toggleCollapsible('automation-description')" class="w-full text-left font-semibold text-indigo-600 hover:text-pink-500 transition focus:outline-none flex items-center">
+                                <span id="automation-description-icon" class="mr-2">&#9658;</span> คำอธิบายหัวข้อหลัก (Outline)
+                            </button>
+                            <div id="automation-description" class="collapsible-content">
+                                <p class="text-xs pt-2">
+                                    หลักสูตรนี้มุ่งเน้นการสร้าง "กำลังคนทักษะสูง" ที่สามารถนำ AI Automation มาใช้เพิ่มประสิทธิภาพธุรกิจ SMEs ได้อย่างรวดเร็วและประหยัดต้นทุน ผ่านเครื่องมือ No-Code/Low-Code ซึ่งช่วยลดข้อจำกัดในการเขียนโค้ด ทำให้บุคลากรนอกสาย IT สามารถเข้าถึงและสร้างระบบอัตโนมัติเพื่อลดความผิดพลาดและงานซ้ำซ้อนได้อย่างเป็นรูปธรรม หัวข้อต่างๆ ครอบคลุมตั้งแต่หลักการออกแบบฐานข้อมูลไปจนถึงการสร้าง MVP ที่ใช้งานได้จริง.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 2: Camera AI Master -->
+                <div class="card p-4 bg-gray-50 border border-indigo-200">
+                    <h3 class="text-lg font-bold text-secondary-purple mb-3">Camera AI Master</h3>
+                    <div class="text-sm space-y-2 text-gray-700">
+                        <p><strong>ชื่อเต็ม (ไทย):</strong> ปัญญาประดิษฐ์สำหรับการประมวลผลจากกล้อง</p>
+                        <p><strong>วัตถุประสงค์:</strong> พัฒนาศักยภาพด้านการสร้างโมเดล Deep Learning สำหรับงานประมวลผลภาพ (Computer Vision) และโครงข่ายประสาทเทียม เพื่อนำไปประยุกต์ใช้ในอุตสาหกรรม/เกษตรกรรม</p>
+                        <p><strong>ระยะเวลา:</strong> ไม่น้อยกว่า 30 ชั่วโมง (5 วัน)</p>
+                        <p><strong>เครื่องมือหลัก:</strong> Pytorch, YOLO, CNN, NumPy, Pandas</p>
+                        
+                         <!-- Collapsible Outline -->
+                         <div class="border-t pt-2 mt-2">
+                            <button onclick="toggleCollapsible('camera-outline')" class="w-full text-left font-semibold text-indigo-600 hover:text-pink-500 transition focus:outline-none flex items-center">
+                                <span id="camera-outline-icon" class="mr-2">&#9658;</span> หัวข้อหลัก (คลิกเพื่อดู)
+                            </button>
+                            <div id="camera-outline" class="collapsible-content">
+                                <ul class="list-disc list-inside mt-2 space-y-1 text-xs">
+                                    <li>**หัวข้อ 1:** พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (3 ทฤษฎี / 3 ปฏิบัติ)</li>
+                                    <li>**หัวข้อ 2:** โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก (3 ทฤษฎี / 3 ปฏิบัติ)</li>
+                                    <li>**หัวข้อ 3:** โครงข่ายประสาทแบบคอนโวลูชัน (CNN) (3 ทฤษฎี / 3 ปฏิบัติ)</li>
+                                    <li>**หัวข้อ 4:** การเรียนรู้แบบถ่ายโอน (Transfer Learning) และ Object Detection (3 ทฤษฎี / 3 ปฏิบัติ)</li>
+                                    <li>**หัวข้อ 5:** การตรวจจับแบบเวลาจริงด้วย YOLO (V3 ถึง V8) (4 ทฤษฎี / 2 ปฏิบัติ)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Collapsible Description -->
+                        <div class="border-t pt-2 mt-2">
+                            <button onclick="toggleCollapsible('camera-description')" class="w-full text-left font-semibold text-indigo-600 hover:text-pink-500 transition focus:outline-none flex items-center">
+                                <span id="camera-description-icon" class="mr-2">&#9658;</span> คำอธิบายหัวข้อหลัก (Outline)
+                            </button>
+                            <div id="camera-description" class="collapsible-content">
+                                <p class="text-xs pt-2">
+                                    หลักสูตรนี้เน้นรายละเอียดเชิงเทคนิคเพื่อให้ผู้เรียนสามารถสร้างโมเดล AI สำหรับใช้งานกับกล้องได้ด้วยตนเอง การใช้งานโมเดล AI กับกล้องมีความสำคัญและแพร่หลายในอุตสาหกรรมและเกษตรกรรม เช่น การตรวจสอบชิ้นงาน การคัดแยก หรือการเฝ้าระวังเหตุการณ์ ผู้เรียนจะได้เจาะลึกการใช้ Pytorch และ YOLO เพื่อพัฒนา, ปรับแต่ง, และประยุกต์ใช้โมเดลในงานจริงของ SMEs ให้เหมาะสมและแม่นยำ.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EVALUATION PROCESS -->
+            <h2 class="text-xl md:text-2xl font-bold text-secondary-purple mb-6 mt-12 flex items-center">
+                กระบวนการประเมินผล <span class="ml-2 text-2xl">📋</span>
+            </h2>
+            <p class="text-sm text-gray-600 mb-8">กระบวนการประเมินครอบคลุมทั้งภาคทฤษฎีและภาคปฏิบัติ เพื่อให้มั่นใจว่าผู้เรียนสามารถนำความรู้ไปใช้งานจริงได้</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                <!-- 1. การประเมินความรู้ (ทฤษฎี) -->
+                <div class="card p-4 bg-white border border-green-300">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-green-500 text-white font-bold rounded-full w-6 h-6 flex items-center justify-center mr-2">1</span>
+                        <h4 class="font-bold text-gray-800">การประเมินความรู้ (ทฤษฎี)</h4>
+                    </div>
+                    <ul class="list-disc list-inside space-y-1 pl-2 text-gray-700">
+                        <li>สอบก่อนเรียน/หลังเรียน (Post-Test)</li>
+                        <li>เกณฑ์ผ่าน: ร้อยละ 70</li>
+                        <li><a href="./evaluation1.html" target="_blank" class="text-indigo-600 hover:text-pink-500 font-semibold underline">ตัวอย่างแบบทดสอบ (Google Form)</a></li>
                     </ul>
-
-                    <details class="mt-4">
-                        <summary>หัวข้อหลัก (คลิกเพื่อดู)</summary>
-                        <ul class="list-disc list-inside ml-4 text-xs text-gray-600 space-y-1 pt-2">
-                            <li>หัวข้อ 1: ปรัชญา No-Code/Low-Code และ Al Automation (2 ชม.)</li>
-                            <li>หัวข้อ 2: การออกแบบฐานข้อมูล และการบูรณาการข้อมูล (3 ชม.)</li>
-                            <li>หัวข้อ 3: การวิเคราะห์และออกแบบ Logic/Flow Automation ขั้นสูง (5 ชม.)</li>
-                            <li>หัวข้อ 4: Workshop: สร้าง Web/Mobile App ด้วย AppSheet (6 ชม.)</li>
-                            <li>หัวข้อ 5: Workshop: เชื่อมต่อและทำงานอัตโนมัติด้วย N8N (8 ชม.)</li>
-                            <li>หัวข้อ 6: Project: พัฒนา Al Automation MVP สำหรับ SMEs (6 ชม.)</li>
-                        </ul>
-                    </details>
-                    
-                    <details class="mt-4">
-                        <summary class="font-semibold text-secondary-purple">คำอธิบายหัวข้อหลัก (Outline)</summary>
-                        <p class="text-xs text-gray-700 pt-2 leading-tight">
-                            หลักสูตรนี้มุ่งเน้นการสร้าง **'นักพัฒนาพลเมือง' (Citizen Developers)** โดยใช้เครื่องมือ No-Code/Low-Code เพื่อขับเคลื่อน Digital Transformation ในธุรกิจ SMEs ผู้เรียนจะได้เรียนรู้ปรัชญาการทำงานอัตโนมัติ, การออกแบบฐานข้อมูลที่ยืดหยุ่น (Google Sheets/Airtable) และการสร้าง Workflow อัตโนมัติที่ซับซ้อนด้วย N8N. การอบรมจะเน้น Workshp ที่ลงมือปฏิบัติจริงในการสร้าง Web/Mobile App ด้วย AppSheet และปิดท้ายด้วยการพัฒนาโครงการ MVP ที่สามารถนำไปใช้ในธุรกิจได้จริง.
-                        </p>
-                    </details>
                 </div>
-                
-                <!-- Card 2: Camera AI Master -->
-                <div class="card">
-                    <div class="h-3 bg-gradient-to-r from-secondary-purple to-accent-pink rounded-t-xl -m-4 mb-4"></div>
-                    <h4 class="text-xl md:text-2xl font-extrabold text-primary-blue mb-3 flex items-center course-card-title">
-                        <span class="mr-2 text-2xl md:text-3xl">📸</span> Camera AI Master
-                    </h4>
-                    <p class="text-base font-medium text-gray-600 mb-4">
-                        <span class="font-bold">ชื่อหลักสูตร (ไทย):</span> ปัญญาประดิษฐ์สำหรับการประมวลผลจากกล้อง
-                    </p>
-                    
-                    <ul class="space-y-2 text-sm text-gray-700">
-                        <li class="flex items-start">
-                            <span class="text-xl mr-2 text-accent-pink">🎯</span>
-                            <span class="flex-1">
-                                <span class="font-semibold">วัตถุประสงค์:</span> พัฒนาศักยภาพการสร้างโมเดล Deep Learning สำหรับงาน Computer Vision เช่น การตรวจจับวัตถุ, การคัดแยกชิ้นงาน เพื่อเพิ่มประสิทธิภาพในอุตสาหกรรม/เกษตรกรรม
-                            </span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-xl mr-2 text-accent-pink">⏳</span>
-                            <span class="flex-1">
-                                <span class="font-semibold">ระยะเวลา:</span> ไม่น้อยกว่า 30 ชั่วโมง (5 วัน)
-                            </span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-xl mr-2 text-accent-pink">🛠️</span>
-                            <span class="flex-1">
-                                <span class="font-semibold">เครื่องมือหลัก:</span> PyTorch, YOLO, CNN, NumPy, Pandas
-                            </span>
-                        </li>
+
+                <!-- 2. การประเมินทักษะ (ปฏิบัติ) -->
+                <div class="card p-4 bg-white border border-blue-300">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-blue-500 text-white font-bold rounded-full w-6 h-6 flex items-center justify-center mr-2">2</span>
+                        <h4 class="font-bold text-gray-800">การประเมินทักษะ (ปฏิบัติ)</h4>
+                    </div>
+                    <ul class="list-disc list-inside space-y-1 pl-2 text-gray-700">
+                        <li>ใบงานภาคปฏิบัติ (Workshop)</li>
+                        <li>Project MVP (สำหรับ SMEs)</li>
+                        <li>เกณฑ์ผ่าน: ร้อยละ 70</li>
+                        <li><a href="./evaluation2.html" target="_blank" class="text-indigo-600 hover:text-pink-500 font-semibold underline">ตัวอย่างใบงาน (Assignment HTML)</a></li>
                     </ul>
-
-                    <details class="mt-4">
-                        <summary>หัวข้อหลัก (คลิกเพื่อดู)</summary>
-                        <ul class="list-disc list-inside ml-4 text-xs text-gray-600 space-y-1 pt-2">
-                            <li>หัวข้อ 1: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (3 ทฤษฎี / 3 ปฏิบัติ)</li>
-                            <li>หัวข้อ 2: โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก (3 ทฤษฎี / 3 ปฏิบัติ)</li>
-                            <li>หัวข้อ 3: โครงข่ายประสาทแบบคอนโวลูชัน (CNN) (3 ทฤษฎี / 3 ปฏิบัติ)</li>
-                            <li>หัวข้อ 4: การเรียนรู้แบบถ่ายโอน (Transfer Learning) และ Object Detection (3 ทฤษฎี / 3 ปฏิบัติ)</li>
-                            <li>หัวข้อ 5: การตรวจจับแบบเวลาจริงด้วย YOLO (v3 ถึง v8) (4 ทฤษฎี / 2 ปฏิบัติ)</li>
-                        </ul>
-                    </details>
-                    
-                    <details class="mt-4">
-                        <summary class="font-semibold text-secondary-purple">คำอธิบายหัวข้อหลัก (Outline)</summary>
-                        <p class="text-xs text-gray-700 pt-2 leading-tight">
-                            หลักสูตรนี้เจาะลึกการสร้างโมเดล Computer Vision ตั้งแต่พื้นฐาน PyTorch ไปจนถึงการประยุกต์ใช้ในอุตสาหกรรม ผู้เรียนจะได้ทำความเข้าใจโครงข่ายประสาทเทียม (Neural Networks) และ CNN เพื่อการประมวลผลภาพอย่างแม่นยำ. หัวข้อสำคัญคือการเรียนรู้แบบถ่ายโอน (Transfer Learning) และการใช้โมเดล Pre-trained เช่น ResNet/MobileNet. จุดสูงสุดของหลักสูตรคือการฝึกปฏิบัติการตรวจจับวัตถุแบบเรียลไทม์ด้วย YOLO (You Only Look Once) เพื่อสร้างระบบตรวจสอบชิ้นงานหรือเฝ้าระวังเหตุการณ์ที่สามารถปรับใช้ได้ด้วยตนเอง.
-                        </p>
-                    </details>
                 </div>
 
-            </div>
-        </section>
-
-        <!-- Evaluation Process Section -->
-        <section class="mb-12">
-            <h3 class="text-3xl font-bold mb-6">
-                <span class="gradient-text">กระบวนการประเมินผล</span> 📋
-            </h3>
-
-            <div class="card p-6 bg-blue-50/70">
-                <p class="text-base text-primary-blue font-semibold mb-4">
-                    กระบวนการประเมินครอบคลุมทั้งภาคทฤษฎีและภาคปฏิบัติ เพื่อให้มั่นใจว่าผู้เรียนสามารถนำความรู้ไปใช้งานจริงได้
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    
-                    <!-- 1. การประเมินความรู้ (ทฤษฎี) -->
-                    <div class="bg-white p-4 rounded-lg shadow-md">
-                        <p class="font-bold text-gray-800 flex items-center"><span class="text-xl mr-2">1️⃣</span> การประเมินความรู้ (ทฤษฎี)</p>
-                        <ul class="text-sm text-gray-600 mt-1 list-disc list-inside ml-4">
-                            <li>สอบก่อนเรียน/หลังเรียน (Post-Test)</li>
-                            <li>เกณฑ์ผ่าน: <span class="font-bold text-green-600">ร้อยละ 70</span></li>
-                            <li><a href="./evaluation_1.html" target="_blank" class="text-secondary-purple underline hover:text-accent-pink text-xs font-semibold">🔗 ตัวอย่างแบบทดสอบ (Google Form)</a></li>
-                        </ul>
+                <!-- 3. การเข้าร่วม -->
+                <div class="card p-4 bg-white border border-red-300">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-red-500 text-white font-bold rounded-full w-6 h-6 flex items-center justify-center mr-2">3</span>
+                        <h4 class="font-bold text-gray-800">การเข้าร่วม</h4>
                     </div>
-                    
-                    <!-- 2. การประเมินทักษะ (ปฏิบัติ) -->
-                    <div class="bg-white p-4 rounded-lg shadow-md">
-                        <p class="font-bold text-gray-800 flex items-center"><span class="text-xl mr-2">2️⃣</span> การประเมินทักษะ (ปฏิบัติ)</p>
-                        <ul class="text-sm text-gray-600 mt-1 list-disc list-inside ml-4">
-                            <li>ใบงานภาคปฏิบัติ (Workshop)</li>
-                            <li>Project MVP (สำหรับ SMEs)</li>
-                            <li>เกณฑ์ผ่าน: <span class="font-bold text-green-600">ร้อยละ 70</span></li>
-                            <li><a href="./evaluation_2.html" target="_blank" class="text-secondary-purple underline hover:text-accent-pink text-xs font-semibold">🔗 ตัวอย่างใบงาน (Assignment HTML)</a></li>
-                        </ul>
-                    </div>
-                    
-                    <!-- 3. การเข้าร่วม -->
-                    <div class="bg-white p-4 rounded-lg shadow-md">
-                        <p class="font-bold text-gray-800 flex items-center"><span class="text-xl mr-2">3️⃣</span> การเข้าร่วม</p>
-                        <ul class="text-sm text-gray-600 mt-1 list-disc list-inside ml-4">
-                            <li>วัดระดับการเข้าเรียน</li>
-                            <li>เกณฑ์ผ่าน: <span class="font-bold text-green-600">ไม่น้อยกว่า 80%</span></li>
-                            <li><a href="./evaluation_3.html" target="_blank" class="text-secondary-purple underline hover:text-accent-pink text-xs font-semibold">🔗 ระบบ Check-in (Google App Script)</a></li>
-                        </ul>
-                    </div>
+                    <ul class="list-disc list-inside space-y-1 pl-2 text-gray-700">
+                        <li>วัดระดับการเข้าเรียน</li>
+                        <li>เกณฑ์ผ่าน: ไม่น้อยกว่า 80%</li>
+                        <li><a href="./evaluation3.html" target="_blank" class="text-indigo-600 hover:text-pink-500 font-semibold underline">ระบบ Check-in (Google App Script)</a></li>
+                    </ul>
                 </div>
             </div>
-        </section>
-        
-        <!-- Timeline Section -->
-        <section class="mb-12">
-            <!-- Timeline 1: AI Automation Master -->
-            <h3 class="text-3xl font-bold mb-6">
-                <span class="gradient-text">แผนงานการฝึกอบรม (AI Automation Master)</span> 📅
-            </h3>
-            
-            <div class="card p-6 mb-8">
-                <p class="text-base font-semibold text-gray-700 mb-4">ตารางการอบรมหลักสูตร AI Automation & Data Integration Master (1 - 15 พ.ย. 2568)</p>
-                
-                <!-- Timeline List with Checkboxes -->
-                <ul class="space-y-3">
-                    <!-- Day 1 -->
-                    <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <input type="checkbox" id="task1" class="mt-1 w-5 h-5 text-secondary-purple bg-gray-100 border-gray-300 rounded focus:ring-secondary-purple mr-3">
-                        <label for="task1" class="flex-1 text-gray-800 text-sm timeline-text">
-                            <span class="font-bold timeline-date">🗓️ 1 พ.ย. 68 (เสาร์):</span> 
-                            ปรัชญา No-Code/Low-Code (09.00-12.00) & การออกแบบฐานข้อมูล (13.00-16.00)
-                        </label>
-                        <button onclick="addToCalendar('AI Automation: ปรัชญา No-Code/Low-Code & ออกแบบฐานข้อมูล', '20251101T090000', '20251101T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
-                            <span class="text-lg align-middle">➕</span>
-                        </button>
-                    </li>
-                    
-                    <!-- Day 2 -->
-                    <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <input type="checkbox" id="task2" class="mt-1 w-5 h-5 text-secondary-purple bg-gray-100 border-gray-300 rounded focus:ring-secondary-purple mr-3">
-                        <label for="task2" class="flex-1 text-gray-800 text-sm timeline-text">
-                            <span class="font-bold timeline-date">🗓️ 2 พ.ย. 68 (อาทิตย์):</span> 
-                            Logic/Flow Automation (ทฤษฎี) & Workshop AppSheet (ปฏิบัติ)-1
-                        </label>
-                        <button onclick="addToCalendar('AI Automation: Logic Flow & AppSheet Workshop 1', '20251102T090000', '20251102T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
-                            <span class="text-lg align-middle">➕</span>
-                        </button>
-                    </li>
 
-                    <!-- Day 3 -->
-                    <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <input type="checkbox" id="task3" class="mt-1 w-5 h-5 text-secondary-purple bg-gray-100 border-gray-300 rounded focus:ring-secondary-purple mr-3">
-                        <label for="task3" class="flex-1 text-gray-800 text-sm timeline-text">
-                            <span class="font-bold timeline-date">🗓️ 8 พ.ย. 68 (เสาร์):</span> 
-                            Workshop AppSheet (ปฏิบัติ)-2 & Workshop N8N (ปฏิบัติ)-1
-                        </label>
-                        <button onclick="addToCalendar('AI Automation: AppSheet Workshop 2 & N8N Workshop 1', '20251108T090000', '20251108T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
-                            <span class="text-lg align-middle">➕</span>
-                        </button>
-                    </li>
-
-                    <!-- Day 4 -->
-                    <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <input type="checkbox" id="task4" class="mt-1 w-5 h-5 text-secondary-purple bg-gray-100 border-gray-300 rounded focus:ring-secondary-purple mr-3">
-                        <label for="task4" class="flex-1 text-gray-800 text-sm timeline-text">
-                            <span class="font-bold timeline-date">🗓️ 9 พ.ย. 68 (อาทิตย์):</span> 
-                            Workshop N8N (ปฏิบัติ)-2 & Workshop N8N (ปฏิบัติ)-3
-                        </label>
-                        <button onclick="addToCalendar('AI Automation: N8N Workshop 2 & 3', '20251109T090000', '20251109T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
-                            <span class="text-lg align-middle">➕</span>
-                        </button>
-                    </li>
-
-                    <!-- Day 5 -->
-                    <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <input type="checkbox" id="task5" class="mt-1 w-5 h-5 text-secondary-purple bg-gray-100 border-gray-300 rounded focus:ring-secondary-purple mr-3">
-                        <label for="task5" class="flex-1 text-gray-800 text-sm timeline-text">
-                            <span class="font-bold timeline-date">🗓️ 15 พ.ย. 68 (เสาร์):</span> 
-                            Project: พัฒนา Al Automation MVP สำหรับ SMEs (ปฏิบัติ) และสรุปผล
-                        </label>
-                        <button onclick="addToCalendar('AI Automation: Final Project MVP & Summary', '20251115T090000', '20251115T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
-                            <span class="text-lg align-middle">➕</span>
-                        </button>
-                    </li>
-                </ul>
-                
-                <div id="calendar-message-ai" class="mt-4 text-center p-3 text-sm rounded-lg text-primary-blue bg-blue-100 hidden"></div>
-
+            <!-- TIMELINE / CALENDAR SECTION -->
+            <h2 class="text-xl md:text-2xl font-bold text-secondary-purple mb-6 mt-12 flex items-center">
+                แผนงานฝึกอบรม (AI Automation Master) <span class="ml-2 text-2xl">📅</span>
+            </h2>
+            <p class="text-sm text-gray-600 mb-4">ตารางอบรมหลักสูตร AI Automation & Data Integration Master (1 - 15 พ.ย. 2568)</p>
+            <div class="card bg-white p-4" id="automation-timeline">
+                <!-- Automation Timeline Items will be generated here by JavaScript -->
             </div>
 
-            <!-- Timeline 2: Camera AI Master (Structure) -->
-            <h3 class="text-3xl font-bold mb-6 mt-12">
-                <span class="gradient-text">แผนงานการฝึกอบรม (Camera AI Master)</span> 📷
-            </h3>
-            
-            <div class="card p-6">
-                <p class="text-base font-semibold text-gray-700 mb-4">ตารางการอบรมหลักสูตร Camera AI Master (22 พ.ย. - 6 ธ.ค. 2568)</p>
-                
-                <!-- Timeline List with Checkboxes for Camera AI -->
-                <ul class="space-y-3">
-                    <!-- Day 1 (Camera AI) -->
-                    <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <input type="checkbox" id="cai_task1" class="mt-1 w-5 h-5 text-accent-pink bg-gray-100 border-gray-300 rounded focus:ring-accent-pink mr-3">
-                        <label for="cai_task1" class="flex-1 text-gray-800 text-sm timeline-text">
-                            <span class="font-bold timeline-date">🗓️ 22 พ.ย. 68 (เสาร์):</span> 
-                            หัวข้อ 1: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (09.00-16.00 น.)
-                        </label>
-                        <button onclick="addToCalendar('Camera AI: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch', '20251122T090000', '20251122T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
-                            <span class="text-lg align-middle">➕</span>
-                        </button>
-                    </li>
-                    
-                    <!-- Day 2 -->
-                    <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <input type="checkbox" id="cai_task2" class="mt-1 w-5 h-5 text-accent-pink bg-gray-100 border-gray-300 rounded focus:ring-accent-pink mr-3">
-                        <label for="cai_task2" class="flex-1 text-gray-800 text-sm timeline-text">
-                            <span class="font-bold timeline-date">🗓️ 23 พ.ย. 68 (อาทิตย์):</span> 
-                            หัวข้อ 2: โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก (09.00-16.00 น.)
-                        </label>
-                        <button onclick="addToCalendar('Camera AI: โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก', '20251123T090000', '20251123T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
-                            <span class="text-lg align-middle">➕</span>
-                        </button>
-                    </li>
-
-                    <!-- Day 3 -->
-                    <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <input type="checkbox" id="cai_task3" class="mt-1 w-5 h-5 text-accent-pink bg-gray-100 border-gray-300 rounded focus:ring-accent-pink mr-3">
-                        <label for="cai_task3" class="flex-1 text-gray-800 text-sm timeline-text">
-                            <span class="font-bold timeline-date">🗓️ 29 พ.ย. 68 (เสาร์):</span> 
-                            หัวข้อ 3: โครงข่ายประสาทแบบคอนโวลูชัน (CNN) (09.00-16.00 น.)
-                        </label>
-                        <button onclick="addToCalendar('Camera AI: โครงข่ายประสาทแบบคอนโวลูชัน (CNN)', '20251129T090000', '20251129T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
-                            <span class="text-lg align-middle">➕</span>
-                        </button>
-                    </li>
-
-                    <!-- Day 4 -->
-                    <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <input type="checkbox" id="cai_task4" class="mt-1 w-5 h-5 text-accent-pink bg-gray-100 border-gray-300 rounded focus:ring-accent-pink mr-3">
-                        <label for="cai_task4" class="flex-1 text-gray-800 text-sm timeline-text">
-                            <span class="font-bold timeline-date">🗓️ 30 พ.ย. 68 (อาทิตย์):</span> 
-                            หัวข้อ 4: การเรียนรู้แบบถ่ายโอน (Transfer Learning) และ Object Detection (09.00-16.00 น.)
-                        </label>
-                        <button onclick="addToCalendar('Camera AI: Transfer Learning & Object Detection', '20251130T090000', '20251130T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
-                            <span class="text-lg align-middle">➕</span>
-                        </button>
-                    </li>
-
-                    <!-- Day 5 -->
-                    <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <input type="checkbox" id="cai_task5" class="mt-1 w-5 h-5 text-accent-pink bg-gray-100 border-gray-300 rounded focus:ring-accent-pink mr-3">
-                        <label for="cai_task5" class="flex-1 text-gray-800 text-sm timeline-text">
-                            <span class="font-bold timeline-date">🗓️ 6 ธ.ค. 68 (เสาร์):</span> 
-                            หัวข้อ 5: การตรวจจับแบบเวลาจริงด้วย YOLO (09.00-16.00 น.)
-                        </label>
-                        <button onclick="addToCalendar('Camera AI: การตรวจจับแบบเวลาจริงด้วย YOLO', '20251206T090000', '20251206T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
-                            <span class="text-lg align-middle">➕</span>
-                        </button>
-                    </li>
-                </ul>
-                
-                <div id="calendar-message-cai" class="mt-4 text-center p-3 text-sm rounded-lg text-primary-blue bg-blue-100 hidden"></div>
-
+            <h2 class="text-xl md:text-2xl font-bold text-secondary-purple mb-6 mt-12 flex items-center">
+                แผนงานฝึกอบรม (Camera AI Master) <span class="ml-2 text-2xl">📸</span>
+            </h2>
+            <p class="text-sm text-gray-600 mb-4">ตารางอบรมหลักสูตร Camera AI Master (22 พ.ย. - 6 ธ.ค. 2568)</p>
+            <div class="card bg-white p-4" id="camera-timeline">
+                <!-- Camera Timeline Items will be generated here by JavaScript -->
             </div>
-        </section>
+        </div>
 
-        <!-- Footer Section: Contact Info -->
-        <footer class="mt-12 pt-6 border-t-4 border-accent-pink/50 text-center">
-            <div class="p-4 bg-gray-100 rounded-xl shadow-inner inline-block">
-                <p class="text-base font-semibold text-primary-blue">
-                    จัดทำโดย <span class="text-lg font-extrabold text-secondary-purple">อ.แทน [ธีรชัย โฉมทัพ]</span>
-                </p>
-                <p class="text-sm text-gray-600">
-                    Head of Digital Transformation
-                </p>
-            </div>
+        <!-- FOOTER -->
+        <footer class="mt-8 pt-4 border-t border-gray-300 text-center text-sm text-gray-500">
+            จัดทำโดย อ.แทน [ธีรชัย โฉมทัพ] 👨‍💻 Head of Digital Transformation
         </footer>
 
     </div>
-    
-    <!-- JavaScript for Add to Calendar functionality (REAL IMPLEMENTATION) -->
-    <script>
-        /**
-         * Creates and opens a new Google Calendar event link.
-         * @param {string} title - The title of the event.
-         * @param {string} startDateTime - Start datetime in YYYYMMDDTHHMMSS format (e.g., '20251101T090000').
-         * @param {string} endDateTime - End datetime in YYYYMMDDTHHMMSS format (e.g., '20251101T160000').
-         * @param {string} startTimeText - Start time text for user message (e.g., '09:00').
-         * @param {string} endTimeText - End time text for user message (e.g., '16:00').
-         */
-        function addToCalendar(title, startDateTime, endDateTime, startTimeText, endTimeText) {
-            const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startDateTime}/${endDateTime}&sf=true&output=xml`;
-
-            window.open(calendarUrl, '_blank');
-            
-            // Show message box (since we can't detect if the user saved it, just confirm the action)
-            const messageBox = document.getElementById(title.includes('Camera AI') ? 'calendar-message-cai' : 'calendar-message-ai');
-            if (messageBox) {
-                messageBox.textContent = `✅ เปิดหน้าต่างปฏิทินสำหรับกิจกรรม "${title}" เรียบร้อยแล้ว (เวลา ${startTimeText} - ${endTimeText} น.). โปรดบันทึกในหน้าต่างใหม่`;
-                messageBox.classList.remove('hidden');
-                setTimeout(() => {
-                    messageBox.classList.add('hidden');
-                }, 5000);
-            }
-        }
-    </script>
 </body>
 </html>
