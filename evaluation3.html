@@ -84,12 +84,21 @@
         // Set the mock current date to October 6, 2025 (2568)
         const mockCurrentDate = new Date(2025, 9, 6, 14, 49, 0); 
         
+        // Array of Thai month abbreviations (starting from index 0 for Jan)
+        const thaiMonths = [
+            "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+            "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
+        ];
+        
         function formatDate(date) {
             const d = new Date(date);
-            const year = d.getFullYear() + 543; // Convert to Buddhist Era (2568)
-            const month = d.getMonth() + 1;
+            const beYear = d.getFullYear() + 543; // Buddhist Era year (e.g., 2568)
+            const shortYear = String(beYear).slice(-2); // Last two digits (e.g., 68)
+            const monthIndex = d.getMonth(); // 0-11
             const day = d.getDate();
-            return `${day} ${month} ${year}`;
+            
+            // Format: Day Month-abbreviation Year-short (e.g., 6 ต.ค. 68)
+            return `${day} ${thaiMonths[monthIndex]} ${shortYear}`;
         }
 
         function formatTime(date) {
