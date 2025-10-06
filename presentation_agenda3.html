@@ -74,7 +74,7 @@
             margin-bottom: 0.5rem;
         }
         
-        /* Table Style for Course Structure */
+        /* Table Style for Course Structure (Kept for reference but not in the final output section) */
         .course-table {
             width: 100%;
             border-collapse: separate;
@@ -133,8 +133,12 @@
             .course-card-title {
                 font-size: 1.5rem; /* text-2xl */
             }
+            /* Further reduction for timeline text to fit one line on smaller screens */
             .timeline-text {
-                font-size: 0.875rem; /* text-sm */
+                font-size: 0.75rem; /* text-xs */
+            }
+            .timeline-date {
+                 font-size: 0.875rem; /* text-sm */
             }
         }
     </style>
@@ -328,9 +332,9 @@
                     <!-- Day 1 -->
                     <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
                         <input type="checkbox" id="task1" class="mt-1 w-5 h-5 text-secondary-purple bg-gray-100 border-gray-300 rounded focus:ring-secondary-purple mr-3">
-                        <label for="task1" class="flex-1 text-gray-800 timeline-text">
-                            <span class="font-bold text-sm">🗓️ 1 พ.ย. 68 (เสาร์):</span> 
-                            <span class="text-xs block md:inline">ปรัชญา No-Code/Low-Code (09.00-12.00) & การออกแบบฐานข้อมูล (13.00-16.00)</span>
+                        <label for="task1" class="flex-1 text-gray-800 text-sm timeline-text">
+                            <span class="font-bold timeline-date">🗓️ 1 พ.ย. 68 (เสาร์):</span> 
+                            ปรัชญา No-Code/Low-Code (09.00-12.00) & การออกแบบฐานข้อมูล (13.00-16.00)
                         </label>
                         <button onclick="addToCalendar('AI Automation: ปรัชญา No-Code/Low-Code & ออกแบบฐานข้อมูล', '20251101T090000', '20251101T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
                             <span class="text-lg align-middle">➕</span>
@@ -340,9 +344,9 @@
                     <!-- Day 2 -->
                     <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
                         <input type="checkbox" id="task2" class="mt-1 w-5 h-5 text-secondary-purple bg-gray-100 border-gray-300 rounded focus:ring-secondary-purple mr-3">
-                        <label for="task2" class="flex-1 text-gray-800 timeline-text">
-                            <span class="font-bold text-sm">🗓️ 2 พ.ย. 68 (อาทิตย์):</span> 
-                            <span class="text-xs block md:inline">Logic/Flow Automation (ทฤษฎี) & Workshop AppSheet (ปฏิบัติ)-1</span>
+                        <label for="task2" class="flex-1 text-gray-800 text-sm timeline-text">
+                            <span class="font-bold timeline-date">🗓️ 2 พ.ย. 68 (อาทิตย์):</span> 
+                            Logic/Flow Automation (ทฤษฎี) & Workshop AppSheet (ปฏิบัติ)-1
                         </label>
                         <button onclick="addToCalendar('AI Automation: Logic Flow & AppSheet Workshop 1', '20251102T090000', '20251102T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
                             <span class="text-lg align-middle">➕</span>
@@ -352,9 +356,9 @@
                     <!-- Day 3 -->
                     <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
                         <input type="checkbox" id="task3" class="mt-1 w-5 h-5 text-secondary-purple bg-gray-100 border-gray-300 rounded focus:ring-secondary-purple mr-3">
-                        <label for="task3" class="flex-1 text-gray-800 timeline-text">
-                            <span class="font-bold text-sm">🗓️ 8 พ.ย. 68 (เสาร์):</span> 
-                            <span class="text-xs block md:inline">Workshop AppSheet (ปฏิบัติ)-2 & Workshop N8N (ปฏิบัติ)-1</span>
+                        <label for="task3" class="flex-1 text-gray-800 text-sm timeline-text">
+                            <span class="font-bold timeline-date">🗓️ 8 พ.ย. 68 (เสาร์):</span> 
+                            Workshop AppSheet (ปฏิบัติ)-2 & Workshop N8N (ปฏิบัติ)-1
                         </label>
                         <button onclick="addToCalendar('AI Automation: AppSheet Workshop 2 & N8N Workshop 1', '20251108T090000', '20251108T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
                             <span class="text-lg align-middle">➕</span>
@@ -364,9 +368,9 @@
                     <!-- Day 4 -->
                     <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
                         <input type="checkbox" id="task4" class="mt-1 w-5 h-5 text-secondary-purple bg-gray-100 border-gray-300 rounded focus:ring-secondary-purple mr-3">
-                        <label for="task4" class="flex-1 text-gray-800 timeline-text">
-                            <span class="font-bold text-sm">🗓️ 9 พ.ย. 68 (อาทิตย์):</span> 
-                            <span class="text-xs block md:inline">Workshop N8N (ปฏิบัติ)-2 & Workshop N8N (ปฏิบัติ)-3</span>
+                        <label for="task4" class="flex-1 text-gray-800 text-sm timeline-text">
+                            <span class="font-bold timeline-date">🗓️ 9 พ.ย. 68 (อาทิตย์):</span> 
+                            Workshop N8N (ปฏิบัติ)-2 & Workshop N8N (ปฏิบัติ)-3
                         </label>
                         <button onclick="addToCalendar('AI Automation: N8N Workshop 2 & 3', '20251109T090000', '20251109T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
                             <span class="text-lg align-middle">➕</span>
@@ -376,9 +380,9 @@
                     <!-- Day 5 -->
                     <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
                         <input type="checkbox" id="task5" class="mt-1 w-5 h-5 text-secondary-purple bg-gray-100 border-gray-300 rounded focus:ring-secondary-purple mr-3">
-                        <label for="task5" class="flex-1 text-gray-800 timeline-text">
-                            <span class="font-bold text-sm">🗓️ 15 พ.ย. 68 (เสาร์):</span> 
-                            <span class="text-xs block md:inline">Project: พัฒนา Al Automation MVP สำหรับ SMEs (ปฏิบัติ) และสรุปผล</span>
+                        <label for="task5" class="flex-1 text-gray-800 text-sm timeline-text">
+                            <span class="font-bold timeline-date">🗓️ 15 พ.ย. 68 (เสาร์):</span> 
+                            Project: พัฒนา Al Automation MVP สำหรับ SMEs (ปฏิบัติ) และสรุปผล
                         </label>
                         <button onclick="addToCalendar('AI Automation: Final Project MVP & Summary', '20251115T090000', '20251115T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
                             <span class="text-lg align-middle">➕</span>
@@ -403,9 +407,9 @@
                     <!-- Day 1 (Camera AI) -->
                     <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
                         <input type="checkbox" id="cai_task1" class="mt-1 w-5 h-5 text-accent-pink bg-gray-100 border-gray-300 rounded focus:ring-accent-pink mr-3">
-                        <label for="cai_task1" class="flex-1 text-gray-800 timeline-text">
-                            <span class="font-bold text-sm">🗓️ 22 พ.ย. 68 (เสาร์):</span> 
-                            <span class="text-xs block md:inline">หัวข้อ 1: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (09.00-16.00 น.)</span>
+                        <label for="cai_task1" class="flex-1 text-gray-800 text-sm timeline-text">
+                            <span class="font-bold timeline-date">🗓️ 22 พ.ย. 68 (เสาร์):</span> 
+                            หัวข้อ 1: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (09.00-16.00 น.)
                         </label>
                         <button onclick="addToCalendar('Camera AI: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch', '20251122T090000', '20251122T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
                             <span class="text-lg align-middle">➕</span>
@@ -415,9 +419,9 @@
                     <!-- Day 2 (Camera AI) -->
                     <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
                         <input type="checkbox" id="cai_task2" class="mt-1 w-5 h-5 text-accent-pink bg-gray-100 border-gray-300 rounded focus:ring-accent-pink mr-3">
-                        <label for="cai_task2" class="flex-1 text-gray-800 timeline-text">
-                            <span class="font-bold text-sm">🗓️ 23 พ.ย. 68 (อาทิตย์):</span> 
-                            <span class="text-xs block md:inline">หัวข้อ 2: โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก (09.00-16.00 น.)</span>
+                        <label for="cai_task2" class="flex-1 text-gray-800 text-sm timeline-text">
+                            <span class="font-bold timeline-date">🗓️ 23 พ.ย. 68 (อาทิตย์):</span> 
+                            หัวข้อ 2: โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก (09.00-16.00 น.)
                         </label>
                         <button onclick="addToCalendar('Camera AI: โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก', '20251123T090000', '20251123T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
                             <span class="text-lg align-middle">➕</span>
@@ -427,9 +431,9 @@
                     <!-- Day 3 (Camera AI) -->
                     <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
                         <input type="checkbox" id="cai_task3" class="mt-1 w-5 h-5 text-accent-pink bg-gray-100 border-gray-300 rounded focus:ring-accent-pink mr-3">
-                        <label for="cai_task3" class="flex-1 text-gray-800 timeline-text">
-                            <span class="font-bold text-sm">🗓️ 29 พ.ย. 68 (เสาร์):</span> 
-                            <span class="text-xs block md:inline">หัวข้อ 3: โครงข่ายประสาทแบบคอนโวลูชัน (CNN) (09.00-16.00 น.)</span>
+                        <label for="cai_task3" class="flex-1 text-gray-800 text-sm timeline-text">
+                            <span class="font-bold timeline-date">🗓️ 29 พ.ย. 68 (เสาร์):</span> 
+                            หัวข้อ 3: โครงข่ายประสาทแบบคอนโวลูชัน (CNN) (09.00-16.00 น.)
                         </label>
                         <button onclick="addToCalendar('Camera AI: โครงข่ายประสาทแบบคอนโวลูชัน (CNN)', '20251129T090000', '20251129T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
                             <span class="text-lg align-middle">➕</span>
@@ -439,9 +443,9 @@
                     <!-- Day 4 (Camera AI) -->
                     <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
                         <input type="checkbox" id="cai_task4" class="mt-1 w-5 h-5 text-accent-pink bg-gray-100 border-gray-300 rounded focus:ring-accent-pink mr-3">
-                        <label for="cai_task4" class="flex-1 text-gray-800 timeline-text">
-                            <span class="font-bold text-sm">🗓️ 30 พ.ย. 68 (อาทิตย์):</span> 
-                            <span class="text-xs block md:inline">หัวข้อ 4: การเรียนรู้แบบถ่ายโอน (Transfer Learning) และ Object Detection (09.00-16.00 น.)</span>
+                        <label for="cai_task4" class="flex-1 text-gray-800 text-sm timeline-text">
+                            <span class="font-bold timeline-date">🗓️ 30 พ.ย. 68 (อาทิตย์):</span> 
+                            หัวข้อ 4: การเรียนรู้แบบถ่ายโอน (Transfer Learning) และ Object Detection (09.00-16.00 น.)
                         </label>
                         <button onclick="addToCalendar('Camera AI: Transfer Learning & Object Detection', '20251130T090000', '20251130T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
                             <span class="text-lg align-middle">➕</span>
@@ -451,9 +455,9 @@
                     <!-- Day 5 (Camera AI) -->
                     <li class="flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200">
                         <input type="checkbox" id="cai_task5" class="mt-1 w-5 h-5 text-accent-pink bg-gray-100 border-gray-300 rounded focus:ring-accent-pink mr-3">
-                        <label for="cai_task5" class="flex-1 text-gray-800 timeline-text">
-                            <span class="font-bold text-sm">🗓️ 6 ธ.ค. 68 (เสาร์):</span> 
-                            <span class="text-xs block md:inline">หัวข้อ 5: การตรวจจับแบบเวลาจริงด้วย YOLO (09.00-16.00 น.)</span>
+                        <label for="cai_task5" class="flex-1 text-gray-800 text-sm timeline-text">
+                            <span class="font-bold timeline-date">🗓️ 6 ธ.ค. 68 (เสาร์):</span> 
+                            หัวข้อ 5: การตรวจจับแบบเวลาจริงด้วย YOLO (09.00-16.00 น.)
                         </label>
                         <button onclick="addToCalendar('Camera AI: การตรวจจับแบบเวลาจริงด้วย YOLO', '20251206T090000', '20251206T160000', '09:00', '16:00')" class="ml-4 px-3 py-1 text-xs font-semibold text-white bg-green-600 rounded-full hover:bg-green-700 transition">
                             <span class="text-lg align-middle">➕</span>
@@ -463,55 +467,6 @@
                 
                 <div id="calendar-message-cai" class="mt-4 text-center p-3 text-sm rounded-lg text-primary-blue bg-blue-100 hidden"></div>
 
-                <p class="text-base font-semibold text-gray-700 mt-8 mb-4">ตารางชั่วโมงการเรียนรู้ตลอดหลักสูตร (รวม 30 ชั่วโมง)</p>
-                <table class="course-table">
-                    <thead>
-                        <tr>
-                            <th class="w-1/2">หัวข้อ</th>
-                            <th class="w-1/6 text-center">ทฤษฎี (ชม.)</th>
-                            <th class="w-1/6 text-center">ปฏิบัติ (ชม.)</th>
-                            <th class="w-1/6 text-center">รวม (ชม.)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1. พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center font-bold">6</td>
-                        </tr>
-                        <tr>
-                            <td>2. โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center font-bold">6</td>
-                        </tr>
-                        <tr>
-                            <td>3. โครงข่ายประสาทแบบคอนโวลูชัน (CNN)</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center font-bold">6</td>
-                        </tr>
-                        <tr>
-                            <td>4. การเรียนรู้แบบถ่ายโอนและการตรวจจับวัตถุในรูปภาพ</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center font-bold">6</td>
-                        </tr>
-                        <tr>
-                            <td>5. การตรวจจับแบบเวลาจริงด้วย YOLO</td>
-                            <td class="text-center">4</td>
-                            <td class="text-center">2</td>
-                            <td class="text-center font-bold">6</td>
-                        </tr>
-                        <tr class="bg-blue-100/70">
-                            <td class="font-extrabold">รวมชั่วโมงการเรียนรู้ตลอดหลักสูตร</td>
-                            <td class="text-center font-extrabold">16</td>
-                            <td class="text-center font-extrabold">14</td>
-                            <td class="text-center font-extrabold">30</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </section>
 
