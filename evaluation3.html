@@ -4,275 +4,326 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ตัวอย่างระบบลงทะเบียนเข้าเรียน</title>
+    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            color: #1e293b;
+            background-color: #f8fafc; /* blue-50 */
+            color: #1e293b; /* slate-800 */
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0; 
+        .container-card {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0;
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden; /* Important for full-width logo */
         }
-        .checkin-card {
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            padding: 2rem;
-            margin-top: -30px; 
-            background-color: #ffffff;
-        }
-        .text-gradient {
-            background: linear-gradient(45deg, #a78bfa, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
-        }
-        #history-section {
-            display: none;
-            transition: all 0.3s ease-in-out;
-        }
-        .history-table th, .history-table td {
-            padding: 0.5rem;
-            text-align: left;
-            font-size: 0.875rem;
-        }
-        /* Custom logo style for full display */
         .full-logo-container {
-            height: 120px; 
+            height: 120px; /* Fixed height for the banner */
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f3f4f6; 
+            background-color: #f3f4f6; /* Subtle background for contrast */
         }
         .full-logo-container img {
             width: 100%;
             height: 100%;
             object-fit: contain; /* Ensures the whole image is visible */
         }
+        .form-area {
+            padding: 2rem;
+        }
+        .text-main-pink {
+            color: #ec4899; /* pink-500 */
+        }
+        .btn-pink {
+            background-color: #ec4899; /* pink-500 */
+            transition: background-color 0.3s;
+        }
+        .btn-pink:hover {
+            background-color: #db2777; /* pink-600 */
+        }
+        .btn-toggle {
+            background-color: #dbeafe; /* blue-100 */
+            color: #1e40af; /* blue-800 */
+            border: 1px solid #93c5fd; /* blue-300 */
+            transition: background-color 0.3s;
+        }
+        .btn-toggle:hover {
+            background-color: #bfdbfe; /* blue-200 */
+        }
+        .history-section {
+            display: none;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        .history-table th, .history-table td {
+            padding: 0.5rem;
+            text-align: left;
+            font-size: 0.75rem; /* Smaller font for table data */
+        }
+        .history-table th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+        }
+        .history-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        footer {
+            background-color: #f1f5f9; /* slate-100 */
+            padding: 1rem;
+            font-size: 0.75rem;
+        }
     </style>
     <script>
-        // Mock data for history display
-        const mockHistory = {
+        // Set the mock current date to October 6, 2025 (2568)
+        const mockCurrentDate = new Date(2025, 9, 6, 14, 49, 0); 
+        
+        function formatDate(date) {
+            const d = new Date(date);
+            const year = d.getFullYear() + 543; // Convert to Buddhist Era (2568)
+            const month = d.getMonth() + 1;
+            const day = d.getDate();
+            return `${day} ${month} ${year}`;
+        }
+
+        function formatTime(date) {
+            const d = new Date(date);
+            const hours = String(d.getHours()).padStart(2, '0');
+            const minutes = String(d.getMinutes()).padStart(2, '0');
+            const seconds = String(d.getSeconds()).padStart(2, '0');
+            return `${hours}:${minutes}:${seconds}`;
+        }
+
+        const mockCheckins = {
             "A123@email.com": [
-                { date: "1 พ.ย. 68", module: "AI Automation", topic: "หัวข้อ 1 & 2 (เช้า)", time: "09:05:30" },
-                { date: "1 พ.ย. 68", module: "AI Automation", topic: "หัวข้อ 1 & 2 (บ่าย)", time: "13:02:15" },
-                { date: "22 พ.ย. 68", module: "Camera AI", topic: "หัวข้อ 1 (เช้า)", time: "09:10:00" }
+                { module: "AI Automation", topic: "1 พ.ย. (เช้า, 09.00): หัวข้อ 1: ปรัชญา No-Code/Low-Code (ทฤษฎี)", timestamp: new Date(2025, 10, 1, 9, 15) },
+                { module: "AI Automation", topic: "1 พ.ย. (บ่าย, 13.00): หัวข้อ 2: การออกแบบฐานข้อมูล (ปฏิบัติ)", timestamp: new Date(2025, 10, 1, 13, 10) },
+                { module: "Camera AI", topic: "22 พ.ย. (เช้า, 09.00): หัวข้อ 1: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (ทฤษฎี/ส่วนที่ 1)", timestamp: new Date(2025, 10, 22, 9, 05) }
             ],
             "B456@email.com": [
-                { date: "1 พ.ย. 68", module: "AI Automation", topic: "หัวข้อ 1 & 2 (เช้า)", time: "09:00:10" }
+                { module: "AI Automation", topic: "2 พ.ย. (เช้า, 09.00): หัวข้อ 3: การวิเคราะห์และออกแบบ Logic/Flow (ทฤษฎี)", timestamp: new Date(2025, 10, 2, 9, 01) },
+                { module: "AI Automation", topic: "8 พ.ย. (บ่าย, 13.00): หัวข้อ 5: Workshop N8N (ปฏิบัติ)-1", timestamp: new Date(2025, 11, 8, 13, 05) }
             ]
         };
 
-        function populateHistory(email) {
-            const history = mockHistory[email] || [];
-            const tbody = document.getElementById('history-tbody');
-            tbody.innerHTML = '';
+        function updateHistory(email) {
+            const historyBody = document.getElementById('history-body');
+            const historyData = mockCheckins[email] || [];
+            historyBody.innerHTML = '';
             
-            if (history.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center text-gray-500 py-4">ไม่พบประวัติการเข้าร่วม</td></tr>`;
+            if (historyData.length === 0) {
+                historyBody.innerHTML = '<tr><td colspan="4" class="text-center p-4 text-gray-500">ไม่พบประวัติการเข้าร่วมสำหรับรหัสนี้</td></tr>';
+            } else {
+                historyData.forEach(item => {
+                    const row = historyBody.insertRow();
+                    row.insertCell().textContent = formatDate(item.timestamp);
+                    row.insertCell().textContent = item.module;
+                    row.insertCell().textContent = item.topic;
+                    row.insertCell().textContent = formatTime(item.timestamp);
+                });
+            }
+
+            // Show history section after updating
+            document.getElementById('history-section').style.display = 'block';
+            document.getElementById('toggle-history-btn').textContent = 'ซ่อนประวัติการเข้าร่วมเรียน (Hide)';
+        }
+
+        function handleCheckin() {
+            const emailInput = document.getElementById('email-input');
+            const email = emailInput.value.trim();
+            const topic = document.getElementById('topic-select').value;
+            const btn = document.getElementById('checkin-btn');
+
+            if (!email || !topic) {
+                alert('กรุณากรอกรหัสผู้เรียน/อีเมล และเลือกหัวข้อ');
                 return;
             }
 
-            history.forEach(item => {
-                const row = tbody.insertRow();
-                row.className = 'border-t';
-                row.innerHTML = `
-                    <td class="font-semibold">${item.date}</td>
-                    <td>${item.module}</td>
-                    <td>${item.topic}</td>
-                    <td>${item.time}</td>
-                `;
+            // Simulate Check-in success
+            const [moduleName, topicDetail] = topic.split(' | ');
+            const newCheckin = {
+                module: moduleName,
+                topic: topicDetail,
+                // Use the mock current date/time
+                timestamp: mockCurrentDate 
+            };
+
+            // Add new checkin to mock data for instant display (if email is one of the mock keys)
+            if (mockCheckins[email]) {
+                mockCheckins[email].push(newCheckin);
+            } else {
+                 // For new users, create a mock entry
+                mockCheckins[email] = [newCheckin];
+            }
+
+            updateHistory(email); // Refresh history
+            
+            // Show message
+            btn.textContent = '✅ ลงทะเบียนสำเร็จ!';
+            btn.classList.add('bg-green-500', 'hover:bg-green-600');
+            btn.classList.remove('bg-pink-500', 'hover:bg-pink-600');
+            
+            setTimeout(() => {
+                btn.textContent = 'ลงนามเข้าร่วมเรียน';
+                btn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                btn.classList.add('bg-pink-500', 'hover:bg-pink-600');
+            }, 3000);
+        }
+
+        function setupToggleButton() {
+            const btn = document.getElementById('toggle-history-btn');
+            const historySection = document.getElementById('history-section');
+            btn.style.display = 'none'; // Initially hidden
+            historySection.style.display = 'none';
+
+            // Show toggle button when email is entered (mockup logic)
+            document.getElementById('email-input').addEventListener('input', function() {
+                if (this.value.trim().length > 0) {
+                     // Check if mock data exists for this email
+                    if (mockCheckins[this.value.trim()]) {
+                        btn.style.display = 'block';
+                    } else {
+                        btn.style.display = 'block';
+                    }
+                } else {
+                    btn.style.display = 'none';
+                    historySection.style.display = 'none';
+                }
             });
         }
-
-        function handleCheckIn(event) {
-            event.preventDefault();
-            const emailInput = document.getElementById('email').value.trim();
-            const topic = document.getElementById('topic').value;
-
-            if (!emailInput || topic === '') {
-                alert('กรุณากรอกรหัสผู้เรียน/อีเมล และเลือกหัวข้อ/ช่วงเวลา');
-                return;
-            }
-
-            // Mock registration success and display history
-            const mockRegistered = { date: "15 พ.ย. 68", module: "AI Automation", topic: topic, time: new Date().toLocaleTimeString('th-TH') };
-            
-            // If email is mock email, push new mock data for display
-            if (mockHistory[emailInput]) {
-                mockHistory[emailInput].push(mockRegistered);
-            } else {
-                mockHistory[emailInput] = [mockRegistered];
-            }
-
-            alert(`ลงทะเบียนสำเร็จ: ${topic} เวลา ${mockRegistered.time}`);
-            
-            // Show history and populate the newly updated data
-            populateHistory(emailInput);
-            document.getElementById('history-section').style.display = 'block';
-            document.getElementById('toggle-button').innerText = 'ซ่อนประวัติการเข้าร่วมเรียน (Hide)';
-        }
-
+        
         function toggleHistory() {
             const historySection = document.getElementById('history-section');
-            const button = document.getElementById('toggle-button');
-            
-            if (historySection.style.display === 'none' || historySection.style.display === '') {
-                const emailInput = document.getElementById('email').value.trim();
-                if (emailInput === '') {
-                    alert('กรุณากรอกรหัสผู้เรียน/อีเมล เพื่อดูประวัติ');
-                    return;
-                }
-                
-                // Only populate if needed and show
-                populateHistory(emailInput);
-                historySection.style.display = 'block';
-                button.innerText = 'ซ่อนประวัติการเข้าร่วมเรียน (Hide)';
-            } else {
+            const btn = document.getElementById('toggle-history-btn');
+            const email = document.getElementById('email-input').value.trim();
+
+            if (historySection.style.display === 'block') {
                 historySection.style.display = 'none';
-                button.innerText = 'แสดงประวัติการเข้าร่วมเรียน (Show)';
-            }
-        }
-        
-        function checkEmailForButton() {
-            const emailInput = document.getElementById('email').value.trim();
-            const toggleButton = document.getElementById('toggle-button');
-            const historySection = document.getElementById('history-section');
-
-            // Hide history when email changes
-            historySection.style.display = 'none';
-            toggleButton.innerText = 'แสดงประวัติการเข้าร่วมเรียน (Show)';
-
-            if (emailInput.length > 5) {
-                toggleButton.classList.remove('hidden');
+                btn.textContent = 'แสดงประวัติการเข้าร่วมเรียน (Show)';
             } else {
-                toggleButton.classList.add('hidden');
+                updateHistory(email); // Update and show history
+                historySection.style.display = 'block';
+                btn.textContent = 'ซ่อนประวัติการเข้าร่วมเรียน (Hide)';
             }
         }
+
+        window.onload = setupToggleButton;
     </script>
 </head>
 <body>
-    <div class="container">
-        <!-- Logo Banner -->
-        <header class="w-full">
-            <div class="full-logo-container w-full">
-                <img src="https://lh3.googleusercontent.com/d/1E7Z5y-T2KR0sfkfrBMNbd_QAILy29a0F" 
-                     alt="โลโก้พันธมิตรโครงการ">
-            </div>
+    <div class="container-card">
+        <!-- HEADER / LOGO BAR -->
+        <header class="full-logo-container w-full">
+            <img src="https://lh3.googleusercontent.com/d/1E7Z5y-T2KR0sfkfrBMNbd_QAILy29a0F" 
+                 alt="โลโก้พันธมิตรโครงการ">
         </header>
 
-        <div class="checkin-card mx-4 sm:mx-0">
-            <h1 class="text-3xl font-extrabold text-gradient mb-4 text-center">
+        <div class="form-area">
+            <h1 class="text-2xl font-extrabold text-center text-main-pink mb-4">
                 ระบบลงทะเบียนเข้าเรียน (Check-in)
             </h1>
-            <p class="text-sm text-gray-600 mb-6 text-center border-b pb-3">
-                ใช้สำหรับบันทึกเวลาเข้าเรียนในแต่ละหัวข้อ
-            </p>
+            <p class="text-center text-gray-600 text-xs mb-6">ใช้สำหรับบันทึกเวลาเข้าเรียนในแต่ละหัวข้อ</p>
 
-            <!-- Check-in Form -->
-            <form class="space-y-6" onsubmit="handleCheckIn(event)">
-                
+            <!-- CHECK-IN FORM -->
+            <div class="space-y-4">
                 <div>
-                    <label for="email" class="block text-md font-medium text-gray-700 mb-1">
-                        รหัสผู้เรียน/อีเมล <span class="text-red-500">*</span>
-                    </label>
-                    <input type="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 p-2 border" 
-                           placeholder="เช่น A123@email.com (สำหรับทดสอบ: A123@email.com หรือ B456@email.com)" 
-                           oninput="checkEmailForButton()" required>
+                    <label for="email-input" class="block text-sm font-medium text-gray-700">รหัสผู้เรียน/อีเมล <span class="text-red-500">*</span></label>
+                    <input type="text" id="email-input" placeholder="ตัวอย่าง: A123@email.com (สำหรับทดสอบ)"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 text-base p-2.5">
                 </div>
 
                 <div>
-                    <label for="topic" class="block text-md font-medium text-gray-700 mb-1">
-                        หัวข้อ/โมดูลที่เข้าเรียน (วันที่/เวลา/รายละเอียด) <span class="text-red-500">*</span>
-                    </label>
-                    <select id="topic" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 p-2 border" required>
+                    <label for="topic-select" class="block text-sm font-medium text-gray-700">หัวข้อ/โมดูลที่เข้าเรียน (วันที่/เวลา/รายละเอียด) <span class="text-red-500">*</span></label>
+                    <select id="topic-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 text-base p-2.5">
                         <option value="">-- เลือกหัวข้อ/ช่วงเวลา --</option>
                         <optgroup label="AI Automation & Data Integration Master (1 - 15 พ.ย. 68)">
-                            <option value="1 พ.ย. (เช้า, 09.00): หัวข้อ 1: ปรัชญา No-Code/Low-Code (ทฤษฎี)">1 พ.ย. (เช้า, 09.00): หัวข้อ 1: ปรัชญา No-Code/Low-Code (ทฤษฎี)</option>
-                            <option value="1 พ.ย. (บ่าย, 13.00): หัวข้อ 2: การออกแบบฐานข้อมูล (ทฤษฎี/ปฏิบัติ)">1 พ.ย. (บ่าย, 13.00): หัวข้อ 2: การออกแบบฐานข้อมูล (ทฤษฎี/ปฏิบัติ)</option>
-                            <option value="2 พ.ย. (เช้า, 09.00): หัวข้อ 3: Logic/Flow Automation (ทฤษฎี)">2 พ.ย. (เช้า, 09.00): หัวข้อ 3: Logic/Flow Automation (ทฤษฎี)</option>
-                            <option value="2 พ.ย. (บ่าย, 13.00): หัวข้อ 4: Workshop AppSheet (ปฏิบัติ)-1">2 พ.ย. (บ่าย, 13.00): หัวข้อ 4: Workshop AppSheet (ปฏิบัติ)-1</option>
-                            <option value="8 พ.ย. (เช้า, 09.00): หัวข้อ 4: Workshop AppSheet (ปฏิบัติ)-2">8 พ.ย. (เช้า, 09.00): หัวข้อ 4: Workshop AppSheet (ปฏิบัติ)-2</option>
-                            <option value="8 พ.ย. (บ่าย, 13.00): หัวข้อ 5: Workshop N8N (ปฏิบัติ)-1">8 พ.ย. (บ่าย, 13.00): หัวข้อ 5: Workshop N8N (ปฏิบัติ)-1</option>
-                            <option value="9 พ.ย. (เช้า, 09.00): หัวข้อ 5: Workshop N8N (ปฏิบัติ)-2">9 พ.ย. (เช้า, 09.00): หัวข้อ 5: Workshop N8N (ปฏิบัติ)-2</option>
-                            <option value="9 พ.ย. (บ่าย, 13.00): หัวข้อ 5: Workshop N8N (ปฏิบัติ)-3">9 พ.ย. (บ่าย, 13.00): หัวข้อ 5: Workshop N8N (ปฏิบัติ)-3</option>
-                            <option value="15 พ.ย. (เช้า, 09.00): หัวข้อ 6: Project MVP (ปฏิบัติ)">15 พ.ย. (เช้า, 09.00): หัวข้อ 6: Project MVP (ปฏิบัติ)</option>
-                            <option value="15 พ.ย. (บ่าย, 13.00): หัวข้อ 6: Project MVP สรุปผล">15 พ.ย. (บ่าย, 13.00): หัวข้อ 6: Project MVP สรุปผล</option>
+                            <!-- 1 พ.ย. 68 (เสาร์) -->
+                            <option value="AI Automation | 1 พ.ย. (เช้า, 09.00): หัวข้อ 1: ปรัชญา No-Code/Low-Code (ทฤษฎี)">1 พ.ย. (เช้า, 09.00): หัวข้อ 1: ปรัชญา No-Code/Low-Code (ทฤษฎี)</option>
+                            <option value="AI Automation | 1 พ.ย. (บ่าย, 13.00): หัวข้อ 2: การออกแบบฐานข้อมูล (ปฏิบัติ)">1 พ.ย. (บ่าย, 13.00): หัวข้อ 2: การออกแบบฐานข้อมูล (ปฏิบัติ)</option>
+                            <!-- 2 พ.ย. 68 (อาทิตย์) -->
+                            <option value="AI Automation | 2 พ.ย. (เช้า, 09.00): หัวข้อ 3: การวิเคราะห์และออกแบบ Logic/Flow (ทฤษฎี)">2 พ.ย. (เช้า, 09.00): หัวข้อ 3: การวิเคราะห์และออกแบบ Logic/Flow (ทฤษฎี)</option>
+                            <option value="AI Automation | 2 พ.ย. (บ่าย, 13.00): หัวข้อ 4: Workshop AppSheet (ปฏิบัติ)-1">2 พ.ย. (บ่าย, 13.00): หัวข้อ 4: Workshop AppSheet (ปฏิบัติ)-1</option>
+                            <!-- 8 พ.ย. 68 (เสาร์) -->
+                            <option value="AI Automation | 8 พ.ย. (เช้า, 09.00): หัวข้อ 4: Workshop AppSheet (ปฏิบัติ)-2">8 พ.ย. (เช้า, 09.00): หัวข้อ 4: Workshop AppSheet (ปฏิบัติ)-2</option>
+                            <option value="AI Automation | 8 พ.ย. (บ่าย, 13.00): หัวข้อ 5: Workshop N8N (ปฏิบัติ)-1">8 พ.ย. (บ่าย, 13.00): หัวข้อ 5: Workshop N8N (ปฏิบัติ)-1</option>
+                            <!-- 9 พ.ย. 68 (อาทิตย์) -->
+                            <option value="AI Automation | 9 พ.ย. (เช้า, 09.00): หัวข้อ 5: Workshop N8N (ปฏิบัติ)-2">9 พ.ย. (เช้า, 09.00): หัวข้อ 5: Workshop N8N (ปฏิบัติ)-2</option>
+                            <option value="AI Automation | 9 พ.ย. (บ่าย, 13.00): หัวข้อ 5: Workshop N8N (ปฏิบัติ)-3">9 พ.ย. (บ่าย, 13.00): หัวข้อ 5: Workshop N8N (ปฏิบัติ)-3</option>
+                            <!-- 15 พ.ย. 68 (เสาร์) -->
+                            <option value="AI Automation | 15 พ.ย. (เช้า, 09.00): หัวข้อ 6: Project MVP (ปฏิบัติ)-1">15 พ.ย. (เช้า, 09.00): หัวข้อ 6: Project MVP (ปฏิบัติ)-1</option>
+                            <option value="AI Automation | 15 พ.ย. (บ่าย, 13.00): หัวข้อ 6: Project MVP และสรุปผล (ปฏิบัติ)-2">15 พ.ย. (บ่าย, 13.00): หัวข้อ 6: Project MVP และสรุปผล (ปฏิบัติ)-2</option>
                         </optgroup>
+
                         <optgroup label="Camera AI Master (22 พ.ย. - 6 ธ.ค. 68)">
-                            <option value="22 พ.ย. (เช้า, 09.00): หัวข้อ 1: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (ทฤษฎี)">22 พ.ย. (เช้า, 09.00): หัวข้อ 1: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (ทฤษฎี)</option>
-                            <option value="22 พ.ย. (บ่าย, 13.00): หัวข้อ 1: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (ปฏิบัติ)">22 พ.ย. (บ่าย, 13.00): หัวข้อ 1: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (ปฏิบัติ)</option>
-                            <option value="23 พ.ย. (เช้า, 09.00): หัวข้อ 2: โครงข่ายประสาทเทียม (ทฤษฎี)">23 พ.ย. (เช้า, 09.00): หัวข้อ 2: โครงข่ายประสาทเทียม (ทฤษฎี)</option>
-                            <option value="23 พ.ย. (บ่าย, 13.00): หัวข้อ 2: การเรียนรู้เชิงลึก (ปฏิบัติ)">23 พ.ย. (บ่าย, 13.00): หัวข้อ 2: การเรียนรู้เชิงลึก (ปฏิบัติ)</option>
-                            <option value="29 พ.ย. (เช้า, 09.00): หัวข้อ 3: โครงข่ายประสาทแบบคอนโวลูชัน (ทฤษฎี)">29 พ.ย. (เช้า, 09.00): หัวข้อ 3: โครงข่ายประสาทแบบคอนโวลูชัน (ทฤษฎี)</option>
-                            <option value="29 พ.ย. (บ่าย, 13.00): หัวข้อ 3: โครงข่ายประสาทแบบคอนโวลูชัน (ปฏิบัติ)">29 พ.ย. (บ่าย, 13.00): หัวข้อ 3: โครงข่ายประสาทแบบคอนโวลูชัน (ปฏิบัติ)</option>
-                            <option value="30 พ.ย. (เช้า, 09.00): หัวข้อ 4: การเรียนรู้แบบถ่ายโอน (ทฤษฎี)">30 พ.ย. (เช้า, 09.00): หัวข้อ 4: การเรียนรู้แบบถ่ายโอน (ทฤษฎี)</option>
-                            <option value="30 พ.ย. (บ่าย, 13.00): หัวข้อ 4: Object Detection (ปฏิบัติ)">30 พ.ย. (บ่าย, 13.00): หัวข้อ 4: Object Detection (ปฏิบัติ)</option>
-                            <option value="6 ธ.ค. (เช้า, 09.00): หัวข้อ 5: การตรวจจับแบบเวลาจริงด้วย YOLO (ทฤษฎี)">6 ธ.ค. (เช้า, 09.00): หัวข้อ 5: การตรวจจับแบบเวลาจริงด้วย YOLO (ทฤษฎี)</option>
-                            <option value="6 ธ.ค. (บ่าย, 13.00): หัวข้อ 5: การตรวจจับแบบเวลาจริงด้วย YOLO (ปฏิบัติ)">6 ธ.ค. (บ่าย, 13.00): หัวข้อ 5: การตรวจจับแบบเวลาจริงด้วย YOLO (ปฏิบัติ)</option>
+                            <!-- 22 พ.ย. 68 (เสาร์) -->
+                            <option value="Camera AI | 22 พ.ย. (เช้า, 09.00): หัวข้อ 1: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (ทฤษฎี/ส่วนที่ 1)">22 พ.ย. (เช้า, 09.00): หัวข้อ 1: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (ทฤษฎี/ส่วนที่ 1)</option>
+                            <option value="Camera AI | 22 พ.ย. (บ่าย, 13.00): หัวข้อ 1: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (ปฏิบัติ/ส่วนที่ 2)">22 พ.ย. (บ่าย, 13.00): หัวข้อ 1: พื้นฐานปัญญาประดิษฐ์ด้วย Pytorch (ปฏิบัติ/ส่วนที่ 2)</option>
+                            <!-- 23 พ.ย. 68 (อาทิตย์) -->
+                            <option value="Camera AI | 23 พ.ย. (เช้า, 09.00): หัวข้อ 2: โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก (ทฤษฎี/ส่วนที่ 1)">23 พ.ย. (เช้า, 09.00): หัวข้อ 2: โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก (ทฤษฎี/ส่วนที่ 1)</option>
+                            <option value="Camera AI | 23 พ.ย. (บ่าย, 13.00): หัวข้อ 2: โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก (ปฏิบัติ/ส่วนที่ 2)">23 พ.ย. (บ่าย, 13.00): หัวข้อ 2: โครงข่ายประสาทเทียมและการเรียนรู้เชิงลึก (ปฏิบัติ/ส่วนที่ 2)</option>
+                            <!-- 29 พ.ย. 68 (เสาร์) -->
+                            <option value="Camera AI | 29 พ.ย. (เช้า, 09.00): หัวข้อ 3: โครงข่ายประสาทแบบคอนโวลูชัน (ทฤษฎี/ส่วนที่ 1)">29 พ.ย. (เช้า, 09.00): หัวข้อ 3: โครงข่ายประสาทแบบคอนโวลูชัน (ทฤษฎี/ส่วนที่ 1)</option>
+                            <option value="Camera AI | 29 พ.ย. (บ่าย, 13.00): หัวข้อ 3: โครงข่ายประสาทแบบคอนโวลูชัน (ปฏิบัติ/ส่วนที่ 2)">29 พ.ย. (บ่าย, 13.00): หัวข้อ 3: โครงข่ายประสาทแบบคอนโวลูชัน (ปฏิบัติ/ส่วนที่ 2)</option>
+                            <!-- 30 พ.ย. 68 (อาทิตย์) -->
+                            <option value="Camera AI | 30 พ.ย. (เช้า, 09.00): หัวข้อ 4: การเรียนรู้แบบถ่ายโอน & Object Detection (ทฤษฎี/ส่วนที่ 1)">30 พ.ย. (เช้า, 09.00): หัวข้อ 4: การเรียนรู้แบบถ่ายโอน & Object Detection (ทฤษฎี/ส่วนที่ 1)</option>
+                            <option value="Camera AI | 30 พ.ย. (บ่าย, 13.00): หัวข้อ 4: การเรียนรู้แบบถ่ายโอน & Object Detection (ปฏิบัติ/ส่วนที่ 2)">30 พ.ย. (บ่าย, 13.00): หัวข้อ 4: การเรียนรู้แบบถ่ายโอน & Object Detection (ปฏิบัติ/ส่วนที่ 2)</option>
+                            <!-- 6 ธ.ค. 68 (เสาร์) -->
+                            <option value="Camera AI | 6 ธ.ค. (เช้า, 09.00): หัวข้อ 5: การตรวจจับแบบเวลาจริงด้วย YOLO (ทฤษฎี/ส่วนที่ 1)">6 ธ.ค. (เช้า, 09.00): หัวข้อ 5: การตรวจจับแบบเวลาจริงด้วย YOLO (ทฤษฎี/ส่วนที่ 1)</option>
+                            <option value="Camera AI | 6 ธ.ค. (บ่าย, 13.00): หัวข้อ 5: การตรวจจับแบบเวลาจริงด้วย YOLO (ปฏิบัติ/ส่วนที่ 2)">6 ธ.ค. (บ่าย, 13.00): หัวข้อ 5: การตรวจจับแบบเวลาจริงด้วย YOLO (ปฏิบัติ/ส่วนที่ 2)</option>
                         </optgroup>
                     </select>
                 </div>
 
-                <div class="pt-4">
-                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transform transition duration-150 ease-in-out">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
-                        </svg>
-                        ลงนามเข้าร่วมเรียน
-                    </button>
-                    <p class="text-xs text-gray-400 mt-3 text-center">
-                        *หน้านี้จำลองการทำงานของ Google App Script (GAS) เพื่อบันทึกข้อมูลไปยัง Google Sheet
-                    </p>
-                </div>
-            </form>
-
-            <div class="pt-6 mt-6 border-t border-gray-200">
-                <button id="toggle-button" onclick="toggleHistory()" 
-                        class="w-full py-2 px-4 border border-indigo-400 text-indigo-700 bg-indigo-100 hover:bg-indigo-200 rounded-md font-semibold hidden transition duration-150 ease-in-out">
-                    แสดงประวัติการเข้าร่วมเรียน (Show)
+                <button id="checkin-btn" onclick="handleCheckin()" 
+                        class="w-full mt-4 btn-pink text-white font-bold py-3 rounded-lg shadow-lg flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v4a1 1 0 00.293.707l3 3a1 1 0 001.414-1.414L11 11.586V7z" clip-rule="evenodd" />
+                    </svg>
+                    ลงนามเข้าร่วมเรียน
                 </button>
-            </div>
 
-            <!-- Check-in History Section -->
-            <div id="history-section" class="mt-4 p-4 border border-gray-300 rounded-lg bg-gray-50">
+                <p class="text-center text-gray-500 text-xs mt-3">*หน้านี้จำลองการทำงานของ Google App Script (GAS) เพื่อบันทึกข้อมูลไปยัง Google Sheet</p>
+            </div>
+            
+            <!-- TOGGLE BUTTON -->
+            <button id="toggle-history-btn" onclick="toggleHistory()" 
+                    class="w-full mt-6 btn-toggle text-sm font-semibold py-2 rounded-lg">
+                แสดงประวัติการเข้าร่วมเรียน (Show)
+            </button>
+
+            <!-- CHECK-IN HISTORY SECTION -->
+            <div id="history-section" class="history-section">
                 <h2 class="text-lg font-bold text-gray-800 mb-3">ประวัติการเข้าร่วมเรียน (Check-in History)</h2>
                 <div class="overflow-x-auto">
-                    <table class="history-table w-full text-sm">
+                    <table class="history-table w-full border-collapse border border-gray-200">
                         <thead>
-                            <tr class="bg-gray-200">
-                                <th class="w-1/6 rounded-tl-lg">วันที่</th>
-                                <th class="w-1/6">หลักสูตร</th>
-                                <th class="w-3/6">หัวข้อ/ช่วงเวลา</th>
-                                <th class="w-1/6 rounded-tr-lg">เวลา Check-in</th>
+                            <tr>
+                                <th class="border border-gray-200">วันที่</th>
+                                <th class="border border-gray-200">หลักสูตร</th>
+                                <th class="border border-gray-200">หัวข้อ/ช่วงเวลา</th>
+                                <th class="border border-gray-200">เวลา Check-in</th>
                             </tr>
                         </thead>
-                        <tbody id="history-tbody">
-                            <!-- History items will be inserted here -->
+                        <tbody id="history-body">
+                            <!-- History items will be inserted here by JavaScript -->
+                            <tr><td colspan="4" class="text-center p-4 text-gray-500">กรุณากรอกอีเมลทดสอบและกดปุ่มเพื่อแสดงประวัติ</td></tr>
                         </tbody>
                     </table>
                 </div>
+                <p class="text-xs text-gray-500 mt-2">*ประวัติการเข้าร่วมที่แสดงนี้เป็นข้อมูลจำลอง (Mock Data) สำหรับการทดสอบเท่านั้น</p>
             </div>
-            
         </div>
 
         <!-- FOOTER -->
-        <footer class="mt-8 pt-4 border-t border-gray-300 text-center text-sm text-gray-500">
+        <footer class="text-center text-gray-700">
             จัดทำโดย อ.แทน [ธีรชัย โฉมทัพ] 👨‍💻 Head of Digital Transformation
         </footer>
     </div>
-    <script>
-        // Ensure initial button state is set
-        document.addEventListener('DOMContentLoaded', () => {
-             const emailInput = document.getElementById('email').value.trim();
-             if (emailInput.length > 5) {
-                document.getElementById('toggle-button').classList.remove('hidden');
-            }
-        });
-    </script>
 </body>
 </html>
