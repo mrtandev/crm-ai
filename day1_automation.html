@@ -6,23 +6,27 @@
     <title>Day 1: ปรัชญา No-Code & Data Design</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-    <!-- Load Lucide Icons (for professional icons) -->
-    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+Thai:wght@100..900&display=swap');
+        :root {
+            --primary-color: #3b82f6; /* Blue-500 */
+            --gradient-start: #3b82f6;
+            --gradient-end: #6366f1; /* Indigo-500 */
+        }
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f7f9fc;
+            font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+            background-color: #f8fafc; /* ใช้สีเดียวกับ Day 2 */
         }
-        /* Custom gradient for titles */
-        .text-gradient {
-            background-image: linear-gradient(45deg, #1e3a8a, #3b82f6);
+        .gradient-text {
+            background-image: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-fill-color: transparent;
+            color: transparent;
         }
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
         /* Custom card style for step-by-step content */
         .step-card {
             border-left: 5px solid #3b82f6;
@@ -47,46 +51,165 @@
             white-space: pre-wrap;
             word-wrap: break-word;
         }
+        
     </style>
+     <script>
+        // Lucide Icons (Placeholder for consistency)
+        const renderIcon = (name, className = 'w-5 h-5') => {
+            const icons = {
+                'users': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M16 21v-2a4 4 0 0 0 -4 -4H6a4 4 0 0 0 -4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0 -3 -3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+                'database': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>`,
+                'blocks': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>`,
+                'code': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+                'arrow-right': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M5 12h14"/><path d="m12 5 7 7 -7 7"/></svg>`,
+                'arrow-down': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M12 5v14"/><path d="m19 12 -7 7 -7 -7"/></svg>`,
+                'star': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+                'coffee': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M10 2v2c0 1.1.9 2 2 2s2 -.9 2 -2V2"/><path d="M12 10v4c0 1.1.9 2 2 2h2c1.1 0 2 -.9 2 -2V10"/><path d="M3 6h18v4a2 2 0 0 1 -2 2H5a2 2 0 0 1 -2 -2V6Z"/></svg>`,
+                'utensils': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M3 2v7c0 1.1.9 2 2 2h4l-3 9"/><path d="M21 2v7c0 1.1 -.9 2 -2 2h-4l3 9"/><line x1="15" x2="9" y1="11" y2="17"/></svg>`,
+                'lightbulb': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M15 14c.2 -.8 1 -1.4 1.8 -1.4a3 3 0 1 1 0 6h-5.6"/><path d="M4 17a3 3 0 1 0 0 6h10c1.7 0 3 -1.3 3 -3 0 -1.1 -.9 -2 -2 -2"/><path d="M12 3L12 12"/><path d="M12 3a7 7 0 0 0 -7 7 7 7 0 0 0 7 7"/></svg>`,
+                'tool': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M16 10l-4 4 -4 4"/><path d="M10 16l4 -4 4 -4"/></svg>`,
+                'git-branch': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1 -9 9"/></svg>`,
+                'brain': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M9 18C7 16 7 14 7 12s0 -4 2 -6"/><path d="M15 6c2 2 2 4 2 6s0 4 -2 6"/><path d="M17 12A10 10 0 0 0 7 12"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10 -4.5 10 -10S17.5 2 12 2Z"/></svg>`,
+                'mail': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7 -10 7 -10 -7"/></svg>`,
+                'alert-triangle': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="m21.73 18 -9 -15a2 2 0 0 0 -3.46 0l-9 15a2 2 0 0 0 1.73 3h18.54a2 2 0 0 0 1.73 -3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+                'shield': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M12 22s8 -4 8 -10V5l-8 -3 -8 3v7c0 6 8 10 8 10z"/></svg>`,
+                'calendar-check': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4 -4"/></svg>`,
+            };
+            return icons[name] || '';
+        };
+
+        window.onload = () => {
+             // We don't need lucide.createIcons() anymore as we use document.write
+             // but we keep the helper function for consistency if the user modifies the code later.
+             console.log("Day 1 Handbook Loaded.");
+        };
+
+    </script>
 </head>
-<body class="p-4 sm:p-8">
+<body class="min-h-screen">
+    <!-- Message Box for Alerts/Confirmations -->
+    <div id="messageBox" class="fixed top-4 right-4 z-50 w-full max-w-sm"></div>
 
-    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl p-6 sm:p-10 mb-12">
-
-        <!-- Header and Course Title -->
-        <div class="mb-8 border-b pb-4">
-            <a href="presentation_agenda.html" class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center mb-4">
-                <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> กลับสู่แผนงานหลัก
-            </a>
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-gradient mb-2">
-                AI Automation & Data Integration Master
-            </h1>
-            <h2 class="text-xl font-semibold text-gray-700">
-                📚 วันที่ 1: ปรัชญา No-Code/Low-Code และการออกแบบข้อมูลที่ยืดหยุ่น (5.5 ชั่วโมงเรียน)
-            </h2>
-            <p class="text-sm text-gray-500 mt-1">ตารางเรียน: 09:00 - 16:00 น. (รวมพักกลางวันและเบรค)</p>
+    <!-- Header Section (Consistent with Day 2) -->
+    <header class="bg-white card-shadow sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="text-3xl font-extrabold tracking-tight">
+                        <span class="gradient-text">AI Automation & Data Integration Master</span>
+                    </div>
+                </div>
+                <div class="mt-2 md:mt-0 text-right text-sm text-gray-600">
+                    Day 1: ปรัชญา No-Code & Data Design
+                </div>
+            </div>
         </div>
+    </header>
 
-        <!-- Instructor Info (Consistent with previous context) -->
-        <div class="flex items-center space-x-4 mb-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
-                 onerror="this.onerror=null;this.src='https://placehold.co/64x64/E0F2F7/3B82F6?text=TT';"
-                 alt="รูป อ.แทน" class="w-16 h-16 rounded-full object-cover shadow-md">
-            <div>
-                <p class="text-lg font-bold text-gray-800">อ.แทน [ธีรชัย โฉมทัพ]</p>
-                <p class="text-sm text-gray-500">Head of Digital Transformation</p>
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Instructor Information Card (Consistent with Day 2) -->
+        <div class="bg-white p-6 rounded-xl card-shadow mb-8 border-t-4 border-indigo-500">
+            <div class="flex items-center space-x-4">
+                <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                     onerror="this.onerror=null;this.src='https://placehold.co/80x80/6366f1/ffffff?text=อ.แทน'"
+                     alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-20 h-20 rounded-full object-cover ring-2 ring-indigo-500">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">อ.แทน <span class="text-indigo-600">[ธีรชัย โฉมทัพ]</span></h2>
+                    <p class="text-base text-gray-500">Head of Digital Transformation</p>
+                    <p class="text-sm text-gray-600 mt-1">ยินดีต้อนรับสู่ Day 1 เราจะสร้างรากฐานของ Data Design และ Low-Code Automation ที่แข็งแกร่ง!</p>
+                </div>
             </div>
         </div>
 
-        <!-- Start of Step-by-Step Lesson Plan -->
-        <h3 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2 flex items-center">
-            <i data-lucide="calendar-check" class="w-6 h-6 mr-3 text-green-600"></i> แผนการสอนรายชั่วโมง (Step-by-Step)
-        </h3>
+        <!-- Timetable and Checkboxes (Day 1 Specific Content) -->
+        <div class="bg-white p-6 rounded-xl card-shadow mb-8">
+            <h3 class="text-2xl font-semibold mb-4 gradient-text">กำหนดการเรียนรู้ Day 1 📚</h3>
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">เวลา</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">หัวข้อ/กิจกรรม</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">สถานะ</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <!-- 09:00 - 10:30 -->
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">09:00 - 10:15 น.</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">หัวข้อ 1.1: นิยามและความแตกต่าง: No-Code vs. Low-Code</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" checked>
+                        </td>
+                    </tr>
+                    <!-- 10:30 - 10:45 -->
+                    <tr>
+                        <td class="px-6 py-2 whitespace-nowrap text-xs text-gray-500 italic">10:15 - 10:30 น.</td>
+                        <td class="px-6 py-2 text-xs text-gray-500 italic">พักเบรคเช้า (Coffee Break)</td>
+                        <td class="px-6 py-2 whitespace-nowrap text-center">
+                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        </td>
+                    </tr>
+                    <!-- 10:45 - 12:00 -->
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">10:30 - 12:00 น.</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">หัวข้อ 1.2: การวิเคราะห์ความต้องการและการเลือกใช้เครื่องมือ (Ecosystem)</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        </td>
+                    </tr>
+                    <!-- 12:00 - 13:00 -->
+                    <tr>
+                        <td class="px-6 py-2 whitespace-nowrap text-xs text-gray-500 italic">12:00 - 13:00 น.</td>
+                        <td class="px-6 py-2 text-xs text-gray-500 italic">พักเที่ยง (Lunch Break)</td>
+                        <td class="px-6 py-2 whitespace-nowrap text-center">
+                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        </td>
+                    </tr>
+                    <!-- 13:00 - 14:30 -->
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">13:00 - 14:45 น.</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">หัวข้อ 2.1: Data Normalization และ PK/FK ใน Google Sheets (GGS)</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        </td>
+                    </tr>
+                    <!-- 14:30 - 14:45 -->
+                    <tr>
+                        <td class="px-6 py-2 whitespace-nowrap text-xs text-gray-500 italic">14:45 - 15:00 น.</td>
+                        <td class="px-6 py-2 text-xs text-gray-500 italic">พักเบรคบ่าย (Coffee Break)</td>
+                        <td class="px-6 py-2 whitespace-nowrap text-center">
+                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        </td>
+                    </tr>
+                    <!-- 14:45 - 16:00 (Workshops) -->
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">15:00 - 16:00 น.</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">
+                            หัวข้อ 2.2-2.4: Workshop AI-Driven GAS (Auto ID, Email Alert, Data Lookup & Stability)
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
+
+        <!-- *************************************************************** -->
+        <!-- ******************** START ORIGINAL CONTENT ********************* -->
+        <!-- *************************************************************** -->
+
+        <h3 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2 flex items-center">
+            <script>document.write(renderIcon('calendar-check', 'w-6 h-6 mr-3 text-green-600'));</script> แผนการสอนรายชั่วโมง (Step-by-Step)
+        </h3>
+        
         <!-- Section 1: Philosophy (09:00 - 12:00) -->
         <div class="mb-8">
             <div class="flex items-center mb-4 p-3 bg-blue-50 rounded-lg">
-                <i data-lucide="star" class="w-6 h-6 text-yellow-500 mr-3"></i>
+                <script>document.write(renderIcon('star', 'w-6 h-6 text-yellow-500 mr-3'));</script>
                 <h4 class="text-xl font-semibold text-blue-800">ช่วงเช้า: ปรัชญา No-Code/Low-Code (2.25 ชม.)</h4>
             </div>
 
@@ -105,7 +228,7 @@
                         
                         <!-- No-Code Box (AppSheet) -->
                         <div class="flex flex-col items-center p-4 w-40 h-40 bg-green-50 rounded-xl shadow-lg border-2 border-green-400">
-                            <i data-lucide="blocks" class="w-8 h-8 text-green-600 mb-2"></i>
+                            <script>document.write(renderIcon('blocks', 'w-8 h-8 text-green-600 mb-2'));</script>
                             <p class="font-bold text-lg text-green-700">AppSheet</p>
                             <p class="text-xs text-center text-gray-600 mt-2">ผู้ใช้งาน: Citizen Dev</p>
                             <p class="text-xs text-center text-gray-600 font-bold text-green-800">เน้นสร้าง Mobile/Web App</p>
@@ -113,14 +236,14 @@
 
                         <!-- Arrow -->
                         <div class="flex items-center text-blue-500 font-bold text-xl">
-                            <i data-lucide="arrow-right" class="w-8 h-8 hidden sm:block"></i>
-                            <i data-lucide="arrow-down" class="w-8 h-8 sm:hidden"></i>
+                            <script>document.write(renderIcon('arrow-right', 'w-8 h-8 hidden sm:block'));</script>
+                            <script>document.write(renderIcon('arrow-down', 'w-8 h-8 sm:hidden'));</script>
                             <span class="text-sm font-medium ml-2 sm:ml-0 sm:mt-2">เชื่อมต่อด้วย...</span>
                         </div>
 
                         <!-- Low-Code Box (n8n/GAS) -->
                         <div class="flex flex-col items-center p-4 w-40 h-40 bg-indigo-50 rounded-xl shadow-lg border-2 border-indigo-400">
-                            <i data-lucide="code" class="w-8 h-8 text-indigo-600 mb-2"></i>
+                            <script>document.write(renderIcon('code', 'w-8 h-8 text-indigo-600 mb-2'));</script>
                             <p class="font-bold text-lg text-indigo-700">n8n / GAS</p>
                             <p class="text-xs text-center text-gray-600 mt-2">ผู้ใช้งาน: Pro Dev / IT</p>
                             <p class="text-xs text-center text-gray-600 font-bold text-indigo-800">เน้น Logic & API</p>
@@ -138,7 +261,7 @@
                         <span class="font-bold text-indigo-700">Low-Code (Pro-Developers / IT):</span> เครื่องมือที่ให้ความสามารถในการสร้าง **Workflow Logic** ที่ซับซ้อนขึ้น สามารถเขียนโค้ด (JavaScript/GAS) ผสมผสานเข้าไปได้ เพื่อจัดการกับ Data Transformation และการเชื่อมต่อกับระบบภายนอกผ่าน API โดยตรง เช่น **n8n** และ **Google App Script (GAS)**
                     </p>
                     
-                    <h5 class="font-bold text-lg text-gray-700 border-b pb-1">1.1.2 The 'Why' & 'When': กลยุทธ์การเลือกใช้เครื่องมือ (Depth Analysis)</h5>
+                    <h5 class="font-bold text-lg text-gray-700 border-b pb-1 mt-6">1.1.2 The 'Why' & 'When': กลยุทธ์การเลือกใช้เครื่องมือ (Depth Analysis)</h5>
                     <p class="ml-4">
                         **Why (เหตุผลที่ต้องทำ Automation):** การใช้ No-Code/Low-Code มีวัตถุประสงค์หลัก 3 ประการคือ 1) ลดเวลาในการพัฒนาระบบ (Time-to-Market) 2) สร้างความยืดหยุ่นในการปรับปรุงกระบวนการ (Agility) และ 3) ลดข้อผิดพลาดที่เกิดจากมนุษย์ (Human Error)
                     </p>
@@ -202,14 +325,14 @@
                     
                 </div>
                 <div class="mt-3 text-sm text-gray-500 italic flex items-center">
-                    <i data-lucide="lightbulb" class="w-4 h-4 mr-2 text-yellow-500"></i> จุดเน้น: การวางแผน Ecosystem โดยมอง GGS เป็นศูนย์กลาง และใช้ AppSheet/n8n/GAS เติมเต็มความสามารถซึ่งกันและกัน
+                    <script>document.write(renderIcon('lightbulb', 'w-4 h-4 mr-2 text-yellow-500'));</script> จุดเน้น: การวางแผน Ecosystem โดยมอง GGS เป็นศูนย์กลาง และใช้ AppSheet/n8n/GAS เติมเต็มความสามารถซึ่งกันและกัน
                 </div>
             </div>
 
             <!-- Divider for Morning Break -->
             <div class="my-6 text-center">
                 <span class="inline-flex items-center justify-center p-3 rounded-full bg-yellow-100 text-yellow-600 font-bold">
-                    <i data-lucide="coffee" class="w-5 h-5 mr-2"></i> เบรคเช้า (10:15 - 10:30 น.)
+                    <script>document.write(renderIcon('coffee', 'w-5 h-5 mr-2'));</script> เบรคเช้า (10:15 - 10:30 น.)
                 </span>
             </div>
 
@@ -231,17 +354,17 @@
                         <div class="font-bold p-2 bg-purple-100 text-purple-800 rounded-tr-lg">จุดเด่น</div>
 
                         <!-- Row 1: App Development -->
-                        <div class="p-2 bg-white font-semibold flex items-center border-l border-b border-purple-300"><i data-lucide="smartphone" class="w-4 h-4 mr-2"></i> สร้าง Web/Mobile App</div>
+                        <div class="p-2 bg-white font-semibold flex items-center border-l border-b border-purple-300"><script>document.write(renderIcon('blocks', 'w-4 h-4 mr-2'));</script> สร้าง Web/Mobile App</div>
                         <div class="p-2 bg-white border-b border-purple-300 font-bold text-green-700">AppSheet</div>
                         <div class="p-2 bg-white border-b border-purple-300 text-xs">UI/UX, Data Forms, CRUD (ใช้ GGS เป็น Data Source)</div>
 
                         <!-- Row 2: Workflow Automation -->
-                        <div class="p-2 bg-white font-semibold flex items-center border-l border-b border-purple-300"><i data-lucide="flow-chart" class="w-4 h-4 mr-2"></i> เชื่อมต่อ/ทำงานอัตโนมัติ</div>
+                        <div class="p-2 bg-white font-semibold flex items-center border-l border-b border-purple-300"><script>document.write(renderIcon('git-branch', 'w-4 h-4 mr-2'));</script> เชื่อมต่อ/ทำงานอัตโนมัติ</div>
                         <div class="p-2 bg-white border-b border-purple-300 font-bold text-indigo-700">N8N, GAS</div>
                         <div class="p-2 bg-white border-b border-purple-300 text-xs">API Integration, Scheduling, Logic (เน้น Data Transformation)</div>
                         
                         <!-- Row 3: Data Source -->
-                        <div class="p-2 bg-white font-semibold flex items-center border-l border-b border-purple-300 rounded-bl-lg"><i data-lucide="database" class="w-4 h-4 mr-2"></i> จัดการฐานข้อมูลหลัก</div>
+                        <div class="p-2 bg-white font-semibold flex items-center border-l border-b border-purple-300 rounded-bl-lg"><script>document.write(renderIcon('database', 'w-4 h-4 mr-2'));</script> จัดการฐานข้อมูลหลัก</div>
                         <div class="p-2 bg-white border-b border-purple-300 font-bold text-red-700">Google Sheets (GGS)</div>
                         <div class="p-2 bg-white border-b border-purple-300 rounded-br-lg text-xs">Storage, Flexibility, Collaboration (ศูนย์กลางข้อมูล)</div>
                     </div>
@@ -259,7 +382,7 @@
                         </ul>
                     </p>
                     
-                    <h5 class="font-bold text-lg text-gray-700 border-b pb-1">1.2.2 การวิเคราะห์ความซับซ้อนของ Logic และ Data Flow</h5>
+                    <h5 class="font-bold text-lg text-gray-700 border-b pb-1 mt-6">1.2.2 การวิเคราะห์ความซับซ้อนของ Logic และ Data Flow</h5>
                     <p class="ml-4">
                         <span class="font-bold text-purple-700">Flow A: Simple CRUD (Create, Read, Update, Delete):</span>
                         <ul class="list-disc list-inside ml-6">
@@ -287,7 +410,7 @@
                 </div>
 
                 <div class="mt-3 text-sm text-gray-500 italic flex items-center">
-                    <i data-lucide="tool" class="w-4 h-4 mr-2 text-purple-500"></i> จุดเน้น: ทำความเข้าใจข้อจำกัดและขีดความสามารถของเครื่องมือหลัก.
+                    <script>document.write(renderIcon('tool', 'w-4 h-4 mr-2 text-purple-500'));</script> จุดเน้น: ทำความเข้าใจข้อจำกัดและขีดความสามารถของเครื่องมือหลัก.
                 </div>
             </div>
             
@@ -304,14 +427,14 @@
         <!-- Divider for Lunch -->
         <div class="my-8 text-center">
             <span class="inline-flex items-center justify-center p-3 rounded-full bg-red-100 text-red-600 font-bold">
-                <i data-lucide="utensils" class="w-5 h-5 mr-2"></i> พักกลางวัน (12:00 - 13:00 น.)
+                <script>document.write(renderIcon('utensils', 'w-5 h-5 mr-2'));</script> พักกลางวัน (12:00 - 13:00 น.)
             </span>
         </div>
 
         <!-- Section 2: Data Design (13:00 - 17:00) -->
         <div class="mb-8">
             <div class="flex items-center mb-4 p-3 bg-blue-50 rounded-lg">
-                <i data-lucide="database" class="w-6 h-6 text-indigo-500 mr-3"></i>
+                <script>document.write(renderIcon('database', 'w-6 h-6 text-indigo-500 mr-3'));</script>
                 <h4 class="text-xl font-semibold text-blue-800">ช่วงบ่าย: การออกแบบข้อมูลที่ยืดหยุ่นและการประยุกต์ใช้ Low-Code (3.25 ชม.)</h4>
             </div>
 
@@ -336,9 +459,9 @@
 
                         <!-- Relation 1 (Customer -> Sales) -->
                         <div class="flex flex-col items-center justify-center text-sm font-bold text-gray-500">
-                            <i data-lucide="arrow-down" class="w-4 h-4 text-gray-500 sm:hidden"></i>
+                            <script>document.write(renderIcon('arrow-down', 'w-4 h-4 text-gray-500 sm:hidden'));</script>
                             <span class="text-xs font-bold text-red-600">1 $\to$ Many</span>
-                            <i data-lucide="arrow-right" class="w-6 h-6 text-gray-500 hidden sm:block"></i>
+                            <script>document.write(renderIcon('arrow-right', 'w-6 h-6 text-gray-500 hidden sm:block'));</script>
                         </div>
 
                         <!-- Table 2: Sales -->
@@ -430,7 +553,7 @@
                 </div>
 
                 <div class="mt-3 text-sm text-gray-500 italic flex items-center">
-                    <i data-lucide="git-branch" class="w-4 h-4 mr-2 text-teal-500"></i> จุดเน้น: การสร้างโครงสร้างข้อมูลที่ 'ยืดหยุ่น' และ 'สอดคล้อง' กับการทำงานของ Automation.
+                    <script>document.write(renderIcon('git-branch', 'w-4 h-4 mr-2 text-teal-500'));</script> จุดเน้น: การสร้างโครงสร้างข้อมูลที่ 'ยืดหยุ่น' และ 'สอดคล้อง' กับการทำงานของ Automation.
                 </div>
             </div>
 
@@ -450,7 +573,7 @@
                         <!-- Table 1: Customers -->
                         <div class="w-48 bg-white border border-gray-300 rounded-lg shadow-md">
                             <div class="p-2 bg-orange-200 font-bold text-sm text-orange-900 rounded-t-lg flex items-center">
-                                <i data-lucide="users" class="w-4 h-4 mr-2"></i> Customers (GGS Sheet)
+                                <script>document.write(renderIcon('users', 'w-4 h-4 mr-2'));</script> Customers (GGS Sheet)
                             </div>
                             <ul class="p-2 text-xs text-gray-700 space-y-1">
                                 <li class="font-bold text-blue-600">ID (PK)</li>
@@ -471,7 +594,7 @@
                 </ol>
 
                 <h5 class="font-bold text-lg text-red-700 mt-6 border-b pb-1 flex items-center">
-                    <i data-lucide="brain" class="w-5 h-5 mr-2 text-red-700"></i> Prompt Template 1: Generate Auto ID GAS Script
+                    <script>document.write(renderIcon('brain', 'w-5 h-5 mr-2 text-red-700'));</script> Prompt Template 1: Generate Auto ID GAS Script
                 </h5>
                 <div class="my-4 p-4 bg-red-50 border border-red-300 rounded-lg shadow-inner">
                     <h6 class="font-bold text-red-800 mb-2">Prompt ที่ใช้สร้างโค้ด Auto ID</h6>
@@ -565,7 +688,7 @@ function debugLogCustomerSheet() {
             <!-- Divider for Afternoon Break -->
             <div class="my-6 text-center">
                 <span class="inline-flex items-center justify-center p-3 rounded-full bg-yellow-100 text-yellow-600 font-bold">
-                    <i data-lucide="cookie" class="w-5 h-5 mr-2"></i> เบรคบ่าย (14:45 - 15:00 น.)
+                    <script>document.write(renderIcon('coffee', 'w-5 h-5 mr-2'));</script> เบรคบ่าย (14:45 - 15:00 น.)
                 </span>
             </div>
 
@@ -578,7 +701,7 @@ function debugLogCustomerSheet() {
                 <p class="font-semibold text-gray-700 mb-4">หัวข้อหลัก: การใช้ AI สร้างโค้ดสำหรับส่งอีเมลสรุปข้อมูลการขายเมื่อเกิด Transaction ใหม่</p>
 
                 <h5 class="font-bold text-lg text-red-700 mt-6 border-b pb-1 flex items-center">
-                    <i data-lucide="brain" class="w-5 h-5 mr-2 text-red-700"></i> Prompt Template 2: Generate Email Notification Script
+                    <script>document.write(renderIcon('brain', 'w-5 h-5 mr-2 text-red-700'));</script> Prompt Template 2: Generate Email Notification Script
                 </h5>
                 <p class="ml-4 text-sm text-gray-700 font-semibold italic">
                     ในการทำ Automation สิ่งที่ขาดไม่ได้คือการแจ้งเตือน (Notification) เราจะใช้ AI สร้างฟังก์ชันที่ส่งอีเมลสรุปยอดขายเมื่อมีการบันทึกข้อมูลใน Sheet 'Sales Transactions'
@@ -635,12 +758,12 @@ function sendNewSaleNotification(e) {
     const recipient = 'admin@example.com';
     const subject = `[ระบบแจ้งเตือน] New Sales Alert: ${transactionId}`;
     const body = `เรียน Admin,\n\nมีการบันทึกรายการขายใหม่ในระบบ:\n\n`
-               + `Transaction ID: ${transactionId}\n`
-               + `Customer ID: ${customerId}\n`
-               + `Product ID: ${productId}\n`
-               + `Quantity: ${quantity}\n\n`
-               + `โปรดตรวจสอบที่ Google Sheet.\n\n`
-               + `AI Automation System.`;
+          + `Transaction ID: ${transactionId}\n`
+          + `Customer ID: ${customerId}\n`
+          + `Product ID: ${productId}\n`
+          + `Quantity: ${quantity}\n\n`
+          + `โปรดตรวจสอบที่ Google Sheet.\n\n`
+          + `AI Automation System.`;
 
     <i class="text-gray-400">// 5. ส่งอีเมล</i>
     MailApp.sendEmail(recipient, subject, body);
@@ -650,7 +773,7 @@ function sendNewSaleNotification(e) {
     <i class="text-gray-400">// การจัดการข้อผิดพลาดระดับมืออาชีพ</i>
     Logger.log(`ERROR in sendNewSaleNotification: ${error.toString()}`);
     MailApp.sendEmail('it-support@example.com', 'GAS Error Alert', 
-                      `เกิดข้อผิดพลาดในการส่งอีเมลแจ้งเตือนการขาย: ${error.toString()}`);
+              `เกิดข้อผิดพลาดในการส่งอีเมลแจ้งเตือนการขาย: ${error.toString()}`);
   }
 }
 
@@ -660,7 +783,7 @@ function sendNewSaleNotification(e) {
                 <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1">การตั้งค่า Trigger (Notification):</h5>
                 <p class="ml-4">ใช้ขั้นตอนการตั้งค่า Trigger **แบบเดียวกับ Workshop 1** แต่เปลี่ยนฟังก์ชันที่รันเป็น <span class="font-mono bg-gray-100 p-1 rounded">sendNewSaleNotification</span> และตั้งค่า Source เป็น Sheet **'Sales Transactions'** แทน Sheet 'Customers'</p>
                 <div class="mt-3 text-sm text-gray-500 italic flex items-center">
-                    <i data-lucide="mail" class="w-4 h-4 mr-2 text-red-500"></i> จุดเน้น: การทำ Logic ที่ทำงานต่อเนื่อง (Sequential Logic) โดยใช้ผลลัพธ์จาก GAS Script หนึ่ง ไป Trigger การทำงานของ GAS Script อีกตัว (หรือ AppSheet Bot)
+                    <script>document.write(renderIcon('mail', 'w-4 h-4 mr-2 text-red-500'));</script> จุดเน้น: การทำ Logic ที่ทำงานต่อเนื่อง (Sequential Logic) โดยใช้ผลลัพธ์จาก GAS Script หนึ่ง ไป Trigger การทำงานของ GAS Script อีกตัว (หรือ AppSheet Bot)
                 </div>
             </div>
 
@@ -673,7 +796,7 @@ function sendNewSaleNotification(e) {
                 <p class="font-semibold text-gray-700 mb-4">หัวข้อหลัก: การใช้ AI สร้างโค้ดสำหรับดึงชื่อสินค้าและราคาสินค้าจากตาราง Master มาคำนวณราคารวม (Total Price) ในตาราง Transaction</p>
                 
                 <h5 class="font-bold text-lg text-red-700 mt-6 border-b pb-1 flex items-center">
-                    <i data-lucide="brain" class="w-5 h-5 mr-2 text-red-700"></i> Prompt Template 3: Generate Lookup and Calculation Script
+                    <script>document.write(renderIcon('brain', 'w-5 h-5 mr-2 text-red-700'));</script> Prompt Template 3: Generate Lookup and Calculation Script
                 </h5>
                 <p class="ml-4 text-sm text-gray-700 font-semibold italic">
                     การทำ Data Lookup (VLOOKUP-like) ใน GAS เป็นเรื่องซับซ้อน เราจะใช้ AI สร้างฟังก์ชันที่อ่าน Product ID และดึง Price มาคำนวณ Total Price และบันทึกกลับลงใน GGS
@@ -751,7 +874,7 @@ function calculateTotalPrice(e) {
 }</code></pre>
 
                 <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1 flex items-center">
-                    <i data-lucide="alert-triangle" class="w-5 h-5 mr-2 text-yellow-500"></i> Advanced Low-Code Stability: Lock Service และ Error Handling
+                    <script>document.write(renderIcon('alert-triangle', 'w-5 h-5 mr-2 text-yellow-500'));</script> Advanced Low-Code Stability: Lock Service และ Error Handling
                 </h5>
                 <p class="ml-4 text-sm text-gray-700 font-semibold italic">
                     เมื่อ Logic ซับซ้อนขึ้น ความเสถียรของโค้ดเป็นสิ่งสำคัญที่สุด เราต้องใช้เครื่องมือเหล่านี้เพื่อให้แน่ใจว่าระบบจะไม่ล่มเมื่อมีผู้ใช้พร้อมกันหลายคน
@@ -806,22 +929,24 @@ function functionWithLock(e) {
                 </p>
 
                 <div class="mt-3 text-sm text-gray-500 italic flex items-center">
-                    <i data-lucide="shield" class="w-4 h-4 mr-2 text-indigo-500"></i> จุดเน้น: การสร้าง Low-Code Script ที่ไม่ใช่แค่ "ทำงานได้" แต่ต้อง "ทำงานได้อย่างเสถียรและปลอดภัย" ในสภาพแวดล้อม Multi-User
+                    <script>document.write(renderIcon('shield', 'w-4 h-4 mr-2 text-indigo-500'));</script> จุดเน้น: การสร้าง Low-Code Script ที่ไม่ใช่แค่ "ทำงานได้" แต่ต้อง "ทำงานได้อย่างเสถียรและปลอดภัย" ในสภาพแวดล้อม Multi-User
                 </div>
             </div>
         </div>
         
-        <!-- Footer -->
-        <footer class="mt-10 pt-4 border-t text-center text-sm text-gray-500">
-            <p>&copy; 2025 AI Automation & Data Integration Master. จัดทำโดย อ.แทน [ธีรชัย โฉมทัพ]</p>
-            <i data-lucide="code" class="w-4 h-4 inline-block align-middle mr-1"></i> เอกสารชุดนี้สร้างขึ้นเพื่อเป็นคู่มือการเรียนรู้เชิงปฏิบัติ.
-        </footer>
+        <!-- *************************************************************** -->
+        <!-- ********************* END ORIGINAL CONTENT ********************** -->
+        <!-- *************************************************************** -->
 
-    </div>
-    
-    <!-- Initialize Lucide Icons -->
-    <script>
-        lucide.createIcons();
-    </script>
+    </main>
+
+    <!-- Footer Section (Consistent with Day 2) -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 AI Automation & Data Integration Master. | เอกสารประกอบการสอนโดย อ.แทน [ธีรชัย โฉมทัพ]</p>
+            <p class="text-sm text-gray-400 mt-1">Head of Digital Transformation</p>
+        </div>
+    </footer>
+
 </body>
 </html>

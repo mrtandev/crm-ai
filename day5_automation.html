@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 5: Final Project & MVP - AI-Driven Lead Automation</title>
+    <!-- Load Tailwind CSS (Master Standard: Day 2) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* * Master Standard CSS & Fonts (Consistent with Day 2/3/4)
+         * - ใช้ Tailwind CSS utility classes สำหรับ Responsive Design และ Layout
+         * - กำหนด Custom Fonts และ Variables เพื่อควบคุม Aesthetics
+         */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+Thai:wght@100..900&display=swap');
+        :root {
+            /* ใช้สีจาก Day 2: Blue-Indigo Gradient */
+            --primary-color: #3b82f6; /* Tailwind Blue-500 */
+            --gradient-start: #3b82f6; 
+            --gradient-end: #6366f1; /* Tailwind Indigo-500 */
+            /* Final Project Accent Color (Green for Success/Deployment) */
+            --accent-project: #10b981; /* Tailwind Emerald-500 */
+            --bg-light: #f8fafc; /* Tailwind Gray-50 */
+        }
+
+        body {
+            /* ใช้ Noto Sans Thai เป็นหลักตาม Master Standard */
+            font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+            background-color: var(--bg-light); 
+            line-height: 1.7;
+            scroll-behavior: smooth;
+        }
+
+        /* Gradient Heading (Standard Aesthetic for H2/H3/H4) */
+        .gradient-text {
+            background-image: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* Card Shadow (Standard Aesthetic for all content blocks) */
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Section Header (Standard Aesthetic - Left Border Indicator) */
+        .section-header {
+            border-left: 5px solid var(--primary-color);
+            padding-left: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 1.5rem; /* Standardized spacing */
+        }
+
+        /* Status Card Specific Style (for callout boxes) */
+        .highlight-card {
+            border-left: 5px solid var(--accent-project); /* Project Green for Success */
+            background-color: #ecfdf5; /* Emerald-50 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+        .warning-card {
+            border-left: 5px solid #f97316; /* Orange-600 for warnings */
+            background-color: #fff7ed; /* Orange-50 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        /* Override Noto Sans Thai font weight for clarity */
+        h1, h2, h3, h4 {
+            font-weight: 700;
+        }
+        
+        /* Code Block Style (Standard: Slate-800 background) */
+        pre {
+            background-color: #1e293b; /* Slate-800 */
+            color: #f1f5f9; /* Slate-100 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        code {
+            font-family: Consolas, monospace;
+            background-color: #334155; /* Slate-700 */
+            padding: 0.1rem 0.3rem;
+            border-radius: 0.25rem;
+            color: #94a3b8; /* Slate-400 */
+        }
+        .expression-code {
+            background-color: #d1fae5; /* Emerald-100 */
+            color: #047857; /* Emerald-700 (for AppSheet/N8N Expression) */
+            font-weight: 600;
+        }
+        /* Style for table headers in content sections */
+        .content-table th {
+            background-color: #f3f4f6;
+        }
+        .flow-node {
+            background-color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .arrow {
+            color: var(--accent-project);
+        }
+
+    </style>
+    <script>
+        // * Lucide Icons (Consistent with Master Handbook Series)
+        const renderIcon = (name, className = 'w-5 h-5') => {
+            const icons = {
+                'cpu': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect width="16" height="16" x="4" y="4" rx="2"/><path d="M15 9h1a2 2 0 0 1 2 2v1"/><path d="M9 15h-1a2 2 0 0 0 -2 2v1"/><path d="M15 15v1a2 2 0 0 1 -2 2h-1"/><path d="M9 9v-1a2 2 0 0 0 -2 -2h-1"/></svg>`,
+                'zap': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+                'database': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 12a9 3 0 0 0 18 0"/><path d="M3 19a9 3 0 0 0 18 0"/><path d="M3 5v14"/></svg>`,
+                'send': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`,
+                'refresh-cw': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1 -2.12 -9.36l3.33 -3.33"/></svg>`,
+                'target': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`,
+                'check-circle': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M22 11.08V12a10 10 0 1 1 -5.93 -9.14"/><path d="M9 11l2 2l4 -4"/></svg>`,
+                'link': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M10 13a5 5 0 0 0 7.54.54l3 -3a5 5 0 0 0 -7.07 -7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0 -7.54 -.54l-3 3a5 5 0 0 0 7.07 7.07l1.71 -1.71"/></svg>`,
+                'trending-up': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
+                'code': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+                'mail': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7l-10 7l-10 -7"/></svg>`,
+                'split': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M12 21v-14"/><path d="M10 5l2 -2l2 2"/><path d="M12 15h-4"/><path d="M12 15l-4 4"/><path d="M12 15l-4 -4"/><path d="M12 15h4"/><path d="M12 15l4 4"/><path d="M12 15l4 -4"/></svg>`,
+            };
+            return icons[name] || '';
+        };
+        
+        window.onload = () => {
+             console.log("Day 5 Final Project Handbook Loaded (Content Depth Target: >= 1000 lines).");
+        };
+
+    </script>
+</head>
+<body class="min-h-screen">
+    <!-- Message Box for Alerts/Confirmations (Standard) -->
+    <div id="messageBox" class="fixed top-4 right-4 z-50 w-full max-w-sm"></div>
+
+    <!-- Header Section (Consistent with Master Handbook - Tailwind Structure) -->
+    <header class="bg-white card-shadow sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="text-3xl font-extrabold tracking-tight">
+                        <span class="gradient-text">AI Automation & Data Integration Master</span>
+                    </div>
+                </div>
+                <div class="mt-2 md:mt-0 text-right text-sm text-gray-600">
+                    Day 5: Final Project & MVP 🎯 การสร้างระบบอัตโนมัติที่สมบูรณ์
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Instructor Information Card (Consistent with Day 2/3/4) -->
+        <div class="bg-white p-6 rounded-xl card-shadow mb-8 border-t-4 border-indigo-500">
+            <div class="flex items-center space-x-4">
+                <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                     onerror="this.onerror=null;this.src='https://placehold.co/80x80/6366f1/ffffff?text=อ.แทน'"
+                     alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-20 h-20 rounded-full object-cover ring-2 ring-indigo-500">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">อ.แทน <span class="text-indigo-600">[ธีรชัย โฉมทัพ]</span></h2>
+                    <p class="text-base text-gray-500">Head of Digital Transformation</p>
+                    <p class="text-sm text-gray-600 mt-1">ยินดีต้อนรับสู่ Day 5: วันที่เราจะรวมทุกองค์ความรู้เข้าด้วยกัน เพื่อสร้าง **Masterpiece MVP**!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Introduction Card -->
+        <div class="bg-white p-6 rounded-xl card-shadow mb-8 highlight-card">
+            <div class="flex items-center space-x-3 mb-4 border-b pb-3 border-emerald-200">
+                <script>document.write(renderIcon('target', 'w-7 h-7 inline-block text-emerald-500 mr-2'));</script>
+                <h2 class="text-3xl font-bold gradient-text">บทนำ: AI-Driven Lead Automation MVP (Project Synthesis)</h2>
+            </div>
+            
+            <p class="text-gray-700 leading-relaxed">
+                Final Project ของเราคือการสร้างระบบ **AI-Driven Lead Qualification and Follow-up MVP** ที่สามารถ:
+                <ul class="list-disc list-inside ml-4 mt-2 space-y-1 font-semibold text-emerald-700">
+                    <li>✅ รับ Leads เข้ามาแบบ Real-Time จากแหล่งข้อมูลใดก็ได้ (AppSheet Webhook)</li>
+                    <li>✅ ใช้ **AI (Gemini)** เพื่อให้คะแนนความน่าจะเป็นในการซื้อ (Lead Scoring) และจัด Tier</li>
+                    <li>✅ แยก Leads ไปยัง **CRM** หรือ **Nurturing Email** โดยอัตโนมัติ (Decision Gate)</li>
+                    <li>✅ **ทนทาน** ต่อการล่มของ API ด้วย **Exponential Backoff** และ **DLQ** (Resilience Logic)</li>
+                    <li>✅ **ปิด Loop** ด้วยการอัปเดตสถานะกลับไปยัง **Google Sheets** (Post-Processing)</li>
+                </ul>
+            </p>
+        </div>
+        <!-- *************************************************************** -->
+
+        <!-- SECTION 6.1: PROJECT ARCHITECTURE AND DATA FLOW -->
+        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
+            <div class="section-header border-blue-500 mb-6">
+                <h2 class="text-3xl font-bold gradient-text">
+                    <script>document.write(renderIcon('link', 'w-7 h-7 inline-block text-blue-500 mr-2'));</script>
+                    6.1 Project Architecture: การเชื่อมต่อองค์ประกอบทั้งหมด
+                </h2>
+            </div>
+            
+            <p class="text-gray-700 leading-relaxed mb-4">
+                Flow ของ Final Project นี้แบ่งออกเป็น 3 Layers หลัก และใช้ **Transaction ID** เป็นแกนกลางในการเชื่อมโยงข้อมูลในทุกขั้นตอน (Day 2/4 Principle)
+            </p>
+
+            <!-- Flow Diagram (Conceptual Synthesis) -->
+            <h4 class="text-xl font-medium mt-6 text-indigo-700">ภาพรวมสถาปัตยกรรม (Full Stack Flow)</h4>
+            <div class="flex flex-col items-center justify-center p-6 bg-gray-100 rounded-xl my-4 card-shadow space-y-3">
+                <div class="flow-node bg-yellow-100 text-yellow-800 font-bold">1. Input Layer (AppSheet Form / Webhook)</div>
+                <div class="arrow text-3xl font-bold">HTTPS POST &darr;</div>
+                <div class="flow-node bg-pink-100 text-pink-800 font-bold">2. N8N Controller Flow (HMAC & 202 Async)</div>
+                <div class="arrow text-3xl font-bold">HTTP Call &darr;</div>
+                <div class="flow-node bg-blue-100 text-blue-800 font-bold">3. N8N Worker Flow (Pre-Process & AI & Decision)</div>
+                <div class="arrow text-3xl font-bold">If/Switch &darr;</div>
+                
+                <div class="flex justify-between w-full max-w-lg mt-2 space-x-2">
+                    <div class="flex flex-col items-center w-1/3">
+                        <div class="flow-node bg-red-100 text-red-800 text-sm">Path A: CRM + Backoff/DLQ (High Priority)</div>
+                    </div>
+                    <div class="flex flex-col items-center w-1/3">
+                        <div class="flow-node bg-teal-100 text-teal-800 text-sm">Path B: Nurturing Email (Medium Priority)</div>
+                    </div>
+                    <div class="flex flex-col items-center w-1/3">
+                        <div class="flow-node bg-gray-200 text-gray-700 text-sm">Path C: Log Only (Low Priority)</div>
+                    </div>
+                </div>
+
+                <div class="arrow text-3xl font-bold">Merge Path &darr;</div>
+                <div class="flow-node bg-emerald-100 text-emerald-800 font-bold">4. Post-Processing (Update Sheets Status)</div>
+            </div>
+
+            <!-- 6.1.2 Data Model Review -->
+            <div class="section-header border-blue-500 mb-6 mt-8">
+                <h3 class="text-2xl font-bold gradient-text">6.1.2 Data Model Review (Day 1 Principle)</h3>
+            </div>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                เราใช้ Google Sheet 3 ตาราง (3NF) เพื่อรักษา Data Integrity:
+            </p>
+            <table class="min-w-full divide-y divide-gray-200 mt-4 content-table text-sm">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-3 py-2 text-left">Sheet Name</th>
+                        <th class="px-3 py-2 text-left">Primary Role</th>
+                        <th class="px-3 py-2 text-left">Key Columns</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                    <tr><td class="py-2"><code class="expression-code">Leads</code></td><td class="py-2">เก็บข้อมูลลูกค้าใหม่ (Timestamp, Email, Phone, Industry)</td><td class="py-2"><code class="expression-code">Lead ID</code> (Unique ID), <code class="expression-code">Status</code></td></tr>
+                    <tr><td class="py-2"><code class="expression-code">DLQ_Log</code></td><td class="py-2">กักเก็บ Payload ที่ N8N ประมวลผลล้มเหลวถาวร (สำหรับ Re-queue)</td><td class="py-2"><code class="expression-code">Log ID</code> (Unique ID), <code class="expression-code">Failed JSON</code></td></tr>
+                    <tr><td class="py-2"><code class="expression-code">Users</code></td><td class="py-2">ตารางอ้างอิงสำหรับ Role/Sales Rep Assignment (สำหรับการค้นหาชื่อ/อีเมล)</td><td class="py-2"><code class="expression-code">Email</code> (Primary Key), <code class="expression-code">Role</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- *************************************************************** -->
+        <!-- SECTION 6.2: APPSHEET MVP SETUP (FRONT-END TRIGGER) -->
+        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
+            <div class="section-header border-blue-500 mb-6">
+                <h2 class="text-3xl font-bold gradient-text">
+                    <script>document.write(renderIcon('zap', 'w-7 h-7 inline-block text-blue-500 mr-2'));</script>
+                    6.2 AppSheet MVP: Webhook Trigger และ Payload Configuration
+                </h2>
+            </div>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                MVP ของ AppSheet มีหน้าที่หลักในการรับข้อมูลจากฟอร์ม (หรือการแก้ไขข้อมูล) และส่ง Payload ที่สะอาดไปยัง N8N ทันทีผ่าน **Webhook Action**
+            </p>
+
+            <!-- Step 6.2.1: AppSheet Automation Bot Setup -->
+            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
+                <script>document.write(renderIcon('code', 'w-6 h-6 text-yellow-600'));</script>
+                <span>Step 1: การกำหนด Event และ Process ใน AppSheet Bot</span>
+            </h3>
+            <ol class="list-decimal list-inside ml-4 mt-2 space-y-1 text-gray-700">
+                <li>**Event:** <code class="expression-code">Data Change: ADD</code> (เมื่อมีแถวใหม่เพิ่มในตาราง <code class="expression-code">Leads</code>)</li>
+                <li>**Condition:** <code class="expression-code">ISBLANK([N8N_Status])</code> (ตรวจสอบว่ายังไม่ถูกประมวลผลโดย N8N)</li>
+                <li>**Step 1:** <code class="expression-code">Call a webhook</code> (Action Type)</li>
+            </ol>
+            
+            <h4 class="text-xl font-medium mt-6 text-indigo-700">JSON Payload Template (Day 3 Review)</h4>
+            <p class="mt-2 text-gray-700 leading-relaxed">
+                เรากำหนด **JSON Body Template** ให้มีโครงสร้างที่ N8N คาดหวัง
+            </p>
+            <pre class="text-sm">
+// Webhook Payload Template (AppSheet)
+{
+  "transaction_id": "<<[Lead ID]>>", // PRIMARY KEY
+  "payload_source": "AppSheet_Lead_App",
+  "client_ip": "<<CONTEXT("Client IP")>>", // ข้อมูล Context สำหรับ Fraud Check
+  "raw_data": {
+    "email": "<<[Email]>>",
+    "phone": "<<[Phone]>>",
+    "industry": "<<[Industry]>>",
+    "budget": "<<[Budget]>>"
+  },
+  "metadata": {
+    "timestamp": "<<NOW()>>", // Timestamp จาก AppSheet
+    "user_email": "<<USEREMAIL()>>"
+  }
+}
+            </pre>
+            <p class="text-gray-700 leading-relaxed mt-3">
+                **Master Tip:** การรวม <code class="expression-code">metadata</code> ช่วยให้ N8N สามารถบันทึก Log และตรวจสอบข้อมูลในเชิง Audit ได้ละเอียดขึ้นมาก
+            </p>
+        </div>
+        
+        <!-- *************************************************************** -->
+        <!-- SECTION 6.3: N8N MASTER FLOW IMPLEMENTATION (BACKEND) -->
+        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
+            <div class="section-header border-blue-500 mb-6">
+                <h2 class="text-3xl font-bold gradient-text">
+                    <script>document.write(renderIcon('repeat', 'w-7 h-7 inline-block text-blue-500 mr-2'));</script>
+                    6.3 N8N Master Flow: Resilience and AI Orchestration
+                </h2>
+            </div>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                Flow ใน N8N แบ่งเป็น **Controller Flow** (รับ Webhook, ตอบ 202, Call Worker) และ **Worker Flow** (Logic หลัก)
+            </p>
+
+            <!-- Step 6.3.1: Controller Flow (202 Accepted) -->
+            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
+                <script>document.write(renderIcon('zap', 'w-6 h-6 text-green-600'));</script>
+                <span>Step 2: Controller Flow (HMAC และ HTTP 202)</span>
+            </h3>
+            <p class="mt-3 text-gray-700 leading-relaxed">
+                Controller Flow รับ Webhook และส่งต่อทันที เพื่อไม่ให้เกิด Timeout
+            </p>
+            <pre class="text-sm">
+// Controller Flow: Node 4 - HTTP Request Node (Call Worker)
+// Flow นี้จะทำงานต่อแม้ Worker Flow จะใช้เวลาประมวลผลนาน
+
+URL: <code class="expression-code">Webhook URL ของ Worker Flow</code>
+Body: <code class="expression-code">{{ JSON.stringify($json) }}</code>
+Method: <code class="expression-code">POST</code>
+Header: <code class="expression-code">Content-Type: application/json</code>
+            </pre>
+
+            <!-- Step 6.3.2: Worker Flow Logic (AI Scoring) -->
+            <div class="section-header border-blue-500 mb-6 mt-8">
+                <h3 class="text-2xl font-bold gradient-text">6.3.2 Worker Flow Logic: AI Lead Scoring Agent (Pre-Processing Master)</h3>
+            </div>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                ก่อนส่งให้ AI ต้องมั่นใจว่าข้อมูลสะอาดและครบถ้วน
+            </p>
+
+            <h4 class="text-xl font-medium mt-6 text-indigo-700">Code Node: Data Pre-processing (Master Validation & Correlation)</h4>
+            <pre class="text-sm">
+// Code Node: 6.3.2 - Data Pre-processing (Master Level)
+const items = $input.json;
+const REQUIRED_FIELDS = ['email', 'industry', 'budget'];
+const outputItems = [];
+
+for (const item of items) {
+    const rawData = item.json.raw_data;
+    let errors = [];
+    
+    // 1. **Data Validation:** Check for critical missing fields
+    for (const field of REQUIRED_FIELDS) {
+        if (!rawData[field] || rawData[field].toString().trim() === '') {
+            errors.push(`Missing Required Field: ${field}`);
+        }
+    }
+    
+    // 2. **Correlation ID:** Generate or use Transaction ID for tracking
+    item.json.correlation_id = item.json.transaction_id || crypto.randomUUID();
+    item.json.cleaned_email = rawData.email ? rawData.email.toLowerCase().trim() : null;
+
+    if (errors.length > 0) {
+        // Flag item for error path (DLQ for Invalid Input)
+        item.json.validation_status = 'INVALID_INPUT';
+        item.json.validation_errors = errors;
+        outputItems.push(item);
+    } else {
+        // Ready for AI Scoring
+        item.json.validation_status = 'VALID';
+        item.json.prompt_input = `Customer Email: ${item.json.cleaned_email}, Industry: ${rawData.industry}, Estimated Budget: ${rawData.budget} USD.`;
+        outputItems.push(item);
+    }
+}
+return outputItems;
+            </pre>
+            
+            <h4 class="text-xl font-medium mt-6 text-indigo-700">AI Node: Structured Output (Day 4 Core)</h4>
+            <p class="mt-2 text-gray-700 leading-relaxed">
+                เรากำหนด **JSON Schema** เพื่อให้ AI ตอบกลับมาในรูปแบบที่ใช้ในการตัดสินใจได้อย่างแม่นยำ:
+            </p>
+            <pre class="text-sm">
+// LLM Prompt + Schema (N8N Configuration)
+System Instruction: "Act as a Senior Sales Analyst. Score the lead from 1 to 10 and assign a Tier (A, B, C) based on budget and industry fit. Provide output in JSON format ONLY."
+
+JSON Schema:
+{
+  "type": "object",
+  "properties": {
+    "score": { "type": "number", "minimum": 1, "maximum": 10 },
+    "tier": { "type": "string", "enum": ["A", "B", "C"] },
+    "sales_assignment": { "type": "string", "description": "ชื่อ Sales Rep ที่เหมาะสม (e.g., 'Sam' for High-Tech, 'Jane' for Retail)" }
+  },
+  "required": ["score", "tier"]
+}
+            </pre>
+        </div>
+        
+        <!-- *************************************************************** -->
+        <!-- SECTION 6.4: RESILIENCE & DECISION GATE -->
+        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
+            <div class="section-header border-blue-500 mb-6">
+                <h2 class="text-3xl font-bold gradient-text">
+                    <script>document.write(renderIcon('trending-up', 'w-7 h-7 inline-block text-blue-500 mr-2'));</script>
+                    6.4 Resilience Logic และ Decision Gates
+                </h2>
+            </div>
+
+            <!-- Step 6.4.1: Decision Gate -->
+            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
+                <script>document.write(renderIcon('cpu', 'w-6 h-6 text-yellow-600'));</script>
+                <span>Step 3: Decision Gate (If Node) ตาม AI Score</span>
+            </h3>
+            <p class="mt-3 text-gray-700 leading-relaxed">
+                เราใช้ผลลัพธ์จาก AI Node เพื่อตัดสินใจแยก Flow
+            </p>
+            <table class="min-w-full divide-y divide-gray-200 mt-4 content-table text-sm">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-3 py-2 text-left">Condition</th>
+                        <th class="px-3 py-2 text-left">Action Path</th>
+                        <th class="px-3 py-2 text-left">Destination</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                    <tr><td class="py-2"><code class="expression-code">{{ $node['AI Node'].json['tier'] }} == "A"</code></td><td class="py-2">Critical Path: สร้าง Record ใน CRM + Alert Slack</td><td class="py-2">API 1: CRM (Target), API 2: Slack</td></tr>
+                    <tr><td class="py-2"><code class="expression-code">{{ $node['AI Node'].json['tier'] }} == "B"</code></td><td class="py-2">Standard Path: สร้าง Record ใน CRM (Low Priority) + Email Nurturing</td><td class="py-2">API 1: CRM (Target), API 2: SendGrid</td></tr>
+                    <tr><td class="py-2">Else (Tier C)</td><td class="py-2">Nurturing Only: บันทึกใน Google Sheet (Nurturing List)</td><td class="py-2">Google Sheets Node</td></tr>
+                </tbody>
+            </table>
+
+            <!-- Step 6.4.2: Resilience for Critical Path -->
+            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
+                <script>document.write(renderIcon('refresh-cw', 'w-6 h-6 text-red-600'));</script>
+                <span>Step 4: Exponential Backoff (Try/Catch) สำหรับ Critical API Call</span>
+            </h3>
+            <p class="mt-3 text-gray-700 leading-relaxed">
+                ใช้ Try/Catch และ Backoff Logic เพื่อจัดการกับความผิดพลาดในการเชื่อมต่อ CRM
+            </p>
+            
+            <pre class="text-sm">
+// Code Node: 6.4.2 - Backoff Logic (ใช้ซ้ำจาก Day 4)
+// This code is placed in the Catch Block of the CRM API Call.
+
+const MAX_RETRIES = 5; 
+const BASE_DELAY_MS = 2000; 
+
+for (const item of $input.json) {
+    const currentAttempt = item.json.retryAttempt || 0;
+    
+    if (currentAttempt >= MAX_RETRIES) {
+        // FAIL PERMANENTLY: ส่งเข้า DLQ
+        item.json.dlq_status = 'PERMANENT_FAIL';
+        item.json.dlq_reason = item.error?.message || 'Max retries exceeded. API Error Code: ' + item.error?.code;
+        item.json.sendToDLQ = true; 
+    } else {
+        // RETRY: คำนวณเวลาหน่วง 2^n * Base Delay
+        const calculatedDelay = Math.pow(2, currentAttempt) * BASE_DELAY_MS;
+        item.json.backoffDelay = Math.min(calculatedDelay, 300000); 
+        item.json.retryAttempt = currentAttempt + 1;
+        item.json.sendToDLQ = false;
+    }
+}
+return $input.json; 
+            </pre>
+            
+            <div class="warning-card p-4 rounded-lg my-4">
+                <h4 class="font-bold text-orange-800">🚨 6.4.3 DLQ Logging Worker Flow (Code สำหรับการบันทึก)</h4>
+                <p class="text-orange-700 text-sm mt-1">
+                    DLQ Worker Flow จะรับ Payload ที่มี <code class="expression-code">sendToDLQ: true</code> และบันทึกข้อมูลสำคัญลงในตาราง Log อย่างละเอียด
+                </p>
+                <pre class="text-sm">
+// DLQ Worker Flow: Node 2 - Code Node (Prepare Data for Logging)
+const items = $input.json;
+const logEntries = [];
+
+for (const item of items) {
+    // 1. ดึงข้อมูลที่จำเป็นและ Error context
+    const correlationId = item.json.correlation_id;
+    const originalPayload = JSON.stringify(item.json);
+    const failureReason = item.json.dlq_reason || 'Unknown Error';
+    const retryCount = item.json.retryAttempt;
+
+    // 2. สร้าง Log Entry สำหรับบันทึกใน Google Sheets (DLQ_Log)
+    logEntries.push({
+        json: {
+            Log_ID: correlationId,
+            Failure_Type: 'API_MAX_RETRY',
+            Error_Message: failureReason,
+            Original_Source: item.json.payload_source,
+            Original_Payload_JSON: originalPayload, // เก็บทั้งก้อนไว้สำหรับการ Re-queue
+            Retry_Count_Final: retryCount,
+            Manual_Status: "Pending Review",
+            Created_At: new Date().toISOString()
+        }
+    });
+}
+return logEntries; 
+// ตามด้วย Google Sheets Node (Append: DLQ_Log)
+                </pre>
+            </div>
+            
+            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
+                <script>document.write(renderIcon('refresh-cw', 'w-6 h-6 text-yellow-600'));</script>
+                <span>Step 5: DLQ Re-queue Scheduler (Flow ที่แยกออกมา)</span>
+            </h3>
+            <p class="mt-3 text-gray-700 leading-relaxed">
+                Flow นี้ถูกตั้งเวลา (Scheduler) ให้ทำงานทุก 30 นาที เพื่อตรวจสอบ Leads ที่ได้รับการแก้ไขแล้ว และนำกลับเข้า Flow หลัก
+            </p>
+            <pre class="text-sm">
+// Re-queue Scheduler Flow: Node 3 - Code Node (JSON Parse & Re-send)
+const items = $input.json; // Input มาจาก Google Sheets Node (Read: WHERE Manual_Status = 'Ready for Requeue')
+const payloadToRequeue = [];
+const WORKER_WEBHOOK_URL = $env.WORKER_WEBHOOK_URL; 
+
+for (const item of items) {
+    const originalPayloadString = item.json.Original_Payload_JSON; 
+    
+    try {
+        const parsedPayload = JSON.parse(originalPayloadString);
+        
+        // **สำคัญ:** ก่อน Re-queue ต้องล้างสถานะ DLQ/Retry ออกจาก Payload เก่า
+        delete parsedPayload.dlq_status;
+        delete parsedPayload.dlq_reason;
+        delete parsedPayload.retryAttempt;
+        delete parsedPayload.sendToDLQ;
+        
+        // 1. **Re-send Logic:** ใช้ HTTP Request Node (POST) เพื่อยิง parsedPayload ไปยัง WORKER_WEBHOOK_URL
+        payloadToRequeue.push({ json: parsedPayload }); 
+        
+    } catch (e) {
+        console.error(`DLQ JSON Parse Error for ID ${item.json.Log_ID}: ${e.message}`);
+        // ควรมี Logic แจ้งเตือนถ้า JSON Parse ล้มเหลวใน Re-queue
+    }
+}
+return payloadToRequeue; 
+            </pre>
+        </div>
+
+        <!-- *************************************************************** -->
+        <!-- SECTION 6.6: ADVANCED CODE NODE PATTERNS (NEW EXPANSION) -->
+        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
+            <div class="section-header border-blue-500 mb-6">
+                <h2 class="text-3xl font-bold gradient-text">
+                    <script>document.write(renderIcon('code', 'w-7 h-7 inline-block text-blue-500 mr-2'));</script>
+                    6.6 Advanced Code Node Patterns: Marketing Action
+                </h2>
+            </div>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                ใน Path B (Email Nurturing) เราใช้ Code Node เพื่อเพิ่มความชาญฉลาดให้กับ Action ทางการตลาด
+            </p>
+
+            <!-- Step 6.6.1: Dynamic HTML Template Rendering -->
+            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
+                <script>document.write(renderIcon('mail', 'w-6 h-6 text-yellow-600'));</script>
+                <span>Step 6: Dynamic HTML Template Rendering (Email Body)</span>
+            </h3>
+            <p class="mt-3 text-gray-700 leading-relaxed">
+                ใช้ Template Literal ใน JavaScript เพื่อสร้าง HTML Body ที่ Personalize โดยอ้างอิงถึงข้อมูลที่ Clean แล้ว และ AI Score
+            </p>
+            <pre class="text-sm">
+// Code Node: 6.6.1 - Email Template Generation
+const items = $input.json;
+
+for (const item of items) {
+    const name = item.json.raw_data.name || 'คุณลูกค้า';
+    const tier = item.json.ai_result.tier;
+    const score = item.json.ai_result.score;
+    
+    // HTML Template (ใช้ Template Literal `...` เพื่อแทรกตัวแปร)
+    const emailBody = `
+        &lt;h1 style="color: #3b82f6;">เรียน ${name} &lt;/h1>
+        &lt;p>ขอบคุณที่สนใจบริการของเรา! ทีมงานของเราได้ประเมินความต้องการของคุณแล้ว (AI Score: ${score}/10)
+        และจัดคุณไว้ในระดับ **Tier ${tier}**&lt;/p>
+        &lt;div style="background: #f0f9ff; padding: 15px; border-radius: 8px;">
+            &lt;p>ตามลำดับความสำคัญนี้ เราได้ส่งข้อมูลไปยังทีม Nurturing เพื่อมอบ Content ที่เหมาะสมที่สุด
+            เพื่อช่วยให้คุณบรรลุเป้าหมายด้าน ${item.json.raw_data.industry} &lt;/p>
+        &lt;/div>
+        &lt;p>ขอแสดงความนับถือ,&lt;br>ทีม AI Automation &lt;/p>
+    `;
+    item.json.email_html_body = emailBody;
+}
+return items; // Output นี้จะถูกส่งไปที่ SendGrid/Email Node
+            </pre>
+
+            <!-- Step 6.6.2: A/B Test Logic for Email Subject Line -->
+            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
+                <script>document.write(renderIcon('split', 'w-6 h-6 text-purple-600'));</script>
+                <span>Step 7: A/B Testing Logic (Random Split)</span>
+            </h3>
+            <p class="mt-3 text-gray-700 leading-relaxed">
+                การทดสอบ Subject Line สำหรับอีเมล Nurturing สามารถทำได้ง่าย ๆ ด้วย Code Node และ **Split In Batches Node**
+            </p>
+            <pre class="text-sm">
+// Code Node: 6.6.2 - A/B Test Split (50/50 Random)
+const items = $input.json;
+const outputA = [];
+const outputB = [];
+
+for (const item of items) {
+    // 1. Randomly assign to Group A or B
+    const isGroupA = Math.random() < 0.5; // 50% probability
+    
+    if (isGroupA) {
+        item.json.subject_line = `A: Leads Tier ${item.json.ai_result.tier} - ข้อเสนอเฉพาะ`;
+        item.json.ab_test_group = 'A';
+        outputA.push(item);
+    } else {
+        item.json.subject_line = `B: [ชื่อลูกค้า] มี Content พิเศษรอคุณอยู่`;
+        item.json.ab_test_group = 'B';
+        outputB.push(item);
+    }
+}
+
+// **สำคัญ:** ส่ง Output เป็น 2 Sets เพื่อใช้ Split In Batches Node ต่อไป
+return [outputA, outputB];
+            </pre>
+            <p class="text-gray-700 leading-relaxed mt-3">
+                **Flow Logic:** Output Index 0 (<code class="expression-code">A</code>) และ Index 1 (<code class="expression-code">B</code>) จะถูกส่งต่อไปยัง Node การส่งอีเมล 2 ชุดที่แตกต่างกัน เพื่อวัด Conversion Rate ในภายหลัง
+            </p>
+        </div>
+
+        <!-- *************************************************************** -->
+        <!-- SECTION 6.7: PRODUCTION MONITORING AND ALERTING (EXPANDED) -->
+        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
+            <div class="section-header border-blue-500 mb-6">
+                <h2 class="text-3xl font-bold gradient-text">
+                    <script>document.write(renderIcon('bell', 'w-7 h-7 inline-block text-blue-500 mr-2'));</script>
+                    6.7 Production Monitoring & Alerting (Master Alert Code)
+                </h2>
+            </div>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                การแจ้งเตือนต้องรวดเร็ว ชัดเจน และมี **Context** ที่เพียงพอให้ทีมแก้ไขปัญหาได้ทันที (เช่น มี Execution ID และ Link ไปยัง Log)
+            </p>
+
+            <!-- Step 6.7.1: Dynamic Alert Formatting -->
+            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
+                <script>document.write(renderIcon('code', 'w-6 h-6 text-yellow-600'));</script>
+                <span>Step 8: Code Node: Dynamic Alert Message (Slack/Line)</span>
+            </h3>
+            <p class="mt-3 text-gray-700 leading-relaxed">
+                โค้ดนี้ใช้สำหรับสร้าง Rich Text/Markdown Message เพื่อส่งใน Slack Node (หรือ Line Notify Node) ใน Catch Block
+            </p>
+            <pre class="text-sm">
+// Code Node: 6.7.1 - Rich Alert Formatting for Slack
+const items = $input.json; // Input มาจาก Catch Block หรือ DLQ Worker
+const N8N_HOST = $env.N8N_BASE_URL; // e.g., https://n8n.mycompany.com
+const WORKFLOW_ID = $env.N8N_WORKFLOW_ID; // ดึง ID Workflow จาก Environment Variable
+
+for (const item of items) {
+    const errorDetails = item.json.dlq_reason || 'API Call Failed (No detailed error)';
+    const correlationId = item.json.correlation_id || 'N/A';
+    const source = item.json.payload_source || 'Unknown';
+    const tier = item.json.ai_result?.tier || 'N/A';
+    const executionId = $execution.id; // ใช้ Global Execution ID ของ N8N
+
+    // 1. สร้าง Dynamic Link ไปยัง Log การทำงาน
+    const logUrl = `${N8N_HOST}/workflow/${WORKFLOW_ID}/execution/${executionId}`;
+    
+    // 2. สร้าง Slack Markdown Message
+    const slackMessage = `
+*🚨 CRITICAL ERROR: DLQ Triggered in Lead Flow*
+---
+*Workflow:* Day 5: AI-Driven Lead Automation (ID: ${WORKFLOW_ID})
+*Execution ID:* <${logUrl}|${executionId}>
+*Correlation ID:* ${correlationId}
+*Error Reason:* ${errorDetails}
+*Lead Tier:* ${tier}
+*Source:* ${source}
+---
+*ACTION:* ทีม Ops โปรดตรวจสอบ Log และพิจารณา *Re-queue* จากตาราง DLQ_Log
+`;
+    item.json.slack_alert_message = slackMessage;
+}
+return items;
+            </pre>
+            <p class="text-gray-700 leading-relaxed mt-3">
+                **Master Tip:** การแทรก <code class="expression-code">$execution.id</code> และใช้ Environment Variable <code class="expression-code">$env.N8N_BASE_URL</code> ทำให้ Alert ของคุณเป็น **Actionable Alert** ที่ทีมสามารถคลิกและเข้าสู่ Log ได้ทันที
+            </p>
+        </div>
+
+        <!-- *************************************************************** -->
+        <!-- SECTION 6.5: FINAL ACTIONS AND DEPLOYMENT -->
+        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
+            <div class="section-header border-blue-500 mb-6">
+                <h2 class="text-3xl font-bold gradient-text">
+                    <script>document.write(renderIcon('send', 'w-7 h-7 inline-block text-blue-500 mr-2'));</script>
+                    6.5 Final Actions: Post-Processing และ Production Deployment
+                </h2>
+            </div>
+
+            <!-- Step 6.5.1: Sales Assignment (Dynamic) -->
+            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
+                <script>document.write(renderIcon('database', 'w-6 h-6 text-yellow-600'));</script>
+                <span>Step 9: Dynamic Sales Rep Assignment (LookUp Master Code)</span>
+            </h3>
+            <p class="mt-3 text-gray-700 leading-relaxed">
+                ใช้ Code Node ในการทำ **LookUp** กับข้อมูล Sales Rep (ที่ดึงมาจากตาราง <code class="expression-code">Users</code>) เพื่อค้นหาอีเมลของ Sales Rep ที่ AI แนะนำ (<code class="expression-code">sales_assignment</code>)
+            </p>
+            <pre class="text-sm">
+// Code Node: 6.5.1 - Dynamic Sales Rep LookUp
+const items = $input.json;
+const usersData = $node['Google Sheets: Read Users'].json; // สมมติว่าดึงข้อมูล Users มาแล้วใน Node ก่อนหน้า
+const DEFAULT_SALES_EMAIL = 'support@company.com'; 
+
+for (const item of items) {
+    const aiAssignedName = item.json.ai_result.sales_assignment;
+    
+    // 1. ค้นหา Sales Rep ตามชื่อที่ AI แนะนำ
+    const assignedUser = usersData.find(user => 
+        user.Name === aiAssignedName
+    );
+
+    let assignedEmail;
+
+    if (assignedUser) {
+        // 2. ถ้าพบผู้ใช้ ให้ใช้อีเมลนั้น
+        assignedEmail = assignedUser.Email;
+    } else {
+        // 3. ถ้าไม่พบ หรือ AI ไม่ได้แนะนำ ให้ใช้ Fallback Email
+        console.warn(`AI suggested unknown Sales Rep: ${aiAssignedName}. Falling back to default.`);
+        assignedEmail = DEFAULT_SALES_EMAIL;
+    }
+    
+    // 4. เก็บอีเมลที่ถูกกำหนดไว้ใน Item
+    item.json.assigned_email = assignedEmail; 
+}
+
+return items;
+            </pre>
+
+
+            <!-- Step 6.5.2: Post-Processing -->
+            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
+                <script>document.write(renderIcon('database', 'w-6 h-6 text-yellow-600'));</script>
+                <span>Step 10: Post-Processing: Update Google Sheets Status (Closing the Loop)</span>
+            </h3>
+            <p class="mt-3 text-gray-700 leading-relaxed">
+                หลังจาก Flow ประมวลผลสำเร็จในทุกเส้นทาง (Path A, B, C) ทุก Item จะถูกรวมเข้าสู่ **Merge Node** และไปสู่ขั้นตอนสุดท้าย: การอัปเดตสถานะในตาราง <code class="expression-code">Leads</code> ของ Google Sheets
+            </p>
+            <pre class="text-sm">
+// Google Sheets Node: Update Row (ใช้ 'Update Row' Method)
+Sheet: <code class="expression-code">Leads</code>
+Key Column: <code class="expression-code">Lead ID</code>
+Key Value: <code class="expression-code">{{ $json.transaction_id }}</code> // ใช้ Transaction ID ที่ส่งมาจาก AppSheet
+
+Data to Update:
+| Column | Value |
+|:---|:---|
+| <code class="expression-code">N8N_Status</code> | <code class="expression-code">PROCESSED - TIER {{ $node['AI Node'].json['tier'] }}</code> |
+| <code class="expression-code">AI_Score</code> | <code class="expression-code">{{ $node['AI Node'].json['score'] }}</code> |
+| <code class="expression-code">Sales_Rep</code> | <code class="expression-code">{{ $json.assigned_email }}</code> |
+| <code class="expression-code">Processed_Date</code> | <code class="expression-code">{{ NOW() }}</code> |
+            </pre>
+            <p class="text-gray-700 leading-relaxed mt-3">
+                นี่คือขั้นตอนสำคัญที่ทำให้ **AppSheet Dashboard** สามารถแสดงผลสถานะล่าสุดของ Leads ที่ถูกประมวลผลโดย N8N ได้อย่างถูกต้อง (Synchronization)
+            </p>
+
+            <!-- Step 6.5.3: Final Production Check -->
+            <div class="section-header border-blue-500 mb-6 mt-8">
+                <h3 class="2xl font-bold gradient-text">6.5.3 Production Check และ Monitoring (Day 4 Integration)</h3>
+            </div>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                ก่อนที่จะเปลี่ยน Flow นี้จาก Test Mode เป็น Production (Active) ต้องตรวจสอบ 3 จุดสุดท้าย:
+            </p>
+            <ol class="list-decimal list-inside ml-4 mt-2 space-y-2 text-gray-700">
+                <li>**Monitoring:** ตรวจสอบว่า **Error Workflow** (Catch-All) และ **DLQ** ของ Flow นี้ทำงานได้อย่างถูกต้อง (Day 4: Step 14)</li>
+                <li>**Credentials:** ตรวจสอบว่า API Keys ทั้งหมด (CRM, Gemini, Slack) ถูกดึงจาก **Environment Variables** อย่างถูกต้อง และไม่ได้ Hardcode (Day 4: Step 16)</li>
+                <li>**Rate Limiting:** หาก CRM API มี Rate Limit ที่ต่ำ ให้เพิ่ม **Delay Node** ก่อน API Call หรือใช้ **Queue Node** เพื่อควบคุมการยิง API ไม่ให้ถี่เกินไป</li>
+            </ol>
+            
+            <h4 class="text-xl font-medium mt-6 text-indigo-700">โค้ด: การจัดการ Rate Limit ด้วย Delay Node</h4>
+            <pre class="text-sm">
+// ระบุ Delay ก่อนถึง HTTP Request Node ไปยัง CRM API
+Delay Time: <code class="expression-code">6000</code> milliseconds // 6 วินาที (เพื่อให้ยิงได้สูงสุด 10 ครั้งต่อนาที)
+Delay Time per Item: <code class="expression-code">Yes</code> // สำคัญ! เพื่อให้แต่ละ Item ถูกหน่วงแยกกัน
+            </pre>
+            
+            <div class="highlight-card p-4 rounded-lg my-4">
+                <h4 class="font-bold text-emerald-800">✅ Master Project Complete: การทำงาน End-to-End</h4>
+                <p class="text-emerald-700 text-sm mt-1">
+                    MVP นี้แสดงให้เห็นถึงการรวมพลังของ Low-Code (AppSheet) และ No-Code Automation (N8N) ที่ถูกยกระดับด้วย AI และ Logic ระดับ Production (Resilience) ซึ่งเป็นมาตรฐานที่ท่านต้องการถ่ายทอดในหลักสูตร Master Handbook ครับ
+                </p>
+            </div>
+        </div>
+
+        <!-- *************************************************************** -->
+        <!-- FINAL CHECKLIST & CONCLUSION -->
+        <!-- *************************************************************** -->
+        <hr class="my-6 border-t border-gray-200">
+
+        <!-- บทสรุป Day 5 (Updated Checklist) -->
+        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
+            <div class="section-header border-green-500">
+                <h2 class="text-3xl font-bold" style="color: #10b981;">
+                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                    สรุป Day 5: Final Project Master Checklist
+                </h2>
+            </div>
+            
+            <div class="mt-4 p-6 bg-green-50 rounded-xl card-shadow">
+                <p class="text-green-800 font-semibold mb-3">Master Project นี้ได้รวมและบรรลุเป้าหมายหลักทั้งหมด:</p>
+                <ul class="list-disc list-inside space-y-3 text-gray-700 ml-4">
+                    <li>✅ **Synthesis:** รวม Data Design, AppSheet UX, N8N Flow, AI และ Resilience</li>
+                    <li>✅ **Pre-Processing Master:** Data Validation และ Correlation ID ใน Code Node</li>
+                    <li>✅ **Asynchronous Handling:** ใช้ Controller Flow + Worker Flow แยกกัน (HTTP 202)</li>
+                    <li>✅ **AI Decision:** ใช้ Gemini LLM Node สำหรับ **Structured Lead Scoring** (Priority/Tier)</li>
+                    <li>✅ **Resilience:** ใช้ **Exponential Backoff** และมีเส้นทางไป **DLQ Worker** ที่สมบูรณ์</li>
+                    <li>✅ **Advanced Code:** ใช้ **Dynamic HTML Templating** และ **A/B Testing Logic**</li>
+                    <li>✅ **Closing the Loop:** **Post-Processing** อัปเดตสถานะ Leads ใน Google Sheets</li>
+                    <li>✅ **Production Readiness:** การตรวจสอบ Rate Limiting และการใช้ Environment Variables</li>
+                </ul>
+            </div>
+        </div>
+        
+    </main>
+
+    <!-- Footer Section (Consistent with Master Handbook - Tailwind Structure) -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 AI Automation & Data Integration Master. | เอกสารประกอบการสอนโดย อ.แทน [ธีรชัย โฉมทัพ]</p>
+            <p class="text-sm text-gray-400 mt-1">Head of Digital Transformation</p>
+        </div>
+    </footer>
+
+</body>
+</html>
