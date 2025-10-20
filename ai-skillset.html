@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โครงการพัฒนากำลังคน</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 20px 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        h1, h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4b5563;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-top: 3rem;
+        }
+        p {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+        .section {
+            margin-bottom: 4rem;
+        }
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        .styled-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .styled-table thead tr {
+            background-color: #667eea;
+            color: #ffffff;
+            text-align: left;
+        }
+        .styled-table th, .styled-table td {
+            padding: 12px 15px;
+            vertical-align: top;
+            border: 1px solid #dddddd; /* Added border for clarity */
+        }
+        .styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f3f6f9;
+        }
+        .styled-table tbody tr:last-of-type {
+            border-bottom: 2px solid #667eea;
+        }
+        .styled-table tbody tr:hover {
+            background-color: #e2e8f0;
+        }
+        .category {
+            font-weight: 700;
+            color: #ffffff;
+            position: relative;
+        }
+        .category.automation {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: white;
+        }
+        .category.data-management {
+            background: linear-gradient(90deg, #4CAF50, #81C784);
+            color: white;
+        }
+        .category.ai-vision {
+            background: linear-gradient(90deg, #FFC107, #FFD54F);
+            color: black;
+        }
+        .skill-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .icon {
+            margin-right: 10px;
+            color: #3b82f6;
+            font-size: 20px;
+        }
+        .job-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            list-style: none;
+            padding: 0;
+        }
+        .job-list li {
+            background-color: #eef2ff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .job-list li:hover {
+            transform: translateY(-5px);
+        }
+        .job-list h3 {
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            color: #4338ca;
+            display: flex;
+            align-items: center;
+        }
+        .job-list h3 .icon {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+        .job-list p {
+            font-size: 1rem;
+            line-height: 1.5;
+            text-align: left;
+        }
+        .node-label {
+            font-size: 14px;
+            font-weight: 600;
+            fill: #333;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+        }
+        .node-skill-label {
+            fill: #333;
+            font-size: 14px;
+        }
+        .node-job-title-label {
+            fill: #000;
+            font-size: 16px;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.4);
+        }
+        .link {
+            stroke: #9ca3af;
+            stroke-opacity: 0.6;
+            stroke-width: 1.5px;
+        }
+        .node-circle {
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .node-circle:hover {
+            stroke-width: 2.5px;
+        }
+        .skill-node { fill: #facc15; stroke: #b45309; }
+        .job-node { fill: #3b82f6; stroke: #1e40af; }
+        .original-job-node { fill: #FF69B4; stroke: #C71585; }
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .tab-button {
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #6b7280;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-button:hover {
+            color: #4338ca;
+        }
+        .tab-button.active {
+            color: #4338ca;
+            border-bottom-color: #4338ca;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .main-heading {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            font-weight: 700;
+        }
+        .styled-table .automation-row {
+            background-color: #dbeafe;
+        }
+        .styled-table .data-management-row {
+            background-color: #dcfce7;
+        }
+        .styled-table .ai-vision-row {
+            background-color: #fffbeb;
+        }
+        .job-list li:nth-child(odd) {
+            background: linear-gradient(135deg, #eef2ff, #dbeafe);
+        }
+        .job-list li:nth-child(even) {
+            background: linear-gradient(135deg, #eef2ff, #f3e9ff);
+        }
+        .legend-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            font-size: 1rem;
+            color: #555;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 8px;
+            border: 1.5px solid;
+        }
+        .color-job { background-color: #3b82f6; border-color: #1e40af; }
+        .color-original-job { background-color: #FF69B4; border-color: #C71585; }
+        .color-skill { background-color: #facc15; border-color: #b45309; }
+        .instruction-box {
+            background-color: #eef2ff;
+            border-left: 4px solid #4338ca;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            font-style: italic;
+        }
+        .job-transformation {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 2rem;
+        }
+        .job-transformation-item {
+            display: flex;
+            align-items: center;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .job-transformation-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .job-transformation-item .column {
+            flex: 1;
+            padding: 0 10px;
+            text-align: center;
+        }
+        .job-transformation-item .column h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .job-transformation-item .column .emoji {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .job-transformation-item .arrow {
+            font-size: 2rem;
+            color: #4b5563;
+        }
+        @media (max-width: 768px) {
+            .job-transformation-item {
+                flex-direction: column;
+                padding: 15px;
+            }
+            .job-transformation-item .arrow {
+                transform: rotate(90deg);
+                margin: 10px 0;
+            }
+        }
+        /* TABEE Custom Styles */
+        .tabee-cell {
+            text-align: center;
+            font-weight: bold;
+            color: #4338ca;
+            width: 50px; /* fixed width for T columns */
+        }
+        .tabee-header-cell {
+            background-color: #a78bfa;
+            color: white;
+            text-align: center;
+            font-weight: 700;
+        }
+        .tabee-match-icon {
+            color: #FFC107; /* Use Yellow accent for visibility */
+            font-size: 1.1rem;
+        }
+        .tabee-definition-box {
+            background-color: #f3f4f6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        }
+        .tabee-definition-item {
+            color: #4b5563;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="container mt-10">
+        <header>
+            <h1 class="main-heading text-center mb-2" style="background:none; -webkit-text-fill-color: initial; color: #4b5563;">โครงการพัฒนากำลังคนสมรรถนะสูงด้านปัญญาประดิษฐ์สำหรับระบบอัตโนมัติและการประมวลผลจากกล้องด้วยเครื่องมือ No-Code/Low-Code เพื่อยกระดับผู้ประกอบการ SMEs ของประเทศไทย</h1>
+            <p class="text-lg md:text-xl text-center mb-10">AI Business Automation & Smart Vision for Enterprise Excellence (AI-BESE)</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('skillset')">Skill Set</button>
+            <button class="tab-button" onclick="showTab('jobs')">ตำแหน่งงานที่สามารถต่อยอดได้</button>
+            <button class="tab-button" onclick="showTab('tabee')">TABEE Mapping</button> <!-- NEW TAB -->
+            <button class="tab-button" onclick="showTab('mapping')">แผนผังความสัมพันธ์</button>
+        </div>
+
+        <!-- TAB 1: Skill Set -->
+        <div id="skillset-content" class="tab-content active">
+            <div class="section">
+                <h1>Skill Set</h1>
+                <p class="text-lg">ทักษะที่จะได้รับ เมื่อเรียนจบหลักสูตร</p>
+                <div class="table-container">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>หมวดหมู่</th>
+                                <th>ทักษะ (Skill)</th>
+                                <th>รายละเอียด</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="4" class="category automation">Automation & Data Integration</td>
+                                <td class="automation-row">
+                                    <div class="skill-item">
+                                        <span class="icon">&#x1F527;</span>
+                                        n8n
+                                    </div>
+                                </td>
+                                <td class="automation-row">เข้าใจในการสร้าง Workflow อัตโนมัติ, การเชื่อมต่อ API, การใช้ Node ต่างๆ สำหรับการจัดการข้อมูลและการแจ้งเตือน</td>
+                            </tr>
+                            <tr>
+                                <td class="automation-row">
+                                    <div class="skill-item">
+                                        <span class="icon">&#x1F4BE;</span>
+                                        Loyverse API
+                                    </div>
+                                </td>
+                                <td class="automation-row">ความสามารถในการดึงข้อมูลการขาย, ข้อมูลสินค้า และข้อมูลลูกค้าจาก Loyverse เพื่อนำไปประมวลผลต่อ</td>
+                            </tr>
+                            <tr>
+                                <td class="automation-row">
+                                    <div class="skill-item">
+                                        <span class="icon">&#x1F4C5;</span>
+                                        vTiger CRM
+                                    </div>
+                                </td>
+                                <td class="automation-row">การจัดการข้อมูลลูกค้า, Sales Pipeline และ Deal ต่างๆ ใน vTiger รวมถึงการเชื่อมต่อผ่าน API</td>
+                            </tr>
+                            <tr>
+                                <td class="automation-row">
+                                    <div class="skill-item">
+                                        <span class="icon">&#x1F4BB;</span>
+                                        Google App Script
+                                    </div>
+                                </td>
+                                <td class="automation-row">การเขียนโค้ดเพื่อเชื่อมต่อกับ Google Sheets, Google Forms และบริการอื่นๆ ของ Google Workspace</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2" class="category data-management">Data Management</td>
+                                <td class="data-management-row">
+                                    <div class="skill-item">
+                                        <span class="icon">&#x1F4CA;</span>
+                                        AppSheet
+                                    </div>
+                                </td>
+                                <td class="data-management-row">การสร้าง Dashboard และแอปพลิเคชันเพื่อจัดการข้อมูล, การสร้างรายงาน และการแสดงผลข้อมูลแบบ Real-time</td>
+                            </tr>
+                            <tr>
+                                <td class="data-management-row">
+                                    <div class="skill-item">
+                                        <span class="icon">&#x1F4C4;</span>
+                                        Google Sheets
+                                    </div>
+                                </td>
+                                <td class="data-management-row">การจัดการและประมวลผลข้อมูลในรูปแบบตาราง, การใช้สูตรต่างๆ และการเป็นฐานข้อมูลแบบ No-Code</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2" class="category ai-vision">AI & Vision</td>
+                                <td class="ai-vision-row">
+                                    <div class="skill-item">
+                                        <span class="icon">&#x1F4F8;</span>
+                                        AI Camera
+                                    </div>
+                                </td>
+                                <td class="ai-vision-row">ความเข้าใจในแนวคิด Computer Vision และการนำ AI มาใช้ในการตรวจนับวัตถุ, การตรวจสอบคุณภาพ และการวิเคราะห์พฤติกรรม</td>
+                            </tr>
+                            <tr>
+                                <td class="ai-vision-row">
+                                    <div class="skill-item">
+                                        <span class="icon">&#x1F9E0;</span>
+                                        PyTorch
+                                    </div>
+                                </td>
+                                <td class="ai-vision-row">การใช้งานไลบรารี PyTorch สำหรับการสร้างและฝึกฝน AI Model เพื่อนำไปใช้กับ Computer Vision</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: Jobs -->
+        <div id="jobs-content" class="tab-content">
+            <div class="section">
+                <h2>ตำแหน่งงานที่สามารถต่อยอดได้</h2>
+                <p class="text-lg">ผู้เรียนสามารถนำ Skill Set ไปประยุกต์ใช้กับตำแหน่งงานเหล่านี้</p>
+                <ul class="job-list">
+                    <li>
+                        <h3><span class="icon">💼</span> Business Analyst / Business Process Improvement</h3>
+                        <p>ผู้เรียนสามารถวิเคราะห์กระบวนการทำงานเพื่อหา Pain Points และนำทักษะด้าน Automation มาออกแบบ Workflow ใหม่ที่ช่วยลดขั้นตอน ลดงานซ้ำซ้อน และเพิ่มประสิทธิภาพการทำงานได้</p>
+                    </li>
+                    <li>
+                        <h3><span class="icon">📊</span> Data Analyst / Data Coordinator</h3>
+                        <p>ผู้เรียนสามารถใช้ AppSheet และ Google Sheets ในการสร้าง Dashboard และระบบจัดการข้อมูล เพื่อรวบรวมและวิเคราะห์ข้อมูลจากหลายแหล่ง (เช่น Loyverse, vTiger) ช่วยให้การตัดสินใจเป็นไปอย่างรวดเร็ว</p>
+                    </li>
+                    <li>
+                        <h3><span class="icon">🤖</span> Automation Specialist / Workflow Automation Manager</h3>
+                        <p>ตำแหน่งนี้ตรงกับทักษะที่ผู้เรียนจะได้รับโดยตรง ผู้เรียนจะเป็นผู้เชี่ยวชาญในการออกแบบ, สร้าง, และดูแลระบบ Automation โดยใช้ n8n เพื่อเชื่อมต่อระบบต่างๆ เข้าด้วยกัน</p>
+                    </li>
+                    <li>
+                        <h3><span class="icon">💻</span> IT Support Specialist (สำหรับธุรกิจ SMEs)</h3>
+                        <p>ผู้เรียนสามารถใช้ทักษะในการแก้ไขปัญหา Automation และพัฒนาเครื่องมือขนาดเล็ก (Scripts) ด้วย Google App Script เพื่อช่วยแก้ปัญหาเฉพาะทางในองค์กรได้</p>
+                    </li>
+                    <li>
+                        <h3><span class="icon">🧠</span> Technical Consultant (AI & Automation)</h3>
+                        <p>ผู้เรียนสามารถนำความรู้และประสบการณ์จาก Project ต้นแบบไปให้คำปรึกษาและออกแบบโซลูชันด้าน AI Automation สำหรับธุรกิจอื่นๆ ได้</p>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <hr>
+                <h2 class="text-lg md:text-xl font-bold mt-8 mb-4">เปลี่ยนผ่านสู่เส้นทางอาชีพใหม่</h2>
+                <p class="text-base text-gray-600 mb-6">ผู้เข้าร่วมโครงการสามารถต่อยอดจากตำแหน่งงานเดิมไปสู่ตำแหน่งงานใหม่ได้อย่างไร</p>
+                <div class="job-transformation" id="job-transformation-container">
+                    <!-- Content generated by JS -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- NEW TAB 3: TABEE Mapping -->
+        <div id="tabee-content" class="tab-content">
+            <div class="section">
+                <h2>TABEE Mapping: การเชื่อมโยงผลลัพธ์การเรียนรู้</h2>
+                <p class="text-lg">แสดงความสอดคล้องของหลักสูตรกับตัวชี้วัดสมรรถนะของสภาวิศวกร (TABEE T1 - T5)</p>
+                <div class="table-container">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th class="w-[15%]">หลักสูตร</th>
+                                <th class="w-[35%]">ผลลัพธ์การเรียนรู้ (Learning Outcomes)</th>
+                                <th class="tabee-header-cell">T1</th>
+                                <th class="tabee-header-cell">T2</th>
+                                <th class="tabee-header-cell">T3</th>
+                                <th class="tabee-header-cell">T4</th>
+                                <th class="tabee-header-cell">T5</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            
+                            <!-- Row Group 1: AI Automation - 5 rows -->
+                            <tr class="automation-row">
+                                <td rowspan="5" class="table-cell font-bold text-indigo-800">
+                                    ปัญญาประดิษฐ์สำหรับระบบอัตโนมัติและการบูรณาการข้อมูลระดับสูง
+                                </td>
+                                <td class="table-cell">วิเคราะห์ปัญหาทางธุรกิจและแปลงเป็นกระบวนการอัตโนมัติที่ชัดเจนได้</td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"><i class="fas fa-dot-circle tabee-match-icon"></i></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                            </tr>
+                            <tr class="automation-row">
+                                <td class="table-cell">ออกแบบฐานข้อมูลและการเชื่อมโยงข้อมูลระหว่างแพลตฟอร์มต่าง ๆ (Data Integration) ได้</td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"><i class="fas fa-dot-circle tabee-match-icon"></i></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                            </tr>
+                            <tr class="automation-row">
+                                <td class="table-cell">ใช้หลักการ Logic Flow และ Conditional Automation เพื่อสร้างระบบอัตโนมัติที่มีความซับซ้อนได้</td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"><i class="fas fa-dot-circle tabee-match-icon"></i></td>
+                            </tr>
+                            <tr class="automation-row">
+                                <td class="table-cell">สร้างต้นแบบที่ถูกใช้งานจริงในพันธมิตรเอกชน SMEs ด้วยเครื่องมือ No-Code/Low-Code เช่น AppSheet, N8N, AppScript</td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"><i class="fas fa-dot-circle tabee-match-icon"></i></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                            </tr>
+                            <tr class="automation-row">
+                                <td class="table-cell">สามารถวัดผลและประเมินประสิทธิภาพของระบบอัตโนมัติที่พัฒนาขึ้นได้</td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"><i class="fas fa-dot-circle tabee-match-icon"></i></td>
+                                <td class="tabee-cell"></td>
+                            </tr>
+
+                            <!-- Row Group 2: AI Camera - 3 rows -->
+                            <tr class="ai-vision-row">
+                                <td rowspan="3" class="table-cell font-bold text-green-800">
+                                    ปัญญาประดิษฐ์สำหรับการประมวลผลจากกล้อง
+                                </td>
+                                <td class="table-cell">อธิบายการทำงานของระบบเรียนรู้เชิงลึกที่ถูกต้องได้</td>
+                                <td class="tabee-cell"><i class="fas fa-dot-circle tabee-match-icon"></i></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                            </tr>
+                            <tr class="ai-vision-row">
+                                <td class="table-cell">สร้างระบบปัญญาประดิษฐ์จากกล้อง โดยใช้ชุดข้อมูลของตนเอง เพื่อฝึกฝนทำโมเดล ทำการปรับแต่งและแก้ไขด้วยตนเองได้ด้วยตนเอง</td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"><i class="fas fa-dot-circle tabee-match-icon"></i></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                            </tr>
+                            <tr class="ai-vision-row">
+                                <td class="table-cell">สร้างต้นแบบที่ถูกใช้งานจริงในพันธมิตรเอกชน SMEs ด้วยเครื่องมือ PyTorch และ YOLO ได้</td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"></td>
+                                <td class="tabee-cell"><i class="fas fa-dot-circle tabee-match-icon"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- TABEE Definitions -->
+                <div class="tabee-definition-box">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-4 flex items-center">
+                        <i class="fas fa-info-circle mr-2"></i> คำจำกัดความของตัวชี้วัดสมรรถนะ (TABEE T1 - T5)
+                    </h3>
+                    <ul class="list-none space-y-3 text-sm tabee-definition-item">
+                        <li class="flex items-start">
+                            <span class="font-bold text-red-600 mr-2 w-8 shrink-0">T1:</span>
+                            <span>An ability to **apply knowledge** of mathematics, science, and engineering.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="font-bold text-red-600 mr-2 w-8 shrink-0">T2:</span>
+                            <span>An ability to **identify, formulate, and solve engineering problems.**</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="font-bold text-red-600 mr-2 w-8 shrink-0">T3:</span>
+                            <span>An ability to **design a system, component, or process** to meet desired needs within realistic constraints.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="font-bold text-red-600 mr-2 w-8 shrink-0">T4:</span>
+                            <span>An ability to **design and conduct experiments, as well as to analyze and interpret data.**</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="font-bold text-red-600 mr-2 w-8 shrink-0">T5:</span>
+                            <span>An ability to use the techniques, skills, and **modern engineering tools** necessary for engineering practice.</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 4: Mapping -->
+        <div id="mapping-content" class="tab-content">
+            <div class="section">
+                <h2>แผนผังความสัมพันธ์ทักษะสู่เส้นทางอาชีพ</h2>
+                <p class="text-lg">แสดงความสัมพันธ์ระหว่าง Skill Set และตำแหน่งงาน</p>
+                <div id="chart-container" class="w-full h-auto" style="min-height: 500px;"></div>
+                <div class="legend-container">
+                    <div class="legend-item"><div class="legend-color color-job"></div>ตำแหน่งงานหลักสูตร</div>
+                    <div class="legend-item"><div class="legend-color color-skill"></div>Skillset ที่จะได้รับ</div>
+                    <div class="legend-item"><div class="legend-color color-original-job"></div>ตำแหน่งงานเดิมของผู้เข้าร่วมโครงการ</div>
+                </div>
+                <div class="instruction-box">
+                    **วิธีใช้งาน:** คลิกที่ชื่อตำแหน่งงานในแผนผังเพื่อดูความเชื่อมโยงกับ Skillset ที่เกี่ยวข้อง
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="flex flex-col items-center justify-center">
+            <p class="text-gray-600 mb-4">จัดทำโดย</p>
+            <div class="flex items-center space-x-4">
+                <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" alt="อ.แทน [ธีรชัย โฉมทัพ] Avatar" class="w-16 h-16 rounded-full shadow-lg">
+                <div class="text-center">
+                    <p class="font-bold text-lg">อ.แทน [ธีรชัย โฉมทัพ]</p>
+                    <p class="text-gray-500">Head of Digital Transformation</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Data for new and original jobs, including their relationships
+        const jobData = {
+            newJobs: [
+                { id: "Business Analyst", icon: "💼", description: "ผู้เรียนสามารถวิเคราะห์กระบวนการทำงานเพื่อหา Pain Points และนำทักษะด้าน Automation มาออกแบบ Workflow ใหม่ที่ช่วยลดขั้นตอน ลดงานซ้ำซ้อน และเพิ่มประสิทธิภาพการทำงานได้" },
+                { id: "Data Analyst", icon: "📊", description: "ผู้เรียนสามารถใช้ AppSheet และ Google Sheets ในการสร้าง Dashboard และระบบจัดการข้อมูล เพื่อรวบรวมและวิเคราะห์ข้อมูลจากหลายแหล่ง (เช่น Loyverse, vTiger) ช่วยให้การตัดสินใจเป็นไปอย่างรวดเร็ว" },
+                { id: "Automation Specialist", icon: "🤖", description: "ตำแหน่งนี้ตรงกับทักษะที่ผู้เรียนจะได้รับโดยตรง ผู้เรียนจะเป็นผู้เชี่ยวชาญในการออกแบบ, สร้าง, และดูแลระบบ Automation โดยใช้ n8n เพื่อเชื่อมต่อระบบต่างๆ เข้าด้วยกัน" },
+                { id: "IT Support Specialist", icon: "💻", description: "ผู้เรียนสามารถใช้ทักษะในการแก้ไขปัญหา Automation และพัฒนาเครื่องมือขนาดเล็ก (Scripts) ด้วย Google App Script เพื่อช่วยแก้ปัญหาเฉพาะทางในองค์กรได้" },
+                { id: "Technical Consultant", icon: "🧠", description: "ผู้เรียนสามารถนำความรู้และประสบการณ์จาก Project ต้นแบบไปให้คำปรึกษาและออกแบบโซลูชันด้าน AI Automation สำหรับธุรกิจอื่นๆ ได้" }
+            ],
+            originalJobs: [
+                { id: "Camera AI Analyst", icon: "📸", description: "นักวิเคราะห์ AI และกล้องวงจรปิด", relatedTo: ["Technical Consultant"] },
+                { id: "AI Automation Developer", icon: "⚙️", description: "นักพัฒนาด้าน AI และระบบอัตโนมัติ", relatedTo: ["Automation Specialist"] },
+                { id: "No-Code Workflow Developer", icon: "🔧", description: "นักพัฒนา Workflow โดยใช้เครื่องมือ No-Code", relatedTo: ["Automation Specialist"] },
+                { id: "CRM & AI Specialist", icon: "👥", description: "ผู้เชี่ยวชาญด้าน CRM และ AI", relatedTo: ["Data Analyst"] },
+                { id: "CRM & AI Developer", icon: "💡", description: "นักพัฒนาด้าน CRM และ AI", relatedTo: ["Data Analyst"] },
+                { id: "AI Architect", icon: "🏢", description: "สถาปนิกด้านปัญญาประดิษฐ์", relatedTo: ["Technical Consultant"] }
+            ]
+        };
+
+        function showTab(tabId) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => button.classList.remove('active'));
+            document.getElementById(tabId + '-content').classList.add('active');
+            event.target.classList.add('active');
+            if (tabId === 'mapping') {
+                renderChart();
+            } else if (tabId === 'jobs') {
+                renderJobTransformation();
+            }
+        }
+
+        function renderJobTransformation() {
+            const container = document.getElementById('job-transformation-container');
+            container.innerHTML = ''; // Clear old content
+
+            jobData.originalJobs.forEach(originalJob => {
+                originalJob.relatedTo.forEach(relatedNewJobId => {
+                    const newJob = jobData.newJobs.find(j => j.id === relatedNewJobId);
+                    if (newJob) {
+                        const item = document.createElement('div');
+                        item.className = 'job-transformation-item';
+                        item.innerHTML = `
+                            <div class="column">
+                                <span class="emoji">${originalJob.icon}</span>
+                                <h3>${originalJob.id}</h3>
+                                <p class="text-sm text-gray-500">${originalJob.description}</p>
+                            </div>
+                            <div class="arrow text-2xl font-bold p-2 md:p-4">➡️</div>
+                            <div class="column">
+                                <span class="emoji">${newJob.icon}</span>
+                                <h3>${newJob.id}</h3>
+                                <p class="text-sm text-gray-500">${newJob.description}</p>
+                            </div>
+                        `;
+                        container.appendChild(item);
+                    }
+                });
+            });
+        }
+        
+        let simulation;
+        let svg;
+
+        function renderChart() {
+            d3.select("#chart-container svg").remove();
+            
+            const width = document.getElementById("chart-container").offsetWidth;
+            const height = Math.max(500, document.getElementById("chart-container").offsetHeight);
+
+            svg = d3.select("#chart-container").append("svg")
+                .attr("viewBox", `0 0 ${width} ${height}`)
+                .style("width", "100%")
+                .style("height", "auto");
+
+            const nodes = [
+                ...jobData.newJobs.map(j => ({ id: j.id, group: "job" })),
+                ...jobData.originalJobs.map(j => ({ id: j.id, group: "original_job" })),
+                { id: "n8n", group: "skill" },
+                { id: "AppSheet", group: "skill" },
+                { id: "Google Sheets", group: "skill" },
+                { id: "Loyverse API", group: "skill" },
+                { id: "vTiger CRM", group: "skill" },
+                { id: "Google App Script", group: "skill" },
+                { id: "PyTorch", group: "skill" },
+                { id: "AI Camera", group: "skill" }
+            ];
+
+            const links = [
+                // Links to new jobs
+                { source: "Business Analyst", target: "n8n" },
+                { source: "Business Analyst", target: "AppSheet" },
+                { source: "Business Analyst", target: "Google Sheets" },
+                { source: "Data Analyst", target: "AppSheet" },
+                { source: "Data Analyst", target: "Google Sheets" },
+                { source: "Data Analyst", target: "Loyverse API" },
+                { source: "Data Analyst", target: "vTiger CRM" },
+                { source: "Automation Specialist", target: "n8n" },
+                { source: "Automation Specialist", target: "Loyverse API" },
+                { source: "Automation Specialist", target: "vTiger CRM" },
+                { source: "Automation Specialist", target: "Google App Script" },
+                { source: "IT Support Specialist", target: "n8n" },
+                { source: "IT Support Specialist", target: "Google App Script" },
+                { source: "Technical Consultant", target: "n8n" },
+                { source: "Technical Consultant", target: "PyTorch" },
+                { source: "Technical Consultant", target: "AI Camera" },
+                
+                // Links from original jobs to new jobs
+                { source: "Camera AI Analyst", target: "Technical Consultant" },
+                { source: "AI Automation Developer", target: "Automation Specialist" },
+                { source: "No-Code Workflow Developer", target: "Automation Specialist" },
+                { source: "CRM & AI Specialist", target: "Data Analyst" },
+                { source: "CRM & AI Developer", target: "Data Analyst" },
+                { source: "AI Architect", target: "Technical Consultant" }
+            ];
+
+            const data = { nodes, links };
+            simulation = d3.forceSimulation(data.nodes)
+                .force("link", d3.forceLink(data.links).id(d => d.id).distance(150))
+                .force("charge", d3.forceManyBody().strength(-400))
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .force("x", d3.forceX(width / 2).strength(0.1)) 
+                .force("y", d3.forceY(height / 2).strength(0.1));
+
+            const link = svg.append("g")
+                .attr("class", "links")
+                .selectAll("line")
+                .data(data.links)
+                .join("line")
+                .attr("class", "link");
+
+            const node = svg.append("g")
+                .attr("class", "nodes")
+                .selectAll("g")
+                .data(data.nodes)
+                .join("g")
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended))
+                .on("click", clickNode);
+
+            node.append("circle")
+                .attr("r", 15)
+                .attr("class", d => {
+                    if (d.group === "job") return "node-circle job-node";
+                    if (d.group === "skill") return "node-circle skill-node";
+                    return "node-circle original-job-node";
+                })
+                .attr("id", d => `node-${d.id.replace(/\s/g, '-')}`);
+
+            node.append("text")
+                .text(d => d.id)
+                .attr("class", d => {
+                    if (d.group === "job") return "node-job-title-label";
+                    if (d.group === "skill") return "node-skill-label";
+                    return "node-job-title-label";
+                })
+                .attr("dx", d => d.group === "job" ? "-20px" : "20px") 
+                .attr("dy", "5px") 
+                .attr("text-anchor", d => d.group === "job" ? "end" : "start");
+
+            simulation.on("tick", () => {
+                link
+                    .attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+
+                node.attr("transform", d => `translate(${
+                    d.x = Math.max(15, Math.min(width - 15, d.x))
+                },${
+                    d.y = Math.max(15, Math.min(height - 15, d.y))
+                })`);
+            });
+
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+
+            function clickNode(event, d) {
+                link.style("stroke-opacity", 0.6).style("stroke", "#9ca3af");
+                node.selectAll("circle").style("stroke-width", "1.5px");
+                node.selectAll("text").style("font-weight", "normal");
+
+                if (d.group === "job" || d.group === "original_job") {
+                    const relatedLinks = data.links.filter(l => l.source.id === d.id || l.target.id === d.id);
+                    const relatedNodes = new Set();
+                    relatedLinks.forEach(l => {
+                        relatedNodes.add(l.source.id);
+                        relatedNodes.add(l.target.id);
+                    });
+                    
+                    link.filter(l => relatedNodes.has(l.source.id) && relatedNodes.has(l.target.id))
+                        .style("stroke-opacity", 1)
+                        .style("stroke", "#ff6b6b")
+                        .style("stroke-width", "3px");
+                    
+                    node.filter(n => relatedNodes.has(n.id))
+                        .selectAll("circle")
+                        .style("stroke-width", "5px")
+                        .style("stroke", "#ff6b6b");
+                    
+                    node.filter(n => relatedNodes.has(n.id))
+                        .selectAll("text")
+                        .style("font-weight", "bold");
+                }
+            }
+        }
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            showTab('skillset');
+        });
+    </script>
+</body>
+</html>
