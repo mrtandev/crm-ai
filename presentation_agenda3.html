@@ -6,6 +6,8 @@
     <title>นำเสนอแผนงานหลักสูตร AI & Automation</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Font Awesome for general icons (if needed, though Emojis are used below) -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" /> -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -106,6 +108,21 @@
             height: 100%;
             object-fit: contain; /* Ensures the whole image is visible */
         }
+        
+        /* New styling for the linked course title for better hover effect */
+        .course-title-link {
+            display: flex;
+            align-items: center;
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 800; /* font-extrabold */
+            color: #4338ca; /* Indigo-700 equivalent for the link text */
+            text-decoration: none;
+            transition: color 0.2s, transform 0.2s;
+        }
+        .course-title-link:hover {
+            color: #ec4899; /* Pink-500 equivalent on hover */
+            transform: translateX(5px);
+        }
     </style>
     <script>
         function toggleCollapsible(id) {
@@ -122,6 +139,7 @@
 
         function createGoogleCalendarLink(title, details, location, startDate, endDate) {
             const baseUrl = 'https://www.google.com/calendar/render?action=TEMPLATE';
+            // Removing all non-alphanumeric characters, specifically for date formatting
             const dates = `${startDate.replace(/:|-|\./g, '')}/${endDate.replace(/:|-|\./g, '')}`;
             
             const url = `${baseUrl}&text=${encodeURIComponent(title)}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(location)}&dates=${dates}`;
@@ -129,7 +147,7 @@
             window.open(url, '_blank');
         }
 
-        // --- Calendar Events Data ---
+        // --- Calendar Events Data (Kept for Timeline Generation) ---
         const eventsAutomation = [
             { date: '1 พ.ย. 68 (เสาร์)', title: 'หัวข้อ 1 & 2: ปรัชญา No-Code/Low-Code และการออกแบบฐานข้อมูล', start: '20251101T090000', end: '20251101T160000', loc: 'Online/Onsite' },
             { date: '2 พ.ย. 68 (อาทิตย์)', title: 'หัวข้อ 3 & 4: Logic/Flow Automation และ Workshop AppSheet (ปฏิบัติ)-1', start: '20251102T090000', end: '20251102T160000', loc: 'Online/Onsite' },
@@ -148,6 +166,8 @@
 
         function createAutomationTimeline() {
             const container = document.getElementById('automation-timeline');
+            // Clear existing content
+            container.innerHTML = ''; 
             eventsAutomation.forEach((event, index) => {
                 const item = document.createElement('div');
                 item.className = 'timeline-item';
@@ -171,6 +191,8 @@
 
         function createCameraTimeline() {
             const container = document.getElementById('camera-timeline');
+            // Clear existing content
+            container.innerHTML = ''; 
             eventsCamera.forEach((event, index) => {
                 const item = document.createElement('div');
                 item.className = 'timeline-item';
@@ -195,6 +217,14 @@
         window.onload = function() {
             createAutomationTimeline();
             createCameraTimeline();
+            
+            // Set automation-description to be open by default
+            document.getElementById('automation-description').classList.add('open');
+            document.getElementById('automation-description-icon').innerHTML = '&#9660;';
+            
+            // Set camera-description to be open by default
+            document.getElementById('camera-description').classList.add('open');
+            document.getElementById('camera-description-icon').innerHTML = '&#9660;';
         };
     </script>
 </head>
@@ -204,13 +234,12 @@
         <header class="bg-white mb-8">
             <div class="full-logo-container w-full">
                 <img src="https://lh3.googleusercontent.com/d/1E7Z5y-T2KR0sfkfrBMNbd_QAILy29a0F" 
-                     alt="โลโก้พันธมิตรโครงการ">
+                    alt="โลโก้พันธมิตรโครงการ">
             </div>
         </header>
 
         <!-- MAIN TITLE -->
         <div class="text-center mb-10">
-            <!-- Font size is kept for the project title as previously agreed -->
             <h1 class="text-2xl md:text-3xl font-extrabold text-gradient leading-tight mb-2">
                 โครงการพัฒนากำลังคนสมรรถนะสูงด้านปัญญาประดิษฐ์
             </h1>
@@ -238,11 +267,12 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Module 1: AI Automation & Data Integration Master - THEME: INDIGO/BLUE -->
                 <div class="course-card p-5 bg-indigo-50 border-4 border-indigo-500 rounded-xl">
-                    <h3 class="text-xl font-extrabold text-indigo-700 mb-3 flex items-center">
+                    <!-- START OF MODIFICATION: Replaced <h3> with <a> for the link -->
+                    <a href="https://idea-crmai.netlify.app/day0_automation" target="_blank" class="course-title-link mb-3">
                         <span class="mr-3 text-2xl">💡</span> AI Automation & Data Integration Master
-                    </h3>
+                    </a>
+                    <!-- END OF MODIFICATION -->
                     <div class="text-base space-y-2 text-gray-700">
-                        <!-- Adjusted text size for readability -->
                         <p class="text-sm"><strong class="text-indigo-600">ชื่อเต็ม (ไทย):</strong> ปัญญาประดิษฐ์สำหรับระบบอัตโนมัติและการบูรณาการข้อมูลระดับสูง</p>
                         <p class="text-sm"><strong class="text-indigo-600">วัตถุประสงค์:</strong> สร้างระบบอัตโนมัติ (Automation Workflow) และการเชื่อมโยงข้อมูล (Data Integration) ด้วยเครื่องมือ No-Code/Low-Code เพื่อยกระดับผู้ประกอบการ SMEs</p>
                         <p class="text-sm"><strong class="text-indigo-600">ระยะเวลา:</strong> ไม่น้อยกว่า 30 ชั่วโมง (5 วัน)</p>
@@ -293,7 +323,7 @@
                         <!-- Collapsible Description -->
                         <div class="border-t border-indigo-200 pt-3 mt-3">
                             <button onclick="toggleCollapsible('automation-description')" class="w-full text-left font-semibold text-indigo-600 hover:text-pink-500 transition focus:outline-none flex items-center">
-                                <span id="automation-description-icon" class="mr-2">&#9658;</span> คำอธิบายหัวข้อหลัก (Outline)
+                                <span id="automation-description-icon" class="mr-2">&#9660;</span> คำอธิบายหัวข้อหลัก (Outline)
                             </button>
                             <div id="automation-description" class="collapsible-content open"> <!-- Set to open by default for visibility -->
                                 <div class="p-3 mt-2 rounded-lg bg-indigo-100 border-2 border-indigo-300">
@@ -312,14 +342,13 @@
                         <span class="mr-3 text-2xl">📸</span> Camera AI Master
                     </h3>
                     <div class="text-base space-y-2 text-gray-700">
-                         <!-- Adjusted text size for readability -->
                         <p class="text-sm"><strong class="text-pink-600">ชื่อเต็ม (ไทย):</strong> ปัญญาประดิษฐ์สำหรับการประมวลผลจากกล้อง</p>
                         <p class="text-sm"><strong class="text-pink-600">วัตถุประสงค์:</strong> พัฒนาศักยภาพด้านการสร้างโมเดล Deep Learning สำหรับงานประมวลผลภาพ (Computer Vision) และโครงข่ายประสาทเทียม เพื่อนำไปประยุกต์ใช้ในอุตสาหกรรม/เกษตรกรรม</p>
                         <p class="text-sm"><strong class="text-pink-600">ระยะเวลา:</strong> ไม่น้อยกว่า 30 ชั่วโมง (5 วัน)</p>
                         <p class="text-sm"><strong class="text-pink-600">เครื่องมือหลัก:</strong> Pytorch, YOLO, CNN, NumPy, Pandas</p>
                         
-                         <!-- Collapsible Outline -->
-                         <div class="border-t border-pink-200 pt-3 mt-3">
+                        <!-- Collapsible Outline -->
+                        <div class="border-t border-pink-200 pt-3 mt-3">
                             <button onclick="toggleCollapsible('camera-outline')" class="w-full text-left font-semibold text-pink-600 hover:text-indigo-500 transition focus:outline-none flex items-center">
                                 <span id="camera-outline-icon" class="mr-2">&#9658;</span> หัวข้อหลัก (คลิกเพื่อดู)
                             </button>
@@ -363,7 +392,7 @@
                         <!-- Collapsible Description -->
                         <div class="border-t border-pink-200 pt-3 mt-3">
                             <button onclick="toggleCollapsible('camera-description')" class="w-full text-left font-semibold text-pink-600 hover:text-indigo-500 transition focus:outline-none flex items-center">
-                                <span id="camera-description-icon" class="mr-2">&#9658;</span> คำอธิบายหัวข้อหลัก (Outline)
+                                <span id="camera-description-icon" class="mr-2">&#9660;</span> คำอธิบายหัวข้อหลัก (Outline)
                             </button>
                             <div id="camera-description" class="collapsible-content open"> <!-- Set to open by default for visibility -->
                                 <div class="p-3 mt-2 rounded-lg bg-pink-100 border-2 border-pink-300">
