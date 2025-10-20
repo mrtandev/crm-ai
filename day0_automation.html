@@ -94,7 +94,7 @@
             cursor: pointer;
         }
         .calendar-btn {
-            background: linear-gradient(90deg, #10b981, #059669); /* Emerald Gradient */
+            background: linear-gradient(90deg, #10b981, #059669); /* Emerald Gradient: Used for link button now */
             color: white;
             padding: 10px 20px;
             border-radius: 8px;
@@ -144,7 +144,7 @@
             </div>
         </div>
 
-        <!-- Course Day Cards (Refactored with Checkboxes and Calendar Button) -->
+        <!-- Course Day Cards (Refactored with Checkboxes and File Link Button) -->
         <h2 class="text-3xl font-bold header-gradient mb-6 border-b-2 border-indigo-200 pb-2">แผนปฏิบัติการรายวัน 🗓️</h2>
 
         <div id="course-plan">
@@ -156,9 +156,10 @@
                         <div class="text-xl font-bold text-gray-800">Day 1: ปรัชญา No-Code/Low-Code และการออกแบบฐานข้อมูลที่ยืดหยุ่น (5 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 1 & 2: วางรากฐานความคิดและการออกแบบโครงสร้างข้อมูล</div>
                     </div>
-                    <button class="calendar-btn flex items-center ml-4" onclick="addToCalendar(1, 'ปรัชญา No-Code', 5, 'วางรากฐานความคิดและการออกแบบโครงสร้างข้อมูล')">
-                        <i class="fas fa-calendar-plus mr-2"></i> ปฏิทิน
-                    </button>
+                    <!-- CHANGED: Replaced Calendar button with File Link -->
+                    <a href="day1_automation.html" class="calendar-btn flex items-center ml-4">
+                        <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
+                    </a>
                 </summary>
                 <div class="topic-list">
                     <h4 class="text-lg font-semibold mb-2">หัวข้อที่ต้องทำ:</h4>
@@ -176,9 +177,10 @@
                         <div class="text-xl font-bold text-gray-800">Day 2: การวิเคราะห์และออกแบบ Logic/Flow Automation ขั้นสูง (5 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 3: การแปลง Business Process เป็น Automation Logic</div>
                     </div>
-                    <button class="calendar-btn flex items-center ml-4" onclick="addToCalendar(2, 'Logic Automation ขั้นสูง', 5, 'การแปลง Business Process เป็น Automation Logic')">
-                        <i class="fas fa-calendar-plus mr-2"></i> ปฏิทิน
-                    </button>
+                    <!-- CHANGED: Replaced Calendar button with File Link -->
+                    <a href="day2_automation.html" class="calendar-btn flex items-center ml-4">
+                        <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
+                    </a>
                 </summary>
                 <div class="topic-list">
                     <h4 class="text-lg font-semibold mb-2">หัวข้อที่ต้องทำ:</h4>
@@ -196,9 +198,10 @@
                         <div class="text-xl font-bold text-gray-800">Day 3: Workshop: สร้าง Web/Mobile App ด้วย AppSheet (6 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 4: สร้างแอปพลิเคชันธุรกิจเพื่อจัดการข้อมูลและ Dashboard</div>
                     </div>
-                    <button class="calendar-btn flex items-center ml-4" onclick="addToCalendar(3, 'Workshop AppSheet', 6, 'สร้างแอปพลิเคชันธุรกิจ')">
-                        <i class="fas fa-calendar-plus mr-2"></i> ปฏิทิน
-                    </button>
+                    <!-- CHANGED: Replaced Calendar button with File Link -->
+                    <a href="day3_automation.html" class="calendar-btn flex items-center ml-4">
+                        <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
+                    </a>
                 </summary>
                 <div class="topic-list">
                     <h4 class="text-lg font-semibold mb-2">หัวข้อที่ต้องทำ:</h4>
@@ -216,9 +219,10 @@
                         <div class="text-xl font-bold text-gray-800">Day 4: Workshop: เชื่อมต่อและทำงานอัตโนมัติด้วย N8N (Part 1) (8 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 5: การเริ่มใช้ n8n และการสร้าง Integration Workflow เบื้องต้น</div>
                     </div>
-                    <button class="calendar-btn flex items-center ml-4" onclick="addToCalendar(4, 'Workshop N8N Part 1', 8, 'การเริ่มใช้ n8n และสร้าง Integration Workflow')">
-                        <i class="fas fa-calendar-plus mr-2"></i> ปฏิทิน
-                    </button>
+                    <!-- CHANGED: Replaced Calendar button with File Link -->
+                    <a href="day4_automation.html" class="calendar-btn flex items-center ml-4">
+                        <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
+                    </a>
                 </summary>
                 <div class="topic-list">
                     <h4 class="text-lg font-semibold mb-2">หัวข้อที่ต้องทำ:</h4>
@@ -236,9 +240,10 @@
                         <div class="text-xl font-bold text-gray-800">Day 5: Project: พัฒนา AI Automation MVP สำหรับ SMEs (6 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 6: การทำ Project จบหลักสูตร และสรุปผลลัพธ์</div>
                     </div>
-                    <button class="calendar-btn flex items-center ml-4" onclick="addToCalendar(5, 'AI Automation MVP Project', 6, 'การบูรณาการ LLMs เข้ากับ Workflow')">
-                        <i class="fas fa-calendar-plus mr-2"></i> ปฏิทิน
-                    </button>
+                    <!-- CHANGED: Replaced Calendar button with File Link -->
+                    <a href="day5_automation.html" class="calendar-btn flex items-center ml-4">
+                        <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
+                    </a>
                 </summary>
                 <div class="topic-list">
                     <h4 class="text-lg font-semibold mb-2">หัวข้อที่ต้องทำ:</h4>
@@ -250,80 +255,13 @@
         </div>
         
         <div class="mt-8 text-center text-gray-500 text-sm p-4 bg-white rounded-lg border">
-            <p>⭐ **เคล็ดลับ:** คุณสามารถขยายรายการของแต่ละวันเพื่อทำเครื่องหมายหัวข้อที่เรียนจบแล้ว และคลิกปุ่ม "ปฏิทิน" เพื่อเพิ่มแผนงานเข้าใน Google Calendar ได้ทันที!</p>
+            <!-- UPDATED HINT TEXT -->
+            <p>⭐ **เคล็ดลับ:** คุณสามารถขยายรายการของแต่ละวันเพื่อทำเครื่องหมายหัวข้อที่เรียนจบแล้ว และคลิกปุ่ม "เข้าดูไฟล์" เพื่อไปยังเอกสารรายละเอียดของวันนั้น ๆ ได้ทันที!</p>
         </div>
 
     </div>
 
-    <script>
-        // JavaScript for 'Add to Calendar' functionality
-        function addToCalendar(day, title, hours, description) {
-            // Placeholder: Assume today is the start date for demonstration
-            // In a real application, you would calculate the actual date for each day
-            const startDate = new Date();
-            // Start time set to 9:00 AM for demonstration
-            startDate.setHours(9, 0, 0, 0);
-
-            // Calculate the actual day based on the index (Day 1 is today, Day 2 is tomorrow, etc.)
-            const eventDate = new Date(startDate);
-            eventDate.setDate(startDate.getDate() + (day - 1));
-
-            // Format date components to YYYYMMDDTHHMMSSZ (Google Calendar format)
-            const formatComponent = (n) => String(n).padStart(2, '0');
-
-            // Start Date/Time
-            const startYear = eventDate.getFullYear();
-            const startMonth = formatComponent(eventDate.getMonth() + 1);
-            const startDay = formatComponent(eventDate.getDate());
-            const startHour = formatComponent(eventDate.getHours());
-            const startMinute = formatComponent(eventDate.getMinutes());
-            const startTime = `${startYear}${startMonth}${startDay}T${startHour}${startMinute}00`;
-
-            // End Date/Time (Start time + duration in hours)
-            const endDate = new Date(eventDate);
-            endDate.setHours(eventDate.getHours() + hours);
-            
-            const endHour = formatComponent(endDate.getHours());
-            const endMinute = formatComponent(endDate.getMinutes());
-            const endTime = `${startYear}${startMonth}${startDay}T${endHour}${endMinute}00`;
-
-            const eventTitle = `หลักสูตร: ${title} (Day ${day})`;
-            const eventDescription = `หัวข้อหลัก: ${description}\n\nโดย อ.แทน [ธีรชัย โฉมทัพ] - Head of Digital Transformation`;
-            const location = 'Online/Classroom'; // Placeholder location
-
-            // Create Google Calendar URL (best cross-platform approach for a front-end button)
-            const googleCalendarUrl = new URL('https://www.google.com/calendar/render');
-            googleCalendarUrl.searchParams.set('action', 'TEMPLATE');
-            googleCalendarUrl.searchParams.set('text', eventTitle);
-            googleCalendarUrl.searchParams.set('dates', `${startTime}/${endTime}`);
-            googleCalendarUrl.searchParams.set('details', eventDescription);
-            googleCalendarUrl.searchParams.set('location', location);
-
-            // Open the new URL in a new tab
-            window.open(googleCalendarUrl.toString(), '_blank');
-
-            // Custom non-alert feedback message
-            console.log(`Successfully generated Google Calendar link for Day ${day}: ${title}`);
-            showNotification(`✅ เพิ่มแผนงาน ${title} (Day ${day}) ลงในปฏิทินแล้ว!`);
-        }
-
-        // Custom Notification function (to avoid using alert())
-        function showNotification(message) {
-            let notification = document.getElementById('custom-notification');
-            if (!notification) {
-                notification = document.createElement('div');
-                notification.id = 'custom-notification';
-                notification.className = 'fixed top-4 right-4 bg-indigo-600 text-white p-4 rounded-lg shadow-2xl opacity-0 transition-opacity duration-300 z-50';
-                document.body.appendChild(notification);
-            }
-            notification.textContent = message;
-            notification.style.opacity = '1';
-
-            setTimeout(() => {
-                notification.style.opacity = '0';
-            }, 3000);
-        }
-    </script>
+    <!-- REMOVED: JavaScript for Add to Calendar functionality has been removed -->
 
 </body>
 </html>
