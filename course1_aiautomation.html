@@ -14,6 +14,8 @@
             --primary-end: #9333ea; /* Purple-700 */
             --text-color: #1f2937;
             --bg-light: #f3f4f6;
+            --button-start: #06b6d4; /* Cyan-500 */
+            --button-end: #10b981; /* Emerald-500 */
         }
         body {
             font-family: 'Kanit', sans-serif;
@@ -92,18 +94,28 @@
             margin-top: 4px;
             flex-shrink: 0;
         }
-        .calendar-btn {
-            background: linear-gradient(90deg, #10b981, #059669); /* Emerald Gradient: Used for link button now */
+        /* START: New Button Style */
+        .start-btn {
+            /* Background Gradient */
+            background-image: linear-gradient(90deg, var(--button-start), var(--button-end));
             color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
+            padding: 12px 24px; /* เพิ่ม Padding ให้ใหญ่ขึ้น */
+            border-radius: 9999px; /* Rounded-full */
+            font-weight: 700; /* Bold */
+            font-size: 1.1rem; /* ใหญ่ขึ้นเล็กน้อย */
             transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3); /* Soft Shadow */
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap; /* ไม่ให้ข้อความขึ้นบรรทัดใหม่ */
         }
-        .calendar-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        .start-btn:hover {
+            transform: translateY(-3px); /* เลื่อนขึ้นเมื่อ hover */
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.5); /* Shadow เข้มขึ้น */
         }
+        /* END: New Button Style */
     </style>
 </head>
 <body>
@@ -150,8 +162,8 @@
                         <div class="text-xl font-bold text-gray-800">Day 1: ปรัชญา No-Code/Low-Code และการออกแบบฐานข้อมูลที่ยืดหยุ่น (6.5 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 1 & 2: วางรากฐานความคิดและการออกแบบโครงสร้างข้อมูล</div>
                     </div>
-                    <a href="day1_automation.html" class="calendar-btn flex items-center ml-4">
-                        <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
+                    <a href="day1_automation.html" class="start-btn flex items-center ml-4">
+                        <i class="fas fa-book-open mr-2"></i> เริ่มเรียน 🚀
                     </a>
                 </summary>
                 <div class="topic-list">
@@ -169,8 +181,8 @@
                         <div class="text-xl font-bold text-gray-800">Day 2: การวิเคราะห์และออกแบบ Logic/Flow Automation ขั้นสูง (6.5 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 3: การแปลง Business Process เป็น Automation Logic</div>
                     </div>
-                    <a href="day2_automation.html" class="calendar-btn flex items-center ml-4">
-                        <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
+                    <a href="day2_automation.html" class="start-btn flex items-center ml-4">
+                        <i class="fas fa-book-open mr-2"></i> เริ่มเรียน 🚀
                     </a>
                 </summary>
                 <div class="topic-list">
@@ -188,8 +200,8 @@
                         <div class="text-xl font-bold text-gray-800">Day 3: Workshop: สร้าง Web/Mobile App ด้วย AppSheet (6 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 4: สร้างแอปพลิเคชันธุรกิจเพื่อจัดการข้อมูลและ Dashboard</div>
                     </div>
-                    <a href="day3_automation.html" class="calendar-btn flex items-center ml-4">
-                        <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
+                    <a href="day3_automation.html" class="start-btn flex items-center ml-4">
+                        <i class="fas fa-book-open mr-2"></i> เริ่มเรียน 🚀
                     </a>
                 </summary>
                 <div class="topic-list">
@@ -207,8 +219,8 @@
                         <div class="text-xl font-bold text-gray-800">Day 4: Workshop: เชื่อมต่อและทำงานอัตโนมัติด้วย N8N (Part 1) (6 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 5: การเริ่มใช้ n8n และการสร้าง Integration Workflow เบื้องต้น</div>
                     </div>
-                    <a href="day4_automation.html" class="calendar-btn flex items-center ml-4">
-                        <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
+                    <a href="day4_automation.html" class="start-btn flex items-center ml-4">
+                        <i class="fas fa-book-open mr-2"></i> เริ่มเรียน 🚀
                     </a>
                 </summary>
                 <div class="topic-list">
@@ -226,8 +238,8 @@
                         <div class="text-xl font-bold text-gray-800">Day 5: Project: พัฒนา AI Automation MVP สำหรับ SMEs (6 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 6: การทำ Project จบหลักสูตร และสรุปผลลัพธ์</div>
                     </div>
-                    <a href="day5_automation.html" class="calendar-btn flex items-center ml-4">
-                        <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
+                    <a href="day5_automation.html" class="start-btn flex items-center ml-4">
+                        <i class="fas fa-book-open mr-2"></i> เริ่มเรียน 🚀
                     </a>
                 </summary>
                 <div class="topic-list">
@@ -240,7 +252,7 @@
         </div>
         
         <div class="mt-8 text-center text-gray-500 text-sm p-4 bg-white rounded-lg border">
-            <p>⭐ **เคล็ดลับ:** คุณสามารถขยายรายการของแต่ละวันเพื่อทำเครื่องหมายหัวข้อที่เรียนจบแล้ว และคลิกปุ่ม "เข้าดูไฟล์" เพื่อไปยังเอกสารรายละเอียดของวันนั้น ๆ ได้ทันที!</p>
+            <p>⭐ **เคล็ดลับ:** คุณสามารถขยายรายการของแต่ละวันเพื่อทำเครื่องหมายหัวข้อที่เรียนจบแล้ว และคลิกปุ่ม **"เริ่มเรียน 🚀"** เพื่อไปยังเอกสารรายละเอียดของวันนั้น ๆ ได้ทันที!</p>
         </div>
 
     </div>
