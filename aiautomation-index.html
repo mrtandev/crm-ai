@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Automation สำหรับ SME: ลดงานซ้ำซาก เพิ่มยอดขาย</title>
-    <!-- โหลด Tailwind CSS เพื่อความสวยงามและ responsive --><script src="https://cdn.tailwindcss.com"></script>
-    <!-- โหลด Lucide Icons (หรือใช้ Emojis และ SVG) --><script src="https://unpkg.com/lucide@latest"></script>
+    <!-- โหลด Tailwind CSS เพื่อความสวยงามและ responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- โหลด Lucide Icons (หรือใช้ Emojis และ SVG) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         /* กำหนด Font Inter เป็นหลัก */
         body {
@@ -40,6 +42,8 @@
             display: inline-flex; /* ใช้ flex เพื่อจัดกึ่งกลาง icon และ text */
             align-items: center; /* จัดกึ่งกลางแนวตั้ง */
             justify-content: center; /* จัดกึ่งกลางแนวนอน */
+            white-space: nowrap; /* ป้องกันข้อความหักบรรทัด */
+            font-size: 0.9rem;
         }
         .bonus-button:hover {
             background-color: #dc2626; /* Red 600 */
@@ -48,28 +52,39 @@
         .bonus-button i {
             margin-right: 6px; /* ระยะห่างระหว่าง icon กับ text */
         }
+        .bonus-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body class="p-4 sm:p-8">
 
     <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl p-6 md:p-10">
 
-        <!-- ส่วนหัว: รูปโปรไฟล์และชื่ออาจารย์ --><header class="text-center mb-10">
+        <!-- ส่วนหัว: รูปโปรไฟล์และชื่ออาจารย์ -->
+        <header class="text-center mb-10">
             <div class="flex flex-col items-center">
-                <!-- รูปโปรไฟล์ --><img 
+                <!-- รูปโปรไฟล์ -->
+                <img 
                     src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
                     alt="รูปโปรไฟล์ อ.แทน" 
                     class="w-24 h-24 object-cover rounded-full ring-4 ring-emerald-500 shadow-xl mb-3"
                     onerror="this.onerror=null; this.src='https://placehold.co/96x96/10b981/ffffff?text=อ.แทน'"
                 >
-                <!-- ชื่ออาจารย์ --><h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">
+                <!-- ชื่ออาจารย์ -->
+                <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">
                     อ.แทน <span class="text-emerald-600">[ธีรชัย โฉมทัพ]</span>
                 </h1>
                 <p class="text-lg text-gray-500 mt-1">ผู้เชี่ยวชาญด้าน AI Automation และ Digital Transformation</p>
             </div>
         </header>
         
-        <!-- หัวข้อหลักและวัตถุประสงค์ --><main>
+        <!-- หัวข้อหลักและวัตถุประสงค์ -->
+        <main>
             <h2 class="text-4xl sm:text-5xl font-extrabold text-center mb-4">
                 <span class="gradient-text">
                     AI Automation หลักสูตรสำหรับ SMEs
@@ -108,9 +123,11 @@
                 ✨ แผนงาน AI Automation ทั้ง 3 ระบบ ✨
             </h3>
 
-            <!-- ส่วนเนื้อหา: Card สำหรับแต่ละระบบ --><div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- ส่วนเนื้อหา: Card สำหรับแต่ละระบบ -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-                <!-- Card 1: Line OA Bot + CRM & Stock Automation --><a href="system01-crm-stock.html" class="card-link block bg-white border border-blue-100 rounded-xl p-6 shadow-lg hover:shadow-2xl transition duration-300 ease-in-out">
+                <!-- Card 1: Line OA Bot + CRM & Stock Automation -->
+                <a href="system01-crm-stock.html" class="card-link block bg-white border border-blue-100 rounded-xl p-6 shadow-lg hover:shadow-2xl transition duration-300 ease-in-out">
                     <div class="flex items-center space-x-4 mb-4">
                         <div class="p-3 bg-blue-500 rounded-full text-white">
                             <i data-lucide="message-square-text" class="w-6 h-6"></i>
@@ -126,7 +143,8 @@
                     </div>
                 </a>
 
-                <!-- Card 2: Feedback-to-Action Automation --><a href="system02-feedback-action.html" class="card-link block bg-white border border-green-100 rounded-xl p-6 shadow-lg hover:shadow-2xl transition duration-300 ease-in-out">
+                <!-- Card 2: Feedback-to-Action Automation -->
+                <a href="system02-feedback-action.html" class="card-link block bg-white border border-green-100 rounded-xl p-6 shadow-lg hover:shadow-2xl transition duration-300 ease-in-out">
                     <div class="flex items-center space-x-4 mb-4">
                         <div class="p-3 bg-green-500 rounded-full text-white">
                             <i data-lucide="shield-check" class="w-6 h-6"></i>
@@ -142,7 +160,8 @@
                     </div>
                 </a>
 
-                <!-- Card 3: Content Generator & Broadcast Scheduler --><a href="system03-content-broadcast.html" class="card-link block bg-white border border-purple-100 rounded-xl p-6 shadow-lg hover:shadow-2xl transition duration-300 ease-in-out">
+                <!-- Card 3: Content Generator & Broadcast Scheduler -->
+                <a href="system03-content-broadcast.html" class="card-link block bg-white border border-purple-100 rounded-xl p-6 shadow-lg hover:shadow-2xl transition duration-300 ease-in-out">
                     <div class="flex items-center space-x-4 mb-4">
                         <div class="p-3 bg-purple-500 rounded-full text-white">
                             <i data-lucide="megaphone" class="w-6 h-6"></i>
@@ -164,14 +183,20 @@
                 คลิกที่ Card เพื่อดูรายละเอียดโครงสร้างระบบ, Flow การทำงาน, และเครื่องมือที่ใช้ในแต่ละโมดูล
             </p>
             
-            <!-- ตำแหน่งที่คุณมาร์คแดงไว้: เพิ่มปุ่ม Bonus --><div class="text-center mt-6">
+            <!-- ตำแหน่งที่คุณมาร์คแดงไว้: เพิ่มปุ่ม Bonus ทั้งสอง -->
+            <div class="bonus-container">
                 <a href="system04-data-dashboard.html" class="bonus-button">
                     <i data-lucide="gift" class="w-5 h-5"></i>
                     Bonus ✨ System 4: Data Pipeline & Dashboard
                 </a>
+                <a href="system05-drive_backup_plan.html" class="bonus-button">
+                    <i data-lucide="package" class="w-5 h-5"></i>
+                    Bonus ✨ System 5: True Backup Google Drive อัตโนมัติ
+                </a>
             </div>
             
-            <!-- ส่วนใหม่: คำอธิบายตัวย่อวัตถุประสงค์หลัก --><div class="mt-12 pt-8 border-t border-gray-200">
+            <!-- ส่วนใหม่: คำอธิบายตัวย่อวัตถุประสงค์หลัก -->
+            <div class="mt-12 pt-8 border-t border-gray-200">
                 <h3 class="text-2xl font-bold text-gray-700 flex items-center mb-6">
                     <i data-lucide="notebook-text" class="w-6 h-6 mr-2 text-indigo-500"></i>
                     คำอธิบายตัวย่อวัตถุประสงค์หลัก (Object of Expenditure Glossary)
@@ -214,7 +239,8 @@
         
     </div>
 
-    <!-- Script เพื่อให้ Lucide Icons แสดงผล --><script>
+    <!-- Script เพื่อให้ Lucide Icons แสดงผล -->
+    <script>
         lucide.createIcons();
     </script>
 

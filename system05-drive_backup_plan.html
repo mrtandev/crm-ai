@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แผนงาน True Backup Google Drive อัตโนมัติ</title>
+    <!-- โหลด Tailwind CSS และ Lucide Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        /* Header Bar - ใช้สีน้ำเงินเข้มสำหรับธีมความปลอดภัย */
+        .secure-header {
+            background-image: linear-gradient(90deg, #3b82f6, #1d4ed8); /* Blue to Dark Blue */
+            color: white;
+            padding: 20px 0;
+            border-radius: 1rem 1rem 0 0;
+            margin: -40px -40px 40px -40px;
+            text-align: center;
+        }
+        .secure-header h2 {
+            font-size: 2.25rem;
+            font-weight: 800;
+        }
+        .step-box {
+            border-left: 4px solid #3b82f6; /* Blue */
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+            background-color: #eff6ff; /* Light Blue BG */
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+        .code-detail {
+            background-color: #1f2937; /* Dark Grey */
+            color: #f3f4f6; /* Light Grey */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            overflow-x: auto;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+        }
+        .code-detail strong {
+            color: #93c5fd; /* Blue 300 */
+        }
+        .detail-step {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid #3b82f6;
+            padding-left: 15px;
+        }
+        .detail-step strong {
+            color: #3b82f6;
+        }
+        .instruction-list li {
+            margin-bottom: 5px;
+        }
+        .teacher-profile {
+            background-color: #e5e7eb;
+            padding: 15px;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="container">
+
+        <!-- ส่วนหัว: ธีมความปลอดภัย -->
+        <div class="secure-header">
+            <h2 class="flex items-center justify-center">
+                <i data-lucide="lock" class="w-8 h-8 mr-3"></i>
+                แผนงาน True Backup Google Drive อัตโนมัติ
+            </h2>
+            <p class="text-lg font-light mt-1">คู่มือการติดตั้งระบบสำรองข้อมูล GGD 2 บัญชี โดยใช้ Python Script</p>
+        </div>
+
+        <!-- ข้อมูลอาจารย์ -->
+        <div class="teacher-profile">
+            <img 
+                src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                alt="รูปโปรไฟล์ อ.แทน" 
+                class="w-16 h-16 object-cover rounded-full ring-2 ring-blue-500 mr-4"
+                onerror="this.onerror=null; this.src='https://placehold.co/64x64/3b82f6/ffffff?text=อ.แทน'"
+            >
+            <div>
+                <h3 class="text-xl font-bold text-gray-800">อ.แทน [ธีรชัย โฉมทัพ]</h3>
+                <p class="text-sm text-gray-600">Head of Digital Transformation</p>
+            </div>
+        </div>
+
+        <!-- 1. หลักการทำงานของระบบ -->
+        <section class="mb-10">
+            <h3 class="text-2xl font-bold text-gray-800 flex items-center mb-4 border-b pb-2">
+                <i data-lucide="scan" class="w-6 h-6 mr-2 text-blue-500"></i>
+                1. หลักการทำงานของระบบ
+            </h3>
+            <ul class="space-y-3 text-gray-700 list-disc list-inside ml-4">
+                <li>**บัญชีหลัก (A):** ใช้ทำงานประจำวันและซิงค์ไฟล์ลงมาที่คอมพิวเตอร์ผ่าน 'Google Drive for Desktop'</li>
+                <li>**บัญชีสำรอง (B):** ใช้เป็นที่เก็บสำเนาเท่านั้น และซิงค์ไฟล์สำรองลงมาที่คอมพิวเตอร์เช่นกัน</li>
+                <li>**Python Script:** จะรันอัตโนมัติเพื่อคัดลอกไฟล์จากโฟลเดอร์ของบัญชี A ไปยังโฟลเดอร์ของบัญชี B (บนเครื่องคอมพิวเตอร์)</li>
+                <li>**Scheduler:** ใช้ Task Scheduler ใน Windows (หรือ Cron Job ใน macOS/Linux) ตั้งเวลาให้ Script รันทุกวันหรือทุกสัปดาห์</li>
+            </ul>
+        </section>
+
+        <!-- 2. วัตถุประสงค์หลัก -->
+        <section class="mb-10">
+            <h3 class="text-2xl font-bold text-gray-800 flex items-center mb-4 border-b pb-2">
+                <i data-lucide="target" class="w-6 h-6 mr-2 text-red-500"></i>
+                2. วัตถุประสงค์หลัก (Object of Expenditure)
+            </h3>
+            <div class="grid grid-cols-2 gap-4 text-gray-700">
+                <div class="p-3 bg-red-100 rounded-lg shadow-md flex items-center">
+                    <i data-lucide="shield-off" class="w-5 h-5 mr-2 text-red-600"></i>
+                    <span class="font-bold">EP (Escape Pain):</span> ป้องกันความเสียหายจากการถูก Hack, ไวรัสเรียกค่าไถ่, หรืออุบัติเหตุ
+                </div>
+                <div class="p-3 bg-red-100 rounded-lg shadow-md flex items-center">
+                    <i data-lucide="activity" class="w-5 h-5 mr-2 text-red-600"></i>
+                    <span class="font-bold">BH (Better Health):</span> สบายใจว่าข้อมูลสำคัญถูกสำรองไว้เสมอ
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. เครื่องมือที่ใช้ -->
+        <section class="mb-10">
+            <h3 class="text-2xl font-bold text-gray-800 flex items-center mb-4 border-b pb-2">
+                <i data-lucide="wrench" class="w-6 h-6 mr-2 text-blue-500"></i>
+                3. เครื่องมือที่ใช้ (Technology Stack)
+            </h3>
+            <ul class="space-y-3 text-gray-700 list-disc list-inside ml-4">
+                <li>**Google Drive for Desktop:** สำหรับซิงค์ไฟล์จาก 2 บัญชีลงมาในเครื่องคอมพิวเตอร์</li>
+                <li>**Python 3:** ภาษาหลักที่ใช้ในการเขียน Script</li>
+                <li>**Shutil Library:** Library ของ Python ที่ใช้สำหรับการคัดลอกไฟล์และโฟลเดอร์</li>
+                <li>**Windows Task Scheduler / Cron Job:** สำหรับตั้งเวลาการรัน Script อัตโนมัติ</li>
+            </ul>
+        </section>
+
+        <!-- 4. คู่มือการดำเนินการ (Step-by-Step Implementation Guide) -->
+        <section class="mb-10">
+            <h3 class="text-3xl font-bold text-gray-800 flex items-center mb-6 border-b pb-2">
+                <i data-lucide="file-text" class="w-7 h-7 mr-2 text-blue-500"></i>
+                4. คู่มือการดำเนินการ: Python Script & Scheduler Setup
+            </h3>
+
+            <!-- Step 1: เตรียมบัญชีและโฟลเดอร์ -->
+            <div class="step-box">
+                <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="folder-open" class="w-5 h-5 mr-2 text-blue-500"></i> Step 1: เตรียม Google Drive และ โฟลเดอร์ในเครื่อง</h4>
+                <div class="detail-step">
+                    <strong>1.1 ติดตั้ง Google Drive for Desktop</strong>
+                    <p class="text-gray-700">ติดตั้งและตั้งค่า **Google Drive for Desktop** โดยล็อกอินด้วย **บัญชี A (หลัก)** และ **บัญชี B (สำรอง)** โดยตั้งค่าให้ซิงค์โฟลเดอร์เฉพาะที่จำเป็นลงมาในเครื่อง</p>
+                </div>
+                <div class="detail-step">
+                    <strong>1.2 กำหนดโฟลเดอร์</strong>
+                    <ul class="list-disc list-inside ml-4 text-gray-700">
+                        <li>**Source (บัญชี A):** โฟลเดอร์ที่ต้องการสำรอง เช่น `C:\Users\YourName\Drive A\Documents`</li>
+                        <li>**Destination (บัญชี B):** โฟลเดอร์สำรอง เช่น `C:\Users\YourName\Drive B\Backup_Folder`</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Step 2: สร้าง Python Script (Copy-Paste) -->
+            <div class="step-box">
+                <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="code" class="w-5 h-5 mr-2 text-blue-500"></i> Step 2: สร้าง Python Script (True Backup Logic)</h4>
+                <div class="detail-step">
+                    <strong>2.1 ติดตั้ง Python และสร้างไฟล์ `backup_script.py`</strong>
+                    <p class="text-gray-700">ติดตั้ง Python 3 บนเครื่องคอมพิวเตอร์ของคุณ จากนั้นสร้างไฟล์ใหม่ชื่อ `backup_script.py` และคัดลอกโค้ดด้านล่างนี้ลงไป (ต้องแก้ไข Path ก่อนใช้)</p>
+                </div>
+                <div class="code-detail bg-gray-800">
+                    <pre># python:Backup Script:backup_script.py
+import shutil
+import os
+from datetime import datetime
+
+# ====================================================================
+# [1] กำหนด Path โฟลเดอร์ Source และ Destination (ต้องแก้ไข)
+# ====================================================================
+# Source Path: โฟลเดอร์ใน Google Drive A ที่ต้องการสำรอง
+SOURCE_DIR = r"C:\Users\YourName\Drive A\Documents" 
+# Destination Path: โฟลเดอร์สำรองใน Google Drive B
+DEST_DIR = r"C:\Users\YourName\Drive B\Backup_Folder" 
+
+# ====================================================================
+# [2] Logic การ Backup (ไม่ต้องแก้ไข)
+# ====================================================================
+def run_backup():
+    if not os.path.exists(SOURCE_DIR):
+        print(f"ERROR: Source directory not found at {SOURCE_DIR}")
+        return
+
+    # สร้างชื่อโฟลเดอร์สำรองเป็น: Backup_YYYYMMDD_HHMM
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+    backup_folder_name = f"Backup_{timestamp}"
+    full_dest_path = os.path.join(DEST_DIR, backup_folder_name)
+
+    try:
+        # ใช้ shutil.copytree เพื่อคัดลอกทั้งโฟลเดอร์
+        print(f"Starting backup from {SOURCE_DIR} to {full_dest_path}")
+        shutil.copytree(SOURCE_DIR, full_dest_path)
+        print("Backup SUCCESSFUL!")
+        print(f"Files backed up to: {full_dest_path}")
+
+    except Exception as e:
+        print(f"Backup FAILED: {e}")
+
+if __name__ == "__main__":
+    run_backup()
+</pre>
+                </div>
+                <div class="detail-step">
+                    <strong>2.2 แก้ไข Path ใน Script</strong>
+                    <p class="text-gray-700">แก้ไขค่าในตัวแปร **SOURCE_DIR** และ **DEST_DIR** ในโค้ด (บรรทัดที่ 10-12) ให้ตรงกับ Path ของ Google Drive ในเครื่องของคุณ</p>
+                </div>
+            </div>
+
+            <!-- Step 3: ตั้งเวลาอัตโนมัติ (Windows Task Scheduler) -->
+            <div class="step-box">
+                <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="clock" class="w-5 h-5 mr-2 text-blue-500"></i> Step 3: ตั้งเวลาอัตโนมัติด้วย Task Scheduler (Windows)</h4>
+                <div class="detail-step">
+                    <strong>3.1 เปิด Task Scheduler</strong>
+                    <p class="text-gray-700">ค้นหา **Task Scheduler** ใน Windows (หรือ Cron Job ใน Linux/macOS) และคลิก **"Create Basic Task"**</p>
+                </div>
+                <div class="detail-step">
+                    <strong>3.2 ตั้งค่า Trigger</strong>
+                    <ul class="list-disc list-inside ml-4 text-gray-700">
+                        <li>**Trigger:** เลือก **Daily** หรือ **Weekly** ตามความถี่ที่ต้องการ</li>
+                        <li>**Time:** กำหนดเวลาที่เหมาะสม เช่น 03:00 AM (เป็นช่วงที่คอมพิวเตอร์เปิดอยู่แต่ไม่มีใครใช้งาน)</li>
+                    </ul>
+                </div>
+                <div class="detail-step">
+                    <strong>3.3 ตั้งค่า Action (รัน Script)</strong>
+                    <ul class="list-disc list-inside ml-4 text-gray-700">
+                        <li>**Action:** เลือก **"Start a program"**</li>
+                        <li>**Program/script:** ใส่ Path เต็มของโปรแกรม Python (เช่น `C:\Users\YourName\AppData\Local\Programs\Python\Python311\python.exe`)</li>
+                        <li>**Add arguments (optional):** ใส่ Path เต็มของ Script ของคุณ (เช่น `C:\Scripts\backup_script.py`)</li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Footer -->
+        <footer class="mt-12 pt-6 border-t border-gray-200 flex justify-between">
+            <a href="system04-data-dashboard.html" class="text-blue-500 hover:text-blue-700 flex items-center">
+                <i data-lucide="arrow-left" class="w-5 h-5 mr-1"></i>
+                ย้อนกลับ Bonus 1
+            </a>
+            <a href="aiautomation-index.html" class="text-blue-500 hover:text-blue-700 flex items-center">
+                กลับหน้าดัชนีหลัก
+                <i data-lucide="arrow-right" class="w-5 h-5 ml-1"></i>
+            </a>
+        </footer>
+        
+    </div>
+
+    <!-- Script เพื่อให้ Lucide Icons แสดงผล -->
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+</html>
