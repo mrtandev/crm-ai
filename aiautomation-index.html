@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Automation สำหรับ SME: ลดงานซ้ำซาก เพิ่มยอดขาย</title>
+    <!-- โหลด Tailwind CSS เพื่อความสวยงามและ responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- โหลด Lucide Icons (หรือใช้ Emojis และ SVG) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* กำหนด Font Inter เป็นหลัก */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc;
+        }
+        /* กำหนดการไล่สีสำหรับหัวข้อ (Gradient Text) */
+        .gradient-text {
+            background-image: linear-gradient(45deg, #10b981, #3b82f6); /* Teal to Blue */
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+        /* กำหนดสไตล์สำหรับปุ่มลิงก์ใน Card */
+        .card-link {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl p-6 md:p-10">
+
+        <!-- ส่วนหัว: รูปโปรไฟล์และชื่ออาจารย์ -->
+        <header class="text-center mb-10">
+            <div class="flex flex-col items-center">
+                <!-- รูปโปรไฟล์ -->
+                <img 
+                    src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                    alt="รูปโปรไฟล์ อ.แทน" 
+                    class="w-24 h-24 object-cover rounded-full ring-4 ring-emerald-500 shadow-xl mb-3"
+                    onerror="this.onerror=null; this.src='https://placehold.co/96x96/10b981/ffffff?text=อ.แทน'"
+                >
+                <!-- ชื่ออาจารย์ -->
+                <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">
+                    อ.แทน <span class="text-emerald-600">[ธีรชัย โฉมทัพ]</span>
+                </h1>
+                <p class="text-lg text-gray-500 mt-1">ผู้เชี่ยวชาญด้าน AI Automation และ Digital Transformation</p>
+            </div>
+        </header>
+        
+        <!-- หัวข้อหลักและวัตถุประสงค์ -->
+        <main>
+            <h2 class="text-4xl sm:text-5xl font-extrabold text-center mb-4">
+                <span class="gradient-text">
+                    AI Automation หลักสูตรสำหรับ SMEs
+                </span>
+            </h2>
+            <p class="text-center text-xl text-gray-600 mb-8">
+                เปลี่ยนงานซ้ำซากให้เป็นระบบอัตโนมัติ เพิ่มยอดขาย และสร้างประสบการณ์ลูกค้าที่ยอดเยี่ยม ด้วยเครื่องมือฟรีและราคาประหยัด
+            </p>
+
+            <div class="space-y-6 mb-10 p-6 bg-gray-50 rounded-2xl shadow-inner">
+                <h3 class="text-2xl font-bold text-gray-700 flex items-center mb-4">
+                    <i data-lucide="target" class="w-6 h-6 mr-2 text-blue-500"></i>
+                    วัตถุประสงค์ของหลักสูตร
+                </h3>
+                <ul class="space-y-3 text-gray-700">
+                    <li class="flex items-start">
+                        <i data-lucide="zap" class="w-5 h-5 mt-1 mr-2 text-yellow-500 flex-shrink-0"></i>
+                        **ลดงานซ้ำซาก (ST & AE):** ใช้ระบบอัตโนมัติ (n8n, Google Apps) จัดการงานที่ต้องทำซ้ำๆ ให้เหลือเวลาไปโฟกัสงานสำคัญ
+                    </li>
+                    <li class="flex items-start">
+                        <i data-lucide="trending-up" class="w-5 h-5 mt-1 mr-2 text-green-500 flex-shrink-0"></i>
+                        **เพิ่มยอดขาย (MM):** ใช้ AI ช่วยคัดกรอง Lead และสร้างคอนเทนต์การตลาดที่ตรงจุดมากขึ้น
+                    </li>
+                    <li class="flex items-start">
+                        <i data-lucide="speech" class="w-5 h-5 mt-1 mr-2 text-indigo-500 flex-shrink-0"></i>
+                        **ปรับปรุงบริการลูกค้า (MC & GP):** สร้างระบบตอบกลับทันทีและวิเคราะห์ฟีดแบ็กเพื่อการบริการที่เหนือกว่า
+                    </li>
+                    <li class="flex items-start">
+                        <i data-lucide="hammer" class="w-5 h-5 mt-1 mr-2 text-red-500 flex-shrink-0"></i>
+                        **ต้นทุนต่ำ:** เน้นการใช้เครื่องมือที่คุณถนัด (Line OA, GGF/GGD, AppSheet, vTiger CRM, n8n) ซึ่งเป็น Opensource หรือฟรีเป็นหลัก
+                    </li>
+                </ul>
+            </div>
+
+            <h3 class="text-3xl font-bold text-gray-800 text-center mt-12 mb-6">
+                ✨ แผนงาน AI Automation ทั้ง 3 ระบบ ✨
+            </h3>
+
+            <!-- ส่วนเนื้อหา: Card สำหรับแต่ละระบบ -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                <!-- Card 1: Line OA Bot + CRM & Stock Automation -->
+                <a href="system01-crm-stock.html" class="card-link block bg-white border border-blue-100 rounded-xl p-6 shadow-lg hover:shadow-2xl transition duration-300 ease-in-out">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="p-3 bg-blue-500 rounded-full text-white">
+                            <i data-lucide="message-square-text" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800">1. Line OA Bot + CRM & Stock</h4>
+                    </div>
+                    <p class="text-gray-600 mb-4">
+                        ตอบกลับลูกค้าอัตโนมัติผ่าน Line OA, คัดกรอง Lead เข้า vTiger CRM และเช็คสต็อก Loyverse Real-time
+                    </p>
+                    <div class="text-sm font-semibold text-blue-600 flex justify-between items-center">
+                        <span>วัตถุประสงค์หลัก: **MM, ST**</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </div>
+                </a>
+
+                <!-- Card 2: Feedback-to-Action Automation -->
+                <a href="system02-feedback-action.html" class="card-link block bg-white border border-green-100 rounded-xl p-6 shadow-lg hover:shadow-2xl transition duration-300 ease-in-out">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="p-3 bg-green-500 rounded-full text-white">
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800">2. AI วิเคราะห์ฟีดแบ็ก</h4>
+                    </div>
+                    <p class="text-gray-600 mb-4">
+                        ใช้ AI สรุปและวิเคราะห์ความรู้สึกจากรีวิว (GGF) และสร้าง Task/Action Plan ใน AppSheet อัตโนมัติ
+                    </p>
+                    <div class="text-sm font-semibold text-green-600 flex justify-between items-center">
+                        <span>วัตถุประสงค์หลัก: **EP, GP**</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </div>
+                </a>
+
+                <!-- Card 3: Content Generator & Broadcast Scheduler -->
+                <a href="system03-content-broadcast.html" class="card-link block bg-white border border-purple-100 rounded-xl p-6 shadow-lg hover:shadow-2xl transition duration-300 ease-in-out">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="p-3 bg-purple-500 rounded-full text-white">
+                            <i data-lucide="megaphone" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-800">3. AI ผู้ช่วยสร้างคอนเทนต์</h4>
+                    </div>
+                    <p class="text-gray-600 mb-4">
+                        ใช้ Generative AI สร้างแคปชั่นการตลาด (GGS) และตั้งเวลาส่ง Line OA Broadcast โดยใช้ n8n และ GAS
+                    </p>
+                    <div class="text-sm font-semibold text-purple-600 flex justify-between items-center">
+                        <span>วัตถุประสงค์หลัก: **MM, AE**</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </div>
+                </a>
+
+            </div>
+            
+            <p class="text-center text-sm text-gray-500 mt-10">
+                คลิกที่ Card เพื่อดูรายละเอียดโครงสร้างระบบ, Flow การทำงาน, และเครื่องมือที่ใช้ในแต่ละโมดูล
+            </p>
+            
+            <!-- ส่วนใหม่: คำอธิบายตัวย่อวัตถุประสงค์หลัก -->
+            <div class="mt-12 pt-8 border-t border-gray-200">
+                <h3 class="text-2xl font-bold text-gray-700 flex items-center mb-6">
+                    <i data-lucide="notebook-text" class="w-6 h-6 mr-2 text-indigo-500"></i>
+                    คำอธิบายตัวย่อวัตถุประสงค์หลัก (Object of Expenditure Glossary)
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-gray-700">
+                    <div class="p-3 bg-indigo-50 rounded-lg shadow-sm">
+                        <span class="font-extrabold text-indigo-600">MM:</span> Make Money (ทำให้ได้เงินเพิ่ม)
+                    </div>
+                    <div class="p-3 bg-indigo-50 rounded-lg shadow-sm">
+                        <span class="font-extrabold text-indigo-600">SM:</span> Save Money (ประหยัดเงิน)
+                    </div>
+                    <div class="p-3 bg-indigo-50 rounded-lg shadow-sm">
+                        <span class="font-extrabold text-indigo-600">ST:</span> Save Time (ประหยัดเวลา)
+                    </div>
+                    <div class="p-3 bg-indigo-50 rounded-lg shadow-sm">
+                        <span class="font-extrabold text-indigo-600">AE:</span> Avoid Effort (หลีกเลี่ยงการต้องใช้ความพยายาม, ทำให้ง่ายขึ้น)
+                    </div>
+                    <div class="p-3 bg-indigo-50 rounded-lg shadow-sm">
+                        <span class="font-extrabold text-indigo-600">EP:</span> Escape Pain (หลีกเลี่ยง/ลดความเจ็บปวด ทั้งกายและใจ)
+                    </div>
+                    <div class="p-3 bg-indigo-50 rounded-lg shadow-sm">
+                        <span class="font-extrabold text-indigo-600">MC:</span> More Comfort (เพิ่มความสะดวกสบาย)
+                    </div>
+                    <div class="p-3 bg-indigo-50 rounded-lg shadow-sm">
+                        <span class="font-extrabold text-indigo-600">BH:</span> Better Health (แข็งแรง/สุขภาพที่ดีขึ้น)
+                    </div>
+                    <div class="p-3 bg-indigo-50 rounded-lg shadow-sm">
+                        <span class="font-extrabold text-indigo-600">GP:</span> Gain Praise (ได้รับการสรรเสริญ/ชื่นชม)
+                    </div>
+                    <div class="p-3 bg-indigo-50 rounded-lg shadow-sm">
+                        <span class="font-extrabold text-indigo-600">ML:</span> More Love (ได้รับความรัก/ความสัมพันธ์ที่ดี)
+                    </div>
+                    <div class="p-3 bg-indigo-50 rounded-lg shadow-sm col-span-1 sm:col-span-2 lg:col-span-3">
+                        <span class="font-extrabold text-indigo-600">ISS & MP:</span> Increase Social Status & More Popularity (ยกระดับสถานะ/สร้างความโด่งดังเป็นที่นิยม)
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        
+    </div>
+
+    <!-- Script เพื่อให้ Lucide Icons แสดงผล -->
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+</html>

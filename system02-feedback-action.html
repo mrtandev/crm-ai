@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบที่ 2: AI วิเคราะห์ฟีดแบ็ก & จัดการงาน</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        /* Gradient Header (ใช้สีเขียว-ม่วง สำหรับ Feedback/Improvement) */
+        .gradient-header {
+            background-image: linear-gradient(90deg, #10b981, #a855f7); /* Emerald to Violet */
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+        /* Step Box (จำลองภาพประกอบการทำงาน) */
+        .step-box {
+            border-left: 4px solid #10b981; /* Emerald */
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+        /* Flowchart Components (ใช้ CSS สร้าง Diagram แทนรูปภาพ) */
+        .flow-node {
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 10px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .node-trigger { background-color: #ef4444; color: white; } /* Red for Trigger */
+        .node-ai { background-color: #f59e0b; color: white; } /* Yellow for AI Analysis */
+        .node-logic { background-color: #10b981; color: white; } /* Green for Logic/Filtering */
+        .node-db { background-color: #3b82f6; color: white; } /* Blue for Database (GGD/GGS) */
+        .node-action { background-color: #a855f7; color: white; } /* Violet for Action (AppSheet/Task) */
+        .flow-arrow {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #9ca3af;
+            margin: 5px 0;
+        }
+        .setup-guide-item {
+            padding: 1.5rem;
+            background-color: #f0fdf4; /* Light Green */
+            border: 1px solid #dcfce7; /* Light Green Border */
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .setup-guide-item h4 {
+            color: #047857; /* Dark Green */
+        }
+        .code-detail {
+            background-color: #27272a; /* Zinc 800 */
+            color: #f4f4f5; /* Zinc 50 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            overflow-x: auto;
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+        }
+        .code-detail strong {
+            color: #a7f3d0; /* Emerald 200 */
+        }
+        .detail-step {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid #10b981; /* Emerald */
+            padding-left: 15px;
+        }
+        .detail-step strong {
+            color: #10b981;
+        }
+        .instruction-list li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="container">
+
+        <header class="text-center mb-10">
+            <div class="flex flex-col items-center">
+                <img 
+                    src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                    alt="รูปโปรไฟล์ อ.แทน" 
+                    class="w-20 h-20 object-cover rounded-full ring-4 ring-green-500 shadow-xl mb-3"
+                    onerror="this.onerror=null; this.src='https://placehold.co/80x80/10b981/ffffff?text=อ.แทน'"
+                >
+                <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">
+                    อ.แทน <span class="text-green-600">[ธีรชัย โฉมทัพ]</span>
+                </h1>
+                <p class="text-lg text-gray-500 mt-1">AI Automation Instructor</p>
+            </div>
+        </header>
+        
+        <h2 class="text-4xl sm:text-5xl mb-6">
+            <span class="gradient-header">
+                ระบบที่ 2: AI วิเคราะห์ฟีดแบ็ก & จัดการงาน
+            </span>
+        </h2>
+        <p class="text-xl text-gray-600 mb-8">
+            เปลี่ยนความคิดเห็นลูกค้า (GGF, Line OA) ให้เป็นข้อมูลเชิงลึกอัตโนมัติ ด้วย AI Sentiment Analysis และสร้าง Action Task ใน AppSheet ทันทีที่พบปัญหา
+        </p>
+
+        <section class="mb-10 p-6 bg-green-50 rounded-xl shadow-lg">
+            <h3 class="text-2xl font-bold text-green-700 flex items-center mb-4">
+                <i data-lucide="info" class="w-6 h-6 mr-2"></i>
+                1. บทนำ: ทำไมการวิเคราะห์ฟีดแบ็กจึงไม่ควรใช้คนทำ?
+            </h3>
+            <p class="text-gray-700">
+                การอ่านและสรุปรีวิวจำนวนมหาศาลใช้เวลามากและอาจเกิดอคติได้ ระบบนี้ช่วยให้ SME สามารถ "ฟัง" ลูกค้าได้ตลอดเวลา โดย AI จะทำหน้าที่เป็นนักวิเคราะห์ที่รวดเร็วและแม่นยำ แยกแยะอารมณ์ (บวก/ลบ) จัดกลุ่มปัญหา และสร้างงานที่ต้องทำใน AppSheet ทันทีที่พบฟีดแบ็กเชิงลบ ซึ่งช่วยลดความเสียหายและเพิ่มโอกาสในการปรับปรุงสินค้าบริการให้ดียิ่งขึ้น
+            </p>
+        </section>
+
+        <section class="mb-10">
+            <h3 class="text-2xl font-bold text-gray-700 flex items-center mb-4">
+                <i data-lucide="target" class="w-6 h-6 mr-2 text-red-500"></i>
+                2. วัตถุประสงค์หลัก (Object of Expenditure)
+            </h3>
+            <div class="grid grid-cols-2 gap-4 text-gray-700">
+                <div class="p-3 bg-red-100 rounded-lg shadow-md flex items-center">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 mr-2 text-red-600"></i>
+                    <span class="font-bold">EP (Escape Pain):</span> ลดความเสี่ยงและความเสียหายจากฟีดแบ็กเชิงลบ
+                </div>
+                <div class="p-3 bg-red-100 rounded-lg shadow-md flex items-center">
+                    <i data-lucide="star" class="w-5 h-5 mr-2 text-red-600"></i>
+                    <span class="font-bold">GP (Gain Praise):</span> ได้รับคำชมและ Loyalty จากการปรับปรุงที่ตรงจุด
+                </div>
+                <div class="p-3 bg-red-100 rounded-lg shadow-md flex items-center">
+                    <i data-lucide="clock" class="w-5 h-5 mr-2 text-red-600"></i>
+                    <span class="font-bold">ST (Save Time):</span> ประหยัดเวลาในการรวบรวมและสรุปข้อมูลรีวิว
+                </div>
+                <div class="p-3 bg-red-100 rounded-lg shadow-md flex items-center">
+                    <i data-lucide="activity" class="w-5 h-5 mr-2 text-red-600"></i>
+                    <span class="font-bold">BH (Better Health):</span> เจ้าของ/ทีมงานไม่ต้องรับภาระทางอารมณ์จากการอ่านรีวิวเชิงลบทั้งหมด
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-10 p-6 bg-gray-100 rounded-xl shadow-lg">
+            <h3 class="text-2xl font-bold text-gray-700 flex items-center mb-4">
+                <i data-lucide="wrench" class="w-6 h-6 mr-2 text-orange-500"></i>
+                3. เครื่องมือที่ใช้ (Technology Stack)
+            </h3>
+            <ul class="space-y-3 text-gray-700 list-disc list-inside">
+                <li>**GGF (Google Forms) & GGS/GGD (Sheets/Drive):** แหล่งข้อมูลฟีดแบ็กหลักและการจัดเก็บข้อมูล</li>
+                <li>**n8n Community:** เครื่องมือ Automation Core สำหรับเชื่อมต่อและเรียกใช้ AI</li>
+                <li>**AI Model API:** (เช่น Gemini, OpenAI) ใช้สำหรับ Sentiment Analysis และ Topic Classification</li>
+                <li>**AppSheet:** สร้างแอปพลิเคชันสำหรับทีมงานเพื่อดู Task และสถานะการแก้ไขปัญหาแบบ Real-time</li>
+            </ul>
+        </section>
+
+        <section class="mb-10">
+            <h3 class="text-3xl font-bold text-gray-800 flex items-center mb-6 border-b pb-2">
+                <i data-lucide="list-checks" class="w-7 h-7 mr-2 text-green-500"></i>
+                4. รายละเอียดการดำเนินการ: คู่มือ Step-by-Step (Workflow)
+            </h3>
+
+            <div class="mb-8 p-6 bg-yellow-50 rounded-xl shadow-inner">
+                <h4 class="text-xl font-bold text-yellow-700 mb-4">4.1 แผนผังการทำงาน (System Flowchart - HTML/CSS Diagram)</h4>
+                <div class="flex flex-col items-center">
+                    <div class="flow-node node-trigger w-3/4">1. ลูกค้าส่งฟีดแบ็กผ่าน GGF (Trigger: New Row in GGS)</div>
+                    <div class="flow-arrow">👇</div>
+                    <div class="flow-node node-ai w-3/4">2. n8n ส่งข้อความรีวิวไปให้ AI Model (Sentiment & Topic Analysis)</div>
+                    <div class="flow-arrow">👇</div>
+                    <div class="flow-node node-db w-3/4">3. n8n บันทึกผลลัพธ์ AI (Sentiment, Topic) กลับไป GGS</div>
+                    <div class="flow-arrow">👇</div>
+                    <div class="flow-node node-logic w-3/4">4. n8n Logic: ตรวจสอบ: Sentiment = Negative OR Topic = Critical?</div>
+                    <div class="flow-arrow"> bifurcates... </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 w-full mt-4">
+                        <div class="col-span-1 flex flex-col items-center">
+                            <div class="flow-node node-action w-full bg-violet-400">5a. สร้าง Task ใหม่ใน AppSheet/vTiger CRM (Priority: High)</div>
+                            <div class="flow-arrow text-violet-500">👇</div>
+                            <div class="flow-node node-action w-full bg-violet-600">6a. แจ้งเตือนทีมงานผ่าน Line OA/Email ทันที</div>
+                        </div>
+
+                        <div class="col-span-1 flex flex-col items-center">
+                            <div class="flow-node node-logic w-full bg-green-400">5b. จบ Workflow: Task เป็น Low Priority (เก็บใน GGS เท่านั้น)</div>
+                            <div class="flow-arrow text-green-500">👇</div>
+                            <div class="flow-node node-action w-full bg-green-600">6b. จบ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-10">
+
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-green-500"></i> Step 1: ออกแบบ Google Form (GGF) และ GGS</h4>
+                    <p>
+                        **วิธีทำ:**
+                    </p>
+                    <ul class="list-decimal list-inside ml-4 text-gray-700">
+                        <li>**สร้าง GGF:** ที่มี Field เช่น: "ความคิดเห็นของคุณ", "ชื่อลูกค้า", "เบอร์โทร", "คะแนนรีวิว (1-5)"</li>
+                        <li>**เชื่อม GGS:** ใน GGF ให้คลิก **Responses > Link to Sheets** เพื่อสร้าง Google Sheet (GGS) ที่จะเก็บข้อมูลฟีดแบ็กโดยอัตโนมัติ</li>
+                        <li>**เตรียม GGS Task:** สร้าง GGS ไฟล์ที่ 2 (ชีตว่าง) ชื่อ "Task List" สำหรับ AppSheet (คอลัมน์: Task ID, Task Name, Priority, Source, Status)</li>
+                    </ul>
+                </div>
+
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-green-500"></i> Step 2: Node 1: Google Sheets Trigger (เมื่อมีฟีดแบ็กใหม่)</h4>
+                    <p>**Node 1: Google Sheets Trigger**</p>
+                    <div class="code-detail">
+                        **Trigger Type:** **New Row**<br>
+                        **Authentication:** เลือก Credential ของ Google Sheets<br>
+                        **Spreadsheet:** เลือก GGS ที่เชื่อมโยงกับ GGF<br>
+                        **Sheet:** เลือกชีตที่เก็บ Response (มักชื่อ "Form Responses 1")
+                    </div>
+                    <p class="mt-2 text-gray-700">
+                        **เป้าหมาย:** ให้ n8n รับรู้และเริ่มทำงานทันทีที่ข้อมูลฟีดแบ็กใหม่เข้าสู่ GGS
+                    </p>
+                </div>
+
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-green-500"></i> Step 3: Node 2: AI วิเคราะห์ฟีดแบ็ก (Sentiment & Topic)</h4>
+                    <p>**Node 2: HTTP Request (หรือ Gemini/OpenAI Node)**</p>
+                    <div class="code-detail">
+                        **Method:** POST | **Header:** `Authorization: Bearer YOUR_API_KEY`<br>
+                        **Body (Prompt):** `"คุณคือผู้เชี่ยวชาญด้านการวิเคราะห์รีวิวลูกค้า จงวิเคราะห์รีวิว: <strong>{{$json.ความคิดเห็นของคุณ}}</strong> และตอบกลับเป็น JSON { "sentiment": "[Negative/Neutral/Positive]", "topic": "[Service/Product/Delivery/Other]", "summary": "..." }" `
+                    </div>
+                    <p class="mt-2 text-gray-700">
+                        **เป้าหมาย:** ใช้ AI แยกแยะอารมณ์และประเภทปัญหา **สำคัญ:** ใช้ Expression `{{$json.ความคิดเห็นของคุณ}}` เพื่อส่งข้อมูลรีวิวไปวิเคราะห์
+                    </p>
+                </div>
+
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-green-500"></i> Step 4: Node 3: บันทึกผล AI ลงใน Google Sheet</h4>
+                    <p>**Node 3: Google Sheets**</p>
+                    <div class="code-detail">
+                        **Operation:** <strong>Update Row</strong><br>
+                        **Row ID:** <strong>{{$json.rowIndex}}</strong> (ดึง Index จาก Node 1)<br>
+                        **Set Value:** <br>
+                        - Column `Sentiment` = <strong>{{$json.sentiment}}</strong><br>
+                        - Column `Topic` = <strong>{{$json.topic}}</strong>
+                    </div>
+                    <p class="mt-2 text-gray-700">
+                        **เป้าหมาย:** บันทึกผลวิเคราะห์ของ AI กลับไปยังแถวเดิมของฟีดแบ็กนั้นใน GGS
+                    </p>
+                </div>
+
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-green-500"></i> Step 5: Node 4: Node Logic (IF Condition สำหรับ Task)</h4>
+                    <p>**Node 4: IF**</p>
+                    <div class="code-detail">
+                        **Condition 1 (Output True):** **{{$json.sentiment}}** `equals` **Negative**<br>
+                        **OR** **{{$json["คะแนนรีวิว (1-5)"]}}** `is less than` **3**
+                    </div>
+                    <p class="mt-2 text-gray-700">
+                        **เป้าหมาย:** กรองเฉพาะฟีดแบ็กเชิงลบ (Sentiment เป็น Negative หรือคะแนนต่ำกว่า 3) ให้ไปที่ Output **True** เพื่อสร้าง Task
+                    </p>
+                </div>
+                
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-green-500"></i> Step 6: Node 5: สร้าง Task ใน AppSheet (ผ่าน GGS)</h4>
+                    <p>**Node 5 (เชื่อมต่อจาก Output True): Google Sheets**</p>
+                    <div class="code-detail">
+                        **Operation:** <strong>Append Row</strong><br>
+                        **Spreadsheet:** เลือก GGS **"Task List"**<br>
+                        **Set Value:** <br>
+                        - Column `Task Name`: <strong>{{$json.summary}}</strong> (สรุปจาก AI)<br>
+                        - Column `Priority`: **High**<br>
+                        - Column `Source`: <strong>{{$json.ชื่อลูกค้า}}</strong>
+                    </div>
+                    <p class="mt-2 text-gray-700">
+                        **เป้าหมาย:** สร้าง Task ใหม่ในชีต Task List ที่ AppSheet ดึงข้อมูลไปแสดงผล และใช้ Node Line OA หรือ Email (Node 6) แจ้งเตือนทีมงาน
+                    </p>
+                </div>
+
+            </div>
+            
+            <section class="mt-10 p-6 bg-red-50 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold text-red-700 flex items-center mb-6">
+                    <i data-lucide="clipboard-list" class="w-6 h-6 mr-2"></i>
+                    5. คู่มือการเตรียมเครื่องมือเบื้องต้น (Setup Guide) **[ทำตามได้ทันที]**
+                </h3>
+                <p class="text-gray-700 mb-6">
+                    นี่คือขั้นตอนสำคัญที่ต้องทำเพื่อให้ได้ API Key และ Credentials ที่ใช้ในการเชื่อมต่อระบบทั้งหมดเข้าด้วยกัน
+                </p>
+
+                <div class="setup-guide-item">
+                    <h4 class="text-xl font-bold flex items-center mb-3">
+                        <i data-lucide="layout-grid" class="w-5 h-5 mr-2 text-green-600"></i>
+                        1. เตรียม Google Workspace (GGF, GGS, AppSheet)
+                    </h4>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 1.1: เตรียม GGF และ GGS</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>**สร้าง GGF:** สร้างแบบฟอร์มให้เรียบร้อย และ **เชื่อมโยง GGF กับ GGS** (ชื่อไฟล์ GGS เช่น "Feedback Responses")</li>
+                            <li>**สร้าง Task List GGS:** สร้าง Google Sheet ไฟล์ที่ 2 ชื่อ "Task List" สำหรับ AppSheet (คอลัมน์: Task ID, Task Name, Priority, Status)</li>
+                        </ul>
+                    </div>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 1.2: สร้าง App ใน AppSheet</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ไปที่ <a href="https://www.appsheet.com/" target="_blank" class="text-blue-500 hover:underline">AppSheet</a> แล้วคลิก **"Start for Free"**</li>
+                            <li>สร้างแอปพลิเคชันใหม่โดยใช้ GGS **"Task List"** เป็น **Data Source** เพื่อให้ทีมงานสามารถดู Task ที่ AI สร้างได้ทันที</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="setup-guide-item">
+                    <h4 class="text-xl font-bold flex items-center mb-3">
+                        <i data-lucide="plug-2" class="w-5 h-5 mr-2 text-green-600"></i>
+                        2. เตรียม Google OAuth Credentials (สำหรับ n8n)
+                    </h4>
+                    <p class="mb-2">
+                        **เป้าหมาย:** สร้างกุญแจ (Credentials) เพื่อให้ n8n สามารถอ่าน/เขียนข้อมูลใน GGS ได้
+                    </p>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 2.1: สร้าง OAuth Client ID</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ไปที่ <a href="https://console.cloud.google.com/" target="_blank" class="text-blue-500 hover:underline">Google Cloud Console</a> และสร้าง Project ใหม่ (ถ้ายังไม่มี)</li>
+                            <li>ไปที่ **APIs & Services > Credentials** และคลิก **"Create Credentials"** เลือก **"OAuth client ID"**</li>
+                            <li>เลือก **"Desktop app"** แล้วกด **"Create"**</li>
+                            <li>คัดลอก **Client ID** และ **Client Secret** มาเก็บไว้</li>
+                        </ul>
+                    </div>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 2.2: เชื่อมต่อบัญชีใน n8n</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ใน n8n ไปที่เมนู **"Credentials"** เลือก **"Google Sheets OAuth2 API"**</li>
+                            <li>ใส่ **Client ID** และ **Client Secret** ที่คัดลอกมา แล้วกด **"Connect My Account"** เพื่อ **อนุมัติสิทธิ์**</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="setup-guide-item">
+                    <h4 class="text-xl font-bold flex items-center mb-3">
+                        <i data-lucide="cpu" class="w-5 h-5 mr-2 text-green-600"></i>
+                        3. เตรียม AI Model API Key (สำหรับ Sentiment Analysis)
+                    </h4>
+                    <p class="mb-2">
+                        **เป้าหมาย:** ได้กุญแจ API Key สำหรับเชื่อมต่อ Generative AI เพื่อใช้ในการวิเคราะห์
+                    </p>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 3.1: สร้าง API Key</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ไปที่เว็บไซต์ผู้ให้บริการ AI (เช่น Gemini/OpenAI) และสร้าง **API Key ใหม่**</li>
+                        </ul>
+                    </div>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 3.2: การใช้งานใน n8n [Header]</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ใน **Node HTTP Request** (Step 3) กำหนด **Headers** เป็น `Authorization` และค่าเป็น `Bearer YOUR_API_KEY`</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-center">
+                    <button class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg hover:bg-indigo-700 transition duration-300 flex items-center">
+                        <i data-lucide="calendar" class="w-5 h-5 mr-2"></i>
+                        Add to Calendar: เริ่มต้นหลักสูตร
+                    </button>
+                </div>
+            </section>
+
+            <footer class="mt-12 pt-6 border-t border-gray-200 flex justify-between">
+                <a href="system01-crm-stock.html" class="text-blue-500 hover:text-blue-700 flex items-center">
+                    <i data-lucide="arrow-left" class="w-5 h-5 mr-1"></i>
+                    ย้อนกลับ ระบบที่ 1
+                </a>
+                <a href="system03-content-broadcast.html" class="text-blue-500 hover:text-blue-700 flex items-center">
+                    ไปต่อ ระบบที่ 3: AI ผู้ช่วยสร้างคอนเทนต์
+                    <i data-lucide="arrow-right" class="w-5 h-5 ml-1"></i>
+                </a>
+            </footer>
+
+        </section>
+        
+    </div>
+
+    <script>
+        lucide.createIcons();
+        document.querySelector('button').addEventListener('click', () => {
+            alert('ฟังก์ชันนี้ใช้สำหรับเพิ่มกิจกรรมลงในปฏิทินเมื่อมีการเผยแพร่จริง');
+        });
+    </script>
+
+</body>
+</html>

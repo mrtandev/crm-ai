@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบที่ 1: Line OA Bot + CRM & Stock Automation</title>
+    <!-- โหลด Tailwind CSS และ Lucide Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        /* Gradient Header (ใช้สีน้ำเงิน-ม่วง สำหรับ CRM/Efficiency) */
+        .gradient-header {
+            background-image: linear-gradient(90deg, #3b82f6, #6366f1); /* Blue to Indigo */
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+        /* Step Box (จำลองภาพประกอบการทำงาน) */
+        .step-box {
+            border-left: 4px solid #3b82f6; /* Blue */
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+        /* Flowchart Components (ใช้ CSS สร้าง Diagram แทนรูปภาพ) */
+        .flow-node {
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 10px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .node-trigger { background-color: #6366f1; color: white; } /* Indigo for Trigger */
+        .node-ai { background-color: #f59e0b; color: white; } /* Yellow for AI Processing */
+        .node-logic { background-color: #10b981; color: white; } /* Green for Logic/Filtering */
+        .node-db { background-color: #3b82f6; color: white; } /* Blue for Database (CRM) */
+        .node-action { background-color: #ef4444; color: white; } /* Red for Final Action (Line OA) */
+        .flow-arrow {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #9ca3af;
+            margin: 5px 0;
+        }
+        .setup-guide-item {
+            padding: 1.5rem;
+            background-color: #eff6ff; /* Light Blue */
+            border: 1px solid #dbeafe; /* Light Blue Border */
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .setup-guide-item h4 {
+            color: #1d4ed8; /* Dark Blue */
+        }
+        .code-detail {
+            background-color: #27272a; /* Zinc 800 */
+            color: #f4f4f5; /* Zinc 50 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            overflow-x: auto;
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+        }
+        .code-detail strong {
+            color: #93c5fd; /* Blue 300 */
+        }
+        .detail-step {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid #3b82f6; /* Blue */
+            padding-left: 15px;
+        }
+        .detail-step strong {
+            color: #3b82f6;
+        }
+        .instruction-list li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="container">
+
+        <!-- ส่วนหัว: รูปโปรไฟล์และชื่ออาจารย์ -->
+        <header class="text-center mb-10">
+            <div class="flex flex-col items-center">
+                <img 
+                    src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                    alt="รูปโปรไฟล์ อ.แทน" 
+                    class="w-20 h-20 object-cover rounded-full ring-4 ring-indigo-500 shadow-xl mb-3"
+                    onerror="this.onerror=null; this.src='https://placehold.co/80x80/3b82f6/ffffff?text=อ.แทน'"
+                >
+                <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">
+                    อ.แทน <span class="text-indigo-600">[ธีรชัย โฉมทัพ]</span>
+                </h1>
+                <p class="text-lg text-gray-500 mt-1">AI Automation Instructor</p>
+            </div>
+        </header>
+        
+        <!-- หัวข้อหลักและหัวข้อย่อย -->
+        <h2 class="text-4xl sm:text-5xl mb-6">
+            <span class="gradient-header">
+                ระบบที่ 1: Line OA Bot + CRM & Stock Automation
+            </span>
+        </h2>
+        <p class="text-xl text-gray-600 mb-8">
+            ผสาน Line OA Chatbot, vTiger CRM และ Loyverse POS ด้วย n8n เพื่อตอบคำถามลูกค้า, คัดกรอง Lead, และตรวจสอบสต็อกสินค้าแบบ Real-time
+        </p>
+
+        <!-- 1. บทนำ -->
+        <section class="mb-10 p-6 bg-blue-50 rounded-xl shadow-lg">
+            <h3 class="text-2xl font-bold text-blue-700 flex items-center mb-4">
+                <i data-lucide="info" class="w-6 h-6 mr-2"></i>
+                1. บทนำ: การเปลี่ยน Line OA ให้เป็นเครื่องมือสร้าง Lead อัตโนมัติ
+            </h3>
+            <p class="text-gray-700">
+                ระบบนี้เป็นหัวใจสำคัญของการดำเนินงาน โดยใช้ AI Chatbot ตอบคำถามพื้นฐาน และเมื่อลูกค้าถามถึงสินค้า/สต็อก, Chatbot จะเชื่อมต่อกับระบบ Loyverse POS (หน้าร้าน) เพื่อดึงข้อมูลสต็อกจริงมาตอบ จากนั้นจะบันทึกข้อมูลลูกค้าที่สนใจลง vTiger CRM ทันที ซึ่งช่วยลดงานซ้ำซาก (AE) และไม่พลาดโอกาสในการขาย (MM)
+            </p>
+        </section>
+
+        <!-- 2. วัตถุประสงค์หลัก -->
+        <section class="mb-10">
+            <h3 class="text-2xl font-bold text-gray-700 flex items-center mb-4">
+                <i data-lucide="target" class="w-6 h-6 mr-2 text-red-500"></i>
+                2. วัตถุประสงค์หลัก (Object of Expenditure)
+            </h3>
+            <div class="grid grid-cols-2 gap-4 text-gray-700">
+                <div class="p-3 bg-red-100 rounded-lg shadow-md flex items-center">
+                    <i data-lucide="trending-up" class="w-5 h-5 mr-2 text-red-600"></i>
+                    <span class="font-bold">MM (Make Money):</span> ไม่พลาดโอกาสในการขาย (Lead) และมีข้อมูลลูกค้าพร้อมปิดการขาย
+                </div>
+                <div class="p-3 bg-red-100 rounded-lg shadow-md flex items-center">
+                    <i data-lucide="clock" class="w-5 h-5 mr-2 text-red-600"></i>
+                    <span class="font-bold">ST (Save Time):</span> ลดเวลาในการตอบคำถามและการเช็คสต็อกด้วยคน
+                </div>
+                <div class="p-3 bg-red-100 rounded-lg shadow-md flex items-center">
+                    <i data-lucide="activity" class="w-5 h-5 mr-2 text-red-600"></i>
+                    <span class="font-bold">AE (Avoid Effort):</span> หลีกเลี่ยงการคีย์ข้อมูลลูกค้าซ้ำซากและการบันทึก Lead เข้า CRM
+                </div>
+                <div class="p-3 bg-red-100 rounded-lg shadow-md flex items-center">
+                    <i data-lucide="user-check" class="w-5 h-5 mr-2 text-red-600"></i>
+                    <span class="font-bold">MC (More Comfort):</span> ลูกค้าได้รับคำตอบสต็อกสินค้าที่แม่นยำ 24/7
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. เครื่องมือที่ใช้ (Technology Stack) -->
+        <section class="mb-10 p-6 bg-gray-100 rounded-xl shadow-lg">
+            <h3 class="text-2xl font-bold text-gray-700 flex items-center mb-4">
+                <i data-lucide="wrench" class="w-6 h-6 mr-2 text-indigo-500"></i>
+                3. เครื่องมือที่ใช้ (Technology Stack)
+            </h3>
+            <ul class="space-y-3 text-gray-700 list-disc list-inside">
+                <li>**Line OA:** ช่องทางรับ Lead และตอบคำถามลูกค้า</li>
+                <li>**n8n Community:** เครื่องมือ Automation Core สำหรับเชื่อมต่อทุกระบบ</li>
+                <li>**AI Model API:** (เช่น Dialogflow, Gemini) ใช้สำหรับ Chatbot Core และ Lead Qualification</li>
+                <li>**Loyverse POS:** ระบบ POS หน้าร้าน (ใช้ API เพื่อดึงข้อมูล Inventory/Stock)</li>
+                <li>**vTiger CRM:** ระบบ CRM หลัก (ใช้ API เพื่อบันทึก Lead/Contact)</li>
+            </ul>
+        </section>
+
+        <!-- 4. รายละเอียดการดำเนินการ (Step-by-Step Implementation Guide) - ขยายให้ละเอียดที่สุด -->
+        <section class="mb-10">
+            <h3 class="text-3xl font-bold text-gray-800 flex items-center mb-6 border-b pb-2">
+                <i data-lucide="list-checks" class="w-7 h-7 mr-2 text-blue-500"></i>
+                4. รายละเอียดการดำเนินการ: คู่มือ Step-by-Step (Workflow)
+            </h3>
+
+            <!-- 4.1 แผนผังการทำงานโดยรวม (Flowchart Visualization) -->
+            <div class="mb-8 p-6 bg-yellow-50 rounded-xl shadow-inner">
+                <h4 class="text-xl font-bold text-yellow-700 mb-4">4.1 แผนผังการทำงาน (System Flowchart - HTML/CSS Diagram)</h4>
+                <div class="flex flex-col items-center">
+                    <div class="flow-node node-trigger w-3/4">1. ลูกค้าส่งข้อความ (Trigger: Line OA Webhook)</div>
+                    <div class="flow-arrow">👇</div>
+                    <div class="flow-node node-ai w-3/4">2. AI (Chatbot Core) วิเคราะห์ Intent (สอบถามสต็อก/สนใจซื้อ)</div>
+                    <div class="flow-arrow">👇</div>
+                    <div class="flow-node node-logic w-3/4">3. IF Node: แยกเส้นทาง (Stock Check / Lead Gen)</div>
+                    <div class="flow-arrow mt-4">--- แยกเส้นทาง ---</div>
+                    
+                    <div class="grid grid-cols-2 gap-4 w-full mt-4">
+                        <!-- Left Path: Stock Check -->
+                        <div class="col-span-1 flex flex-col items-center">
+                            <div class="flow-node node-db w-full bg-orange-500">4a. HTTP Request: ดึง Stock จาก Loyverse API</div>
+                            <div class="flow-arrow text-orange-500">👇</div>
+                            <div class="flow-node node-action w-full bg-red-500">5a. Line Reply: ตอบผลสต็อกกลับ Line OA</div>
+                        </div>
+
+                        <!-- Right Path: Lead Generation -->
+                        <div class="col-span-1 flex flex-col items-center">
+                            <div class="flow-node node-db w-full bg-indigo-500">4b. vTiger CRM Node: สร้าง Lead ใหม่</div>
+                            <div class="flow-arrow text-indigo-500">👇</div>
+                            <div class="flow-node node-action w-full bg-red-500">5b. Line Reply: ตอบยืนยันการรับ Lead กลับ Line OA</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-10">
+                <h4 class="text-2xl font-bold text-indigo-600 mb-6">⚙️ Workflow: Line OA Lead & Stock Automation</h4>
+
+                <!-- Step 1: Line OA Trigger (รับข้อความ) -->
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-blue-500"></i> Step 1: Node 1: Line OA Webhook Trigger</h4>
+                    <p>**Node 1: Line**</p>
+                    <div class="code-detail">
+                        **Trigger Type:** **Webhook**<br>
+                        **Events:** Message (รับข้อความทุกประเภท)<br>
+                        <p class="mt-2"><strong>สิ่งที่ต้องทำ:</strong> กด 'Activate' และคัดลอก Webhook URL ไปวางใน Line Developer Console</p>
+                    </div>
+                </div>
+
+                <!-- Step 2: AI Analysis (Intent & Keyword Extraction) -->
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-blue-500"></i> Step 2: Node 2: AI วิเคราะห์ Intent (Stock Check, Interested)</h4>
+                    <p>**Node 2: HTTP Request (หรือ AI Node)**</p>
+                    <div class="code-detail">
+                        **Method:** POST | **Header:** `Authorization: Bearer YOUR_AI_KEY`<br>
+                        **Prompt Structure:** `"วิเคราะห์ข้อความ <strong>{{$json.events[0].message.text}}</strong> แยก Intent เป็น STOCK_CHECK หรือ LEAD_GEN และดึง Product Keyword ตอบกลับเป็น JSON..."`
+                        <p class="mt-2"><strong>Data Mapping:</strong> ใช้ Expression: <code>{{$json.events[0].message.text}}</code> เพื่อดึงข้อความที่ลูกค้าพิมพ์มา</p>
+                    </div>
+                    <p class="mt-2 text-gray-700">
+                        **เป้าหมาย:** ให้ AI แยกแยะว่าลูกค้าสนใจเช็คสต็อก หรือสอบถามข้อมูลเพื่อเป็น Lead
+                    </p>
+                </div>
+
+                <!-- Step 3: Logic Decision (แยกเส้นทางตาม Intent) -->
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-blue-500"></i> Step 3: Node 3: IF Node (แยกตาม Intent)</h4>
+                    <p>**Node 3: IF**</p>
+                    <div class="code-detail">
+                        **Condition 1 (Output 1: Stock):** **{{$json.intent}}** `equals` **STOCK_CHECK**<br>
+                        **Condition 2 (Output 2: Lead):** **{{$json.intent}}** `equals` **LEAD_GEN**
+                    </div>
+                    <p class="mt-2 text-gray-700">
+                        **เป้าหมาย:** แยก Workflow ออกเป็น 2 สาย โดย Output 1 คือ Stock Check และ Output 2 คือ Lead Generation
+                    </p>
+                </div>
+
+                <!-- Step 4a: Stock Check (Loyverse) -->
+                <div class="step-box ml-8 bg-gray-100 p-4 rounded-lg">
+                    <h5 class="text-xl font-bold text-blue-600 mb-2 flex items-center"><i data-lucide="trending-down" class="w-5 h-5 mr-2"></i> Step 4a: (สาย Stock Check) ดึง Inventory จาก Loyverse</h5>
+                    <p>**Node 4: HTTP Request (Loyverse API) - เชื่อมจาก Output 1**</p>
+                    <div class="code-detail bg-orange-900">
+                        **Method:** GET | **Credential:** Loyverse Token<br>
+                        **URL:** (Loyverse Inventory Endpoint)<br>
+                        **Query Param:** `item_name` = <strong>{{$json.product_keyword}}</strong>
+                    </div>
+                </div>
+
+                <!-- Step 5a: Line Reply Stock -->
+                <div class="step-box ml-8 bg-gray-100 p-4 rounded-lg">
+                    <h5 class="text-xl font-bold text-blue-600 mb-2 flex items-center"><i data-lucide="message-square-text" class="w-5 h-5 mr-2"></i> Step 5a: (สาย Stock Check) ตอบผล Stock กลับ Line OA</h5>
+                    <p>**Node 5: Line**</p>
+                    <div class="code-detail bg-red-900">
+                        **Operation:** Reply Message<br>
+                        **Reply Token:** <strong>{{$json.events[0].replyToken}}</strong><br>
+                        **Text:** `"สินค้า <strong>{{$json.product_keyword}}</strong> คงเหลือในสต็อก: <strong>{{$json.stock_count}}</strong> ชิ้น ขอบคุณครับ/ค่ะ!"`
+                    </div>
+                    <p class="mt-2 text-gray-700">
+                        **Data Mapping:** ใช้ Expression ดึง `replyToken` และ `product_keyword` จาก Node ก่อนหน้า และดึง `stock_count` จากผลลัพธ์ Loyverse API
+                    </p>
+                </div>
+
+                <!-- Step 4b: Lead Generation (vTiger CRM) -->
+                <div class="step-box ml-8 bg-gray-100 p-4 rounded-lg">
+                    <h5 class="text-xl font-bold text-blue-600 mb-2 flex items-center"><i data-lucide="user-plus" class="w-5 h-5 mr-2"></i> Step 4b: (สาย Lead Gen) สร้าง Lead ใน vTiger CRM</h5>
+                    <p>**Node 4: vTiger CRM - เชื่อมจาก Output 2**</p>
+                    <div class="code-detail bg-indigo-900">
+                        **Operation:** <strong>Create</strong><br>
+                        **Resource:** Lead<br>
+                        **Fields:** <br>
+                        - `Lead Source`: **Line OA**<br>
+                        - `Last Name`: **{{$json.events[0].source.userId}}** (ใช้ Line User ID เป็นชื่อชั่วคราว)<br>
+                        - `Description`: **สนใจสินค้า: {{$json.product_keyword}}**
+                    </div>
+                </div>
+
+                <!-- Step 5b: Line Reply Lead -->
+                <div class="step-box ml-8 bg-gray-100 p-4 rounded-lg">
+                    <h5 class="text-xl font-bold text-blue-600 mb-2 flex items-center"><i data-lucide="message-square-text" class="w-5 h-5 mr-2"></i> Step 5b: (สาย Lead Gen) ตอบยืนยันกลับ Line OA</h5>
+                    <p>**Node 5: Line**</p>
+                    <div class="code-detail bg-red-900">
+                        **Operation:** Reply Message<br>
+                        **Reply Token:** <strong>{{$json.events[0].replyToken}}</strong><br>
+                        **Text:** `"ขอบคุณที่สนใจครับ/ค่ะ! ทีมงานของเราได้รับข้อมูล Lead แล้ว จะรีบติดต่อกลับเพื่อดูแลสินค้า <strong>{{$json.product_keyword}}</strong> ให้นะครับ!"`
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 5. คู่มือการเตรียมเครื่องมือเบื้องต้น (Setup Guide) - ละเอียดที่สุด -->
+            <section class="mt-10 p-6 bg-red-50 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold text-red-700 flex items-center mb-6">
+                    <i data-lucide="clipboard-list" class="w-6 h-6 mr-2"></i>
+                    5. คู่มือการเตรียมเครื่องมือเบื้องต้น (Setup Guide) **[ทำตามได้ทันที]**
+                </h3>
+                <p class="text-gray-700 mb-6">
+                    รายละเอียดการเตรียม API Key และ Credentials ที่ต้องใช้ในการเชื่อมต่อ vTiger CRM, Loyverse POS และ Line OA
+                </p>
+
+                <!-- Item 1: vTiger CRM API -->
+                <div class="setup-guide-item">
+                    <h4 class="text-xl font-bold flex items-center mb-3">
+                        <i data-lucide="database" class="w-5 h-5 mr-2 text-indigo-600"></i>
+                        1. เตรียม vTiger CRM Credentials
+                    </h4>
+                    <p class="mb-2">
+                        **เป้าหมาย:** สร้าง Credential เพื่อให้ n8n สามารถเชื่อมต่อและสร้าง Lead/Contact ใน vTiger CRM ได้
+                    </p>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 1.1: ค้นหา Access Key ใน vTiger</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ล็อกอินเข้า vTiger CRM</li>
+                            <li>ไปที่ **My Preferences** (มักอยู่ใต้รูปโปรไฟล์)</li>
+                            <li>ค้นหา **Access Key** และคัดลอกค่านี้มาเก็บไว้ (สำคัญมาก)</li>
+                        </ul>
+                    </div>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 1.2: เชื่อมต่อบัญชีใน n8n [Credentials]</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ใน n8n ไปที่เมนู **"Credentials"** และเลือก **"vTiger CRM"**</li>
+                            <li>ใส่ **URL** ของ vTiger Instance ของคุณ (เช่น `https://yourcompany.vtiger.com`)</li>
+                            <li>ใส่ **Username** (มักเป็น Email) และ **Access Key** ที่คัดลอกมา</li>
+                            <li>กด **"Save"** Credential นี้จะใช้ใน Workflow (Node vTiger CRM ใน Step 4b)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Item 2: Loyverse POS API -->
+                <div class="setup-guide-item">
+                    <h4 class="text-xl font-bold flex items-center mb-3">
+                        <i data-lucide="shopping-cart" class="w-5 h-5 mr-2 text-indigo-600"></i>
+                        2. เตรียม Loyverse POS API Key
+                    </h4>
+                    <p class="mb-2">
+                        **เป้าหมาย:** สร้าง Token เพื่อให้ n8n สามารถดึงข้อมูลสินค้าคงคลัง (Inventory) จาก Loyverse ได้
+                    </p>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 2.1: สร้าง Personal Access Token</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ล็อกอินเข้าสู่ **Loyverse Back Office**</li>
+                            <li>ไปที่ **Settings > Integrations > Personal Access Tokens**</li>
+                            <li>คลิก **"Generate Token"** และคัดลอก Token ที่สร้างขึ้นมา</li>
+                        </ul>
+                    </div>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 2.2: การใช้งานใน n8n [Header]</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ใน **Node HTTP Request** (Loyverse API ใน Step 4a)</li>
+                            <li>กำหนด **Headers** เป็น `Authorization` และค่าเป็น `Bearer YOUR_LOYVERSE_TOKEN`</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Item 3: Line OA Webhook & Token -->
+                <div class="setup-guide-item">
+                    <h4 class="text-xl font-bold flex items-center mb-3">
+                        <i data-lucide="message-square" class="w-5 h-5 mr-2 text-indigo-600"></i>
+                        3. เตรียม Line OA Webhook และ Channel Token
+                    </h4>
+                    <p class="mb-2">
+                        **เป้าหมาย:** ตั้งค่า Line OA ให้ส่งข้อความลูกค้ามาที่ n8n และอนุญาตให้ n8n ตอบกลับ
+                    </p>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 3.1: Line OA Channel Access Token</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>สร้าง Line Credentials ใน n8n โดยใช้ **Channel Access Token (long-lived)** จาก Line Developer Console</li>
+                        </ul>
+                    </div>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 3.2: Line OA Webhook URL</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ใน n8n เปิด Workflow แล้วกด **"Active"** เพื่อให้ Node Line OA Webhook Trigger สร้าง URL</li>
+                            <li>คัดลอก URL นี้ไปวางใน **Line Developer Console > Messaging API > Webhook URL**</li>
+                            <li>**เปิดใช้งาน Webhook** เพื่อให้ Line OA ส่งข้อความลูกค้ามาที่ n8n</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-center">
+                    <button class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg hover:bg-indigo-700 transition duration-300 flex items-center">
+                        <i data-lucide="calendar" class="w-5 h-5 mr-2"></i>
+                        Add to Calendar: เริ่มต้นหลักสูตร
+                    </button>
+                </div>
+            </section>
+
+            <!-- Footer for Navigation -->
+            <footer class="mt-12 pt-6 border-t border-gray-200 flex justify-between">
+                <a href="aiautomation-index.html" class="text-blue-500 hover:text-blue-700 flex items-center">
+                    <i data-lucide="arrow-left" class="w-5 h-5 mr-1"></i>
+                    ย้อนกลับ หน้าดัชนี
+                </a>
+                <a href="system02-feedback-action.html" class="text-blue-500 hover:text-blue-700 flex items-center">
+                    ไปต่อ ระบบที่ 2: AI วิเคราะห์ฟีดแบ็ก
+                    <i data-lucide="arrow-right" class="w-5 h-5 ml-1"></i>
+                </a>
+            </footer>
+
+        </section>
+        
+    </div>
+
+    <!-- Script เพื่อให้ Lucide Icons แสดงผล -->
+    <script>
+        lucide.createIcons();
+        document.querySelector('button').addEventListener('click', () => {
+            alert('ฟังก์ชันนี้ใช้สำหรับเพิ่มกิจกรรมลงในปฏิทินเมื่อมีการเผยแพร่จริง');
+        });
+    </script>
+
+</body>
+</html>

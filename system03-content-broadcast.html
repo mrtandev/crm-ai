@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบที่ 3: AI ผู้ช่วยสร้างแคปชั่น & คอนเทนต์สู่ Line OA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        /* Gradient Header (ใช้สีส้ม-แดง สำหรับ Content/Marketing) */
+        .gradient-header {
+            background-image: linear-gradient(90deg, #f97316, #ef4444); /* Orange to Red */
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+        /* Step Box (จำลองภาพประกอบการทำงาน) */
+        .step-box {
+            border-left: 4px solid #f97316; /* Orange */
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+        /* Flowchart Components (ใช้ CSS สร้าง Diagram แทนรูปภาพ) */
+        .flow-node {
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 10px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .node-trigger { background-color: #f97316; color: white; } /* Orange for Trigger */
+        .node-ai { background-color: #f59e0b; color: white; } /* Yellow for AI Generation */
+        .node-logic { background-color: #10b981; color: white; } /* Green for Logic/Filtering */
+        .node-db { background-color: #3b82f6; color: white; } /* Blue for Database (GGS) */
+        .node-action { background-color: #ef4444; color: white; } /* Red for Final Action (Broadcast) */
+        .flow-arrow {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #9ca3af;
+            margin: 5px 0;
+        }
+        .setup-guide-item {
+            padding: 1.5rem;
+            background-color: #fff7ed; /* Light Orange */
+            border: 1px solid #fed7aa; /* Light Orange Border */
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .setup-guide-item h4 {
+            color: #ea580c; /* Dark Orange */
+        }
+        .code-detail {
+            background-color: #27272a; /* Zinc 800 */
+            color: #f4f4f5; /* Zinc 50 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            overflow-x: auto;
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+        }
+        .code-detail strong {
+            color: #a7f3d0; /* Emerald 200 */
+        }
+        .detail-step {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid #f97316;
+            padding-left: 15px;
+        }
+        .detail-step strong {
+            color: #f97316;
+        }
+        .instruction-list li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="container">
+
+        <header class="text-center mb-10">
+            <div class="flex flex-col items-center">
+                <img 
+                    src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                    alt="รูปโปรไฟล์ อ.แทน" 
+                    class="w-20 h-20 object-cover rounded-full ring-4 ring-orange-500 shadow-xl mb-3"
+                    onerror="this.onerror=null; this.src='https://placehold.co/80x80/f97316/ffffff?text=อ.แทน'"
+                >
+                <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">
+                    อ.แทน <span class="text-orange-600">[ธีรชัย โฉมทัพ]</span>
+                </h1>
+                <p class="text-lg text-gray-500 mt-1">AI Automation Instructor</p>
+            </div>
+        </header>
+        
+        <h2 class="text-4xl sm:text-5xl mb-6">
+            <span class="gradient-header">
+                ระบบที่ 3: AI ผู้ช่วยสร้างแคปชั่น & คอนเทนต์สู่ Line OA
+            </span>
+        </h2>
+        <p class="text-xl text-gray-600 mb-8">
+            ใช้ Generative AI สร้างคอนเทนต์การตลาดที่ดึงดูดและมีประสิทธิภาพอย่างรวดเร็ว จัดการด้วย Google Sheet และตั้งเวลาส่ง Line OA Broadcast อัตโนมัติด้วย n8n/GAS
+        </p>
+
+        <section class="mb-10 p-6 bg-yellow-50 rounded-xl shadow-lg">
+            <h3 class="text-2xl font-bold text-yellow-700 flex items-center mb-4"><i data-lucide="info" class="w-6 h-6 mr-2"></i>1. บทนำ: ลดภาวะ 'สมองตัน' ในการสร้างคอนเทนต์</h3>
+            <p class="text-gray-700">ปัญหาใหญ่ของ SME คือการต้องคิดคอนเทนต์ใหม่ๆ ทุกวัน ระบบนี้จะเปลี่ยน GGS ให้เป็นห้องระดมสมองส่วนตัว AI จะสร้างแคปชั่นและไอเดียภาพ/วิดีโอให้คุณเลือกสรร เพียงแค่คุณใส่ Keyword สั้นๆ จากนั้นระบบจะช่วยจัดเก็บและตั้งเวลาส่ง Broadcast ผ่าน Line OA ได้อย่างแม่นยำ ทำให้การตลาดของคุณลื่นไหลและสม่ำเสมอโดยใช้ความพยายามน้อยที่สุด (AE)</p>
+        </section>
+
+        <section class="mb-10">
+            <h3 class="text-2xl font-bold text-gray-700 flex items-center mb-4"><i data-lucide="target" class="w-6 h-6 mr-2 text-red-500"></i>2. วัตถุประสงค์หลัก (Object of Expenditure)</h3>
+            <div class="grid grid-cols-2 gap-4 text-gray-700">
+                <div class="p-3 bg-red-100 rounded-lg shadow-md flex items-center"><i data-lucide="trending-up" class="w-5 h-5 mr-2 text-red-600"></i><span class="font-bold">MM:</span> เพิ่ม Engagement และโอกาสในการขาย</div>
+                <div class="p-3 bg-red-100 rounded-lg shadow-md flex items-center"><i data-lucide="clock" class="w-5 h-5 mr-2 text-red-600"></i><span class="font-bold">ST:</span> ลดเวลาในการระดมสมองและตั้งเวลาการส่งคอนเทนต์</div>
+                <div class="p-3 bg-red-100 rounded-lg shadow-md flex items-center"><i data-lucide="activity" class="w-5 h-5 mr-2 text-red-600"></i><span class="font-bold">AE:</span> ลดภาระในการคิดคอนเทนต์ด้วยตนเอง</div>
+                <div class="p-3 bg-red-100 rounded-lg shadow-md flex items-center"><i data-lucide="megaphone" class="w-5 h-5 mr-2 text-red-600"></i><span class="font-bold">ISS & MP:</span> ภาพลักษณ์การตลาดดูเป็นมืออาชีพ</div>
+            </div>
+        </section>
+
+        <section class="mb-10 p-6 bg-gray-100 rounded-xl shadow-lg">
+            <h3 class="text-2xl font-bold text-gray-700 flex items-center mb-4"><i data-lucide="wrench" class="w-6 h-6 mr-2 text-orange-500"></i>3. เครื่องมือที่ใช้ (Technology Stack)</h3>
+            <ul class="space-y-3 text-gray-700 list-disc list-inside">
+                <li>**GGS (Google Sheets):** Content Calendar และ Input สำหรับ AI</li>
+                <li>**n8n Community:** เครื่องมือ Automation Core สำหรับเชื่อมต่อ AI และจัดการ Workflow</li>
+                <li>**AI Model API:** (เช่น Gemini, OpenAI) ใช้สำหรับ Generative Text (Caption/Idea)</li>
+                <li>**Line OA:** ช่องทางสุดท้ายสำหรับ Broadcast ข้อความ</li>
+                <li>**GAS (Google Apps Script) / n8n Schedule Node:** ใช้สำหรับการตั้งเวลา (Scheduler)</li>
+            </ul>
+        </section>
+
+        <section class="mb-10">
+            <h3 class="text-3xl font-bold text-gray-800 flex items-center mb-6 border-b pb-2">
+                <i data-lucide="list-checks" class="w-7 h-7 mr-2 text-orange-500"></i>
+                4. รายละเอียดการดำเนินการ: คู่มือ Step-by-Step (Workflow)
+            </h3>
+            
+            <div class="mb-8 p-6 bg-yellow-50 rounded-xl shadow-inner">
+                <h4 class="text-xl font-bold text-yellow-700 mb-4">4.1 แผนผังการทำงาน (System Flowchart - HTML/CSS Diagram)</h4>
+                <div class="flex flex-col items-center">
+                    <div class="flow-node node-trigger w-3/4">Workflow A: Content Generator (Trigger: Manual/GGS)</div>
+                    <div class="flow-arrow">👇</div>
+                    <div class="flow-node node-ai w-3/4">n8n ส่ง Prompt ไป AI Model (Generate Content)</div>
+                    <div class="flow-arrow">👇</div>
+                    <div class="flow-node node-db w-3/4">บันทึกผลลัพธ์ (Caption, Idea) กลับ GGS เพื่อรอ Approval</div>
+                    <div class="flow-arrow mt-4">--- SME Review & Set Date ---</div>
+                    <div class="flow-node node-trigger w-3/4">Workflow B: Broadcast Scheduler (Trigger: Schedule)</div>
+                    <div class="flow-arrow">👇</div>
+                    <div class="flow-node node-logic w-3/4">n8n อ่าน GGS: คอนเทนต์ที่ Approved และถึงเวลานัดส่งแล้ว</div>
+                    <div class="flow-arrow">👇</div>
+                    <div class="flow-node node-action w-3/4">Line OA Broadcast (ส่งข้อความ) และอัปเดต GGS เป็น 'Sent'</div>
+                </div>
+            </div>
+
+            <div class="space-y-10">
+
+                <h4 class="text-2xl font-bold text-orange-600 mb-6">⚙️ Workflow A: AI Content Generator (สร้างแคปชั่น)</h4>
+
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-orange-500"></i> Step 1: สร้าง Content Calendar ใน Google Sheet</h4>
+                    <p>**วิธีทำ:** สร้าง GGS ที่มีคอลัมน์เหล่านี้: **A: Row ID**, **B: Keyword** (Input), **C: AI Status** (`PENDING`), **D: Caption**, **E: Image Idea**, **F: Date to Post**, **G: Final Status**</p>
+                </div>
+
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-orange-500"></i> Step 2: Node 1 & 2: Trigger และ Read GGS</h4>
+                    <p>**Node 2: Google Sheets**</p>
+                    <div class="code-detail">
+                        **Operation:** <strong>Read</strong><br>
+                        **Filters:** **Filter Column: C (AI Status)** | **Value:** PENDING
+                    </div>
+                </div>
+
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-orange-500"></i> Step 3: Node 3: AI สร้างแคปชั่น (HTTP Request Node)</h4>
+                    <p>**Node 3: HTTP Request (หรือ OpenAI/Gemini Node)**</p>
+                    <div class="code-detail">
+                        **Method:** POST | **Header:** `Authorization: Bearer YOUR_API_KEY`<br>
+                        **Body (Prompt):** `"คุณคือ... จงสร้างแคปชั่น... สำหรับ Keyword: <strong>{{$json.Keyword}}</strong> ตอบกลับเป็น JSON..."`
+                    </div>
+                </div>
+
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-orange-500"></i> Step 4: Node 4: Update GGS ด้วยผล AI</h4>
+                    <p>**Node 4: Google Sheets**</p>
+                    <div class="code-detail">
+                        **Operation:** <strong>Update Row</strong> | **Row ID:** <strong>{{$json["Row ID"]}}</strong><br>
+                        **Set Value:** Column D (Caption) = <strong>{{$json.Caption}}</strong> | Column C (AI Status) = <strong>GENERATED</strong>
+                    </div>
+                </div>
+                
+                <h4 class="text-2xl font-bold text-orange-600 mb-6 mt-12">🚀 Workflow B: Broadcast Scheduler (ส่งข้อความ)</h4>
+                
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-orange-500"></i> Step 5: Node 1 & 2: Schedule Trigger และ Read Approved Content</h4>
+                    <p>**Node 1: Schedule Trigger** (Trigger Type: Hourly)</p>
+                    <p>**Node 2: Google Sheets**</p>
+                    <div class="code-detail">
+                        **Operation:** <strong>Read</strong><br>
+                        **Filters:** **Filter Column: G (Final Status)** | **Value:** APPROVED<br>
+                        **Filters:** **Filter Column: F (Date to Post)** | **Value:** <strong>{{ $now() }}</strong>
+                    </div>
+                </div>
+
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-orange-500"></i> Step 6: Node 3: ส่ง Line OA Broadcast</h4>
+                    <p>**Node 3: Line**</p>
+                    <div class="code-detail">
+                        **Operation:** <strong>Broadcast</strong><br>
+                        **Message Type:** Text<br>
+                        **Text:** <strong>{{$json.Caption}}</strong>
+                    </div>
+                </div>
+
+                <div class="step-box">
+                    <h4 class="text-xl font-bold text-gray-800 flex items-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 mr-2 text-orange-500"></i> Step 7: Node 4: อัปเดตสถานะเป็น Sent</h4>
+                    <p>**Node 4: Google Sheets**</p>
+                    <div class="code-detail">
+                        **Operation:** <strong>Update Row</strong> | **Row ID:** <strong>{{$json["Row ID"]}}</strong><br>
+                        **Set Value:** Column G (Final Status) = <strong>SENT</strong>
+                    </div>
+                </div>
+
+            </div>
+            
+            <section class="mt-10 p-6 bg-red-50 rounded-xl shadow-md">
+                <h3 class="text-2xl font-bold text-red-700 flex items-center mb-6">
+                    <i data-lucide="clipboard-list" class="w-6 h-6 mr-2"></i>
+                    5. คู่มือการเตรียมเครื่องมือเบื้องต้น (Setup Guide) **[ทำตามได้ทันที]**
+                </h3>
+                <p class="text-gray-700 mb-6">
+                    นี่คือขั้นตอนสำคัญที่ต้องทำเพื่อให้ได้ API Key และ Credentials ที่ใช้ในการเชื่อมต่อระบบทั้งหมดเข้าด้วยกัน
+                </p>
+
+                <div class="setup-guide-item">
+                    <h4 class="text-xl font-bold flex items-center mb-3">
+                        <i data-lucide="calendar" class="w-5 h-5 mr-2 text-orange-600"></i>
+                        1. เตรียม Google Sheet (GGS) และ Google OAuth Credentials
+                    </h4>
+                    <p class="mb-2">
+                        **เป้าหมาย:** สร้างไฟล์ GGS และสร้างกุญแจ (Credentials) เพื่อให้ n8n สามารถอ่าน-เขียนข้อมูลใน GGS ได้อย่างปลอดภัย
+                    </p>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 1.1: สร้าง Google Sheet [GGS]</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ไปที่ Google Drive ของคุณ และ **สร้าง Google Sheet ใหม่** ตั้งชื่อว่า "AI Content Calendar"</li>
+                            <li>สร้างหัวข้อคอลัมน์ A-G ตามที่กำหนดใน Step 1</li>
+                        </ul>
+                    </div>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 1.2: สร้าง Google OAuth Credentials ใน Google Cloud Console [GGC]</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>เปิด <a href="https://console.cloud.google.com/" target="_blank" class="text-blue-500 hover:underline">Google Cloud Console</a> และ **สร้าง Project ใหม่**</li>
+                            <li>ไปที่เมนู **APIs & Services > Credentials** และคลิก **"Create Credentials"** เลือก **"OAuth client ID"**</li>
+                            <li>ในหน้าจอ **"Application type"** ให้เลือก **"Desktop app"** แล้วกด **"Create"**</li>
+                            <li>คัดลอก **Client ID** และ **Client Secret** มาเก็บไว้</li>
+                        </ul>
+                        <p class="mt-2 text-gray-700">
+                            *นี่คือตัวอย่างข้อมูลที่คุณต้องคัดลอก:*
+                        </p>
+                        <div class="code-detail bg-green-900">
+                            Client ID: <strong>1234567890-abcdefg.apps.googleusercontent.com</strong><br>
+                            Client Secret: <strong>GOCSPX-hijklmnopqrstuvwxyz</strong>
+                        </div>
+                    </div>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 1.3: เชื่อมต่อบัญชีใน n8n [Credentials]</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ใน n8n ไปที่เมนู **"Credentials"** เลือก **"Google Sheets OAuth2 API"**</li>
+                            <li>ใส่ **Client ID** และ **Client Secret** แล้วกด **"Connect My Account"** เพื่อ **อนุมัติสิทธิ์** เข้าถึง Google Sheet ของคุณ</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="setup-guide-item">
+                    <h4 class="text-xl font-bold flex items-center mb-3">
+                        <i data-lucide="message-square" class="w-5 h-5 mr-2 text-orange-600"></i>
+                        2. เตรียม Line OA Channel Access Token (สำหรับ Broadcast)
+                    </h4>
+                    <p class="mb-2">
+                        **เป้าหมาย:** ดึงกุญแจอนุญาต (Token) เพื่อให้ n8n สามารถสั่งส่งข้อความ Broadcast ได้
+                    </p>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 2.1: การ Issue Token ใน Line Developer Console</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ล็อกอินเข้า <a href="https://manager.line.biz/" target="_blank" class="text-blue-500 hover:underline">Line Developer Console</a> เลือก Channel</li>
+                            <li>ไปที่แท็บ **"Messaging API"** และเลื่อนหาหัวข้อ **"Channel access token (long-lived)"**</li>
+                            <li>คลิก **"Issue"** และ **คัดลอกค่า Token** ทั้งหมดมาเก็บไว้ (ใช้สำหรับการส่ง Broadcast)</li>
+                        </ul>
+                    </div>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 2.2: เชื่อมต่อบัญชีใน n8n [Credentials]</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ใน n8n ไปที่เมนู **"Credentials"** และเลือก **"Line"**</li>
+                            <li>ในช่อง **"Access Token"** ให้วาง **Channel Access Token** ที่คัดลอกมาลงไป</li>
+                            <li>กด **"Save"** Credential นี้จะใช้ใน Workflow B (Node 3: Line Broadcast)</li>
+                        </ul>
+                    </div>
+                    <p class="mt-2 text-gray-700">
+                        *นี่คือตัวอย่างความยาวของ Channel Access Token*
+                    </p>
+                    <div class="code-detail bg-red-900">
+                        Channel Access Token: <strong>E1vO_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...</strong>
+                    </div>
+                </div>
+
+                <div class="setup-guide-item">
+                    <h4 class="text-xl font-bold flex items-center mb-3">
+                        <i data-lucide="cpu" class="w-5 h-5 mr-2 text-orange-600"></i>
+                        3. เตรียม AI Model API Key (สำหรับ Content Generation)
+                    </h4>
+                    <p class="mb-2">
+                        **เป้าหมาย:** ได้กุญแจ API Key สำหรับเชื่อมต่อ Generative AI (เช่น Gemini, OpenAI) เพื่อให้ n8n สามารถสั่งสร้างแคปชั่นได้
+                    </p>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 3.1: สร้าง API Key</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ไปที่เว็บไซต์ผู้ให้บริการ AI ที่คุณเลือก (เช่น Google AI Studio หรือ OpenAI Platform)</li>
+                            <li>ไปที่หน้า **API Key Management** คลิก **"Create new key"** และ **คัดลอก Key** ที่แสดงขึ้นมาทันที</li>
+                        </ul>
+                    </div>
+                    <div class="detail-step">
+                        <strong>ขั้นตอนที่ 3.2: การใช้งานใน n8n [Header]</strong>
+                        <ul class="list-decimal list-inside ml-4 instruction-list text-gray-700">
+                            <li>ใน **Node HTTP Request** ใน Workflow A (Step 3)</li>
+                            <li>**Headers:** ใส่ `Authorization` และค่าเป็น `Bearer YOUR_API_KEY`</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-center">
+                    <button class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg hover:bg-indigo-700 transition duration-300 flex items-center">
+                        <i data-lucide="calendar" class="w-5 h-5 mr-2"></i>
+                        Add to Calendar: เริ่มต้นหลักสูตร
+                    </button>
+                </div>
+            </section>
+
+            <footer class="mt-12 pt-6 border-t border-gray-200 flex justify-between">
+                <a href="system02-feedback-action.html" class="text-blue-500 hover:text-blue-700 flex items-center">
+                    <i data-lucide="arrow-left" class="w-5 h-5 mr-1"></i>
+                    ย้อนกลับ ระบบที่ 2
+                </a>
+                <a href="aiautomation-index.html" class="text-blue-500 hover:text-blue-700 flex items-center">
+                    จบหลักสูตร: กลับหน้าดัชนี
+                    <i data-lucide="arrow-right" class="w-5 h-5 ml-1"></i>
+                </a>
+            </footer>
+
+        </section>
+        
+    </div>
+
+    <script>
+        lucide.createIcons();
+        document.querySelector('button').addEventListener('click', () => {
+            alert('ฟังก์ชันนี้ใช้สำหรับเพิ่มกิจกรรมลงในปฏิทินเมื่อมีการเผยแพร่จริง');
+        });
+    </script>
+
+</body>
+</html>
