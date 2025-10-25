@@ -3,944 +3,415 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Day 4: Workshop N8N ขั้นสูง - Master Automation Handbook</title>
-    <!-- Load Tailwind CSS (Master Standard: Day 2) -->
+    <title>Day 4: Workshop เชื่อมต่ออัตโนมัติด้วย N8N (Part 1)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <style>
-        /* * Master Standard CSS & Fonts (Consistent with Day 2/3)
-         * - ใช้ Tailwind CSS utility classes สำหรับ Responsive Design และ Layout
-         * - กำหนด Custom Fonts และ Variables เพื่อควบคุม Aesthetics
-         */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+Thai:wght@100..900&display=swap');
         :root {
-            /* ใช้สีจาก Day 2: Blue-Indigo Gradient */
-            --primary-color: #3b82f6; /* Tailwind Blue-500 */
-            --gradient-start: #3b82f6; 
-            --gradient-end: #6366f1; /* Tailwind Indigo-500 */
-            /* N8N Accent Color (for highlights) */
-            --accent-n8n: #ff4785; /* Pink/Red for N8N elements */
-            --bg-light: #f8fafc; /* Tailwind Gray-50 */
+            --primary-color: #4f46e5; /* Indigo-600 for Day 4 focus */
+            --gradient-start: #4f46e5;
+            --gradient-end: #818cf8; /* Indigo-400 */
+            --node-color: #f97316; /* Orange-500 for N8N Nodes */
         }
-
         body {
-            /* ใช้ Noto Sans Thai เป็นหลักตาม Master Standard */
             font-family: 'Noto Sans Thai', 'Inter', sans-serif;
-            background-color: var(--bg-light); 
-            line-height: 1.7;
-            scroll-behavior: smooth;
+            background-color: #f8fafc;
         }
-
-        /* Gradient Heading (Standard Aesthetic for H2/H3/H4) */
         .gradient-text {
             background-image: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        
-        /* Card Shadow (Standard Aesthetic for all content blocks) */
         .card-shadow {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        
-        /* Section Header (Standard Aesthetic - Left Border Indicator) */
-        .section-header {
+        .step-card {
             border-left: 5px solid var(--primary-color);
-            padding-left: 1rem;
-            margin-top: 2rem;
-            margin-bottom: 1.5rem; /* Standardized spacing */
+            transition: all 0.3s ease;
         }
-
-        /* Status Card Specific Style (for callout boxes) */
-        .highlight-card {
-            border-left: 5px solid var(--accent-n8n); /* N8N Pink for Key Concept */
-            background-color: #fce7f6; /* Pink-50 */
-            padding: 1rem;
-            border-radius: 0.5rem;
+        .step-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
         }
-        .warning-card {
-            border-left: 5px solid #f97316; /* Orange-600 for warnings */
-            background-color: #fff7ed; /* Orange-50 */
-            padding: 1rem;
-            border-radius: 0.5rem;
+        .n8n-tip {
+            background-color: #eef2ff; /* Indigo-50 */
+            border-left: 4px solid #4f46e5;
         }
-
-        /* Override Noto Sans Thai font weight for clarity */
-        h1, h2, h3, h4 {
+        .node-component {
+            font-family: monospace;
+            background-color: #fed7aa; /* Orange-200 */
+            color: #9a3412; /* Orange-900 */
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .webhook-badge {
+            background-color: #fcd34d; /* Amber-300 */
+            color: #92400e; /* Amber-900 */
             font-weight: 700;
-        }
-        
-        /* Code Block Style (Standard: Slate-800 background) */
-        pre {
-            background-color: #1e293b; /* Slate-800 */
-            color: #f1f5f9; /* Slate-100 */
-            padding: 1rem;
-            border-radius: 0.5rem;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-        }
-        code {
-            font-family: Consolas, monospace;
-            background-color: #334155; /* Slate-700 */
-            padding: 0.1rem 0.3rem;
-            border-radius: 0.25rem;
-            color: #94a3b8; /* Slate-400 */
+            padding: 2px 8px;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
         }
         .expression-code {
-            background-color: #ffe4e6; /* Pink-100 */
-            color: #be185d; /* Pink-700 (for n8n Expression) */
-            font-weight: 600;
+            font-family: monospace;
+            background-color: #e0f2f1;
+            color: #0d9488;
+            padding: 2px 4px;
+            border-radius: 3px;
         }
-        /* Style for table headers in content sections */
-        .content-table th {
-            background-color: #f3f4f6;
+        .json-box {
+            background-color: #1f2937; /* Gray-800 */
+            color: #38bdf8; /* Sky-400 */
+            padding: 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            font-size: 0.8rem;
         }
-        .flow-node {
-            background-color: white;
-            padding: 0.75rem 1.25rem;
-            border-radius: 0.5rem;
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            text-align: center;
+        .json-key {
+            color: #fcd34d; /* Amber-300 */
         }
-        .arrow {
-            color: var(--accent-n8n);
+        .json-value {
+            color: #a7f3d0; /* Teal-200 */
         }
-
+        .json-structure {
+            border: 2px dashed #9333ea;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #faf5ff;
+        }
     </style>
-    <script>
-        // * Lucide Icons (Consistent with Day 2/3)
-        const renderIcon = (name, className = 'w-5 h-5') => {
-            const icons = {
-                'zap': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
-                'repeat': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="m17 2 4 4 -4 4"/><path d="M3 11v-1a4 4 0 0 1 4 -4h14"/><path d="m7 22 -4 -4 4 -4"/><path d="M21 13v1a4 4 0 0 1 -4 4h-14"/></svg>`,
-                'cpu': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect width="16" height="16" x="4" y="4" rx="2"/><path d="M15 9h1a2 2 0 0 1 2 2v1"/><path d="M9 15h-1a2 2 0 0 0 -2 2v1"/><path d="M15 15v1a2 2 0 0 1 -2 2h-1"/><path d="M9 9v-1a2 2 0 0 0 -2 -2h-1"/></svg>`,
-                'lock': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
-                'shield-alert': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M12 22s8 -4 8 -11V5l-8 -3l-8 3v6c0 7 8 11 8 11"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>`,
-                'database': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 12a9 3 0 0 0 18 0"/><path d="M3 19a9 3 0 0 0 18 0"/><path d="M3 5v14"/></svg>`,
-                'git-branch': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1 -9 9"/></svg>`,
-                'activity': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M22 12h-4l-3 9l-6 -18l-3 9h-4"/></svg>`,
-                'code': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
-                'alert-triangle': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71 -3L13.71 3.86a2 2 0 0 0 -3.42 0z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>`,
-                'bell': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3 -2 3 -9"/><path d="M10.36 21a1.9 1.9 0 0 0 3.28 0"/></svg>`,
-            };
-            return icons[name] || '';
-        };
-        
-        window.onload = () => {
-             console.log("Day 4 Handbook Loaded (Content Depth Target: >= 1000 lines).");
-        };
-
-    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
 <body class="min-h-screen">
-    <!-- Message Box for Alerts/Confirmations (Standard) -->
-    <div id="messageBox" class="fixed top-4 right-4 z-50 w-full max-w-sm"></div>
-
-    <!-- Header Section (Consistent with Day 2/3 - Tailwind Structure) -->
     <header class="bg-white card-shadow sticky top-0 z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <div class="text-3xl font-extrabold tracking-tight">
-                        <span class="gradient-text">AI Automation & Data Integration Master</span>
-                    </div>
-                </div>
-                <div class="mt-2 md:mt-0 text-right text-sm text-gray-600">
-                    Day 4: Workshop N8N ขั้นสูง ⚡️ ระบบ Automation ระดับ Production
+                <a href="course1_aiautomation.html" class="flex items-center space-x-2 text-gray-500 hover:text-emerald-600 transition duration-150">
+                    <i class="fas fa-arrow-left"></i>
+                    <span class="text-sm font-medium hidden sm:inline">กลับสู่แผนผังหลักสูตร</span>
+                </a>
+                <div class="mt-2 md:mt-0 text-right text-base font-semibold text-gray-800">
+                    Day 4: Workshop เชื่อมต่ออัตโนมัติด้วย N8N (Part 1)
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Area -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <!-- Instructor Information Card (Consistent with Day 2/3) -->
         <div class="bg-white p-6 rounded-xl card-shadow mb-8 border-t-4 border-indigo-500">
             <div class="flex items-center space-x-4">
                 <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
-                     onerror="this.onerror=null;this.src='https://placehold.co/80x80/6366f1/ffffff?text=อ.แทน'"
+                     onerror="this.onerror=null;this.src='https://placehold.co/80x80/4f46e5/ffffff?text=อ.แทน'"
                      alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-20 h-20 rounded-full object-cover ring-2 ring-indigo-500">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800">อ.แทน <span class="text-indigo-600">[ธีรชัย โฉมทัพ]</span></h2>
-                    <p class="text-base text-gray-500">Head of Digital Transformation</p>
-                    <p class="text-sm text-gray-600 mt-1">ยินดีต้อนรับสู่ Day 4: เราจะสร้าง **Backend Automation** ที่ฉลาด ทนทาน และใช้ AI ในการตัดสินใจด้วย N8N!</p>
+                    <p class="base text-gray-500">Head of Digital Transformation</p>
+                    <p class="sm text-gray-600 mt-1">วันนี้เราจะยกระดับ AppSheet/GGS ด้วยการเชื่อมต่อกับโลกภายนอกผ่าน N8N ซึ่งเป็นเครื่องมือ Automation ที่ทรงพลัง!</p>
                 </div>
             </div>
         </div>
 
-        <!-- Timetable and Checkboxes (Day 4 Content) -->
         <div class="bg-white p-6 rounded-xl card-shadow mb-8">
-            <h3 class="text-2xl font-semibold mb-4 gradient-text">กำหนดการเรียนรู้ Day 4 (N8N Advanced Workshop) ⚡️</h3>
+            <h3 class="text-2xl font-semibold mb-4 gradient-text">กำหนดการเรียนรู้ Day 4 (6 ชั่วโมง) 🔌</h3>
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">เวลา</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">หัวข้อ/กิจกรรม</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">สถานะ</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ประเภท</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">09:00 - 10:30 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">
-                            หัวข้อ 5.1: Master Webhook: HMAC Security, Data Validation, และ Asynchronous Response (202 Accepted)
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        </td>
+                    <tr class="hover:bg-indigo-50">
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">09:00 - 10:15 น.</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 1:** N8N Fundamentals: Core Concepts (Nodes, Workflows, Data Structure)</td>
+                        <td class="px-6 py-4 text-center text-xs font-bold text-indigo-600">รากฐาน Automation</td>
                     </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">10:45 - 12:00 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">
-                            หัวข้อ 5.2: Resilience Logic: Exponential Backoff (JS Code) และ Dead Letter Queue (DLQ) Workflow
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        </td>
+                    <tr class="bg-yellow-50">
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">10:15 - 10:30 น.</td>
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคเช้า (Coffee Break)***</td>
+                        <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">13:00 - 14:30 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">
-                            หัวข้อ 5.3: Structured AI Agent: JSON Schema Output, Prompt Engineering และ AI-Driven Decision Gates
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        </td>
+                    <tr class="hover:bg-indigo-50">
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">10:30 - 12:00 น.</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 2:** Webhooks & API: การรับ-ส่งข้อมูลระหว่างระบบ</td>
+                        <td class="px-6 py-4 text-center text-xs font-bold text-indigo-600">ทฤษฎี (I/O)</td>
                     </tr>
-                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">14:45 - 16:00 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">
-                            หัวข้อ 5.4/5.5: Production Flow: State Management (Idempotency) และ Active Monitoring/Alerting
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        </td>
+                    <tr class="bg-red-50">
+                        <td class="px-6 py-2 text-sm font-semibold text-red-800">12:00 - 13:00 น.</td>
+                        <td class="px-6 py-2 text-sm font-semibold text-red-800">***พักกลางวัน (Lunch Break)***</td>
+                        <td class="px-6 py-2 text-center text-xs font-bold text-red-600">พัก</td>
                     </tr>
-                    <!-- Breaks -->
-                     <tr class="bg-gray-50">
-                        <td class="px-6 py-2 whitespace-nowrap text-xs text-gray-500 italic">10:30 - 10:45 น.</td>
-                        <td class="px-6 py-2 text-xs text-gray-500 italic">พักเบรค (Coffee Break)</td>
-                        <td class="px-6 py-2 whitespace-nowrap text-center"><input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"></td>
+                    <tr class="hover:bg-indigo-50">
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">13:00 - 14:45 น.</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**Workshop 1:** สร้าง Workflow: AppSheet (Webhook) → N8N → Google Sheets</td>
+                        <td class="px-6 py-4 text-center text-xs font-bold text-indigo-600">ปฏิบัติ (Data Entry)</td>
                     </tr>
-                    <tr class="bg-gray-50">
-                        <td class="px-6 py-2 whitespace-nowrap text-xs text-gray-500 italic">12:00 - 13:00 น.</td>
-                        <td class="px-6 py-2 text-xs text-gray-500 italic">พักเที่ยง (Lunch Break)</td>
-                        <td class="px-6 py-2 whitespace-nowrap text-center"><input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"></td>
+                    <tr class="bg-yellow-50">
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">14:45 - 15:00 น.</td>
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคบ่าย (Coffee Break)***</td>
+                        <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
+                    </tr>
+                    <tr class="hover:bg-indigo-50">
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">15:00 - 16:30 น.</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**Workshop 2:** การจัดการข้อมูล (Set, Split in Batches, If Node)</td>
+                        <td class="px-6 py-4 text-center text-xs font-bold text-indigo-600">Logic Flow</td>
+                    </tr>
+                    <tr class="hover:bg-indigo-50">
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">16:30 - 17:00 น.</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**สรุป:** การ Debugging และการเตรียมพร้อมสำหรับ Day 5 (Advanced n8n)</td>
+                        <td class="px-6 py-4 text-center text-xs font-bold text-indigo-600">สรุป</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Introduction Card -->
-        <div class="bg-white p-6 rounded-xl card-shadow mb-8 highlight-card">
-            <div class="flex items-center space-x-3 mb-4 border-b pb-3 border-pink-200">
-                <script>document.write(renderIcon('zap', 'w-7 h-7 inline-block text-red-500 mr-2'));</script>
-                <h2 class="text-3xl font-bold gradient-text">บทนำ: N8N ในฐานะสมองส่วนกลาง (The Central Brain)</h2>
-            </div>
-            
-            <p class="text-gray-700 leading-relaxed">
-                ใน Day 3 เราได้สร้าง **Front-End** ที่ทรงพลังด้วย AppSheet และใช้ **Webhook Action** เป็นสะพานเชื่อม วันนี้ใน Day 4 เราจะดำดิ่งสู่ **N8N** ในฐานะ **Backend Automation Engine** ที่แท้จริง N8N จะทำหน้าที่เป็น **"สมองส่วนกลาง"** ที่รับคำสั่งจาก AppSheet หรือ Platform อื่น ๆ แล้วประมวลผลตรรกะที่ซับซ้อน (Logic), จัดการกับความผิดพลาด (Resilience), และใช้ความสามารถของ AI ในการตัดสินใจทางธุรกิจ
-            </p>
-            <p class="text-gray-700 leading-relaxed mt-3">
-                เป้าหมายสูงสุดคือการเปลี่ยน Flow ที่ทำงานตามลำดับ (Linear) ให้กลายเป็น **ระบบอัตโนมัติระดับ Production (Production-Grade Automation)** ที่เชื่อถือได้, สามารถจัดการกับสถานการณ์ที่ไม่คาดฝันได้เอง, และรักษาความถูกต้องของข้อมูล (Data Integrity) ตลอดเวลา นี่คือสิ่งที่แยก Master Developer ออกจากผู้ใช้งานทั่วไปครับ
-            </p>
-        </div>
-        <!-- *************************************************************** -->
 
-        <!-- SECTION 5.1: MASTER WEBHOOK IMPLEMENTATION -->
-        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
-            <div class="section-header border-blue-500 mb-6">
-                <h2 class="text-3xl font-bold gradient-text">
-                    <script>document.write(renderIcon('lock', 'w-7 h-7 inline-block text-blue-500 mr-2'));</script>
-                    5.1 Master Webhook: HMAC, Validation, และ Asynchronous Response
-                </h2>
-            </div>
-            
-            <p class="text-gray-700 leading-relaxed mb-4">
-                Webhook คือจุดเริ่มต้นของ Flow ส่วนใหญ่ การรับ Webhook อย่างปลอดภัยและมีประสิทธิภาพต้องมีขั้นตอนที่ชัดเจน 4 ขั้นตอน: Security, Validation, Idempotency, และ Timely Response
-            </p>
-
-            <!-- Step 5.1.1: Webhook Security (HMAC) -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('lock', 'w-6 h-6 text-red-600'));</script>
-                <span>Step 1: HMAC Verification (การยืนยันความถูกต้องของแหล่งที่มา)</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                HMAC (Hash-based Message Authentication Code) คือมาตรฐานในการตรวจสอบว่า Payload ที่ส่งมายัง Webhook นั้นมาจาก Platform ที่เราเชื่อถือจริง ๆ และไม่มีการแก้ไขระหว่างทาง (Tamper-Proof) เราจะใช้ **Code Node** ทันทีหลัง Webhook Node เพื่อทำการตรวจสอบนี้:
-            </p>
-            
-            <div class="warning-card p-4 rounded-lg my-4">
-                <h4 class="font-bold text-orange-800">💡 โค้ด JavaScript สำหรับ HMAC Verification ใน Code Node</h4>
-                <p class="text-orange-700 text-sm mt-1">
-                    ตัวอย่างนี้สมมติว่า Platform ต้นทางใช้ Algorithm SHA256 และส่ง Signature มาใน Header ชื่อ <code class="expression-code">X-HMAC-Signature</code>
-                </p>
-                <pre class="text-sm">
-// Code Node: 5.1.1 - HMAC Verification
-const crypto = require('crypto');
-const items = $input.json;
-const SECRET_KEY = $env.WEBHOOK_SECRET; // ดึง Secret Key จาก Environment Variable (Best Practice)
-const VALIDATION_STATUS = [];
-
-for (const item of items) {
-    // 1. ดึง Signature ที่ส่งมาใน Header
-    const sentSignature = item.headers['x-hmac-signature']; 
-    if (!sentSignature) {
-        VALIDATION_STATUS.push({ isValid: false, reason: 'HMAC Signature Header Missing' });
-        continue;
-    }
-
-    // 2. สร้าง Payload Body จากข้อมูลที่ได้รับ (ต้องเป็น Raw Body)
-    // IMPORTANT: ใน n8n บางครั้งต้องใช้ item.request.body.raw แทน item.json
-    const rawBody = JSON.stringify(item.json); 
-
-    // 3. คำนวณ HMAC ใหม่
-    const calculatedHmac = crypto
-        .createHmac('sha256', SECRET_KEY)
-        .update(rawBody)
-        .digest('hex');
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-indigo-400 pb-2 flex items-center">
+            <i class="fas fa-network-wired w-8 h-8 mr-3 text-indigo-600"></i>
+            ส่วนที่ 1: N8N Fundamentals: รากฐานของ Automation
+        </h3>
         
-    // 4. เปรียบเทียบ
-    const isValid = calculatedHmac === sentSignature;
-
-    if (!isValid) {
-        VALIDATION_STATUS.push({ isValid: false, reason: 'HMAC Verification Failed: Signatures Mismatch' });
-    } else {
-        VALIDATION_STATUS.push({ isValid: true });
-    }
-}
-
-// โค้ดนี้จะส่ง Array ของสถานะออกไปเพื่อให้ Filter Node คัดกรองต่อ
-return VALIDATION_STATUS;
-                </pre>
-                <p class="text-orange-700 text-sm mt-2">
-                    **Master Tip:** การใช้ Environment Variable (<code class="expression-code">$env.WEBHOOK_SECRET</code>) แทนการ Hardcode ค่า Secret Key ใน Flow คือมาตรฐานความปลอดภัยสูงสุด
+        <div class="step-card bg-white p-5 rounded-xl card-shadow mb-8 border-l-4 border-indigo-500">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-sitemap mr-2 text-orange-600"></i> 1.1 Workflows, Nodes, และ Data Structure (ทักษะ: n8n)
+            </h4>
+            
+            <p class="mb-4 text-gray-700">
+                N8N ทำงานบนแนวคิดของ **Workflows** ซึ่งคือชุดของขั้นตอนที่ประกอบด้วย **Nodes** แต่ละ Node ทำหน้าที่เฉพาะเจาะจงกับข้อมูลที่ไหลผ่าน
+            </p>
+            <div class="p-4 n8n-tip rounded-lg my-4">
+                <p class="font-bold text-indigo-800 mb-2 flex items-center">
+                    <i class="fas fa-cogs mr-2"></i> Core N8N Concepts
                 </p>
+                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-2">
+                    <li><span class="font-bold">Workflow:</span> เส้นทางของข้อมูลตั้งแต่จุดเริ่มต้น (Trigger) ไปจนถึงจุดสิ้นสุด</li>
+                    <li><span class="node-component">Node:</span> กล่องคำสั่งที่รับข้อมูลเข้า (Input Item) ประมวลผล และส่งข้อมูลออก (Output Item)</li>
+                    <li><span class="font-bold">Input Item / Output Item:</span> ข้อมูลจะถูกส่งผ่านเป็น Array ของ JSON Objects</li>
+                    <li><span class="font-bold text-red-600">Expression (สำคัญมาก):</span> การเขียน Code เล็กๆ เพื่อดึง/ปรับปรุงค่าจาก JSON เช่น <span class="expression-code">${{$json["Customer_Name"]}}</span></li>
+                </ul>
             </div>
             
-            <!-- Step 5.1.5: Data Validation (NEW EXPANSION) -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('alert-triangle', 'w-6 h-6 text-orange-600'));</script>
-                <span>Step 2: Data Validation: การคัดกรอง Payload ที่ไม่สมบูรณ์</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                แม้ว่า Webhook จะปลอดภัย แต่ Payload ที่ส่งมาอาจมีข้อมูลขาดหาย (Missing Fields) หรือรูปแบบผิดเพี้ยน (Wrong Data Type) เราควรใช้ **Code Node** เพื่อตรวจสอบข้อมูลสำคัญก่อนเข้าสู่ Logic หลัก เพื่อป้องกัน Flow ล้มเหลวกลางทาง
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-play-circle mr-2 text-green-600"></i> 1.2 Trigger Nodes vs. Regular Nodes
+            </h4>
+            <p class="mb-4 text-gray-700">
+                Workflow จะเริ่มต้นทำงานได้ด้วย **Trigger Node** เท่านั้น
             </p>
             
-            <div class="highlight-card p-4 rounded-lg my-4">
-                <h4 class="font-bold text-pink-800">💡 โค้ด JavaScript สำหรับ Data Validation (Required Fields)</h4>
-                <p class="text-pink-700 text-sm mt-1">
-                    ตัวอย่างการตรวจสอบว่า Payload มี `transaction_id` และ `customer_data.email` ที่ไม่เป็นค่าว่าง:
-                </p>
-                <pre class="text-sm">
-// Code Node: 5.1.2 - Data Validation
-const items = $input.json;
-const validItems = [];
-const invalidItems = [];
-
-for (const item of items) {
-    const data = item.json;
-    const errors = [];
-    
-    // Check 1: Transaction ID must be present
-    if (!data.transaction_id || data.transaction_id.trim() === '') {
-        errors.push("Missing or Empty 'transaction_id'");
-    }
-    
-    // Check 2: Customer Email must be a valid string
-    if (!data.customer_data || typeof data.customer_data.email !== 'string' || data.customer_data.email.indexOf('@') === -1) {
-        errors.push("Invalid or Missing 'customer_data.email'");
-    }
-    
-    // Check 3: Order Amount must be a number
-    if (typeof data.order_data.total_amount !== 'number' || data.order_data.total_amount <= 0) {
-        errors.push("Invalid 'order_data.total_amount'. Must be a positive number.");
-    }
-    
-    if (errors.length > 0) {
-        // ถ้ามี Error ให้ส่งไปเส้นทาง Error Log
-        item.json.validationErrors = errors;
-        invalidItems.push(item);
-    } else {
-        validItems.push(item);
-    }
-}
-
-// **สำคัญ:** โค้ดนี้ต้องส่ง Output เป็น 2 Sets (Index 0: Valid, Index 1: Invalid)
-return [validItems, invalidItems]; 
-                </pre>
-                <p class="text-pink-700 text-sm mt-2">
-                    **Master Tip:** หลังจาก Code Node นี้ ต้องใช้ **Split In Batches Node** หรือ **Merge Node** เพื่อแยก Output Index 0 (Valid) ไปยัง Logic หลัก และ Index 1 (Invalid) ไปยัง **DLQ/Error Log** เพื่อไม่ให้ Flow ล้มเหลวจากข้อมูลขยะ
-                </p>
+            <div class="border border-green-300 rounded-lg overflow-x-auto my-4 p-4 bg-green-50 text-sm">
+                <ul class="list-disc ml-6 text-gray-700 space-y-1">
+                    <li><span class="font-bold text-green-700">Trigger Nodes (เริ่มต้น):</span> เช่น <span class="node-component">Webhook</span>, <span class="node-component">Schedule</span>, หรือ <span class="node-component">AppSheet Trigger</span> (เมื่อมีการส่งข้อมูลจาก AppSheet)</li>
+                    <li><span class="font-bold text-gray-700">Regular Nodes (ดำเนินการ):</span> เช่น <span class="node-component">Google Sheets</span> (Append Row), <span class="node-component">Email Send</span>, <span class="node-component">Set</span> (ปรับปรุงข้อมูล)</li>
+                </ul>
             </div>
+        </div>
 
-
-            <!-- Step 5.1.3: Idempotency and Transaction ID (Preventing Duplicates) -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('database', 'w-6 h-6 text-purple-600'));</script>
-                <span>Step 3: Idempotency Check และ Transaction ID</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                Webhook หลาย Platform มีกลไก Retry ซ้ำ ๆ (เช่น เมื่อได้ HTTP 500) ทำให้เกิด **Duplicate Runs** ได้ N8N ต้องมีกลไกป้องกันที่เรียกว่า **Idempotency** โดยใช้ Transaction ID ที่ส่งมาจากต้นทาง (เช่น Order ID) หรือสร้าง UUID ใหม่
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-orange-400 pb-2 flex items-center">
+            <i class="fas fa-cubes w-8 h-8 mr-3 text-orange-600"></i>
+            ตารางสรุปประเภทและตัวอย่าง Nodes ของ N8N (4 หมวดหลัก)
+        </h3>
+        
+        <div class="bg-white p-5 rounded-xl card-shadow mb-8 border-l-4 border-orange-500 overflow-x-auto">
+            <p class="text-gray-700 mb-4">
+                Nodes ใน N8N แบ่งออกเป็นประเภทหลักๆ เพื่อช่วยในการวางแผน Workflow
             </p>
-            <div class="highlight-card p-4 rounded-lg my-4">
-                <h4 class="font-bold text-pink-800">🛠️ กลไก Idempotency (ใช้ Google Sheets/Redis)</h4>
-                <ol class="list-decimal list-inside ml-4 mt-2 space-y-1 text-pink-700">
-                    <li>**Set Node:** ดึง Transaction ID จาก Payload (เช่น <code class="expression-code">{{ $json.transaction_id }}</code>)</li>
-                    <li>**Google Sheets/Redis Node (Read):** ค้นหา Transaction ID นี้ในตาราง **`Processed_IDs`**</li>
-                    <li>**If Node:**
-                        <ul class="list-disc list-inside ml-4 mt-1">
-                            <li>**Condition:** <code class="expression-code">{{ $node["Google Sheets"].json["length"] }} > 0</code> (ถ้าพบ ID นี้แล้ว)</li>
-                            <li>**True Path:** **Stop Node** (หยุด Flow ทันทีและส่ง HTTP 200 กลับไป)</li>
-                            <li>**False Path:** ไปต่อที่ Logic หลักและบันทึก Transaction ID ลงในตาราง `Processed_IDs` ก่อนเริ่มประมวลผล</li>
-                        </ul>
-                    </li>
+            
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-orange-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-sm font-bold text-orange-700 uppercase tracking-wider w-1/4">ประเภท Node หลัก</th>
+                        <th class="px-4 py-3 text-left text-sm font-bold text-orange-700 uppercase tracking-wider w-1/4">วัตถุประสงค์</th>
+                        <th class="px-4 py-3 text-left text-sm font-bold text-orange-700 uppercase tracking-wider w-1/2">Nodes ตัวอย่างที่ใช้บ่อย</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                    <tr>
+                        <td class="px-4 py-3 font-bold text-indigo-700">1. Trigger Nodes</td>
+                        <td class="px-4 py-3">เป็นจุดเริ่มต้นของ Workflow (รับข้อมูลเข้า)</td>
+                        <td class="px-4 py-3">
+                            <span class="node-component">Webhook</span>, <span class="node-component">Schedule</span>, <span class="node-component">Form Trigger</span>, <span class="node-component">AppSheet Trigger</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 font-bold text-indigo-700">2. Logic / Flow Nodes</td>
+                        <td class="px-4 py-3">ควบคุมทิศทางและสร้างเงื่อนไขการทำงาน</td>
+                        <td class="px-4 py-3">
+                            <span class="node-component">If</span>, <span class="node-component">Switch</span>, <span class="node-component">Wait</span>, <span class="node-component">Split In Batches</span>, <span class="node-component">Merge</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 font-bold text-indigo-700">3. Data / Transformation Nodes</td>
+                        <td class="px-4 py-3">ปรับปรุง เปลี่ยนแปลง หรือดึงข้อมูลใน Workflow</td>
+                        <td class="px-4 py-3">
+                            <span class="node-component">Set</span> (สำคัญมาก), <span class="node-component">Code</span>, <span class="node-component">Item Lists</span>, <span class="node-component">JSON</span>, <span class="node-component">Function Item</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 font-bold text-indigo-700">4. Application / Service Nodes</td>
+                        <td class="px-4 py-3">เชื่อมต่อและแลกเปลี่ยนข้อมูลกับระบบภายนอก</td>
+                        <td class="px-4 py-3">
+                            <span class="node-component">Google Sheets</span>, <span class="node-component">Line Notify</span>, <span class="node-component">HTTP Request</span>, <span class="node-component">ChatGPT</span>, <span class="node-component">Mailchimp</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-amber-400 pb-2 flex items-center">
+            <i class="fas fa-bell w-8 h-8 mr-3 text-amber-600"></i>
+            ส่วนที่ 2: Webhooks & API: การเชื่อมต่อภายนอก
+        </h3>
+
+        <div class="step-card bg-white p-5 rounded-xl card-shadow mb-8 border-l-4 border-amber-500">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-hand-point-right mr-2 text-red-600"></i> 2.1 Webhooks (The Listener) (ทักษะ: n8n)
+            </h4>
+            <p class="mb-4 text-gray-700">
+                <span class="webhook-badge"><i class="fas fa-bolt mr-2"></i> Webhook</span> คือ URL พิเศษที่ N8N สร้างขึ้น เพื่อรอรับข้อมูลจากระบบภายนอก
+            </p>
+            <div class="p-4 n8n-tip rounded-lg my-4">
+                <p class="font-bold text-indigo-800 mb-2 flex items-center">
+                    <i class="fas fa-mouse-pointer mr-2"></i> การรับข้อมูลจาก AppSheet Automation
+                </p>
+                <ol class="list-decimal ml-6 text-sm text-gray-700 space-y-1">
+                    <li>ใน N8N: สร้าง <span class="node-component">Webhook Node</span> และ Copy URL ที่ได้มา</li>
+                    <li>ใน AppSheet Automation: สร้าง <span class="node-component">Task Webhook</span></li>
+                    <li>กำหนด URL ปลายทาง (Webhook URL) และกำหนด **Body** ของข้อมูลที่จะส่งออก (JSON Format)</li>
+                    <li>เมื่อ AppSheet บันทึกข้อมูล → จะส่ง JSON Data ไปที่ Webhook URL ของ N8N ทันที</li>
                 </ol>
             </div>
 
-            <!-- Step 5.1.4: Asynchronous Response (202 Accepted) -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('zap', 'w-6 h-6 text-green-600'));</script>
-                <span>Step 4: Asynchronous Response (HTTP 202) สำหรับ Flow ที่ซับซ้อน</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                เนื่องจาก Flow ของเรามี AI, Backoff, และหลาย Node ซึ่งใช้เวลานานเกินกว่า 30 วินาที (Timeout ของ Platform ต้นทาง) เราต้องตอบกลับ Webhook ทันทีด้วย Code <code class="expression-code">202 Accepted</code>
-            </p>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                **เทคนิค:** ใช้ **Webhook Response Node** เป็น Node ที่ 2 ใน Flow (หลังจากการ Validation พื้นฐาน) และตั้งค่า **Status Code** เป็น <code class="expression-code">202 Accepted</code> จากนั้นให้ Flow ที่เหลือเป็นการทำงานแบบเบื้องหลัง (Asynchronous Process) โดยอาจใช้ **Queue Node** หรือ **Split in Batches Node** เพื่อจัดการงาน
-            </p>
-            <pre class="text-sm">
-// โครงสร้าง Flow Asynchronous (Master Flow)
-Webhook Trigger &rarr; Code Node (HMAC/Validation) &rarr; Webhook Response Node (Status 202) &rarr; *Flow Logic หลัก*
-            </pre>
-        </div>
-
-        <!-- *************************************************************** -->
-        <!-- SECTION 5.2: RESILIENCE LOGIC AND DLQ -->
-        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
-            <div class="section-header border-blue-500 mb-6">
-                <h2 class="text-3xl font-bold gradient-text">
-                    <script>document.write(renderIcon('repeat', 'w-7 h-7 inline-block text-blue-500 mr-2'));</script>
-                    5.2 Resilience Logic: Exponential Backoff และ Dead Letter Queue (DLQ)
-                </h2>
-            </div>
-            
-            <p class="text-gray-700 leading-relaxed mb-4">
-                Flow ที่ยั่งยืนต้องไม่ล้มเหลวเพียงเพราะ API ปลายทางล่มชั่วคราว เราต้องมีกลไก Retry อัจฉริยะ (Exponential Backoff) และมีระบบกักเก็บข้อมูลที่ล้มเหลวถาวร (DLQ) เพื่อการตรวจสอบด้วยมือ
-            </p>
-
-            <!-- Step 5.2.1: Exponential Backoff Implementation -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('repeat', 'w-6 h-6 text-yellow-600'));</script>
-                <span>Step 5: การนำ Exponential Backoff มาใช้ใน Catch Block (ด้วย Code Node)</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                เราใช้ **Try/Catch Block** ร่วมกับ **Code Node** เพื่อคำนวณเวลาหน่วงในการ Retry ที่เพิ่มขึ้นเรื่อย ๆ (Exponential) และใช้ **Branching** เพื่อแยกเส้นทาง Retry ออกจาก DLQ
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-share-square mr-2 text-cyan-600"></i> 2.2 API (The Sender) (ทักษะ: n8n)
+            </h4>
+            <p class="mb-4 text-gray-700">
+                API คือการส่งคำสั่งออกไปนอกระบบ (เช่น <span class="node-component">Google Sheets Node</span> ที่ N8N ส่งคำสั่งให้ไปเพิ่มแถวใน GGS)
             </p>
             
-            <pre class="text-sm">
-// Code Node: 5.2.1 - Exponential Backoff Logic
-const MAX_RETRIES = 5; 
-const BASE_DELAY_MS = 2000; // เริ่มต้นที่ 2 วินาที (2000ms)
-
-for (const item of $input.json) {
-    // ดึงสถานะปัจจุบันของ Item
-    const currentAttempt = item.json.retryAttempt || 0;
-    
-    // ตรวจสอบว่าถึงขีดจำกัดสูงสุดหรือยัง
-    if (currentAttempt >= MAX_RETRIES) {
-        item.json.status = 'FAILED_DLQ';
-        item.json.errorDetail = item.error?.message || 'Max retries exceeded.';
-        item.json.timestamp = new Date().toISOString();
-        item.json.sendToDLQ = true; // Flag สำหรับส่งเข้า DLQ
-    } else {
-        // คำนวณเวลาหน่วง: 2^n * Base Delay
-        const calculatedDelay = Math.pow(2, currentAttempt) * BASE_DELAY_MS;
-        const delay = Math.min(calculatedDelay, 300000); // จำกัดสูงสุดที่ 5 นาที (300,000ms)
-        
-        item.json.retryAttempt = currentAttempt + 1;
-        item.json.backoffDelay = delay;
-        item.json.status = 'PENDING_RETRY';
-        item.json.sendToDLQ = false;
-    }
-}
-
-return $input.json;
-
-// #######################################################################
-            </pre>
-            
-            <h4 class="text-xl font-medium mt-6 text-indigo-700">โครงสร้าง Flow Resilience (Try/Catch/Retry/DLQ)</h4>
-            <div class="flex flex-col items-center justify-center p-6 bg-gray-100 rounded-xl my-4 card-shadow space-y-3">
-                <div class="flow-node bg-blue-200 text-blue-800 font-bold">1. Try Block Start</div>
-                <div class="arrow text-3xl font-bold">&darr;</div>
-                <div class="flow-node bg-yellow-100 text-yellow-800">API Call (HTTP Request Node)</div>
-                <div class="flex justify-between w-full max-w-sm">
-                    <div class="arrow text-xl font-bold text-green-500">Success &darr; (End Flow)</div>
-                    <div class="arrow text-xl font-bold text-red-500">Fail &darr; (To Catch Block)</div>
-                </div>
-                <div class="flow-node bg-red-100 text-red-800 font-bold">2. Catch Block Start</div>
-                <div class="arrow text-3xl font-bold">&darr;</div>
-                <div class="flow-node bg-purple-100 text-purple-800">Code Node (5.2.1 Backoff Logic)</div>
-                <div class="arrow text-3xl font-bold">&darr;</div>
-                <div class="flow-node bg-indigo-100 text-indigo-800 font-semibold">3. If Node (Check: sendToDLQ == true)</div>
-                
-                <div class="flex justify-between w-full max-w-lg mt-2">
-                    <div class="flex flex-col items-center">
-                        <div class="arrow text-xl font-bold text-green-500">False (Retry) &darr;</div>
-                        <div class="flow-node bg-green-50 text-green-700 text-sm">Wait Node (Delay: <code class="expression-code">{{ $json.backoffDelay }}</code>)</div>
-                        <div class="arrow text-xl font-bold text-green-500">Go To Node &rarr; Try Block Start (Loop)</div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div class="arrow text-xl font-bold text-red-500">True (DLQ) &darr;</div>
-                        <div class="flow-node bg-red-50 text-red-700 text-sm">HTTP Request Node &rarr; DLQ Webhook</div>
-                        <div class="arrow text-xl font-bold text-red-500">End Flow</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 5.2.2: Dead Letter Queue (DLQ) Workflow -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('shield-alert', 'w-6 h-6 text-red-600'));</script>
-                <span>Step 6: Dead Letter Queue (DLQ) Workflow และการ Re-queue</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                DLQ คือ Flow แยกต่างหากที่ทำหน้าที่เพียงรับ บันทึก และแจ้งเตือนข้อมูลที่ล้มเหลวถาวร เพื่อให้เราสามารถแก้ไขปัญหาด้วยมือ (Manual Intervention) และนำกลับเข้าสู่ Flow หลักอีกครั้ง (Re-queue)
-            </p>
-            <h4 class="text-xl font-medium mt-6 text-indigo-700">โครงสร้าง DLQ Workflow</h4>
-            <ol class="list-decimal list-inside ml-4 mt-2 space-y-1 text-gray-700">
-                <li>**Webhook Trigger:** รับ Payload ที่มี `sendToDLQ: true` จาก Flow หลัก</li>
-                <li>**Set Node:** จัดรูปแบบข้อมูลสำหรับ Log โดยเพิ่ม `Flow_Name`, `Manual_Status: Pending Review`</li>
-                <li>**Google Sheets/DB Node:** บันทึก Payload ทั้งหมดลงในตาราง **`DLQ_Error_Log`**</li>
-                <li>**Notification Node:** ส่งแจ้งเตือนระดับ **Critical Alert** ผ่าน Line/Slack/Email พร้อมแนบ Transaction ID</li>
-            </ol>
-            
-            <h4 class="text-xl font-medium mt-6 text-indigo-700">กลไก Re-queue (การนำข้อมูลกลับเข้าสู่ระบบ)</h4>
-            <p class="mt-2 text-gray-700 leading-relaxed">
-                กลไกนี้เป็น Flow แยกที่รันตามเวลาที่กำหนด (Scheduled) เพื่อจัดการข้อมูลใน DLQ Log:
-            </p>
-            <pre class="text-sm">
-// โครงสร้าง Flow Re-queue
-Cron/Interval Node (ทุก 30 นาที) &rarr; Google Sheets (Read: Where Status == 'Ready to Requeue') &rarr; 
-Code Node (JSON.parse(Original_Payload)) &rarr; HTTP Request Node (Target: Webhook Flow หลัก) &rarr; 
-Google Sheets (Update Status to 'Requeued')
-            </pre>
-            
-            <div class="highlight-card p-4 rounded-lg my-4">
-                <h4 class="font-bold text-pink-800">💡 โค้ด JavaScript สำหรับ JSON Parse (สำคัญมากสำหรับ Re-queue)</h4>
-                <p class="text-pink-700 text-sm mt-1">
-                    เมื่อคุณดึง `Original_Payload` ที่ถูกบันทึกเป็น JSON String จาก Google Sheets/DB คุณต้องแปลงกลับเป็น JSON Object ก่อนยิงกลับเข้า Flow หลัก:
+            <div class="border border-cyan-300 rounded-lg overflow-x-auto my-4 p-4 bg-cyan-50 text-sm">
+                <p class="font-bold text-cyan-700 mb-2">บทบาทของ HTTP Request Node</p>
+                <p class="text-gray-700">
+                    <span class="node-component">HTTP Request Node</span> ใช้สำหรับเชื่อมต่อกับ API ใดๆ ที่ไม่มี Node สำเร็จรูปใน N8N
                 </p>
-                <pre class="text-sm">
-// Code Node: 5.2.2 - Parsing Original Payload (Re-queue Flow)
-const items = $input.json;
-const payloadToRequeue = [];
-
-for (const item of items) {
-    const originalPayloadString = item.json.Original_Payload_JSON; 
-    
-    try {
-        // **Critical Step:** แปลง JSON String กลับเป็น Object
-        const parsedPayload = JSON.parse(originalPayloadString);
-        
-        // เราต้องส่ง Payload ที่สะอาดและไม่มี metadata ของ DLQ กลับเข้า Flow หลัก
-        payloadToRequeue.push({ json: parsedPayload }); 
-        
-    } catch (e) {
-        console.error(`Error parsing payload for re-queue: ${e.message}`);
-        // ควรมี Logic แจ้งเตือนถ้า JSON Parse ล้มเหลว
-    }
-}
-
-return payloadToRequeue; // ส่งออก Payload ที่พร้อมยิง Webhook
-                </pre>
-            </div>
-        </div>
-
-        <!-- *************************************************************** -->
-        <!-- SECTION 5.3: STRUCTURED AI AGENT INTEGRATION (EXPANDED) -->
-        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
-            <div class="section-header border-blue-500 mb-6">
-                <h2 class="text-3xl font-bold gradient-text">
-                    <script>document.write(renderIcon('cpu', 'w-7 h-7 inline-block text-blue-500 mr-2'));</script>
-                    5.3 Structured AI Agent: JSON Schema Output และ Decision Gates (ขยายตัวอย่าง)
-                </h2>
-            </div>
-            <p class="text-gray-700 leading-relaxed mb-4">
-                การเรียกใช้ AI ใน N8N ต้องมีเป้าหมายที่ชัดเจนคือการได้ผลลัพธ์ในรูปแบบที่เครื่องจักรเข้าใจ (JSON Schema) ไม่ใช่แค่ข้อความธรรมดา เพื่อนำไปใช้ในการตัดสินใจต่อใน Flow
-            </p>
-
-            <!-- Step 5.3.1: Data Pre-processing -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('code', 'w-6 h-6 text-yellow-600'));</script>
-                <span>Step 7: Data Pre-processing: การเตรียมข้อมูลให้ AI</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                ก่อนส่งข้อมูลเข้า LLM Node ควรใช้ **Code Node** เพื่อทำความสะอาดข้อมูล, ตรวจสอบค่าว่าง (Null), และจัดรูปแบบให้อ่านง่าย (Normalization) ดังเช่นตัวอย่างการแปลงตัวเลขรายได้เป็น String ที่มีหน่วย
-            </p>
-            
-            <pre class="text-sm">
-// Code Node: 5.3.1 - Data Pre-processing for LLM
-const items = $input.json;
-const currency = "บาท";
-
-for (const item of items) {
-    const rawRevenue = item.json.order_data.total_amount;
-    let formattedRevenue;
-    
-    if (rawRevenue && typeof rawRevenue === 'number' && rawRevenue > 1000000) {
-        // แปลงตัวเลขหลักล้านให้อ่านง่าย
-        formattedRevenue = `${(rawRevenue / 1000000).toFixed(1)} ล้าน${currency}`;
-    } else if (rawRevenue) {
-        formattedRevenue = `${rawRevenue.toLocaleString()} ${currency}`;
-    } else {
-        formattedRevenue = `ไม่ระบุ`;
-    }
-
-    // เพิ่ม Field ใหม่สำหรับ Prompt
-    item.json.llm_input_data = {
-        customer_name: item.json.customer_data.name || 'ไม่ระบุ',
-        order_amount_text: formattedRevenue,
-        order_status: item.json.order_data.status
-    };
-}
-return items;
-            </pre>
-
-            <!-- Step 5.3.2: Example 1: Order Triage and Prioritization (Original) -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('cpu', 'w-6 h-6 text-green-600'));</script>
-                <span>Step 8: ตัวอย่าง 1: Order Triage ด้วย JSON Schema Output</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                **วัตถุประสงค์:** จัดลำดับความสำคัญของใบสั่งซื้อโดย AI เพื่อใช้ใน If Node
-            </p>
-            
-            <pre class="text-sm">
-// System Prompt: กำหนดบทบาทและกฎเกณฑ์ (MUST FOLLOW)
-"คุณคือผู้ประเมินความเสี่ยงและจัดลำดับความสำคัญของใบสั่งซื้อ (Order Triage Agent) หน้าที่ของคุณคือการประเมินใบสั่งซื้อตามความเร่งด่วนและความเสี่ยงการยกเลิก"
-
-// JSON Schema (กำหนดโครงสร้างผลลัพธ์ที่แน่นอน)
-{
-  "type": "object",
-  "properties": {
-    "priority": { "type": "string", "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW"] },
-    "risk_score": { "type": "number", "description": "คะแนนความเสี่ยง 1-100" },
-    "is_escalated": { "type": "boolean" },
-    "reasoning": { "type": "string" }
-  },
-  "required": ["priority", "risk_score"]
-}
-
-// If Node Condition (Decision Gate)
-Condition 1: <code class="expression-code">{{ $node["LLM Node"].json["priority"] }}</code> equals <code class="expression-code">CRITICAL</code> &rarr; ส่งให้ทีม Sales ทันที
-Condition 2: <code class="expression-code">{{ $node["LLM Node"].json["risk_score"] }}</code> is greater than <code class="expression-code">80</code> &rarr; ส่ง Alert ไปยัง Line/Slack
-            </pre>
-            
-            <!-- Step 5.3.3: Example 2: Product Categorization and Tagging (NEW EXPANSION) -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('cpu', 'w-6 h-6 text-green-600'));</script>
-                <span>Step 9: ตัวอย่าง 2: Product Categorization และ Tagging (Multi-Dimensional Output)</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                **วัตถุประสงค์:** จัดหมวดหมู่สินค้าใหม่และสร้าง Tag สำหรับ SEO/Inventory โดยใช้ AI วิเคราะห์จากคำบรรยายสินค้า (Long Description)
-            </p>
-            
-            <pre class="text-sm">
-// System Prompt: กำหนดให้ AI เป็น Content Manager
-"คุณคือผู้เชี่ยวชาญด้านการจัดหมวดหมู่สินค้า (Product Catalog Manager) หน้าที่ของคุณคือการอ่านคำบรรยายสินค้า และจัดกลุ่มหมวดหมู่หลัก, หมวดหมู่ย่อย, และสร้าง 3-5 keywords สำหรับ SEO"
-
-// User Prompt Template (ใช้ Long Product Description)
-"โปรดวิเคราะห์คำบรรยายสินค้าต่อไปนี้ และตอบกลับเป็น JSON Array (เนื่องจากอาจมีสินค้าหลายรายการ):
-{{ $json.product_data.long_description }}"
-
-// JSON Schema (กำหนดโครงสร้างผลลัพธ์เป็น Array ของ Object)
-{
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "product_id": { "type": "string" },
-      "category_main": { "type": "string", "enum": ["Electronics", "Apparel", "Home Goods", "Other"] },
-      "category_sub": { "type": "string" },
-      "keywords_list": { "type": "array", "items": { "type": "string" } },
-      "is_seasonal": { "type": "boolean" }
-    },
-    "required": ["product_id", "category_main", "keywords_list"]
-  }
-}
-            </pre>
-            
-            <h4 class="text-xl font-medium mt-6 text-indigo-700">การนำ Array Output ไปใช้ใน Flow ต่อไป</h4>
-            <p class="mt-2 text-gray-700 leading-relaxed">
-                เนื่องจาก AI ส่งผลลัพธ์เป็น **Array** ของ Object เราสามารถส่ง Output นี้ตรงไปยัง Node เช่น **Split In Batches Node** หรือ **Item Lists Node** เพื่อวนลูป (Loop) จัดการแต่ละสินค้าต่อไปได้ทันที โดยไม่ต้องแปลงข้อมูลอีก
-            </p>
-        </div>
-
-        <!-- *************************************************************** -->
-        <!-- SECTION 5.6: ADVANCED DATA TRANSFORMATION (NEW EXPANSION) -->
-        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
-            <div class="section-header border-blue-500 mb-6">
-                <h2 class="text-3xl font-bold gradient-text">
-                    <script>document.write(renderIcon('code', 'w-7 h-7 inline-block text-blue-500 mr-2'));</script>
-                    5.6 Advanced Data Transformation: JSDO และ Item Manipulation
-                </h2>
-            </div>
-            <p class="text-gray-700 leading-relaxed mb-4">
-                ใน Flow ระดับ Master เราต้องเผชิญกับข้อมูลจาก API ที่มีโครงสร้างแปลก ๆ (เช่น ข้อมูลซ้อนกันหลายชั้น) หรือต้องการรวมข้อมูลจากหลาย Node เข้าด้วยกันในรูปแบบที่เฉพาะเจาะจง **Code Node** คือเครื่องมือเดียวที่ให้ความยืดหยุ่นนี้
-            </p>
-            
-            <!-- Step 5.6.1: Flattening Nested JSON -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('database', 'w-6 h-6 text-yellow-600'));</script>
-                <span>Step 10: Flattening Nested JSON (การดึงข้อมูลจากโครงสร้างซ้อนกัน)</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                API หลายตัวส่งข้อมูลที่ซ้อนกัน (Nested Data) ซึ่งยากต่อการ Map ใน Node ทั่วไป เราใช้ JS เพื่อ **Flatten** ให้เป็น Object ระดับเดียว (Single Level)
-            </p>
-            <pre class="text-sm">
-// Code Node: 5.6.1 - Flatten Customer Data
-const items = $input.json;
-
-for (const item of items) {
-    const original = item.json;
-    
-    // ตรวจสอบและดึงข้อมูลที่ซ้อนกัน
-    const customer = original.data.customer_info || {};
-    const address = customer.billing_address || {};
-    
-    // Flattening (สร้าง Object ใหม่ที่มี Field ระดับเดียว)
-    item.json = {
-        transaction_id: original.transaction_id,
-        // ดึงค่าจากระดับที่ 3
-        customer_name: customer.full_name,
-        customer_email: customer.email,
-        
-        // ดึงค่าจากระดับที่ 4
-        billing_city: address.city,
-        billing_zip: address.zip_code,
-
-        // เก็บข้อมูลดิบไว้ใน case ที่จำเป็น
-        _original_payload: original
-    };
-}
-return items;
-            </pre>
-
-            <!-- Step 5.6.2: Merging Multiple Inputs (JSDO) -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('git-branch', 'w-6 h-6 text-green-600'));</script>
-                <span>Step 11: Merging Multiple Inputs (การรวมข้อมูลจากหลาย Node)</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                หลังจากใช้ **Merge Node** เราสามารถใช้ Code Node เพื่อรวมผลลัพธ์จากหลาย Node เข้าด้วยกันอย่างมีตรรกะ โดยใช้ <code class="expression-code">$item(index)</code>
-            </p>
-            <pre class="text-sm">
-// Code Node: 5.6.2 - Merging Data (หลัง Merge Node)
-// สมมติว่า Input 0 คือ Customer Data, Input 1 คือ Order Details
-const items = $input.item; // ใน n8n $input.item ใช้ได้หลัง Merge Node
-
-const customerData = items[0].json; 
-const orderDetails = items[1].json;
-
-const mergedOutput = {
-    // รวม Field ที่ต้องการ
-    transaction_id: orderDetails.transaction_id,
-    customer_id: customerData.id,
-    customer_name: customerData.full_name,
-    
-    // คำนวณ Field ใหม่
-    total_amount: orderDetails.amount,
-    date_processed: new Date().toISOString()
-};
-
-return [{ json: mergedOutput }];
-            </pre>
-
-            <!-- Step 5.6.3: Complex Looping and Batching -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('repeat', 'w-6 h-6 text-purple-600'));</script>
-                <span>Step 12: การสร้าง Item List จาก Array ภายใน Payload</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                หาก Webhook ส่งรายการสินค้า (Line Items) มาใน Payload เดียวกัน เราต้องแยกแต่ละ Line Item ออกเป็น 1 Item ใน N8N เพื่อให้ Node ถัดไป (เช่น Google Sheets Node) บันทึกแต่ละรายการลงในฐานข้อมูลอย่างถูกต้อง (Batching/Loop Preparation)
-            </p>
-            <pre class="text-sm">
-// Code Node: 5.6.3 - Splitting Line Items
-const items = $input.json;
-const lineItems = [];
-
-for (const item of items) {
-    const orderId = item.json.transaction_id;
-    const itemsArray = item.json.order_data.line_items || [];
-    
-    for (const lineItem of itemsArray) {
-        // สร้าง Item ใหม่สำหรับแต่ละ Line Item
-        lineItems.push({ 
-            json: {
-                parent_order_id: orderId,
-                product_sku: lineItem.sku,
-                quantity: lineItem.qty,
-                price_per_unit: lineItem.price
-            }
-        });
-    }
-}
-
-// โค้ดนี้เปลี่ยน 1 Input Item (Order) ให้เป็นหลาย Output Items (Line Items)
-return lineItems;
-            </pre>
-        </div>
-        
-        <!-- *************************************************************** -->
-        <!-- SECTION 5.4: PRODUCTION-GRADE LOGIC & STATE MANAGEMENT -->
-        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
-            <div class="section-header border-blue-500 mb-6">
-                <h2 class="text-3xl font-bold gradient-text">
-                    <script>document.write(renderIcon('database', 'w-7 h-7 inline-block text-blue-500 mr-2'));</script>
-                    5.4 Production Flow: State Management และ Multi-Step Idempotency
-                </h2>
-            </div>
-            <p class="text-gray-700 leading-relaxed mb-4">
-                Flow ที่รันหลายขั้นตอน (เช่น สร้างลูกค้าใน CRM, สร้าง Invoice, ส่งอีเมล) จำเป็นต้องมีการบันทึกสถานะชั่วคราว (State Management) เพื่อป้องกันความผิดพลาดหาก Flow ถูกหยุดกลางคัน และรักษา Idempotency ของแต่ละ Step
-            </p>
-
-            <!-- Step 5.4.1: State Management with Redis/Google Sheets -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('database', 'w-6 h-6 text-purple-600'));</script>
-                <span>Step 13: การจัดการสถานะ (State Management) ระหว่าง Node</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                เมื่อ Flow รันเสร็จสิ้น Node หนึ่ง ๆ เราต้องบันทึกสถานะความสำเร็จของ Step นั้นลงในฐานข้อมูลชั่วคราว (เช่น Redis หรือ Google Sheets) เพื่อไม่ให้ทำซ้ำใน Step ถัดไป
-            </p>
-            <h4 class="text-xl font-medium mt-6 text-indigo-700">ตัวอย่าง: การป้องกันการสร้างลูกค้าซ้ำซ้อน</h4>
-            <ol class="list-decimal list-inside ml-4 mt-2 space-y-1 text-gray-700">
-                <li>**Step 1: Check:** ตรวจสอบใน DB/Redis ว่า `CustomerID: [ID]` มี Field `CRM_Created: true` หรือยัง</li>
-                <li>**Step 2: Create Customer (True Path):** ถ้าไม่มี ให้สร้างลูกค้าใน CRM</li>
-                <li>**Step 3: Update State:** ใช้ **Redis Node** (หรือ Google Sheets Node) เพื่อบันทึก:
-                    <pre class="text-sm">
-// Redis Node: Set Key-Value
-Key: <code class="expression-code">customer_state:{{ $json.customer_data.id }}</code>
-Value: <code class="expression-code">{"CRM_Created": true, "Invoice_Generated": false, "Timestamp": "{{ NOW() }}"}</code>
-                    </pre>
-                </li>
-                <li>**Step 4: Check Invoice:** ใน Step ต่อไป (สร้าง Invoice) ให้ตรวจสอบ `Invoice_Generated` ว่าเป็น `false` ก่อนดำเนินการต่อ</li>
-            </ol>
-            <p class="text-gray-700 leading-relaxed mt-3">
-                การจัดการสถานะนี้ทำให้ Flow ของเรามีความทนทานต่อการรันซ้ำ และรับประกันว่าแต่ละ Action จะถูกดำเนินการเพียงครั้งเดียว (True Idempotency)
-            </p>
-
-            <!-- Step 5.4.2: Execution Hooks and Error Handling -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('alert-triangle', 'w-6 h-6 text-red-600'));</script>
-                <span>Step 14: การใช้ Execution Hooks และ Catch-All Error Handler</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                N8N มีความสามารถในการกำหนด **Error Workflow** ส่วนกลางที่รับผิดชอบการจัดการ Error ที่ Node ต่าง ๆ จับไม่ได้ (Uncaught Error)
-            </p>
-            <ol class="list-decimal list-inside ml-4 mt-2 space-y-1 text-gray-700">
-                <li>**สร้าง Error Workflow:** Flow ใหม่ที่เริ่มต้นด้วย **Error Trigger Node**</li>
-                <li>**การทำงานของ Error Flow:** Flow นี้จะรับข้อมูล Error (เช่น `error.message`, `error.nodeName`) จาก Flow ที่ล้มเหลวทั้งหมด</li>
-                <li>**Logging:** บันทึก Error Log อย่างละเอียดลงใน DB/Sheets (คล้าย DLQ)</li>
-                <li>**Notification:** ส่ง Critical Alert ไปยังผู้ดูแลระบบ</li>
-                <li>**Setting:** ใน Flow หลัก ให้ไปที่ **Workflow Settings > Error Handling** และเลือกให้ส่ง Uncaught Error ไปยัง **Error Workflow** ที่สร้างไว้</li>
-            </ol>
-            <p class="text-gray-700 leading-relaxed mt-3">
-                นี่คือ **Global Safety Net** ที่ทำให้ Flow Production ของเราไม่เงียบหายเมื่อเกิดข้อผิดพลาดที่ไม่คาดคิด
-            </p>
-        </div>
-        
-        <!-- *************************************************************** -->
-        <!-- SECTION 5.5: MONITORING AND HEALTH CHECK -->
-        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
-            <div class="section-header border-blue-500 mb-6">
-                <h2 class="text-3xl font-bold gradient-text">
-                    <script>document.write(renderIcon('activity', 'w-7 h-7 inline-block text-blue-500 mr-2'));</script>
-                    5.5 Monitoring, Health Check, และ API Credential Management
-                </h2>
-            </div>
-            <p class="text-gray-700 leading-relaxed mb-4">
-                Automation Engine ที่ทำงานเบื้องหลังต้องมีการตรวจสอบสถานะอย่างต่อเนื่อง (Active Monitoring) เพื่อให้เราทราบปัญหาก่อนที่ผู้ใช้จะรู้
-            </p>
-
-            <!-- Step 5.5.1: Active Health Check -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('bell', 'w-6 h-6 text-yellow-600'));</script>
-                <span>Step 15: Active Health Check (การตรวจสอบสถานะระบบภายนอก)</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                Flow ที่รันตามเวลาที่กำหนด (Cron/Interval Node) เพื่อตรวจสอบการเชื่อมต่อกับระบบที่สำคัญ (เช่น CRM, Payment Gateway) ด้วยการทำ API Call ที่เรียบง่าย (เช่น ดึง Record 1 แถว)
-            </p>
-            <pre class="text-sm">
-// โครงสร้าง Flow Health Check
-Cron Node (ทุก 60 นาที) &rarr; HTTP Request Node (GET /api/v1/health) &rarr; 
-If Node (Check: Status Code == 200) 
-    &rarr; True: Log Success (Google Sheets/DB)
-    &rarr; False: Email/Line Critical Alert (API Is Down)
-            </pre>
-            
-            <!-- Step 5.5.2: API Credential Rotation -->
-            <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2 border-b pb-2">
-                <script>document.write(renderIcon('key', 'w-6 h-6 text-red-600'));</script>
-                <span>Step 16: การจัดการ API Credential และ Rotation</span>
-            </h3>
-            <p class="mt-3 text-gray-700 leading-relaxed">
-                Credential ที่มีวันหมดอายุต้องได้รับการจัดการอย่างเป็นระบบ N8N ช่วยให้เราสามารถใช้ **Environment Variable** ในการเก็บ API Key ได้ ซึ่งทำให้เราสามารถเปลี่ยน Key ทั้งหมดได้โดยไม่ต้องแก้ไข Flow เลย
-            </p>
-            <div class="warning-card p-4 rounded-lg my-4">
-                <h4 class="font-bold text-orange-800">Master Practice: Hardcode vs. Environment Variable</h4>
-                <ul class="list-disc list-inside ml-4 mt-2 space-y-1 text-orange-700">
-                    <li>**ไม่ควร** Hardcode API Key ใน Credential Node หรือ Code Node</li>
-                    <li>**ควรใช้** <code class="expression-code">${{ $env.CRM_API_KEY }}</code> ใน Credential Settings</li>
-                    <li>**Rotation:** เมื่อ Key หมดอายุ ทีม DevOps/IT สามารถอัปเดตค่าในไฟล์ Environment (.env) ของ N8N ได้โดยไม่ต้องเปิด N8N UI</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- *************************************************************** -->
-        <!-- FINAL CHECKLIST & CONCLUSION -->
-        <!-- *************************************************************** -->
-        <hr class="my-6 border-t border-gray-200">
-
-        <!-- บทสรุป Day 4 (Updated Checklist) -->
-        <div class="bg-white p-6 rounded-xl card-shadow mt-8">
-            <div class="section-header border-green-500">
-                <h2 class="text-3xl font-bold" style="color: #10b981;">
-                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                    สรุป Day 4: N8N Master Checklist (ฉบับสมบูรณ์)
-                </h2>
-            </div>
-            
-            <div class="mt-4 p-6 bg-green-50 rounded-xl card-shadow">
-                <p class="text-green-800 font-semibold mb-3">เมื่อเสร็จสิ้น Workshop นี้ ท่านจะสามารถ:</p>
-                <ul class="list-disc list-inside space-y-3 text-gray-700 ml-4">
-                    <li>✅ ตั้งค่า **Webhook Trigger** พร้อมการยืนยันความถูกต้องด้วย **HMAC Verification** (ด้วย Code Node)</li>
-                    <li>✅ ใช้ **Data Validation** (Code Node) เพื่อคัดกรอง Payload ที่ไม่สมบูรณ์ตั้งแต่ต้นทาง</li>
-                    <li>✅ ใช้กลไก **Idempotency Check** เพื่อป้องกันการรัน Flow ซ้ำซ้อนจาก Webhook Retry</li>
-                    <li>✅ ส่ง **Asynchronous Response (HTTP 202)** เพื่อป้องกัน Timeout ใน Flow ที่ใช้เวลานาน</li>
-                    <li>✅ สร้าง **Resilience Logic** ด้วย **Exponential Backoff Algorithm** (JS Code) เพื่อจัดการ Retry ชั่วคราว</li>
-                    <li>✅ ออกแบบ **Dead Letter Queue (DLQ) Workflow** และสร้างกลไก **Re-queue** ด้วย Google Sheets/DB</li>
-                    <li>✅ กำหนด **Structured AI Agent** ด้วย **JSON Schema Output** (ตัวอย่าง 2 รูปแบบ) เพื่อให้ได้ผลลัพธ์ที่นำไปใช้ใน Decision Gate ได้ทันที</li>
-                    <li>✅ ใช้เทคนิค **Advanced Data Transformation** (Flattening, Merging, Looping) ด้วย Code Node</li>
-                    <li>✅ นำ **State Management** มาใช้ใน Flow หลายขั้นตอนเพื่อรักษา True Idempotency ของแต่ละ Step</li>
-                    <li>✅ สร้าง **Global Error Workflow** (Execution Hook) เพื่อจับ Error ที่ไม่คาดคิดทั้งหมด</li>
-                    <li>✅ ตั้งค่า **Active Health Check** และจัดการ **API Credential** ด้วย Environment Variables</li>
+                <ul class="list-disc ml-6 text-xs text-gray-600 mt-2">
+                    <li><span class="font-bold">Method:</span> <span class="expression-code">POST</span> (สำหรับส่ง/สร้างข้อมูลใหม่) หรือ <span class="expression-code">GET</span> (สำหรับดึงข้อมูล)</li>
+                    <li><span class="font-bold">Header:</span> ใช้สำหรับส่ง API Key หรือ Token</li>
                 </ul>
             </div>
         </div>
         
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-purple-400 pb-2 flex items-center">
+            <i class="fas fa-microchip w-8 h-8 mr-3 text-purple-600"></i>
+            ตัวอย่างสาธิต: JSON Data Flow จาก AppSheet เข้า N8N
+        </h3>
+
+        <div class="step-card bg-white p-5 rounded-lg shadow-md mb-8 border-l-4 border-purple-500">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-file-code mr-2 text-pink-600"></i> 3.0 การทำความเข้าใจโครงสร้าง JSON (JSON Payload)
+            </h4>
+            <p class="mb-4 text-gray-700">
+                เมื่อ AppSheet ส่ง Webhook ข้อมูลจะอยู่ในรูปแบบ **JSON Array** ซึ่ง N8N จะรับเข้ามาเป็น Input Item ที่ต้องถูกประมวลผลต่อ
+            </p>
+            
+            <div class="json-structure p-5">
+                <p class="font-bold text-purple-800 mb-3 text-center">ภาพจำลอง: JSON Payload จาก AppSheet (ส่งข้อมูล 1 รายการ)</p>
+                
+                <div class="json-box mb-4">
+                    [<br>
+                    &nbsp;&nbsp;{<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"Action Type"</span>: <span class="json-value">"Add"</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"TableName"</span>: <span class="json-value">"Sales_Transactions"</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"Data"</span>: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"TXN_ID"</span>: <span class="json-value">"TXN-251025-ABCD"</span>, <span class="text-gray-400">// Primary Key</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"Customer_Ref"</span>: <span class="json-value">"CUST-001"</span>, <span class="text-gray-400">// Foreign Key</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"Item_Name"</span>: <span class="json-value">"Coffee Maker (Deluxe)"</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"Quantity"</span>: <span class="json-value">5</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"Price"</span>: <span class="json-value">1500.00</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    ]
+                </div>
+                
+                <p class="font-bold text-purple-800 mb-3 text-center">Data Mapping ใน N8N (Set Node)</p>
+                <div class="text-center flex items-center justify-center space-x-4">
+                    <div class="bg-purple-100 p-2 rounded-md font-semibold text-purple-800 text-sm">JSON Path (AppSheet)</div>
+                    <i class="fas fa-long-arrow-alt-right text-purple-600 text-2xl"></i>
+                    <div class="bg-green-100 p-2 rounded-md font-semibold text-green-800 text-sm">Target Column (Google Sheets)</div>
+                </div>
+                
+                <div class="mt-3 bg-white p-3 rounded-lg border border-purple-300 text-sm">
+                    <ul class="list-disc ml-6 text-gray-700 space-y-1">
+                        <li>ดึง Transaction ID: <span class="expression-code">${{$json.Data.TXN_ID}}</span> → คอลัมน์ A (ID_TRANSACTION)</li>
+                        <li>ดึง Customer ID: <span class="expression-code">${{$json.Data.Customer_Ref}}</span> → คอลัมน์ B (FK_CUSTOMER)</li>
+                        <li>ดึง Quantity: <span class="expression-code">${{$json.Data.Quantity}}</span> → คอลัมน์ D (QTY)</li>
+                    </ul>
+                </div>
+                
+                <p class="text-sm text-gray-500 italic mt-3">
+                    <i class="fas fa-exclamation-triangle mr-1 text-yellow-500"></i> จุดสำคัญ: N8N จะมองข้อมูลใน JSON Array นี้เป็น 1 Input Item (หรือมากกว่า หาก AppSheet ส่งข้อมูลมาหลายรายการ)
+                </p>
+            </div>
+        </div>
+
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-pink-400 pb-2 flex items-center">
+            <i class="fas fa-list-check w-8 h-8 mr-3 text-pink-600"></i>
+            Workshop 1: สร้าง Workflow Data Entry
+        </h3>
+
+        <div class="step-card bg-white p-5 rounded-xl card-shadow mb-8 border-l-4 border-pink-500">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-drafting-compass mr-2 text-purple-600"></i> 3.1 การวางแผน Workflow (Plan)
+            </h4>
+            <p class="mb-4 text-gray-700">
+                **โจทย์:** เมื่อมีการบันทึกรายการขายใน AppSheet ให้ N8N รับข้อมูลและบันทึกข้อมูลนั้นลงใน GGS อีก Sheet (หรือ GGS อื่น) พร้อมส่ง Line Notify
+            </p>
+            <p class="text-center font-bold text-indigo-700 bg-indigo-100 p-3 rounded-lg mt-4 text-lg">
+                AppSheet (Webhook) → <span class="node-component">N8N Webhook</span> → <span class="node-component">Google Sheets Node</span> → <span class="node-component">Line Notify</span>
+            </p>
+
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-code-branch mr-2 text-orange-600"></i> 3.2 การจัดการ Data Flow (Logic Nodes)
+            </h4>
+            <p class="mb-4 text-gray-700">
+                เราใช้ Node เช่น <span class="node-component">Set</span> และ <span class="node-component">If</span> เพื่อเตรียมข้อมูลและสร้างเงื่อนไข
+            </p>
+            
+            <div class="border border-orange-300 rounded-lg overflow-x-auto my-4 p-4 bg-orange-50">
+                <p class="font-bold text-orange-700 mb-2">ตัวอย่างการใช้ Nodes ที่สำคัญ</p>
+                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-2">
+                    <li><span class="node-component">Set Node:</span> ใช้เปลี่ยนชื่อ Key ใน JSON (Map Data) เช่น เปลี่ยน <span class="expression-code">SaleID</span> ที่มาจาก AppSheet เป็น <span class="expression-code">Transaction_ID</span> ที่จะใส่ใน GGS</li>
+                    <li><span class="node-component">If Node:</span> ใช้สร้างเงื่อนไขการทำงาน เช่น "ถ้า <span class="expression-code">${{$json["Total_Price"]}}</span> มากกว่า 10,000 ให้เดินไปที่ Branch A (ส่งอีเมลผู้จัดการ) ถ้าไม่ถึง ให้ไป Branch B (ส่ง Line Notify พนักงาน)"</li>
+                    <li><span class="node-component">Code Node:</span> ใช้เขียน JavaScript เพื่อประมวลผลข้อมูลที่ซับซ้อน เช่น การคำนวณภาษีหลายชั้น หรือการ Format วันที่</li>
+                </ul>
+            </div>
+            
+        </div>
+
+
+        <div class="mt-12 text-center p-6 bg-indigo-50 rounded-lg card-shadow border-t-4 border-indigo-700">
+            <p class="font-bold text-2xl text-indigo-800 mb-2">
+                <i class="fas fa-check-circle mr-2"></i> สรุปสิ่งที่ผู้เรียนจะได้จาก Day 4 Part 1
+            </p>
+            <p class="text-gray-700 text-lg">
+                ผู้เรียนเข้าใจหลักการทำงานของ N8N, Webhooks และ API สามารถสร้าง Workflow พื้นฐานเพื่อรับข้อมูลจาก AppSheet และนำไปบันทึก/ส่งต่อในระบบอื่นได้อย่างอัตโนมัติ พร้อมทั้งใช้ Logic Node (Set, If) เพื่อควบคุม Data Flow ได้
+            </p>
+            <a href="day5_automation.html" class="inline-flex items-center mt-4 px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition duration-150">
+                <span class="mr-2">ไปยัง Day 5: Workshop เชื่อมต่ออัตโนมัติด้วย N8N (Part 2)</span> <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
     </main>
 
-    <!-- Footer Section (Consistent with Day 2/3 - Tailwind Structure) -->
     <footer class="bg-gray-800 text-white py-6 mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p>&copy; 2025 AI Automation & Data Integration Master. | เอกสารประกอบการสอนโดย อ.แทน [ธีรชัย โฉมทัพ]</p>
-            <p class="text-sm text-gray-400 mt-1">Head of Digital Transformation</p>
         </div>
     </footer>
 

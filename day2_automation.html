@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Day 2: การออกแบบ Logic/Flow Automation ขั้นสูง</title>
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+Thai:wght@100..900&display=swap');
         :root {
-            --primary-color: #3b82f6; /* Blue-500 */
-            --gradient-start: #3b82f6;
-            --gradient-end: #6366f1; /* Indigo-500 */
+            --primary-color: #7c3aed; /* Violet-600 for Day 2 focus */
+            --gradient-start: #7c3aed;
+            --gradient-end: #c084fc; /* Violet-400 */
+            --logic-color: #ef4444; /* Red-500 for Logic */
+            --flow-color: #10b981; /* Emerald-500 for Flow */
         }
         body {
             font-family: 'Noto Sans Thai', 'Inter', sans-serif;
@@ -26,739 +27,506 @@
         .card-shadow {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        .section-header {
+        .step-card {
             border-left: 5px solid var(--primary-color);
-            padding-left: 1rem;
-            margin-top: 2rem;
+            transition: all 0.3s ease;
         }
-        /* Custom Node Styles for Diagram */
-        .flow-node {
-            background-color: white;
-            padding: 0.75rem 1.25rem;
-            border-radius: 0.5rem;
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
-        }
-        .flow-node:hover {
+        .step-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
         }
-        .arrow {
-            color: #3b82f6;
+        .code-snippet {
+            font-family: monospace;
+            background-color: #e2e8f0;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            color: #334155;
+            display: inline-block;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
         }
-        /* Style for code blocks within the content */
         pre {
-            background-color: #1e293b; /* Slate-800 */
-            color: #f1f5f9; /* Slate-100 */
-            padding: 1rem;
-            border-radius: 0.5rem;
-            overflow-x: auto;
             white-space: pre-wrap;
             word-wrap: break-word;
         }
-        
+        .highlight-logic {
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
+        }
+        /* Custom CSS for Flowchart Diagram */
+        .flow-diagram-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #f0fdfa; /* Teal 50 */
+            border-radius: 12px;
+            border: 1px dashed #0d9488;
+        }
+        .flow-node {
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 8px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .flow-start-end {
+            background-color: #a7f3d0; /* Emerald 200 */
+            color: #065f46;
+            border: 2px solid #059669;
+            border-radius: 50px;
+        }
+        .flow-task {
+            background-color: #bfdbfe; /* Blue 200 */
+            color: #1e40af;
+            border: 2px solid #3b82f6;
+        }
+        .flow-gateway {
+            background-color: #fecaca; /* Red 200 */
+            color: #991b1b;
+            border: 2px solid #dc2626;
+            transform: rotate(45deg);
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            cursor: pointer;
+        }
+        .flow-gateway span {
+            transform: rotate(-45deg);
+            font-size: 0.8rem;
+        }
+        .flow-arrow {
+            display: block;
+            width: 0;
+            height: 20px;
+            border-left: 2px solid #475569;
+            margin: 0 auto;
+            position: relative;
+        }
+        .flow-arrow::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -4px;
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid #475569;
+        }
+        .flow-path {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .flow-branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 40%;
+            padding: 0 10px;
+        }
+        .flow-label-true, .flow-label-false {
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .flow-label-true { color: #10b981; }
+        .flow-label-false { color: #ef4444; }
+        .ai-prompt-box {
+            background-color: #eef2ff;
+            border: 2px solid #6366f1;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+        .ai-prompt-box pre {
+            background-color: #ffffff;
+            border: 1px solid #c7d2fe;
+        }
+        .ai-prompt-box .prompt-label {
+            color: #4f46e5;
+            font-weight: 700;
+        }
     </style>
-    <script>
-        // Lucide Icons (as a placeholder for a single icon setup)
-        const renderIcon = (name, className = 'w-5 h-5') => {
-            const icons = {
-                // Simplified set of icons needed for this file
-                'cpu': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect width="16" height="16" x="4" y="4" rx="2"/><path d="M15 9h1a2 2 0 0 1 2 2v1"/><path d="M9 15h-1a2 2 0 0 0 -2 2v1"/><path d="M15 15v1a2 2 0 0 1 -2 2h-1"/><path d="M9 9v-1a2 2 0 0 0 -2 -2h-1"/></svg>`,
-                'zap': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
-                'lock': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
-                'refresh-cw': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1 -2.12 -9.36l3.33 -3.33"/></svg>`,
-                'repeat': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="m17 2 4 4 -4 4"/><path d="M3 11v-1a4 4 0 0 1 4 -4h14"/><path d="m7 22 -4 -4 4 -4"/><path d="M21 13v1a4 4 0 0 1 -4 4h-14"/></svg>`,
-                'git-branch': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1 -9 9"/></svg>`,
-                'calendar-plus': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M21 13V6a2 2 0 0 0 -2 -2h-2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/><path d="M17 17h4"/><path d="M19 15v4"/></svg>`,
-                'box-select': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M16 16h2a2 2 0 0 0 2 -2V4a2 2 0 0 0 -2 -2H6a2 2 0 0 0 -2 2v2"/><path d="M2 12v6a2 2 0 0 0 2 2h10"/></svg>`,
-                'code': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
-                'layout-grid': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>`,
-                'corner-up-left': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0 -4 -4h-4"/></svg>`,
-                'bell': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3 -2 3 -9"/><path d="M10.36 21a1.9 1.9 0 0 0 3.28 0"/></svg>`,
-                'hash': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><line x1="4" x2="20" y1="9" y2="9"/><line x1="4" x2="20" y1="15" y2="15"/><line x1="10" x2="8" y1="3" y2="21"/><line x1="16" x2="14" y1="3" y2="21"/></svg>`,
-            };
-            return icons[name] || '';
-        };
-
-        const addToCalendar = (title, start) => {
-            // Functionality is kept simple as per instructions, using a mock alert/message box.
-            const messageBox = document.getElementById('messageBox');
-            messageBox.innerHTML = `<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                <strong class="font-bold">สำเร็จ!</strong>
-                <span class="block sm:inline">ฟังก์ชัน 'Add to Calendar' ถูกจำลองการเรียกใช้แล้ว.</span>
-            </div>`;
-            setTimeout(() => {
-                messageBox.innerHTML = '';
-            }, 3000);
-        };
-        
-        window.onload = () => {
-             console.log("Day 2 Handbook Loaded (Line count target met and exceeded).");
-        };
-
-    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
 <body class="min-h-screen">
-    <!-- Message Box for Alerts/Confirmations -->
-    <div id="messageBox" class="fixed top-4 right-4 z-50 w-full max-w-sm"></div>
-
-    <!-- Header Section (Consistent with Day 1) -->
     <header class="bg-white card-shadow sticky top-0 z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <div class="text-3xl font-extrabold tracking-tight">
-                        <span class="gradient-text">AI Automation & Data Integration Master</span>
-                    </div>
-                </div>
-                <div class="mt-2 md:mt-0 text-right text-sm text-gray-600">
-                    Day 2: การออกแบบ Logic/Flow Automation ขั้นสูง
+                <a href="course1_aiautomation.html" class="flex items-center space-x-2 text-gray-500 hover:text-indigo-600 transition duration-150">
+                    <i class="fas fa-arrow-left"></i>
+                    <span class="text-sm font-medium hidden sm:inline">กลับสู่แผนผังหลักสูตร</span>
+                </a>
+                <div class="mt-2 md:mt-0 text-right text-base font-semibold text-gray-800">
+                    Day 2: Logic/Flow Automation ขั้นสูง
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Area -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <!-- Instructor Information Card (Consistent with Day 1) -->
-        <div class="bg-white p-6 rounded-xl card-shadow mb-8 border-t-4 border-indigo-500">
+        <div class="bg-white p-6 rounded-xl card-shadow mb-8 border-t-4 border-violet-500">
             <div class="flex items-center space-x-4">
                 <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
                      onerror="this.onerror=null;this.src='https://placehold.co/80x80/6366f1/ffffff?text=อ.แทน'"
-                     alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-20 h-20 rounded-full object-cover ring-2 ring-indigo-500">
+                     alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-20 h-20 rounded-full object-cover ring-2 ring-violet-500">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-800">อ.แทน <span class="text-indigo-600">[ธีรชัย โฉมทัพ]</span></h2>
+                    <h2 class="text-2xl font-bold text-gray-800">อ.แทน <span class="text-violet-600">[ธีรชัย โฉมทัพ]</span></h2>
                     <p class="text-base text-gray-500">Head of Digital Transformation</p>
-                    <p class="text-sm text-gray-600 mt-1">ยินดีต้อนรับสู่ Day 2 เราจะเจาะลึกการสร้าง Flow อัตโนมัติที่ 'ฉลาด' และ 'ทนทาน' ด้วย n8n และเทคนิคจัดการ API ขั้นสูง!</p>
+                    <p class="text-sm text-gray-600 mt-1">Day 2 คือการเปลี่ยน **กระบวนการ** ที่น่าเบื่อ ให้เป็น **Flowchart** ที่สวยงามและชาญฉลาด!</p>
                 </div>
             </div>
         </div>
 
-        <!-- Timetable and Checkboxes -->
         <div class="bg-white p-6 rounded-xl card-shadow mb-8">
-            <h3 class="text-2xl font-semibold mb-4 gradient-text">กำหนดการเรียนรู้ Day 2 🛠️</h3>
+            <h3 class="text-2xl font-semibold mb-4 gradient-text">กำหนดการเรียนรู้ Day 2 (6.5 ชั่วโมง) 📚</h3>
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">เวลา</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">หัวข้อ/กิจกรรม</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">สถานะ</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ประเภท</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    <!-- 09:00 - 10:30 -->
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">09:00 - 10:30 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">หัวข้อ 3.1: วิเคราะห์ Logic/Flow Automation ขั้นสูง (Stateless vs. State-Driven) และ Webhook Basic</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" checked>
-                        </td>
+                    <tr class="hover:bg-violet-50">
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">09:00 - 10:15 น.</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 1:** การวิเคราะห์ Business Process → Flowcharting (BPMN Lite)</td>
+                        <td class="px-6 py-4 text-center text-xs font-bold text-violet-600">ทฤษฎี & Flow</td>
                     </tr>
-                    <!-- 10:30 - 10:45 -->
-                    <tr>
-                        <td class="px-6 py-2 whitespace-nowrap text-xs text-gray-500 italic">10:30 - 10:45 น.</td>
-                        <td class="px-6 py-2 text-xs text-gray-500 italic">พักเบรค (Coffee Break)</td>
-                        <td class="px-6 py-2 whitespace-nowrap text-center">
-                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        </td>
+                    <tr class="bg-yellow-50">
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">10:15 - 10:30 น.</td>
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคเช้า (Coffee Break)***</td>
+                        <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
-                    <!-- 10:45 - 12:00 -->
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">10:45 - 12:00 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">หัวข้อ 3.2: Deep Dive Webhook: Security (HMAC, ID Gen), Response Handling และ Data Transformation</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        </td>
+                    <tr class="hover:bg-violet-50">
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">10:30 - 12:00 น.</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 2:** Conditional Logic, Data Mapping และ Transformation</td>
+                        <td class="px-6 py-4 text-center text-xs font-bold text-violet-600">Logic Core</td>
                     </tr>
-                    <!-- 12:00 - 13:00 -->
-                    <tr>
-                        <td class="px-6 py-2 whitespace-nowrap text-xs text-gray-500 italic">12:00 - 13:00 น.</td>
-                        <td class="px-6 py-2 text-xs text-gray-500 italic">พักเที่ยง (Lunch Break)</td>
-                        <td class="px-6 py-2 whitespace-nowrap text-center">
-                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        </td>
+                    <tr class="bg-red-50">
+                        <td class="px-6 py-2 text-sm font-semibold text-red-800">12:00 - 13:00 น.</td>
+                        <td class="px-6 py-2 text-sm font-semibold text-red-800">***พักกลางวัน (Lunch Break)***</td>
+                        <td class="px-6 py-2 text-center text-xs font-bold text-red-600">พัก</td>
                     </tr>
-                    <!-- 13:00 - 14:30 -->
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">13:00 - 14:30 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">หัวข้อ 3.3: Workshop n8n: AI Lead Scoring, Data Pre-processing และการสร้าง JSON Schema Output</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        </td>
+                    <tr class="hover:bg-violet-50">
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">13:00 - 14:45 น.</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**Workshop:** ออกแบบ Logic Flow สำหรับ 3 MVP Systems</td>
+                        <td class="px-6 py-4 text-center text-xs font-bold text-violet-600">ปฏิบัติ</td>
                     </tr>
-                    <!-- 14:30 - 14:45 -->
-                    <tr>
-                        <td class="px-6 py-2 whitespace-nowrap text-xs text-gray-500 italic">14:30 - 14:45 น.</td>
-                        <td class="px-6 py-2 text-xs text-gray-500 italic">พักเบรค (Coffee Break)</td>
-                        <td class="px-6 py-2 whitespace-nowrap text-center">
-                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        </td>
+                    <tr class="bg-yellow-50">
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">14:45 - 15:00 น.</td>
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคบ่าย (Coffee Break)***</td>
+                        <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
-                    <!-- 14:45 - 16:00 (Split into 3 sub-sections) -->
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">14:45 - 16:00 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">
-                            หัวข้อ 3.4-3.7: Advanced Resilience (Backoff), Workflow Patterns (Sub-Workflow, DLQ) และ Monitoring
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            <input type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        </td>
+                    <tr class="hover:bg-violet-50">
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">15:00 - 16:00 น.</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 3:** Error Handling, Security และสรุป Flow Design</td>
+                        <td class="px-6 py-4 text-center text-xs font-bold text-violet-600">สรุป & ขั้นสูง</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        
-        <!-- Content Start -->
-        
-        <!-- ####################################################################### -->
-        <div class="section-header">
-            <h2 class="text-3xl font-bold gradient-text">บทนำ: จากการจัดเก็บสู่การตัดสินใจ 🚀</h2>
-        </div>
-        <p class="mt-4 text-gray-700 leading-relaxed">
-            ใน Day 1 เราได้วางรากฐานสำคัญด้วยการทำความเข้าใจปรัชญา **Low-Code** และจัดระเบียบข้อมูลของเราบน **Google Sheets** ให้เป็นฐานข้อมูลที่ถูกต้องแม่นยำ (Data Normalization) นั่นคือขั้นตอนของ **"Input"** และ **"Storage"** ที่มั่นคงแล้วครับ 
-            แต่วันนี้ เราจะก้าวไปอีกขั้นสู่โลกของ **"Process"** และ **"Decision-Making"** ในระบบอัตโนมัติ ซึ่งต้องใช้เครื่องมืออย่าง **n8n** เพื่อเชื่อมต่อระบบที่หลากหลายและสร้างตรรกะที่ซับซ้อนขึ้นมา 
-            เป้าหมายของเราคือการสร้าง **"สมอง"** ให้กับระบบ Automation ที่สามารถทำงานได้อย่างอิสระ, จัดการกับข้อผิดพลาดได้เอง, และใช้ AI มาช่วยตัดสินใจทางธุรกิจได้จริง นี่คือหัวใจสำคัญของการเป็น **Master** ในด้านนี้ครับ
-        </p>
-        
-        <div class="section-header">
-            <h2 class="text-3xl font-bold gradient-text mt-8">หัวข้อ 3: การวิเคราะห์และออกแบบ Logic/Flow Automation ขั้นสูง</h2>
-        </div>
-        
-        <p class="mt-4 text-gray-700 leading-relaxed">
-            การออกแบบ Flow ขั้นสูงไม่ได้หมายถึงแค่การลากเส้นเชื่อม Node เข้าหากัน แต่หมายถึงการคิดถึงสถานการณ์ที่อาจผิดพลาด และวิธีการที่ระบบควรตอบสนองต่อสิ่งเหล่านั้น เราต้องเปลี่ยนวิธีคิดจาก Automation แบบเชิงเส้น (Linear) ไปสู่ Automation แบบมีเงื่อนไขและทนทาน (Conditional & Resilient) การวิเคราะห์ความต้องการเชิงลึกก่อนเขียนโค้ดหรือสร้าง Flow เป็นหัวใจสำคัญที่แยกมืออาชีพออกจากมือสมัครเล่นครับ
-        </p>
 
-        <!-- Sub-section: Webhook Concept -->
-        <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2">
-            <script>document.write(renderIcon('zap', 'w-6 h-6 text-yellow-600'));</script>
-            <span>3.1 Webhook: The Universal Trigger (ตัวกระตุ้นสากล)</span>
+
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-violet-400 pb-2 flex items-center">
+            <i class="fas fa-project-diagram w-8 h-8 mr-3 text-violet-600"></i>
+            ส่วนที่ 1: การวิเคราะห์ Business Process → Flowcharting
         </h3>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            **Webhook** คือเครื่องมือสำคัญที่ทำให้ระบบ Automation ของเราทำงานแบบ **Real-Time** แทนที่จะต้องคอยตรวจสอบ (Polling) ข้อมูลอยู่ตลอดเวลา ลองนึกภาพ Webhook เหมือนเป็น "โทรศัพท์สายด่วน" ที่ปลายทางจะโทรมาหา n8n ของเราทันทีที่มีเหตุการณ์สำคัญเกิดขึ้น (เช่น มีลูกค้ากรอกฟอร์ม, มีการขายเกิดขึ้นใน Shopify, หรือมีการเพิ่มแถวใน Google Sheets) **ข้อดีสูงสุดคือความเร็วและประสิทธิภาพด้านทรัพยากร**
-        </p>
         
-        <div class="p-4 bg-yellow-50 rounded-lg my-4 border border-yellow-200">
-            <h4 class="font-bold text-yellow-800">💡 แนวคิดหลัก: Real-Time vs. Polling</h4>
-            <p class="text-yellow-700 text-sm mt-1">
-                **Polling:** ตรวจสอบข้อมูลซ้ำๆ ทุกช่วงเวลา (เปลืองทรัพยากร, ช้า, มี Latency)<br>
-                **Webhook:** ทำงานทันทีที่เหตุการณ์เกิดขึ้น (รวดเร็ว, ประหยัดทรัพยากร, Zero Latency)<br>
-                <em>ในระบบระดับ Enterprise การใช้ Webhook เป็นมาตรฐานขั้นต่ำครับ</em>
+        <div class="step-card bg-white p-5 rounded-lg shadow-md mb-8 border-l-4 border-violet-500">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-puzzle-piece mr-2 text-red-600"></i> 1.1 ความสำคัญของการออกแบบ Logic ก่อน Tools
+            </h4>
+            
+            <p class="mb-4 text-gray-700">
+                ข้อผิดพลาดอันดับหนึ่งของการทำ Automation คือการกระโดดไปใช้ Tool (AppSheet/n8n) ก่อนที่จะมีแผนงาน (Flowchart) ที่ชัดเจน Day 2 จะเน้นย้ำว่า **"Flowchart คือภาษาของ Low-Code Developer"**
             </p>
-        </div>
 
-        <h4 class="text-xl font-medium mt-6 text-indigo-700">โครงสร้าง Payload ของ Webhook (การสื่อสารของระบบ)</h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            เมื่อ Webhook ถูกเรียกใช้ มันจะส่งชุดข้อมูล (Payload) มาในรูปแบบ JSON ซึ่งเป็น "วัตถุดิบ" สำหรับ Flow ของเรา การเข้าใจโครงสร้าง JSON จึงเป็นสิ่งสำคัญมากในการทำ Data Mapping ต่อไป โดยเราต้องรู้จักการอ้างอิงถึงข้อมูลที่ถูกต้อง เช่น <code>{{ $json.lead_data.email }}</code> Payload นี้คือหัวใจของข้อมูลทั้งหมดใน Flow นี้
-        </p>
-        <pre class="text-sm mt-3">
-{
-  "event_type": "new_lead_submission",
-  "timestamp": "2025-10-07T11:00:00Z",
-  "lead_data": {
-    "name": "สมชาย ใจดี",
-    "email": "somchai@example.com",
-    "industry": "E-Commerce",
-    "annual_revenue": 5000000
-  },
-  "source": "Landing Page X"
-}
-        </pre>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            ใน n8n เราจะใช้ **Webhook Node** เป็นจุดเริ่มต้น (Trigger) และสามารถดึงข้อมูลจากโครงสร้าง JSON นี้มาใช้ในการประมวลผลต่อได้ เช่น ดึงค่า <code>lead_data.industry</code> มาใช้ในการตัดสินใจ
-        </p>
-        
-        <!-- CSS Diagram: Webhook Flow -->
-        <h4 class="text-xl font-medium mt-6 text-indigo-700">แผนภาพการทำงานของ Webhook Flow (Visual Aid)</h4>
-        <div class="flex flex-wrap items-center justify-center p-6 bg-gray-100 rounded-xl my-4 card-shadow space-x-4 md:space-x-8">
-            <div class="flow-node bg-green-100 text-green-800">
-                Landing Page (Form Submit)
+            <div class="my-6 p-4 highlight-logic rounded-lg">
+                <p class="font-bold text-lg text-red-700 mb-2 flex items-center">
+                    <i class="fas fa-exclamation-triangle mr-2"></i> คำเตือน: อย่าเริ่มสร้าง! จนกว่า Flow จะชัดเจน
+                </p>
+                <p class="text-sm text-gray-700">
+                    การสร้าง Logic ใน n8n หรือ AppSheet โดยไม่มี Flowchart ชัดเจน จะนำไปสู่การแก้ไขซ้ำๆ และเสียเวลา การออกแบบ Flowchart ให้ถูกต้องครั้งเดียว ประหยัดเวลาไปได้มากกว่า 80%
+                </p>
             </div>
-            <div class="arrow text-3xl font-bold">
-                <script>document.write(renderIcon('zap', 'w-8 h-8 text-indigo-500'));</script>
-            </div>
-            <div class="flow-node bg-blue-100 text-blue-800">
-                Webhook Call (HTTPS POST)
-            </div>
-            <div class="arrow text-3xl font-bold">
-                &rarr;
-            </div>
-            <div class="flow-node bg-indigo-100 text-indigo-800">
-                n8n Workflow Trigger
-            </div>
-        </div>
 
-        <p class="mt-4 text-gray-700 leading-relaxed">
-            นี่คือการมองภาพรวมแบบ End-to-End เมื่อฟอร์มถูกส่ง ข้อมูลจะถูกส่งตรงไปที่ n8n ทันที ทำให้ Flow การทำงานอัตโนมัติของเราเริ่มขึ้นในพริบตา ไม่ต้องรอรอบการตรวจสอบอีกต่อไป
-        </p>
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-bezier-curve mr-2 text-green-600"></i> 1.2 Business Process Mapping (BPMN Lite) (ทักษะ: Google App Script, n8n)
+            </h4>
+            <p class="mb-4 text-gray-700">
+                เราจะใช้หลักการของ BPMN (Business Process Model and Notation) แต่ในรูปแบบง่ายๆ (Lite) ที่เน้น 3 องค์ประกอบหลัก เพื่อให้ Flowchart สื่อสารได้อย่างชัดเจน
+            </p>
 
-        <!-- New Sub-section: Webhook Security and Response Handling -->
-        <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2">
-            <script>document.write(renderIcon('lock', 'w-6 h-6 text-blue-600'));</script>
-            <span>3.2 Deep Dive: Webhook Security (HMAC, ID Gen) และ Response Handling</span>
-        </h3>
-        
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            การใช้ Webhook เพียงอย่างเดียวอาจไม่ปลอดภัย เพราะใครก็สามารถยิง Payload เข้ามาใน URL ของเราได้ หากเราต้องการทำงานกับแพลตฟอร์มสำคัญ เช่น **Line, Stripe, หรือ Shopify** เราจำเป็นต้องใช้มาตรการรักษาความปลอดภัยที่เรียกว่า **HMAC Verification** และมีการจัดการ **Transaction ID** ที่เป็นมาตรฐาน
-        </p>
-        
-        <h4 class="text-xl font-medium mt-6 text-indigo-700">HMAC (Hash-based Message Authentication Code) คืออะไร?</h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            HMAC คือลายเซ็นดิจิทัลที่ถูกเข้ารหัสโดยใช้ **Secret Key** ที่เรารู้และ Platform ต้นทางรู้เท่านั้น เมื่อ Webhook ถูกส่งมา มันจะแนบค่า HMAC มาด้วย หน้าที่ของเราใน n8n คือ:
-            <ol class="list-decimal list-inside ml-4 mt-2 space-y-1 text-gray-700">
-                <li>รับ Payload และ HMAC Signature ที่แนบมาใน Header</li>
-                <li>ใช้ **Secret Key** เดียวกัน คำนวณ HMAC ใหม่จาก Payload ที่ได้รับ</li>
-                <li>**เปรียบเทียบ** ค่า HMAC ที่คำนวณได้กับค่าที่ส่งมา</li>
-            </ol>
-            ถ้าค่าไม่ตรงกัน แปลว่า Payload ถูกดักจับหรือแก้ไขระหว่างทาง เราต้อง **ปฏิเสธ** การทำงานของ Flow ทันที นี่คือระดับความปลอดภัยที่มืออาชีพต้องทำ
-        </p>
-
-        <h4 class="text-xl font-medium mt-6 text-indigo-700 flex items-center space-x-2">
-            <script>document.write(renderIcon('hash', 'w-5 h-5'));</script>
-            <span>Transaction ID (Unique Identifier) และ Data Integrity Check</span>
-        </h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            ทุกการรันของ Flow ควรมี **Transaction ID** ที่ไม่ซ้ำกัน ซึ่งสามารถสร้างได้ง่าย ๆ ใน n8n โดยใช้ **UUID Node** หรือ JavaScript <code>crypto.randomUUID()</code> ID นี้สำคัญมากสำหรับการตรวจสอบความถูกต้องของข้อมูล (Data Integrity Check) และการอ้างอิงเมื่อเกิด Error
-            <ul class="list-disc list-inside ml-4 mt-2 space-y-1 text-gray-700">
-                <li>**Duplicate Check:** ก่อนประมวลผล เราควรใช้ Transaction ID ตรวจสอบในฐานข้อมูล (Google Sheets/Airtable) ว่า ID นี้เคยถูกประมวลผลสำเร็จแล้วหรือไม่ เพื่อป้องกัน **Duplicate Runs** (โดยเฉพาะจาก Webhook Retry)</li>
-                <li>**Error Tracing:** เมื่อเกิด Error ใน Log เราจะใช้ Transaction ID นี้ในการค้นหาข้อมูลที่ล้มเหลวในทุกระบบที่เกี่ยวข้อง (n8n logs, DLQ sheet, ฐานข้อมูล) ทำให้การ Debugging เร็วขึ้น 90%</li>
-            </ul>
-        </p>
-        <pre class="text-sm mt-3">
-// ตัวอย่างการสร้าง Transaction ID ใน Code Node
-const transactionId = crypto.randomUUID();
-// เพิ่ม ID เข้าไปใน Item
-for (const item of $input.json) {
-    item.transaction_id = transactionId;
-}
-return $input.json;
-        </pre>
-        
-        <h4 class="text-xl font-medium mt-6 text-indigo-700">Webhook Response Codes (200, 202, 500)</h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            เมื่อ n8n รับ Webhook แล้ว เราต้องส่ง HTTP Response Code กลับไปให้ Platform ต้นทางอย่างถูกต้อง เพื่อแจ้งสถานะการรับงาน:
-            <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
-                <li class="text-gray-700"><strong><code class="font-mono bg-gray-200 px-1 rounded">200 OK</code>:</strong> Flow เสร็จสมบูรณ์แล้ว ไม่มีปัญหา</li>
-                <li class="text-gray-700"><strong><code class="font-mono bg-gray-200 px-1 rounded">202 Accepted</code>:</strong> Flow ได้รับข้อมูลแล้ว และกำลังจะเริ่มประมวลผล (ใช้เมื่อ Flow ใช้เวลานานเกิน 30 วินาที เพื่อไม่ให้ Platform ต้นทาง Timeout)</li>
-                <li class="text-gray-700"><strong><code class="font-mono bg-gray-200 px-1 rounded">500 Internal Server Error</code>:</strong> เกิดข้อผิดพลาดใน Flow ของ n8n (เช่น เชื่อมต่อฐานข้อมูลไม่ได้) Platform ต้นทางอาจจะพยายาม Retry ให้เราภายหลัง</li>
-            </ul>
-            การเลือกใช้ Response Code ที่เหมาะสมเป็นสิ่งสำคัญในการบริหารจัดการการ Retry ของ Platform ต้นทางครับ
-        </p>
-        
-        <h4 class="text-xl font-medium mt-6 text-indigo-700">การจัดการ Timeout และการใช้ 202 Accepted (Asynchronous Flow)</h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            Flow Automation ขั้นสูงมักใช้เวลาประมวลผลนาน เช่น การเรียก AI, การประมวลผลไฟล์ขนาดใหญ่ ซึ่งอาจใช้เวลาเกิน 10-30 วินาที หากเราไม่ส่ง Response กลับไปเร็วพอ Platform ต้นทางจะคิดว่าการเรียก Webhook ล้มเหลวและจะพยายาม Retry ซ้ำ ซึ่งทำให้เกิด Flow ซ้ำซ้อน (Duplicate Runs)
-            วิธีแก้คือใช้ **202 Accepted** โดยเราจะให้ Flow หลักส่ง 202 กลับไปทันทีที่ได้รับ Payload จากนั้นใช้ **Queue/Sub-Workflow** เพื่อประมวลผลงานจริงเบื้องหลัง (Asynchronous Processing) เทคนิคนี้ช่วยให้ระบบของเราไม่โหลดหนักเกินไปและยังรักษาความเร็วในการตอบสนอง Webhook ได้ด้วย
-        </p>
-
-        <!-- Sub-section: AI Node for Lead Scoring -->
-        <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2">
-            <script>document.write(renderIcon('cpu', 'w-6 h-6 text-green-600'));</script>
-            <span>3.3 Workshop: AI Lead Scoring, Data Pre-processing และ JSON Schema Output</span>
-        </h3>
-        
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            เราจะใช้ AI Node เพื่อทำสิ่งที่ซับซ้อนกว่าแค่การสรุปข้อมูล นั่นคือการ **"ให้คะแนนลูกค้าเป้าหมาย" (Lead Scoring)** ซึ่งต้องผ่านขั้นตอนที่สำคัญมาก 2 ขั้นตอน คือ **Data Pre-processing** และ **Structured Output Design**
-        </p>
-
-        <h4 class="text-xl font-medium mt-6 text-indigo-700 flex items-center space-x-2">
-            <script>document.write(renderIcon('box-select', 'w-5 h-5'));</script>
-            <span>ขั้นตอนที่ 1: Data Pre-processing (ทำความสะอาดข้อมูลก่อนเข้า AI)</span>
-        </h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            AI ทำงานได้ดีกับข้อมูลที่สะอาด ถูกจัดรูปแบบ และไม่มีค่าว่าง (Null) ก่อนที่เราจะส่ง Payload ทั้งก้อนให้ AI เราควรใช้ **Code Node** หรือ **Set Node** เพื่อ:
-            <ol class="list-decimal list-inside ml-4 mt-2 space-y-1 text-gray-700">
-                <li>**Data Validation:** ตรวจสอบว่า Field ที่สำคัญ (เช่น Email, Revenue) ไม่เป็นค่าว่าง</li>
-                <li>**Data Cleaning:** ลบอักขระพิเศษที่ไม่จำเป็น หรือแปลงชื่อย่อให้เป็นชื่อเต็ม (เช่น 'IT' เป็น 'Information Technology')</li>
-                <li>**Normalization:** แปลงตัวเลข (เช่น Annual Revenue) ให้เป็นรูปแบบที่ AI อ่านง่าย เช่น แปลงจาก $5,000,000 เป็น '5 million baht'</li>
-            </ol>
-            นี่คือตัวอย่างโค้ด JavaScript ใน **Code Node** เพื่อทำ Pre-processing:
-        </p>
-        <pre class="text-sm mt-3">
-// Code Node: การทำความสะอาดและตรวจสอบข้อมูล (Clean and Validate Data)
-const leads = $input.json;
-
-for (let lead of leads) {
-    // 1. ตรวจสอบและแทนที่ค่าว่าง (Data Validation) - ถ้าไม่มี Industry ให้ใส่ 'Unknown'
-    if (!lead.lead_data.industry) {
-        lead.lead_data.industry = "Unknown";
-    }
-    
-    // 2. Data Transformation (การแปลงตัวอักษรให้เป็นพิมพ์ใหญ่ทั้งหมด) - ทำให้ชื่อเป็นมาตรฐาน
-    if (lead.lead_data.name) {
-        lead.lead_data.name = lead.lead_data.name.trim().toUpperCase();
-    }
-    
-    // 3. แปลง Revenue ให้เป็นตัวเลขที่ถูกต้อง (ถ้าเป็น string) - เตรียมข้อมูลตัวเลขให้พร้อมคำนวณ
-    let revenue = parseFloat(lead.lead_data.annual_revenue) || 0;
-    lead.lead_data.annual_revenue_numeric = revenue; 
-    
-    // 4. การจัดการวันที่/เวลา (Timezone Standardization)
-    if (lead.timestamp) {
-        lead.processed_date = new Date(lead.timestamp).toISOString();
-    }
-    
-    // 5. การสร้าง Correlation ID (ใช้สำหรับ Tracing)
-    lead.correlation_id = lead.transaction_id; // ใช้ Transaction ID ที่สร้างไว้
-}
-
-return leads;
-        </pre>
-
-        <h4 class="text-xl font-medium mt-6 text-indigo-700 flex items-center space-x-2">
-            <script>document.write(renderIcon('code', 'w-5 h-5'));</script>
-            <span>ขั้นตอนที่ 2: การออกแบบ System Prompt และ JSON Schema Output</span>
-        </h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            เราต้องใช้เทคนิค **Structured Output** เพื่อให้ AI ตอบกลับมาในรูปแบบ JSON ที่เราสามารถนำไปใช้ใน If Node ต่อไปได้ นี่คือหัวใจของ Prompt Engineering สำหรับ Automation: การบังคับให้ AI ทำงานตาม Schema ที่เรากำหนดไว้
-        </p>
-        <pre class="text-sm mt-3">
-// System Instruction: กำหนดบทบาท, กฎเกณฑ์, และรูปแบบ JSON (MUST RETURN JSON)
-"คุณคือผู้เชี่ยวชาญด้านการวิเคราะห์ลูกค้าเป้าหมาย (Lead Analyst) หน้าที่ของคุณคือการอ่านข้อมูลลูกค้า และให้คะแนนความสนใจ/ความเหมาะสม (Score) โดยอิงตามกฎต่อไปนี้:
-1. คะแนน (Score) ต้องอยู่ระหว่าง 1 (ต่ำ) ถึง 10 (สูง)
-2. 'Industry' ที่ตรงกับ 'E-Commerce' หรือ 'SME Manufacturing' ได้คะแนนเพิ่ม +2
-3. 'Annual_Revenue' ที่มากกว่า 5,000,000 บาท ได้คะแนนเพิ่ม +3
-4. คุณต้องตอบกลับมาเป็น JSON Object ที่มีโครงสร้างดังนี้เท่านั้น:
-    {
-        "score": <number 1-10>,
-        "tier": <string (A, B, C)>, // Tier A = 8-10, B = 5-7, C = 1-4
-        "reason": <string (Thai explanation for the score)>
-    }"
-
-// User Prompt: ข้อมูลลูกค้าที่จะส่งไป (ใช้ค่าที่ถูก Clean แล้ว)
-"ข้อมูลลูกค้าที่ผ่านการตรวจสอบแล้ว:
-Name: {{ $json.lead_data.name }}
-Industry: {{ $json.lead_data.industry }}
-Annual_Revenue: {{ $json.lead_data.annual_revenue_numeric }}"
-        </pre>
-        
-        <h4 class="text-xl font-medium mt-6 text-indigo-700">Decision Gate: การนำคะแนน AI มาใช้จริง</h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            หลังจากที่ AI ประมวลผลและส่งผลลัพธ์ JSON กลับมา (เช่น <code>{"score": 8, "tier": "A", "reason": "Revenue สูงและอยู่ในอุตสาหกรรมเป้าหมาย"}</code>) เราจะใช้ **If Node** (Decision Gate) เพื่อแยก Flow การทำงาน:
-        </p>
-        
-        <!-- CSS Diagram: AI Decision Flow -->
-        <h4 class="text-xl font-medium mt-6 text-indigo-700">แผนภาพ AI Lead Scoring และ Decision (Visual Aid)</h4>
-        <div class="flex flex-col items-center justify-center p-6 bg-white rounded-xl my-4 card-shadow space-y-4">
-            <!-- Row 1: Trigger and Pre-process -->
-            <div class="flex items-center space-x-4">
-                <div class="flow-node bg-yellow-100 text-yellow-800">
-                    Webhook Trigger
-                </div>
-                <div class="arrow text-3xl font-bold">
-                    &rarr;
-                </div>
-                <div class="flow-node bg-purple-100 text-purple-800">
-                    Code Node (Data Pre-process)
-                </div>
-                <div class="arrow text-3xl font-bold">
-                    &rarr;
-                </div>
-                <div class="flow-node bg-green-100 text-green-800">
-                    AI Node (Lead Scoring)
-                </div>
+            <div class="border border-green-300 rounded-lg overflow-x-auto my-4 text-sm">
+                <table class="min-w-full divide-y divide-green-200">
+                    <thead class="bg-green-50">
+                        <tr>
+                            <th class="px-4 py-2 text-left font-bold text-green-700">สัญลักษณ์</th>
+                            <th class="px-4 py-2 text-left font-bold text-green-700">ความหมาย</th>
+                            <th class="px-4 py-2 text-left font-bold text-green-700">เทียบเท่าใน n8n / AppSheet</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-green-200">
+                        <tr>
+                            <td class="px-4 py-3 font-bold text-gray-900">วงกลม (Start/End)</td>
+                            <td class="px-4 py-3">จุดเริ่มต้น/จุดสิ้นสุดของ Workflow (Trigger)</td>
+                            <td class="px-4 py-3">Webhooks, Scheduled Events, On Add/Update Bot (AppSheet)</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 font-bold text-gray-900">สี่เหลี่ยมผืนผ้า (Task)</td>
+                            <td class="px-4 py-3">กิจกรรมที่ต้องทำ (เช่น บันทึกข้อมูล, ส่งอีเมล, ดึง API)</td>
+                            <td class="px-4 py-3">AppSheet Action, n8n Node (Function, HTTP Request)</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 font-bold text-gray-900">เพชร (Gateway)</td>
+                            <td class="px-4 py-3">การตัดสินใจ/เงื่อนไข (Conditional Logic) ที่มีทางออกมากกว่า 1 ทาง</td>
+                            <td class="px-4 py-3">AppSheet Branching Logic, n8n IF Node</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             
-            <!-- Row 2: Decision -->
-            <div class="arrow text-3xl font-bold">
-                &darr;
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-chalkboard-teacher mr-2 text-blue-600"></i> 1.3 Workshop: แปลงโจทย์ธุรกิจเป็น Flowchart
+            </h4>
+            <p class="mb-4 text-gray-700">
+                ผู้เรียนฝึกทำ Flowchart จากโจทย์ **"Line OA Chatbot & Lead Scoring"** (System 1 MVP) ที่เราจะเริ่มทำจริงใน Day 4
+            </p>
+            
+            <h5 class="font-bold text-lg text-red-700 mt-4 border-b pb-1">โจทย์: Line OA Lead Scoring (Line → GGS → CRM)</h5>
+            <div class="p-4 bg-gray-100 rounded-lg text-sm text-gray-700 mb-6">
+                <ol class="list-decimal ml-6 space-y-1">
+                    <li>**Start:** ลูกค้าทัก Line OA เข้ามา (Webhook Trigger)</li>
+                    <li>**Task 1:** ตรวจสอบว่า Line_ID นี้มีใน GGS (ตาราง Customers) หรือยัง</li>
+                    <li>**Gateway 1 (Decision):** <span class="font-bold text-red-700">ถ้า (IF)</span> เป็นลูกค้าใหม่ → ไป **Task 2** <span class="font-bold text-red-700">ถ้า (ELSE)</span> เป็นลูกค้าเก่า → ไป **Task 3**</li>
+                    <li>**Task 2 (New):** บันทึก Line_ID และชื่อเข้า GGS (Status: New Lead)</li>
+                    <li>**Task 3 (Old):** อัปเดต Last_Contact_Date ใน GGS</li>
+                    <li>**Task 4:** ส่งข้อความต้อนรับอัตโนมัติกลับไปทาง Line OA</li>
+                    <li>**End:** จบ Flow</li>
+                </ol>
             </div>
-            <div class="flow-node bg-indigo-100 text-indigo-800 font-semibold">
-                If Node: Decision Gate (If Score >= 7)
-            </div>
+            
+            <h5 class="font-bold text-lg text-violet-700 mt-4 border-b pb-1 flex items-center">
+                <i class="fas fa-chart-bar mr-2 text-violet-600"></i> ภาพประกอบ: Flowchart Logic (Line OA Lead Scoring)
+            </h5>
+            <div class="flow-diagram-container my-4">
+                <div class="flow-node flow-start-end">Start: Line OA Webhook Trigger</div>
+                <div class="flow-arrow"></div>
+                <div class="flow-node flow-task">Task 1: Lookup Line ID (ใน GGS Customers)</div>
+                <div class="flow-arrow"></div>
+                
+                <div class="flow-gateway"><span>Gateway 1: IF Found?</span></div>
 
-            <!-- Row 3: Branches -->
-            <div class="flex justify-between w-full max-w-lg">
-                <div class="flex flex-col items-center">
-                    <div class="arrow text-xl font-bold text-green-500">
-                        True &darr;
+                <div class="flow-path">
+                    <div class="flow-branch">
+                        <div class="flow-label-true">TRUE (ลูกค้าเก่า)</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-node flow-task bg-yellow-100 border-yellow-400 text-yellow-800">Task 3: Update Last_Contact_Date</div>
                     </div>
-                    <div class="flow-node bg-green-50 text-green-700 text-sm">
-                        High Score (A/B): ส่งให้ Sales ทันที + Alert Line
+                    
+                    <div class="flow-branch">
+                        <div class="flow-label-false">FALSE (ลูกค้าใหม่)</div>
+                        <div class="flow-arrow"></div>
+                        <div class="flow-node flow-task bg-red-100 border-red-400 text-red-800">Task 2: Insert New Lead (Status: New Lead)</div>
                     </div>
                 </div>
-                <div class="flex flex-col items-center">
-                    <div class="arrow text-xl font-bold text-red-500">
-                        False &darr;
-                    </div>
-                    <div class="flow-node bg-red-50 text-red-700 text-sm">
-                        Low Score (C): Add to Nurturing Email List (Delay 7 days)
-                    </div>
-                </div>
+                
+                <div class="flow-arrow" style="height: 40px;"></div>
+                <div class="flow-node flow-task">Task 4: Send Welcome Message (Line OA API)</div>
+                <div class="flow-arrow"></div>
+                <div class="flow-node flow-start-end">End: Workflow Complete</div>
             </div>
-        </div>
-        
-        <p class="mt-4 text-gray-700 leading-relaxed">
-            นี่คือการใช้ AI เป็นส่วนหนึ่งของ **ตรรกะการไหลของข้อมูล (Flow Logic)** อย่างแท้จริง ทำให้ Automation ของเราไม่ได้แค่ย้ายข้อมูล แต่สามารถ **จัดลำดับความสำคัญ** และ **ตอบสนองต่อคุณภาพ** ของข้อมูลที่ไหลผ่านได้ ซึ่งเป็นแก่นแท้ของ Automation Master ในยุคนี้ครับ
-        </p>
+            </div>
 
-        <!-- Sub-section: Resilience and Backoff -->
-        <div class="section-header">
-            <h2 class="text-3xl font-bold gradient-text mt-8">หัวข้อ 3.4: Advanced Resilience: Exponential Backoff Implementation</h2>
-        </div>
-        
-        <p class="mt-4 text-gray-700 leading-relaxed">
-            เรากลับมาที่เรื่อง **Resilience** การจัดการความผิดพลาดในการเชื่อมต่อ API เป็นสิ่งที่ต้องทำอย่างมืออาชีพ และ **Exponential Backoff** คือคำตอบ
-        </p>
 
-        <h4 class="text-xl font-medium mt-6 text-indigo-700 flex items-center space-x-2">
-            <script>document.write(renderIcon('repeat', 'w-5 h-5'));</script>
-            <span>Exponential Backoff คืออะไร? (ทบทวนเชิงลึก)</span>
-        </h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            **Exponential Backoff** คือเทคนิคในการ Retry (ลองใหม่) ที่ดีที่สุด โดยมันจะ **เพิ่มระยะเวลาหน่วงในการรอ** ก่อนที่จะลองใหม่ในแต่ละครั้ง เพื่อลดภาระบน Server ปลายทาง และเพิ่มโอกาสสำเร็จในการเชื่อมต่อเมื่อ Server ฟื้นตัว
-        </p>
-        
-        <h4 class="text-xl font-medium mt-6 text-indigo-700">หลักการคำนวณ (The Math Behind It)</h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            สูตรพื้นฐานคือ: 
-            $$ \text{Delay} = 2^{\text{RetryCount}} \times \text{BaseDelay} $$
-        </p>
-        <div class="bg-gray-100 p-4 rounded-lg my-4 text-gray-800">
-            <p><strong>ตัวอย่าง:</strong> ถ้า Base Delay = 1000ms (1 วินาที)</p>
-            <ul class="list-disc list-inside ml-4 mt-2 space-y-1 text-sm">
-                <li>**ลองครั้งที่ 1 (RetryCount = 1):** $2^1 \times 1000 \text{ms} = 2 \text{ วินาที}$</li>
-                <li>**ลองครั้งที่ 2 (RetryCount = 2):** $2^2 \times 1000 \text{ms} = 4 \text{ วินาที}$</li>
-                <li>**ลองครั้งที่ 3 (RetryCount = 3):** $2^3 \times 1000 \text{ms} = 8 \text{ วินาที}$</li>
-                <li>**ลองครั้งที่ 5 (RetryCount = 5):** $2^5 \times 1000 \text{ms} = 32 \text{ วินาที}$</li>
-            </ul>
-            <p class="mt-2 text-sm font-semibold">จะเห็นว่าเวลาหน่วงรวมกันเกือบ 1 นาที ซึ่งให้เวลาเพียงพอให้ Server ฟื้นตัว</p>
-        </div>
-        
-        <h4 class="text-xl font-medium mt-6 text-indigo-700 flex items-center space-x-2">
-            <script>document.write(renderIcon('code', 'w-5 h-5'));</script>
-            <span>การนำไปใช้ใน n8n ด้วย Function Node (Step-by-Step Code)</span>
-        </h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            เราใช้ **Function Node** เพื่อคำนวณค่าหน่วงเวลาและสถานะการ Retry โดยเฉพาะ นี่คือโค้ดที่คุณต้องนำไปใช้ใน n8n:
-        </p>
-        
-        <pre class="text-sm mt-3">
-// โค้ด JavaScript สำหรับ Exponential Backoff (ใช้ใน n8n Function Node)
-// #######################################################################
-
-const MAX_RETRIES = 5; // กำหนดจำนวนครั้งสูงสุดในการลองใหม่
-const BASE_DELAY_MS = 1000; // 1 วินาที เป็นเวลาเริ่มต้นในการหน่วง
-
-// วนลูปผ่านทุก Item (ข้อมูล) ที่ส่งเข้ามาใน Function Node
-for (const item of $input.json) {
-  // ดึงค่า 'retryCount' จากข้อมูลปัจจุบัน หรือกำหนดให้เป็น 0 ถ้ายังไม่มี
-  // นี่คือการเก็บ State ของการ Retry ไว้ในข้อมูลของ Flow เอง
-  const retryCount = item.retryCount || 0; 
-  
-  if (retryCount >= MAX_RETRIES) {
-    // 1. ถ้าลองครบ 5 ครั้งแล้ว: ติดสถานะ Error และเตรียมส่งไปยัง Dead Letter Queue
-    item.errorStatus = 'MAX_RETRIES_EXCEEDED';
-    item.message = 'ไม่สามารถดำเนินการได้สำเร็จหลังลองใหม่สูงสุดแล้ว';
-    item.sendToDLQ = true; // Flag สำหรับแยกข้อมูลไป Dead Letter Queue
-  } else {
-    // 2. คำนวณเวลาหน่วงตามสูตร Exponential Backoff
-    // ใช้ Math.min เพื่อจำกัดเวลาหน่วงสูงสุดไม่ให้เกิน 60 วินาที (Optional Safety Cap)
-    const calculatedDelay = Math.pow(2, retryCount + 1) * BASE_DELAY_MS;
-    const delay = Math.min(calculatedDelay, 60000); // ไม่เกิน 60 วินาที
-    
-    // 3. อัปเดต State และเพิ่มข้อมูลการหน่วงเวลา
-    item.retryCount = retryCount + 1;
-    item.backoffDelay = delay;
-    item.message = `กำลังจะลองใหม่อีกครั้งใน ${delay}ms... (ความพยายามครั้งที่ ${item.retryCount}/${MAX_RETRIES})`;
-    item.sendToDLQ = false;
-  }
-}
-
-// ส่ง Item ที่ถูกอัปเดตสถานะและเวลาหน่วงกลับไป
-return $input.json;
-
-// #######################################################################
-        </pre>
-        
-        <h4 class="text-xl font-medium mt-6 text-indigo-700 flex items-center space-x-2">
-            <script>document.write(renderIcon('git-branch', 'w-5 h-5'));</script>
-            <span>โครงสร้าง Workflow Resilience ใน n8n (Try/Catch Pattern)</span>
-        </h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            เพื่อนำโค้ดด้านบนมาใช้ Flow ของเราต้องมีโครงสร้างแบบ **Try/Catch** และใช้ **Branching** เพื่อจัดการกับสถานะการ Retry และสถานะ Error อย่างชัดเจน
-        </p>
-        
-        <div class="p-4 bg-indigo-50 rounded-lg my-4 border-l-4 border-indigo-400">
-            <h4 class="font-bold text-indigo-800">✅ 5 ขั้นตอนหลักของการทำ Backoff Workflow</h4>
-            <ol class="list-decimal list-inside ml-4 mt-2 space-y-1 text-sm text-indigo-700">
-                <li>**Try Block:** ห่อหุ้ม API Call (HTTP Request Node) ที่มีโอกาสล้มเหลวไว้</li>
-                <li>**On Fail (Catch Block):** เมื่อ API Call ล้มเหลว (Error) ให้ส่งข้อมูลไปที่ **Function Node** (โค้ด Backoff ด้านบน)</li>
-                <li>**Branching:** ใช้ **If Node** ตรวจสอบว่า `item.sendToDLQ` เป็น True หรือ False</li>
-                <li>**Retry Path:** ถ้า `sendToDLQ` เป็น False ให้ส่งข้อมูลไปที่ **Wait Node** (ใช้ <code>{{ $json.backoffDelay }}</code>) จากนั้นวนกลับไปที่ **Try Block** เพื่อลองใหม่</li>
-                <li>**DLQ Path:** ถ้า `sendToDLQ` เป็น True ให้ส่งข้อมูลไปที่ **Dead Letter Queue** (การจัดการ Error ถาวร)</li>
-            </ol>
-        </div>
-        
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            การสร้าง Loop ใน n8n ทำได้โดยใช้ **Go To Node** หรือ **Merge Node** เพื่อวนกลับไปที่จุดเริ่มต้นของ Try Block และควรจำกัดจำนวนรอบการทำงานด้วย Expression เพื่อป้องกันการทำงานที่ไม่สิ้นสุด (Infinite Loop) นี่คือ Best Practice ที่ทำให้ Flow ของคุณทนทานและประหยัดทรัพยากร
-        </p>
-
-        <!-- New Sub-section for Advanced Workflow Patterns -->
-        <div class="section-header">
-            <h2 class="text-3xl font-bold gradient-text mt-8">หัวข้อ 3.5: Advanced n8n Workflow Patterns (Sub-Workflow และ Data Mapping)</h2>
-        </div>
-
-        <h3 class="text-2xl font-semibold mt-6 text-gray-800 flex items-center space-x-2">
-            <script>document.write(renderIcon('layout-grid', 'w-6 h-6 text-purple-600'));</script>
-            <span>การหลีกเลี่ยง "Spaghetti Code" ด้วย Sub-Workflows</span>
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-red-500 pb-2 flex items-center mt-8">
+            <i class="fas fa-sitemap w-8 h-8 mr-3 text-red-600"></i>
+            ส่วนที่ 2: Conditional Logic และ Data Mapping
         </h3>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            เมื่อ Flow ของเราเริ่มซับซ้อนขึ้น มีหลายเส้นทางและหลายเงื่อนไข โครงสร้าง Workflow อาจกลายเป็น "สปาเก็ตตี้โค้ด" ที่ดูแลรักษายาก วิธีแก้ไขมาตรฐานระดับมืออาชีพคือการใช้ **Execute Workflow Node** เพื่อแบ่ง Flow ใหญ่เป็น **Sub-Workflows (Flow ย่อย)**
-        </p>
-        
-        <h4 class="text-xl font-medium mt-6 text-indigo-700">ประโยชน์และกรณีการใช้งาน Sub-Workflows</h4>
-        <ul class="list-disc list-inside ml-4 mt-2 space-y-1 text-gray-700">
-            <li>**Maintainability:** แยกส่วน Logic ที่ซับซ้อน (เช่น การทำ Data Cleaning, การคำนวณภาษี) ออกไปอยู่ใน Flow ของตัวเอง ทำให้ Flow หลักดูสะอาดตาและง่ายต่อการแก้ไข</li>
-            <li>**Reusability:** Flow ย่อยเช่น **"CalculateTaxAndVAT"** หรือ **"StandardizeCustomerName"** สามารถถูกเรียกใช้ซ้ำได้ใน Flow หลักหลาย ๆ ตัว ช่วยประหยัดเวลาในการสร้างซ้ำ</li>
-            <li>**Scalability:** สามารถจำกัดทรัพยากรหรือจัดการ Rate Limit ของ API ภายนอกใน Flow ย่อยได้ ทำให้ Flow หลักทำงานได้อย่างรวดเร็ว</li>
-            <li>**Debugging:** เมื่อเกิด Error เราสามารถระบุได้ทันทีว่าปัญหาเกิดจาก Flow ย่อยตัวใด ทำให้การแก้ไขรวดเร็วขึ้นมาก</li>
-        </ul>
-        
-        <h4 class="text-xl font-medium mt-6 text-indigo-700 flex items-center space-x-2">
-            <script>document.write(renderIcon('corner-up-left', 'w-5 h-5'));</script>
-            <span>การจัดการ Data Mapping ใน Sub-Workflows (Advanced Data Passing)</span>
-        </h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            เมื่อ Flow หลักเรียก Flow ย่อย เราต้องมั่นใจว่าข้อมูล (Payload) ถูกส่งผ่านไปและกลับอย่างถูกต้อง ใน n8n เราใช้ **Input Data** สำหรับส่งข้อมูลเข้า และ Flow ย่อยต้องใช้ **Respond to Webhook** หรือ **Return Data Node** เพื่อส่งผลลัพธ์กลับไปยัง Flow หลัก
-        </p>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            **ข้อควรระวังเรื่อง Credentials:** เราไม่ควรส่ง API Keys หรือ Sensitive Data ผ่าน Payload โดยตรง แต่ควรใช้ **Context / Environment Variables** ที่ถูกกำหนดไว้ใน n8n เพื่อให้ Flow ย่อยเข้าถึงข้อมูลได้โดยตรง ซึ่งปลอดภัยกว่ามาก
-        </p>
-        <pre class="text-sm mt-3">
-// ตัวอย่างการส่งข้อมูลเข้า Sub-Workflow (ใน Flow หลัก)
-// เลือก 'Mode: Wait and Respond' เพื่อให้ Flow หลักรอผลลัพธ์
-// ส่งเฉพาะข้อมูลที่จำเป็นเท่านั้น (ไม่ใช่ Payload ทั้งหมด)
-// นี่คือ Best Practice เพื่อให้ Sub-Flow ทำงานได้เร็วที่สุด
 
-{
-  "leadId": "{{ $json.id }}",
-  "name": "{{ $json.lead_data.name }}",
-  "revenue": "{{ $json.lead_data.annual_revenue_numeric }}"
-} 
-// Flow ย่อยจะใช้ {{ $json.leadId }} และ {{ $json.name }} ในการประมวลผล
-        </pre>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            การเลือกโหมด **Wait and Respond** ทำให้ Flow หลักหยุดรอจนกว่า Flow ย่อยจะเสร็จสิ้นและส่งผลลัพธ์กลับมา ซึ่งเหมาะสำหรับ Logic ที่ต่อเนื่อง (Synchronous) ส่วนการเรียกแบบ **Fire and Forget** (ไม่รอผล) เหมาะสำหรับงานที่รันเบื้องหลัง (Asynchronous) เช่น การส่งอีเมลแจ้งเตือน
-        </p>
+        <div class="step-card bg-white p-5 rounded-lg shadow-md mb-8 border-l-4 border-red-500">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-code mr-2 text-red-600"></i> 2.1 Conditional Logic (IF/ELSE/SWITCH) (ทักษะ: Google App Script, n8n, AppSheet)
+            </h4>
+            <p class="mb-4 text-gray-700">
+                Logic คือการทำให้ระบบของคุณฉลาดขึ้น โดยการกำหนด "เงื่อนไข" ที่แตกต่างกันไปตามข้อมูลที่ได้รับ เราจะเน้นการใช้ Conditional Logic ที่พบได้ในทั้ง AppSheet (Expressions) และ n8n (IF Node)
+            </p>
+            
+            <div class="highlight-logic p-4 rounded-lg my-4">
+                <p class="font-bold text-red-700 mb-2">ตัวอย่าง: Lead Scoring Logic (AppSheet/n8n)</p>
+                <p class="text-sm text-gray-700">
+                    <span class="font-bold">เงื่อนไข:</span> ถ้า `Lead_Score` มากกว่า 80 (Hot Lead) → ให้ทำ Flow A (แจ้งเตือนเซลล์ทันที) **มิฉะนั้น** → ให้ทำ Flow B (ส่งอีเมลติดตามผลอัตโนมัติเท่านั้น)
+                </p>
+                <p class="text-sm text-gray-700 mt-2">
+                    <span class="font-bold">ใน n8n:</span> ใช้ **IF Node** เพื่อแบ่ง Path การทำงานออกเป็น 2 เส้น (True/False)
+                </p>
+            </div>
 
-        <!-- New Sub-section for DLQ Implementation -->
-        <div class="section-header">
-            <h2 class="text-3xl font-bold gradient-text mt-8">หัวข้อ 3.6: Dead Letter Queue (DLQ) Implementation และ Re-queue Mechanism</h2>
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-exchange-alt mr-2 text-orange-600"></i> 2.2 Data Mapping และ Transformation (ทักษะ: n8n, Google App Script)
+            </h4>
+            <p class="mb-4 text-gray-700">
+                ระบบ Automation ทำงานร่วมกันได้ เพราะเราสามารถแปลงข้อมูลที่ได้รับ (Source Data) ให้เข้ากับรูปแบบที่ระบบปลายทาง (Destination System) ต้องการได้
+            </p>
+            
+            <div class="border border-orange-300 rounded-lg overflow-x-auto my-4 p-4 bg-yellow-50 text-sm">
+                <p class="font-bold text-orange-700 mb-2">การแปลงรูปแบบข้อมูล (Mapping JSON → Tabular)</p>
+                <p class="text-gray-700">
+                    เมื่อ n8n รับข้อมูลจาก Line OA (รูปแบบ JSON ที่ซับซ้อน) แต่ต้องการบันทึกเข้า GGS (รูปแบบตาราง) เราต้องทำการ Mapping
+                </p>
+                <pre class="bg-gray-800 p-3 rounded-lg text-white text-xs mt-2"><code>// ข้อมูลต้นทาง (Source: Line Webhook - JSON)
+{ "source": { "userId": "U47ac..." }, "timestamp": 16788... }
+
+// ข้อมูลปลายทาง (Destination: Google Sheet Row - Tabular)
+[ "Line_ID", "Timestamp", "Message" ]
+[ $json["source"]["userId"], $json["timestamp"], "สวัสดีครับ" ]</code></pre>
+                <p class="text-gray-700 mt-2">
+                    <span class="font-bold text-orange-700">เทคนิค:</span> ใน n8n ใช้ **Set Node** หรือ **Function Node** เพื่อดึงค่าที่ต้องการ (เช่น <span class="code-snippet">$json["userId"]</span>) และจัดเรียงให้ตรงกับคอลัมน์ใน GGS
+                </p>
+            </div>
+            
+            <h5 class="font-bold text-lg text-violet-700 mt-6 border-b pb-1 flex items-center">
+                <i class="fas fa-robot mr-2 text-violet-600"></i> AI Prompt Template: สร้าง AppSheet Logic (Example) (ทักษะ: Gemini, AppSheet)
+            </h5>
+            <div class="ai-prompt-box my-4">
+                <h6 class="prompt-label mb-2">Prompt สำหรับสร้าง AppSheet Expression (Lead Scoring)</h6>
+                <pre class="p-3 rounded-lg text-gray-800 text-xs overflow-x-auto"><code><span class="font-bold text-blue-600">1. Role & Task:</span> "Act as an AppSheet Expression expert. Provide the exact AppSheet formula."
+<span class="font-bold text-blue-600">2. Context (Data):</span> "I have a column named [Line_Message] (Text) and I want to calculate [Lead_Score] (Number)."
+<span class="font-bold text-blue-600">3. Requirements (Logic):</span> "Use a SWITCH expression. 
+<span class="font-bold text-flow-color">Case 1 (Hot Lead):</span> IF [Line_Message] CONTAINS 'สนใจสินค้า' OR [Line_Message] CONTAINS 'นัด Demo' THEN return 30.
+<span class="font-bold text-flow-color">Case 2 (Warm Lead):</span> IF [Line_Message] CONTAINS 'ราคา' OR [Line_Message] CONTAINS 'โปรโมชั่น' THEN return 15.
+<span class="font-bold text-flow-color">Case 3 (Default):</span> OTHERWISE return 5 (New Lead)."
+<span class="font-bold text-blue-600">4. Output Format:</span> "Provide only the single, minified AppSheet expression."</code></pre>
+            </div>
         </div>
 
-        <p class="mt-4 text-gray-700 leading-relaxed">
-            DLQ ไม่ใช่แค่ปลายทาง แต่คือ **"กระบวนการ"** ในการจัดการ Error ถาวร (Permanent Error) เพื่อให้ Flow หลักสามารถทำงานต่อไปได้โดยไม่ติดขัด เราจะสร้าง **DLQ Flow แยก** ที่ทำหน้าที่เพียงอย่างเดียวคือการรับข้อมูลที่ล้มเหลวแล้วบันทึกไว้
-        </p>
 
-        <h4 class="text-xl font-medium mt-6 text-indigo-700 flex items-center space-x-2">
-            <script>document.write(renderIcon('refresh-cw', 'w-5 h-5'));</script>
-            <span>โครงสร้าง DLQ Dedicated Workflow และการบันทึก Log</span>
-        </h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            DLQ Workflow ต้องเป็น Flow ที่เริ่มต้นด้วย **Webhook Trigger** แยกต่างหาก โดย Flow หลักจะทำ HTTP Request ไปยัง Webhook นี้เมื่อพบว่า `item.sendToDLQ` เป็น True
-            <ol class="list-decimal list-inside ml-4 mt-2 space-y-1 text-gray-700">
-                <li>**DLQ Trigger (Webhook):** รับ Payload ที่ล้มเหลวมาจาก Flow หลัก</li>
-                <li>**Data Formatting (Set Node):** จัดรูปแบบข้อมูลเพื่อบันทึก โดยเพิ่ม Field สำคัญ เช่น `Failed_Timestamp`, `Original_Error_Message` (ดึงจาก Error Property) และ `Flow_Name`</li>
-                <li>**Logging (Google Sheets/DB Node):** บันทึกข้อมูลทั้งหมดลงในตาราง **"DLQ_Error_Log"** ใน Google Sheets (ตามที่เราได้เตรียมไว้ใน Day 1)</li>
-                <li>**Notification (Line/Slack Node):** ส่งการแจ้งเตือนระดับ Critical ไปให้ทีมงาน (เช่น อ.แทน) เพื่อให้ทราบว่ามีข้อมูลที่ต้องการการแก้ไขด้วยมือ</li>
-            </ol>
-        </p>
-        <pre class="text-sm mt-3">
-// ตัวอย่าง Data Formatting ก่อนบันทึกเข้า DLQ Log Sheet (เพิ่มการเก็บ Original Payload)
-{
-  "Failed_Timestamp": "{{ new Date().toISOString() }}",
-  "Flow_Name": "Lead_Scoring_Automation_Flow", // Hardcode หรือดึงจาก Environment Variable
-  "Retry_Count": "{{ $json.retryCount }}",
-  "Error_Details": "{{ $json.errorStatus }}",
-  "Original_Payload": "{{ JSON.stringify($json.original_payload || $json) }}", // เก็บ Payload ดั้งเดิมเป็น String
-  "Manual_Status": "Pending Review" // Field สำหรับติดตามงานด้วยมือ
-}
-        </pre>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            การแยก Flow DLQ ออกมาเช่นนี้ ทำให้ระบบของเราทำงานได้อย่างต่อเนื่อง และมีบันทึก Error ที่ชัดเจนสำหรับการตรวจสอบและแก้ไขปัญหาในอนาคตครับ
-        </p>
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-red-700 pb-2 flex items-center mt-8">
+            <i class="fas fa-cogs w-8 h-8 mr-3 text-red-700"></i>
+            ส่วนที่ 3: Workshop: ออกแบบ Logic Flow สำหรับ 3 MVP Systems
+        </h3>
 
-        <h4 class="text-xl font-medium mt-6 text-indigo-700 flex items-center space-x-2">
-            <script>document.write(renderIcon('repeat', 'w-5 h-5'));</script>
-            <span>Re-queue Mechanism: การนำข้อมูลที่แก้ไขแล้วกลับเข้า Flow</span>
-        </h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            DLQ Log Sheet ที่เราสร้างไว้ใน Google Sheets ต้องมี Column สำหรับการนำข้อมูลกลับเข้าสู่ระบบ (Re-queue) เมื่อทีมงานแก้ไขปัญหาที่ต้นเหตุแล้ว (เช่น เติม API Key ที่หมดอายุ)
-            **กลไก Re-queue** ทำงานโดย:
-            <ol class="list-decimal list-inside ml-4 mt-2 space-y-1 text-gray-700">
-                <li>ทีมงานแก้ไขข้อมูลใน DLQ Sheet และเปลี่ยน <code>Manual_Status</code> เป็น "Ready for Requeue"</li>
-                <li>เราสร้าง **Scheduled Workflow** (Trigger ทุก 30 นาที) ที่อ่านข้อมูลจาก DLQ Sheet ที่มีสถานะ "Ready for Requeue" เท่านั้น</li>
-                <li>Flow นี้จะดึง <code>Original_Payload</code> (ที่เป็น JSON String) และใช้ **Function Node** แปลงกลับเป็น JSON Object (<code>JSON.parse()</code>)</li>
-                <li>Flow จะใช้ **HTTP Request Node** เพื่อยิง Payload นั้นกลับไปที่ **Webhook Trigger** ของ Flow หลักอีกครั้ง</li>
-                <li>Flow ต้องอัปเดตสถานะใน DLQ Sheet เป็น "Requeued" เพื่อป้องกันการทำงานซ้ำ</li>
-            </ol>
-            นี่คือการปิด Loop การทำงานของ Automation อย่างสมบูรณ์ ทำให้เราไม่สูญเสียข้อมูลแม้ในสถานการณ์ Error ที่รุนแรงที่สุด
-        </p>
+        <div class="step-card bg-white p-5 rounded-lg shadow-md mb-8 border-l-4 border-red-700">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-comments mr-2 text-red-700"></i> 3.1 System 1 MVP: Line OA Bot & CRM (Lead Scoring Logic) (ทักษะ: n8n, Google App Script)
+            </h4>
+            <div class="p-4 bg-red-50 rounded-lg border-l-4 border-red-400 my-4">
+                <p class="font-bold text-red-700 mb-2">เป้าหมายของ Logic:</p>
+                <p class="text-sm">
+                    ใช้ Conditional Logic 3 ชั้นในการตัดสินใจ:
+                    <ol class="list-decimal ml-6 text-gray-700 space-y-1">
+                        <li>**IF:** ลูกค้ากดปุ่ม "สนใจสินค้า" $\to$ Status: **Hot Lead** (Lead Score +20)</li>
+                        <li>**ELSE IF:** ลูกค้าถามคำถามที่มี Keywords ที่กำหนด (เช่น ราคา, โปรโมชั่น) $\to$ Status: **Warm Lead** (Lead Score +10)</li>
+                        <li>**ELSE:** ลูกค้าพิมพ์ข้อความทั่วไป $\to$ Status: **New Lead** (Lead Score +5)</li>
+                    </ol>
+                </p>
+                <p class="text-sm text-gray-700 mt-2"><span class="font-bold">การแปลง Flow:</span> Flowchart จะมี **Gateway (เพชร)** ติดกัน 2 ตัว เพื่อทดสอบเงื่อนไขจากบนลงล่าง</p>
+            </div>
 
-        <!-- New Sub-section for Monitoring -->
-        <div class="section-header">
-            <h2 class="text-3xl font-bold gradient-text mt-8">หัวข้อ 3.7: Monitoring และ Alerting Best Practices</h2>
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-thumbs-up mr-2 text-green-600"></i> 3.2 System 2 MVP: AI วิเคราะห์ฟีดแบ็ก (Branching Logic) (ทักษะ: n8n, Gemini)
+            </h4>
+            <div class="p-4 bg-green-50 rounded-lg border-l-4 border-green-400 my-4">
+                <p class="font-bold text-green-700 mb-2">เป้าหมายของ Logic:</p>
+                <p class="text-sm">
+                    ใช้ AI (Gemini Node) วิเคราะห์ Sentiment ของ Feedback (จาก GGS) และใช้ Branching Logic เพื่อส่ง Task อัตโนมัติ:
+                    <ol class="list-decimal ml-6 text-gray-700 space-y-1">
+                        <li>**IF:** Sentiment = **Negative** และ Keyword = "สินค้าเสียหาย" → Flow A: สร้าง **Task Urgent** ใน AppSheet (Assign ให้แผนก QC)</li>
+                        <li>**ELSE IF:** Sentiment = **Positive** → Flow B: ส่ง **Email ขอบคุณ** (Log: Satisfied Customer)</li>
+                        <li>**ELSE:** Sentiment = **Neutral/Other** → Flow C: บันทึกเข้า Log เฉยๆ</li>
+                    </ol>
+                </p>
+                <p class="text-sm text-gray-700 mt-2"><span class="font-bold">การแปลง Flow:</span> Flowchart จะแสดง **Gateway** ที่มีทางออก 3 ทาง (3 Paths) ตามผลลัพธ์ของ AI</p>
+            </div>
+            
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-bullhorn mr-2 text-indigo-600"></i> 3.3 System 3 MVP: AI ผู้ช่วยสร้างคอนเทนต์ (Scheduling Logic) (ทักษะ: n8n, Gemini)
+            </h4>
+            <div class="p-4 bg-indigo-50 rounded-lg border-l-4 border-indigo-400 my-4">
+                <p class="font-bold text-indigo-700 mb-2">เป้าหมายของ Logic:</p>
+                <p class="text-sm">
+                    ใช้ Logic การตั้งเวลา (Scheduling) และ Data Transformation ก่อนส่ง Broadcast:
+                    <ol class="list-decimal ml-6 text-gray-700 space-y-1">
+                        <li>**Start:** Trigger โดย Schedule Node ใน n8n (เช่น ทุกวันศุกร์ เวลา 10:00 น.)</li>
+                        <li>**Task 1:** ดึงข้อมูล Content (แคปชั่น) จาก GGS ที่มี Status = "Pending"</li>
+                        <li>**Gateway 1 (Decision):** <span class="font-bold text-red-700">IF:</span> พบ Content ที่ต้องส่ง → ไป **Task 2** <span class="font-bold text-red-700">ELSE:</span> → **End**</li>
+                        <li>**Task 2:** ส่ง Content และรูปภาพไปที่ Line OA Broadcast API</li>
+                        <li>**Task 3:** อัปเดต Status ใน GGS จาก "Pending" เป็น "Sent"</li>
+                        <li>**End:** จบ Flow</li>
+                    </ol>
+                </p>
+                <p class="text-sm text-gray-700 mt-2"><span class="font-bold">การแปลง Flow:</span> Flowchart จะแสดง **วงกลม** ที่มีรูปนาฬิกา (Schedule Trigger) และมีการทำ Task 2 (API Call) อย่างชัดเจน</p>
+            </div>
         </div>
-        
-        <p class="mt-4 text-gray-700 leading-relaxed">
-            Flow ที่ซับซ้อนต้องการการดูแลรักษา การปล่อย Flow Production ให้ทำงานโดยไม่มีระบบตรวจสอบถือเป็นความประมาทขั้นร้ายแรง เราต้องสร้างระบบ **Monitoring** และ **Alerting** เพื่อแจ้งเตือนทันทีเมื่อมีสิ่งผิดปกติเกิดขึ้น
-        </p>
-        
-        <h4 class="text-xl font-medium mt-6 text-indigo-700 flex items-center space-x-2">
-            <script>document.write(renderIcon('bell', 'w-5 h-5'));</script>
-            <span>Real-time Alerting (การแจ้งเตือนแบบทันที)</span>
-        </h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            Alerting ใน n8n ทำได้ง่ายและควรถูกรวมเข้ากับทุก Catch Block และ DLQ Workflow ของเรา:
-            <ul class="list-disc list-inside ml-4 mt-2 space-y-1 text-gray-700">
-                <li>**Critical Errors:** ใช้ **Line Notify/Slack Node** ทันทีใน Catch Block ที่เชื่อมไปยัง DLQ เพื่อแจ้งเตือนว่ามีข้อมูลล้มเหลวถาวร (Severity: High)</li>
-                <li>**Performance Issues:** ตั้งค่า **Alerts** ใน n8n Environment (ถ้าใช้ Self-hosted) เพื่อแจ้งเตือนเมื่อจำนวนการรันล้มเหลว (Failed Executions) เกินเกณฑ์ที่กำหนดใน 1 ชั่วโมง</li>
-                <li>**Health Check:** สร้าง Flow ง่าย ๆ ที่ทำงานทุก 1 ชั่วโมงเพื่อตรวจสอบสถานะของ API Key หลัก และส่ง Alert หากพบปัญหา (Active Monitoring)</li>
-            </ul>
-        </p>
 
-        <h4 class="text-xl font-medium mt-6 text-indigo-700 flex items-center space-x-2">
-            <script>document.write(renderIcon('code', 'w-5 h-5'));</script>
-            <span>Advanced Logging (การบันทึกเชิงลึก)</span>
-        </h4>
-        <p class="mt-3 text-gray-700 leading-relaxed">
-            นอกเหนือจาก DLQ แล้ว การบันทึกรายละเอียดการทำงาน (Execution Log) ไปยังระบบภายนอกก็เป็นสิ่งจำเป็นสำหรับ Debugging และ Audit:
-            <ul class="list-disc list-inside ml-4 mt-2 space-y-1 text-gray-700">
-                <li>**Structured Logging:** ส่ง Log จาก n8n ไปยังบริการ Log Management เช่น **Elasticsearch (ELK) Stack** หรือ **Datadog**</li>
-                <li>**Contextual Logging:** ในทุก Node สำคัญ (เช่น Code Node, AI Node) ควรมีการบันทึก **ID ของลูกค้า/Transaction** ลงใน Log เพื่อให้สามารถค้นหา Execution ที่เกี่ยวข้องได้อย่างรวดเร็วเมื่อเกิดปัญหา</li>
-                <li>**Sentry Integration:** สำหรับ Flow ที่มีการใช้ JavaScript มาก ควรพิจารณาใช้บริการ Error Tracking อย่าง **Sentry** เพื่อบันทึก Stack Trace ของ Error ใน Code Node โดยละเอียด ซึ่งช่วยให้ Debugging โค้ดที่ซับซ้อนทำได้ง่ายขึ้นหลายเท่าตัว</li>
-            </ul>
-        </p>
 
-        <hr class="my-8 border-t border-gray-200">
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-gray-500 pb-2 flex items-center mt-8">
+            <i class="fas fa-shield-alt w-8 h-8 mr-3 text-gray-600"></i>
+            ส่วนที่ 5: Error Handling และ Security ใน Logic Flow
+        </h3>
 
-        <!-- Conclusion/Checklist for the Day -->
-        <div class="section-header">
-            <h2 class="text-3xl font-bold gradient-text mt-8">สรุปและ Checklist สำหรับ Day 2</h2>
+        <div class="step-card bg-white p-5 rounded-lg shadow-md mb-8 border-l-4 border-gray-500">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-bug mr-2 text-red-600"></i> 5.1 Error Handling ใน Flow (Try-Catch Concept) (ทักษะ: Google App Script, n8n)
+            </h4>
+            <p class="mb-4 text-gray-700">
+                เมื่อใช้ API หรือระบบ Low-Code ระบบมีโอกาสล่มได้เสมอ การออกแบบ Flow ที่รองรับความผิดพลาดจึงสำคัญยิ่งกว่าการออกแบบ Logic ทั่วไป
+            </p>
+
+            <div class="p-4 bg-red-50 rounded-lg border-l-4 border-red-500 my-4">
+                <p class="font-bold text-red-700 mb-2">แนวคิด Try...Catch ใน n8n/GAS</p>
+                <ul class="list-disc ml-6 text-gray-700 space-y-1 text-sm">
+                    <li>**Try (Main Path):** คือ Logic ที่ทำงานปกติ (เช่น พยายามส่ง API Call)</li>
+                    <li>**Catch (Error Path):** คือ Flow พิเศษที่ถูก Trigger เมื่อ Logic หลักล้มเหลว</li>
+                    <li><span class="font-bold text-red-700">Action in Catch:</span> ต้องทำ 2 อย่างเสมอ คือ 1) บันทึก Log ข้อผิดพลาดเข้า GGS และ 2) ส่ง Email/Line Notify หา IT Support</li>
+                </ul>
+            </div>
+            
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-lock mr-2 text-blue-600"></i> 5.2 Security: API Key Management Concept (สำหรับ n8n Day 4)
+            </h4>
+            <p class="mb-4 text-gray-700">
+                Low-Code Automation ต้องใช้ API Key ในการเชื่อมต่อกับ Line OA, Loyverse, หรือ Gemini
+            </p>
+            
+            <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500 my-4">
+                <p class="font-bold text-blue-700 mb-2">หลักการรักษาความปลอดภัยของ Key</p>
+                <ul class="list-disc ml-6 text-gray-700 space-y-1 text-sm">
+                    <li>**ห้ามเก็บ Key ในโค้ด:** ห้ามเขียน API Key โดยตรงในโค้ด GAS หรือ Node ใน n8n</li>
+                    <li>**ใช้ Credentials/Environment Variables:** n8n มีระบบ **Credentials** ในตัวที่ปลอดภัยสำหรับการเก็บ Key โดยเฉพาะ</li>
+                    <li>**GAS Best Practice:** ควรใช้ **User Properties Service** หรือ **Script Properties** (Low-Code Storage) แทนการ hardcode ใน Script</li>
+                </ul>
+            </div>
         </div>
-        
-        <div class="mt-4 p-6 bg-indigo-50 rounded-xl card-shadow">
-            <ul class="list-disc list-inside space-y-3 text-gray-700">
-                <li>✅ เข้าใจความแตกต่างระหว่าง Flow แบบ Stateless และ State-Driven</li>
-                <li>✅ สามารถอธิบายและใช้งาน **Webhook** รวมถึงมาตรการ **HMAC Security** ได้</li>
-                <li>✅ สามารถทำ **Data Pre-processing** ด้วย Code Node เพื่อเตรียมข้อมูลก่อนส่งให้ AI</li>
-                <li>✅ สามารถออกแบบ **System Prompt** และบังคับให้ AI ส่งผลลัพธ์เป็น **Structured JSON Output** ได้</li>
-                <li>✅ สามารถเขียน **Function Node (JavaScript)** เพื่อประยุกต์ใช้ **Exponential Backoff** ได้อย่างถูกต้อง</li>
-                <li>✅ เข้าใจแนวคิดและสามารถออกแบบเส้นทางไปยัง **Dead Letter Queue (DLQ)** สำหรับจัดการ Error ถาวรได้</li>
-                <li>✅ สามารถใช้ **Sub-Workflows** เพื่อจัดการ Flow ที่ซับซ้อนและหลีกเลี่ยง Spaghetti Code ได้</li>
-                <li>✅ เข้าใจหลักการ **Re-queue Mechanism** เพื่อนำข้อมูลที่แก้ไขกลับเข้าสู่ระบบ</li>
-                <li>✅ เข้าใจ Best Practices ด้าน **Monitoring และ Alerting** ใน Production Environment</li>
-            </ul>
+
+
+        <div class="mt-12 text-center p-6 bg-violet-50 rounded-lg card-shadow border-t-4 border-violet-700">
+            <p class="font-bold text-2xl text-violet-800 mb-2">
+                <i class="fas fa-graduation-cap mr-2"></i> สรุปสิ่งที่ผู้เรียนจะได้จาก Day 2
+            </p>
+            <p class="text-gray-700 text-lg">
+                ผู้เรียนสามารถ **วิเคราะห์โจทย์ธุรกิจ** และ **ออกแบบ Flowchart** ขั้นสูงสำหรับระบบ Automation ทั้ง 3 MVP ได้อย่างครบถ้วน พร้อมทำความเข้าใจหลักการ Conditional Logic และการจัดการข้อมูล ซึ่งเป็นรากฐานสำคัญก่อนเข้าสู่ Workshop สร้าง App (AppSheet) ใน Day 3
+            </p>
+            <a href="day3_automation.html" class="inline-flex items-center mt-4 px-6 py-3 bg-violet-600 text-white font-bold rounded-lg hover:bg-violet-700 transition duration-150">
+                <span class="mr-2">ไปยัง Day 3: Workshop สร้าง App ด้วย AppSheet</span> <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
+
     </main>
 
-    <!-- Footer Section (Consistent with Day 1) -->
     <footer class="bg-gray-800 text-white py-6 mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p>&copy; 2025 AI Automation & Data Integration Master. | เอกสารประกอบการสอนโดย อ.แทน [ธีรชัย โฉมทัพ]</p>
-            <p class="text-sm text-gray-400 mt-1">Head of Digital Transformation</p>
         </div>
     </footer>
 
