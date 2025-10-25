@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เฉลย Workshop: AI Automation Master</title>
+    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Noto Sans Thai Font and Inter Font --><style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+Thai:wght@100..900&display=swap');
+        :root {
+            --primary-color: #0d9488; /* Teal-600 */
+            --gradient-start: #0d9488;
+            --gradient-end: #34d399; /* Teal-400 */
+        }
+        body {
+            font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+            background-color: #f8fafc;
+            line-height: 1.6;
+        }
+        .gradient-text {
+            background-image: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .solution-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .card-header {
+            padding: 16px 24px;
+            background-color: #f0fdfa; /* Teal-50 */
+            border-bottom: 2px solid var(--primary-color);
+        }
+        .code-block {
+            background-color: #1f2937; /* Dark BG for code */
+            color: #d1fae5; /* Light Green text */
+            padding: 16px;
+            overflow-x: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+        .code-block pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .ai-node {
+            background-color: #bfdbfe;
+            color: #1e40af;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .app-expression {
+            font-family: monospace;
+            background-color: #fef2f2;
+            color: #b91c1c;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+    <!-- Font Awesome Icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body class="p-8">
+
+    <!-- Header Section -->
+    <header class="text-center mb-10">
+        <h1 class="text-4xl font-extrabold gradient-text mb-2">เฉลย Workshop หลักสูตร</h1>
+        <p class="text-xl text-gray-600">AI Automation & Data Integration Master (Day 1 - Day 5)</p>
+        <p class="text-sm text-gray-500 mt-1">เอกสารนี้ใช้สำหรับผู้สอนและผู้เรียนเพื่อตรวจสอบความถูกต้องของ Logic และ Code</p>
+    </header>
+
+    <!-- Day 1 Solutions -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold text-gray-700 mb-6 border-b-2 border-blue-300 pb-2 flex items-center">
+            <i class="fas fa-database mr-3 text-blue-500"></i> Day 1: Data Design และ Google App Script (GAS)
+        </h2>
+
+        <div class="solution-card">
+            <div class="card-header">
+                <h3 class="text-xl font-bold text-gray-800">Workshop: GAS Auto ID Generator</h3>
+                <p class="text-sm text-gray-600">โจทย์: สร้าง Primary Key อัตโนมัติ (CUST-YYMMDD-HHMMSS-RANDOM) ใน GGS</p>
+            </div>
+            <div class="p-6">
+                <p class="font-semibold text-teal-600">✅ SOLUTION: Google App Script (GAS)</p>
+                <div class="code-block">
+                    <pre>
+// ฟังก์ชันหลัก: ทำงานเมื่อมีการแก้ไขข้อมูลใน GGS (Trigger On Edit)
+function onEdit(e) {
+  const TARGET_SHEET_NAME = 'Customers';
+  const ID_COLUMN_INDEX = 1; // คอลัมน์ A
+  const FIRST_DATA_ROW = 2;
+
+  const range = e.range; 
+  const sheet = range.getSheet(); 
+  const sheetName = sheet.getName(); 
+
+  if (sheetName !== TARGET_SHEET_NAME || range.getRow() < FIRST_DATA_ROW) {
+    return;
+  }
+  
+  try {
+    // การจัดการความเสถียร (Stability) ด้วย Lock Service
+    const lock = LockService.getScriptLock();
+    if (lock.tryLock(15000)) { 
+      const idCell = sheet.getRange(range.getRow(), ID_COLUMN_INDEX);
+      if (idCell.getValue() === "") {
+        const newId = generateUniqueId('CUST-');
+        idCell.setValue(newId);
+      }
+      lock.releaseLock();
+    }
+  } catch (error) {
+    Logger.log(`[ERROR] Auto ID Failed: ${error.toString()}`);
+  }
+}
+
+// ฟังก์ชันสร้าง Unique ID
+function generateUniqueId(prefix) {
+  const now = new Date();
+  const year = now.getFullYear().toString().substring(2);
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const time = String(now.getHours()).padStart(2, '0') + String(now.getMinutes()).padStart(2, '0') + String(now.getSeconds()).padStart(2, '0');
+  const randomHex = Math.random().toString(16).substring(2, 6).toUpperCase(); 
+
+  const timestamp = `${year}${month}${day}-${time}`;
+  return `${prefix}${timestamp}-${randomHex}`;
+}
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Day 2 Solutions -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold text-gray-700 mb-6 border-b-2 border-violet-300 pb-2 flex items-center">
+            <i class="fas fa-sitemap mr-3 text-violet-500"></i> Day 2: Logic Flow Design และ Conditional Logic
+        </h2>
+        
+        <div class="solution-card">
+            <div class="card-header">
+                <h3 class="text-xl font-bold text-gray-800">Workshop: AppSheet Lead Scoring Logic (AppSheet Expression)</h3>
+                <p class="text-sm text-gray-600">โจทย์: กำหนด Lead Score (30/15/5) ตาม Keywords ในข้อความ [Line_Message]</p>
+            </div>
+            <div class="p-6">
+                <p class="font-semibold text-teal-600">✅ SOLUTION: AppSheet SWITCH Expression</p>
+                <p class="app-expression p-3 bg-gray-50 border border-gray-200">
+                    SWITCH(TRUE, <br>
+                    &nbsp;&nbsp;OR(CONTAINS([Line_Message], "สนใจสินค้า"), CONTAINS([Line_Message], "นัด Demo")), 30, <span class="text-gray-500">// Hot Lead</span><br>
+                    &nbsp;&nbsp;OR(CONTAINS([Line_Message], "ราคา"), CONTAINS([Line_Message], "โปรโมชั่น")), 15, <span class="text-gray-500">// Warm Lead</span><br>
+                    &nbsp;&nbsp;5 <span class="text-gray-500">// Default: New Lead</span><br>
+                    )
+                </p>
+                <p class="font-semibold text-teal-600 mt-6">✅ SOLUTION: Flowchart Logic (Line OA Lead Scoring)</p>
+                <!-- Simplified Flowchart Text for clarity in the solution document -->
+                <div class="p-4 bg-yellow-50 rounded-lg text-sm">
+                    <p class="font-bold text-yellow-800">Flow Path หลัก:</p>
+                    <p>Line Webhook (Start) → Lookup Line ID (Task) → **IF** Found (Gateway) → (True) Update Contact / (False) Create New Lead → Send Welcome Message (Task) → End</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Day 3 Solutions -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold text-gray-700 mb-6 border-b-2 border-emerald-300 pb-2 flex items-center">
+            <i class="fas fa-mobile-alt mr-3 text-emerald-500"></i> Day 3: AppSheet App/Bot Creation
+        </h2>
+        
+        <div class="solution-card">
+            <div class="card-header">
+                <h3 class="text-xl font-bold text-gray-800">Workshop: AppSheet Security Filter</h3>
+                <p class="text-sm text-gray-600">โจทย์: กำหนดให้พนักงานเห็นเฉพาะรายการขายที่ตัวเองสร้างเท่านั้น</p>
+            </div>
+            <div class="p-6">
+                <p class="font-semibold text-teal-600">✅ SOLUTION: Security Filter Expression</p>
+                <p class="app-expression p-3 bg-gray-50 border border-gray-200">
+                    <span class="text-gray-500">// AppSheet: Security > Filter > Row Filter Condition</span><br>
+                    ([Sales_Person_Email] = USEREMAIL()) <span class="text-gray-500">// ใช้งานได้เมื่อคอลัมน์ [Sales_Person_Email] ถูกบันทึกไว้ใน GGS</span>
+                </p>
+                
+                <p class="font-semibold text-teal-600 mt-6">✅ SOLUTION: AppSheet Automation Bot (Trigger)</p>
+                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-2">
+                    <li>**Event (Trigger):** <span class="app-expression">Data Change (Adds Only)</span> บนตาราง Sales Transactions</li>
+                    <li>**Process (Logic):** <span class="app-expression">Create New File</span> (PDF/Email Body) และ <span class="app-expression">Send an email</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Day 4 Solutions -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold text-gray-700 mb-6 border-b-2 border-indigo-300 pb-2 flex items-center">
+            <i class="fas fa-network-wired mr-3 text-indigo-500"></i> Day 4: N8N Webhooks และ Data Transformation
+        </h2>
+        
+        <div class="solution-card">
+            <div class="card-header">
+                <h3 class="text-xl font-bold text-gray-800">Workshop 1: AppSheet (Webhook) → N8N → Google Sheets</h3>
+                <p class="text-sm text-gray-600">โจทย์: รับ JSON จาก AppSheet และ Map Fields ลง GGS</p>
+            </div>
+            <div class="p-6">
+                <p class="font-semibold text-teal-600">✅ SOLUTION: N8N Node Sequence</p>
+                <p class="data-flow-path text-sm text-center mb-4">
+                    <span class="ai-node">Webhook</span> → <span class="ai-node">Set Node</span> → <span class="ai-node">Google Sheets (Append Row)</span>
+                </p>
+                
+                <p class="font-semibold text-teal-600">✅ SOLUTION: Data Mapping Expression (Set Node)</p>
+                <div class="code-block">
+                    <pre>
+// การดึงข้อมูลจาก JSON Payload ที่มาจาก AppSheet
+// AppSheet Payload จะอยู่ในรูปแบบ { "Data": { "Column1": "Value1", ... } }
+{
+  "Transaction_ID": "{{ $json['Data']['TXN_ID'] }}",
+  "Customer_Ref": "{{ $json['Data']['Customer_Ref'] }}",
+  "Total_Price": "{{ $json['Data']['Total_Price'] }}" 
+}
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Day 5 Solutions -->
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold text-gray-700 mb-6 border-b-2 border-red-300 pb-2 flex items-center">
+            <i class="fas fa-rocket mr-3 text-red-500"></i> Day 5: AI (Gemini) Integration และ Complex Workflow
+        </h2>
+        
+        <div class="solution-card">
+            <div class="card-header">
+                <h3 class="text-xl font-bold text-gray-800">Workshop 4: AI Summarization & Content Automation</h3>
+                <p class="text-sm text-gray-600">โจทย์: ใช้ Gemini สรุปข้อมูลยาวๆ จาก GGS ก่อนส่ง Line Notify</p>
+            </div>
+            <div class="p-6">
+                <p class="font-semibold text-teal-600">✅ SOLUTION: N8N Workflow (AI Integration)</p>
+                <p class="data-flow-path text-sm text-center mb-4">
+                    <span class="ai-node">Schedule</span> → <span class="ai-node">GGS (Read Data)</span> → <span class="ai-node">Gemini Node (Prompt)</span> → <span class="ai-node">Line Notify (Broadcast)</span>
+                </p>
+                
+                <p class="font-semibold text-teal-600">✅ SOLUTION: Prompt Template (Gemini Node)</p>
+                <div class="code-block">
+                    <pre>
+// Prompt ที่ถูกสร้างแบบ Dynamic โดยใช้ Expression ดึงเนื้อหาจาก GGS
+"โปรดสรุปสาระสำคัญของรายงานนี้ให้เหลือ 3-4 บรรทัด โดยเน้น 'ปัญหาหลัก' และ 'ข้อเสนอแนะหลัก' เท่านั้น: {{ $json['Report_Content'] }}"
+                    </pre>
+                </div>
+            </div>
+        </div>
+        
+        <div class="solution-card">
+            <div class="card-header">
+                <h3 class="text-xl font-bold text-gray-800">Project MVP: Error Handling (Advanced Logic)</h3>
+                <p class="text-sm text-gray-600">โจทย์: สร้าง Flow Path เพื่อดักจับและแจ้งเตือนข้อผิดพลาด</p>
+            </div>
+            <div class="p-6">
+                <p class="font-semibold text-teal-600">✅ SOLUTION: N8N Error Handling Sequence</p>
+                <p class="data-flow-path text-sm text-center mb-4">
+                    <span class="ai-node">Main Workflow</span> → **[Error Path]** → <span class="ai-node">Function Node</span> (Format Error Log) → <span class="ai-node">Google Sheets (Log Table)</span> → <span class="ai-node">Line Notify (Admin Alert)</span>
+                </p>
+                <p class="text-sm text-gray-700 mt-4">
+                    <span class="font-bold text-red-600">หลักการ:</span> เมื่อเกิด Error, Workflow จะไหลเข้าสู่ **Error Path** ซึ่งจะทำงาน 3 ขั้นตอน: 1) บันทึกรายละเอียด Error, 2) ส่งแจ้งเตือนหาผู้ดูแลระบบ, 3) จบ Workflow อย่างปลอดภัย
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="text-center text-gray-500 mt-10 border-t pt-4">
+        <p>เอกสารฉบับนี้เป็นทรัพย์สินทางปัญญาของหลักสูตร AI Automation Master</p>
+    </footer>
+
+</body>
+</html>

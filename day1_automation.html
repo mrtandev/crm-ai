@@ -6,36 +6,52 @@
     <title>Day 1: ปรัชญา No-Code & Data Design</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* นำเข้า Font และกำหนด Root Variables */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+Thai:wght@100..900&display=swap');
         :root {
+            /* สีหลักของ Day 1: Blue/Indigo (ตามต้นฉบับ) */
             --primary-color: #3b82f6; /* Blue-500 */
             --gradient-start: #3b82f6;
             --gradient-end: #6366f1; /* Indigo-500 */
-            /* เพิ่มสี Gradient สำหรับ Summary Card (ม่วง/ชมพู) */
             --summary-start: #8b5cf6; /* Violet-500 */
             --summary-end: #ec4899; /* Pink-500 */
+            /* สีสำหรับหัวข้อหลัก (สอดคล้องกับ Day 2) */
+            --section-title-color: #1f2937; /* Gray-800 */
         }
         body {
             font-family: 'Noto Sans Thai', 'Inter', sans-serif;
             background-color: #f8fafc;
         }
+
+        /* สไตล์ Gradient Text (เหมือน Day 2) */
         .gradient-text {
             background-image: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            font-weight: 700; /* ทำให้หัวข้อ Gradient ชัดเจนขึ้น */
         }
+
+        /* Card Shadow (เหมือน Day 2) */
         .card-shadow {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
+
+        /* Step Card (เหมือน Day 2) */
         .step-card {
             border-left: 5px solid var(--primary-color);
             transition: all 0.3s ease;
+            padding: 25px; /* เพิ่ม Padding เล็กน้อย */
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Shadow ที่เบาลงเพื่อซ้อนกับ hover */
         }
         .step-card:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Shadow ที่หนาขึ้นเมื่อ Hover */
+            transform: translateY(-3px); /* เลื่อนขึ้นเล็กน้อย */
+            border-left-color: var(--gradient-end); /* เปลี่ยนสีเส้นเมื่อ Hover */
         }
+
+        /* สไตล์ Code Snippet (เหมือน Day 2) */
         .code-snippet {
             font-family: monospace;
             background-color: #e2e8f0;
@@ -49,7 +65,11 @@
         pre {
             white-space: pre-wrap;
             word-wrap: break-word;
+            /* ปรับสไตล์ pre ใน Workshop */
+            background-color: #1f2937 !important; 
         }
+
+        /* สไตล์ AI Prompt Box */
         .ai-prompt-box {
             background-color: #eef2ff;
             border: 2px solid #6366f1;
@@ -68,25 +88,23 @@
         .gas-code {
             color: #f87171; /* Red-400 for GAS keywords */
         }
-        /* *** START: CSS สำหรับ Summary Card (ตามรูป) *** */
+        
+        /* สไตล์ Summary Card (ปรับปรุงให้สวยงามและคงเดิม) */
         .summary-card-wrapper {
-            /* Full width container for the final summary card */
             margin-top: 2rem;
             margin-bottom: 2rem;
         }
         .summary-card-content {
-            /* The actual content box with border and gradient background */
-            background: linear-gradient(135deg, #f3e8ff, #f0f9ff); /* Very light gradient bg */
+            background: linear-gradient(135deg, #f3e8ff, #f0f9ff);
             border: 4px solid;
             border-image: linear-gradient(to right, var(--summary-start), var(--summary-end)) 1;
             padding: 2rem;
-            border-radius: 0.5rem; 
+            border-radius: 0.75rem; /* เพิ่มความโค้งมน */
             text-align: center;
         }
         .summary-card-content h4 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            /* ใช้ Gradient Text สำหรับหัวข้อสรุป */
+            font-size: 1.8rem; /* เพิ่มขนาดหัวข้อ */
+            font-weight: 800;
             background-image: linear-gradient(to right, #4c1d95, var(--summary-end));
             -webkit-background-clip: text;
             background-clip: text;
@@ -94,70 +112,39 @@
             margin-bottom: 1rem;
         }
         .summary-card-content .summary-icon {
-            color: var(--summary-end); /* Pink */
+            color: var(--summary-end);
             filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
             margin-right: 0.5rem;
         }
-        .summary-card-content p {
-            color: #475569; /* Slate-600 */
-            font-size: 1rem;
-            margin-top: 1rem;
-            line-height: 1.6;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            font-weight: 500;
-        }
         .summary-card-content .btn-next {
             background-image: linear-gradient(to right, var(--summary-start), var(--summary-end));
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             margin-top: 1.5rem;
             padding: 0.75rem 2rem;
-            border-radius: 9999px; /* rounded-full */
+            border-radius: 9999px;
             font-weight: 700;
             color: white;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
         }
-        .summary-card-content .btn-next:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.2);
+
+        /* สไตล์หัวข้อหลัก (เหมือน Day 2) */
+        .main-section-title {
+            font-size: 2.25rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            color: var(--section-title-color);
+            margin-bottom: 1.5rem; /* mb-6 */
+            border-bottom: 4px solid var(--primary-color); /* ใช้สี Day 1 */
+            padding-bottom: 0.5rem; /* pb-2 */
+            display: flex;
+            align-items: center;
         }
-        /* *** END: CSS สำหรับ Summary Card *** */
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <script>
-        // Lucide Icons Placeholder for consistency (รักษาส่วนนี้ไว้)
-        const renderIcon = (name, className = 'w-5 h-5') => {
-            const icons = {
-                'users': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M16 21v-2a4 4 0 0 0 -4 -4H6a4 4 0 0 0 -4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0 -3 -3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
-                'database': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/><path d="M3 19A9 3 0 0 0 21 19"/></svg>`,
-                'blocks': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>`,
-                'code': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
-                'arrow-right': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M5 12h14"/><path d="m12 5 7 7 -7 7"/></svg>`,
-                'arrow-down': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M12 5v14"/><path d="m19 12 -7 7 -7 -7"/></svg>`,
-                'star': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
-                'coffee': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M10 2v2c0 1.1.9 2 2 2s2 -.9 2 -2V2"/><path d="M12 10v4c0 1.1.9 2 2 2h2c1.1 0 2 -.9 2 -2V10"/><path d="M3 6h18v4a2 2 0 0 1 -2 2H5a2 2 0 0 1 -2 -2V6Z"/></svg>`,
-                'utensils': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M3 2v7c0 1.1.9 2 2 2h4l-3 9"/><path d="M21 2v7c0 1.1 -.9 2 -2 2h-4l3 9"/><line x1="15" x2="9" y1="11" y2="17"/></svg>`,
-                'lightbulb': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M15 14c.2 -.8 1 -1.4 1.8 -1.4a3 3 0 1 1 0 6h-5.6"/><path d="M4 17a3 3 0 1 0 0 6h10c1.7 0 3 -1.3 3 -3 0 -1.1 -.9 -2 -2 -2"/><path d="M12 3L12 12"/><path d="M12 3a7 7 0 0 0 -7 7 7 7 0 0 0 7 7"/></svg>`,
-                'tool': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M16 10l-4 4 -4 4"/><path d="M10 16l4 -4 4 -4"/></svg>`,
-                'git-branch': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1 -9 9"/></svg>`,
-                'brain': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M9 18C7 16 7 14 7 12s0 -4 2 -6"/><path d="M15 6c2 2 2 4 2 6s0 4 -2 6"/><path d="M17 12A10 10 0 0 0 7 12"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10 -4.5 10 -10S17.5 2 12 2Z"/></svg>`,
-                'mail': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7 -10 7 -10 -7"/></svg>`,
-                'alert-triangle': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="m21.73 18 -9 -15a2 2 0 0 0 -3.46 0l-9 15a2 2 0 0 0 1.73 3h18.54a2 2 0 0 0 1.73 -3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
-                'shield': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M12 22s8 -4 8 -10V5l-8 -3 -8 3v7c0 6 8 10 8 10z"/></svg>`,
-                'calendar-check': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4 -4"/></svg>`,
-                'graduation-cap': `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M22 10v6m-2 -4L12 2L2 10l10 8 10 -8zm-4 4v4m-12 -4v4m6 -12L12 2v10z"/></svg>`,
-            };
-            // Use document.write if the user is embedding the code directly
-            document.write(icons[name] || '');
-        };
-    </script>
 </head>
 <body class="min-h-screen">
-    <div id="messageBox" class="fixed top-4 right-4 z-50 w-full max-w-sm"></div>
 
     <header class="bg-white card-shadow sticky top-0 z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -178,12 +165,12 @@
         <div class="bg-white p-6 rounded-xl card-shadow mb-8 border-t-4 border-indigo-500">
             <div class="flex items-center space-x-4">
                 <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
-                     onerror="this.onerror=null;this.src='https://placehold.co/80x80/6366f1/ffffff?text=อ.แทน';"
-                     alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-20 h-20 rounded-full object-cover ring-2 ring-indigo-500">
+                    onerror="this.onerror=null;this.src='https://placehold.co/80x80/6366f1/ffffff?text=อ.แทน';"
+                    alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-20 h-20 rounded-full object-cover ring-2 ring-indigo-500">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800">อ.แทน <span class="text-indigo-600">[ธีรชัย โฉมทัพ]</span></h2>
                     <p class="text-base text-gray-500">Head of Digital Transformation</p>
-                    <p class="text-sm text-gray-600 mt-1">ยินดีต้อนรับสู่ Day 1 เราจะสร้างรากฐานของ Data Design และ Low-Code Automation ที่แข็งแกร่ง!</p>
+                    <p class="text-sm text-gray-600 mt-1">ยินดีต้อนรับสู่ Day 1 เราจะสร้างรากฐานของ **Data Design** และ **Low-Code Automation** ที่แข็งแกร่ง! 🧱</p>
                 </div>
             </div>
         </div>
@@ -243,9 +230,9 @@
             </table>
         </div>
 
-
-        <h3 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2 flex items-center">
-            <i class="fas fa-calendar-check w-6 h-6 mr-3 text-green-600"></i> แผนการสอนรายชั่วโมง (Step-by-Step)
+        <h3 class="main-section-title">
+            <i class="fas fa-calendar-alt w-8 h-8 mr-3 text-indigo-600"></i>
+            แผนการสอนรายชั่วโมง (Step-by-Step)
         </h3>
         
         <div class="mb-8">
@@ -253,43 +240,43 @@
                 <i class="fas fa-bullhorn w-6 h-6 text-purple-600 mr-3"></i>
                 <h4 class="text-xl font-semibold text-purple-800">พิธีเปิดงานและกล่าวเปิดหลักสูตร (09:00 - 10:00 น.)</h4>
             </div>
-            <div class="step-card bg-white p-5 rounded-lg shadow-md mb-4 border-l-4 border-purple-500">
+            <div class="step-card bg-white p-5 rounded-xl card-shadow mb-4" style="border-left-color: #8b5cf6;">
                 <div class="flex justify-between items-start mb-2">
                     <span class="text-lg font-bold text-gray-800">09:00 - 10:00 น.</span>
                     <span class="text-xs font-medium text-purple-500 bg-purple-100 px-2 py-1 rounded-full">เปิดงาน & Vision</span>
                 </div>
-                <p class="font-semibold text-gray-700 mb-4">หัวข้อหลัก: การต้อนรับ, กำหนดวิสัยทัศน์ (Vision) ของหลักสูตร, และการแนะนำ Ecosystem</p>
+                <p class="font-semibold text-gray-700 mb-4">หัวข้อหลัก: การต้อนรับ, กำหนดวิสัยทัศน์ (**Vision**) ของหลักสูตร, และการแนะนำ Ecosystem</p>
                 <ul class="list-disc list-inside ml-4 text-gray-600">
                     <li>ต้อนรับผู้เข้าร่วม และแนะนำ อ.แทน</li>
-                    <li>กล่าวเปิดตัวหลักสูตร "AI Automation & Data Integration Master"</li>
+                    <li>กล่าวเปิดตัวหลักสูตร "AI Automation & Data Integration Master" 🚀</li>
                     <li>ภาพรวม 5 วัน: What to Expect & Why (เน้นการเปลี่ยนงานซ้ำซากให้เป็น Automation)</li>
                     <li>แนะนำ Ecosystem: Google Sheets (หัวใจ) + AppSheet (มือ) + n8n (เส้นเลือด) + Gemini (สมอง)</li>
                 </ul>
             </div>
         </div>
 
+        <h3 class="main-section-title" style="border-bottom-color: #2563eb;">
+            <i class="fas fa-handshake w-8 h-8 mr-3 text-blue-600"></i>
+            ส่วนที่ 1: ปรัชญา No-Code/Low-Code (10:00 - 12:00 น.)
+        </h3>
+        
         <div class="mb-8">
-            <div class="flex items-center mb-4 p-3 bg-blue-50 rounded-lg">
-                <i class="fas fa-star w-6 h-6 text-yellow-500 mr-3"></i>
-                <h4 class="text-xl font-semibold text-blue-800">ช่วงเช้า (ต่อ): ปรัชญา No-Code/Low-Code (10:00 - 12:00 น.)</h4>
-            </div>
-
-            <div class="step-card bg-white p-5 rounded-lg shadow-md mb-4">
+            <div class="step-card bg-white p-5 rounded-xl card-shadow mb-4" style="border-left-color: #3b82f6;">
                 <div class="flex justify-between items-start mb-2">
                     <span class="text-lg font-bold text-gray-800">10:00 - 11:00 น.: บทนำ & ทฤษฎี</span>
                     <span class="text-xs font-medium text-blue-500 bg-blue-100 px-2 py-1 rounded-full">ทฤษฎี & แนวคิด</span>
                 </div>
-                <p class="font-semibold text-gray-700 mb-4">หัวข้อหลัก: ทำความเข้าใจโลกของ No-Code และ Low-Code (AppSheet, N8N) และบทบาทของ Gemini (ทักษะ: AppSheet, n8n, Google App Script)</p>
+                <p class="font-semibold text-gray-700 mb-4">หัวข้อหลัก: ทำความเข้าใจโลกของ No-Code และ Low-Code (**AppSheet**, **N8N**) และบทบาทของ Gemini</p>
                 
                 <div class="my-4 p-5 bg-gray-50 rounded-lg border border-blue-200 shadow-inner">
-                    <p class="text-sm font-semibold text-gray-700 mb-3 text-center">ภาพที่ 1.1: เปรียบเทียบ No-Code และ Low-Code (เน้น AppSheet, n8n)</p>
+                    <p class="text-sm font-semibold text-gray-700 mb-3 text-center"><i class="fas fa-chart-area mr-1 text-blue-500"></i> ภาพที่ 1.1: เปรียบเทียบ No-Code และ Low-Code (เน้น AppSheet, n8n)</p>
                     <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8">
                         
                         <div class="flex flex-col items-center p-4 w-40 h-40 bg-green-50 rounded-xl shadow-lg border-2 border-green-400">
                             <i class="fas fa-th-large w-8 h-8 text-green-600 mb-2"></i>
                             <p class="font-bold text-lg text-green-700">AppSheet</p>
                             <p class="text-xs text-center text-gray-600 mt-2">ผู้ใช้งาน: Citizen Dev</p>
-                            <p class="text-xs text-center text-gray-600 font-bold text-green-800">เน้นสร้าง Mobile/Web App</p>
+                            <p class="text-xs text-center text-gray-600 font-bold text-green-800">เน้นสร้าง Mobile/Web App 📱</p>
                         </div>
 
                         <div class="flex items-center text-blue-500 font-bold text-xl">
@@ -299,29 +286,29 @@
                         </div>
 
                         <div class="flex flex-col items-center p-4 w-40 h-40 bg-indigo-50 rounded-xl shadow-lg border-2 border-indigo-400">
-                            <i class="fas fa-code w-8 h-8 text-indigo-600 mb-2"></i>
+                            <i class="fas fa-code-branch w-8 h-8 text-indigo-600 mb-2"></i>
                             <p class="font-bold text-lg text-indigo-700">n8n / GAS</p>
                             <p class="text-xs text-center text-gray-600 mt-2">ผู้ใช้งาน: Pro Dev / IT</p>
-                            <p class="text-xs text-center text-gray-600 font-bold text-indigo-800">เน้น Logic & API</p>
+                            <p class="text-xs text-center text-gray-600 font-bold text-indigo-800">เน้น Logic & API 🔗</p>
                         </div>
                     </div>
                 </div>
                 <div class="space-y-4 text-gray-600">
-                    <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1">1.1.1 นิยามและความแตกต่าง: No-Code (AppSheet) vs. Low-Code (n8n/GAS) (ทักษะ: AppSheet, n8n, Google App Script)</h5>
+                    <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1">1.1.1 นิยามและความแตกต่าง: No-Code (AppSheet) vs. Low-Code (n8n/GAS)</h5>
                     <p class="ml-4">
-                        <span class="font-bold text-green-700">No-Code (Citizen Developers):</span> เครื่องมือที่เน้นความเร็วในการสร้าง **Application Interface** โดยใช้การลากวาง (Drag-and-Drop) และตั้งค่าผ่าน UI เช่น **AppSheet**
+                        <span class="font-bold text-green-700">No-Code:</span> เครื่องมือที่เน้นความเร็วในการสร้าง **Application Interface** โดยใช้การลากวาง (เช่น **AppSheet**)
                     </p>
                     <p class="ml-4">
-                        <span class="font-bold text-indigo-700">Low-Code (Pro-Developers / IT):</span> เครื่องมือที่ให้ความสามารถในการสร้าง **Workflow Logic** ที่ซับซับซ้อนขึ้น เช่น **n8n** และ **Google App Script (GAS)**
+                        <span class="font-bold text-indigo-700">Low-Code:</span> เครื่องมือที่ให้ความสามารถในการสร้าง **Workflow Logic** ที่ซับซ้อนขึ้น เช่น **n8n** และ **Google App Script (GAS)**
                     </p>
                     
                     <h5 class="font-bold text-lg text-gray-700 border-b pb-1 mt-6">1.1.2 The Role of AI in Low-Code / No-Code (แนวคิด AI Agent และ Gemini)</h5>
                     <p class="ml-4">
-                        AI (เช่น **Gemini API**) เข้ามาเพิ่ม "สมอง" ใน Ecosystem นี้ โดยเฉพาะใน **GAS/Low-Code** เพื่อจัดการ Unstructured Data (เช่น การสรุป Feedback ลูกค้า, การจัดหมวดหมู่ข้อความ)
+                        AI (เช่น **Gemini API**) เข้ามาเพิ่ม **"สมอง"** 🧠 ใน Ecosystem นี้ โดยเฉพาะใน Low-Code เพื่อจัดการ Unstructured Data
                     </p>
                 </div>
                 <div class="mt-3 text-sm text-gray-500 italic flex items-center">
-                    <i class="fas fa-lightbulb w-4 h-4 mr-2 text-yellow-500"></i> จุดเน้น: การวางแผน Ecosystem โดยมอง GGS เป็นศูนย์กลาง และใช้ AppSheet/n8n/GAS เติมเต็มความสามารถซึ่งกันและกัน
+                    <i class="fas fa-lightbulb w-4 h-4 mr-2 text-yellow-500"></i> จุดเน้น: การวางแผน Ecosystem โดยมอง GGS เป็นศูนย์กลาง
                 </div>
             </div>
 
@@ -331,33 +318,34 @@
                 </span>
             </div>
 
-            <div class="step-card bg-white p-5 rounded-lg shadow-md mb-4">
+            <div class="step-card bg-white p-5 rounded-xl card-shadow mb-4" style="border-left-color: #6366f1;">
                 <div class="flex justify-between items-start mb-2">
                     <span class="text-lg font-bold text-gray-800">11:15 - 12:00 น.: การเลือกใช้เครื่องมือ</span>
                     <span class="text-xs font-medium text-purple-500 bg-purple-100 px-2 py-1 rounded-full">ปฏิบัติ (Discussion)</span>
                 </div>
-                <p class="font-semibold text-gray-700 mb-4">หัวข้อหลัก: การวิเคราะห์ความต้องการและ Ecosystem (ทักษะ: Google Sheets, AppSheet, n8n, Google App Script)</p>
+                <p class="font-semibold text-gray-700 mb-4">หัวข้อหลัก: การวิเคราะห์ความต้องการและ Ecosystem Matrix</p>
                 
                 <div class="my-4 p-5 bg-gray-50 rounded-lg border border-purple-200 shadow-inner overflow-x-auto">
-                    <p class="text-sm font-semibold text-gray-700 mb-3 text-center">ภาพที่ 1.2: เกณฑ์การเลือกใช้เครื่องมือหลัก (AppSheet, n8n, GGS)</p>
+                    <p class="text-sm font-semibold text-gray-700 mb-3 text-center"><i class="fas fa-table mr-1 text-purple-500"></i> ภาพที่ 1.2: เกณฑ์การเลือกใช้เครื่องมือหลัก (AppSheet, n8n, GGS)</p>
                     <div class="flex flex-col sm:grid sm:grid-cols-3 gap-1 text-sm min-w-max">
                         <div class="font-bold p-2 bg-purple-200 text-purple-900 rounded-tl-lg">ประเภทงานหลัก</div>
                         <div class="font-bold p-2 bg-purple-100 text-purple-800">เครื่องมือแนะนำ</div>
                         <div class="font-bold p-2 bg-purple-100 text-purple-800 rounded-tr-lg">จุดเด่น</div>
 
-                        <div class="p-2 bg-white font-semibold flex items-center border-l border-b border-purple-300"><i class="fas fa-th-large w-4 h-4 mr-2"></i> สร้าง Web/Mobile App</div>
-                        <div class="p-2 bg-white border-b border-purple-300 font-bold text-green-700">AppSheet (ทักษะ: AppSheet)</div>
+                        <div class="p-2 bg-white font-semibold flex items-center border-l border-b border-purple-300"><i class="fas fa-th-large w-4 h-4 mr-2 text-green-600"></i> สร้าง Web/Mobile App</div>
+                        <div class="p-2 bg-white border-b border-purple-300 font-bold text-green-700">AppSheet</div>
                         <div class="p-2 bg-white border-b border-purple-300 text-xs">UI/UX, Data Forms, CRUD (ใช้ GGS เป็น Data Source)</div>
 
-                        <div class="p-2 bg-white font-semibold flex items-center border-l border-b border-purple-300"><i class="fas fa-code-branch w-4 h-4 mr-2"></i> เชื่อมต่อ/ทำงานอัตโนมัติ</div>
-                        <div class="p-2 bg-white border-b border-purple-300 font-bold text-indigo-700">N8N, GAS (ทักษะ: n8n, Google App Script)</div>
+                        <div class="p-2 bg-white font-semibold flex items-center border-l border-b border-purple-300"><i class="fas fa-code-branch w-4 h-4 mr-2 text-indigo-600"></i> เชื่อมต่อ/ทำงานอัตโนมัติ</div>
+                        <div class="p-2 bg-white border-b border-purple-300 font-bold text-indigo-700">N8N, GAS</div>
                         <div class="p-2 bg-white border-b border-purple-300 text-xs">API Integration, Scheduling, Logic (เน้น Data Transformation)</div>
                         
-                        <div class="p-2 bg-white font-semibold flex items-center border-l border-b border-purple-300 rounded-bl-lg"><i class="fas fa-database w-4 h-4 mr-2"></i> จัดการฐานข้อมูลหลัก</div>
-                        <div class="p-2 bg-white border-b border-purple-300 font-bold text-red-700">Google Sheets (GGS) (ทักษะ: Google Sheets)</div>
+                        <div class="p-2 bg-white font-semibold flex items-center border-l border-b border-purple-300 rounded-bl-lg"><i class="fas fa-database w-4 h-4 mr-2 text-red-700"></i> จัดการฐานข้อมูลหลัก</div>
+                        <div class="p-2 bg-white border-b border-purple-300 font-bold text-red-700">Google Sheets (GGS)</div>
                         <div class="p-2 bg-white border-b border-purple-300 rounded-br-lg text-xs">Storage, Flexibility, Collaboration (ศูนย์กลางข้อมูล)</div>
                     </div>
                 </div>
+
                 <div class="space-y-4 text-gray-600">
                     <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1">1.2.1 เกณฑ์การพิจารณาเลือกแพลตฟอร์ม:</h5>
                     <p class="ml-4">
@@ -366,7 +354,7 @@
                     
                     <h5 class="font-bold text-lg text-gray-700 border-b pb-1 mt-6">1.2.2 Workshop: วิเคราะห์สถานการณ์จริง (3 เคส)</h5>
                     <p class="ml-4">
-                        <span class="font-bold text-purple-700">วิธีทำ:</span> ผู้เรียนแต่ละคนจะได้รับโจทย์ 3 สถานการณ์ จากนั้นให้ใช้ตาราง Matrix ด้านบนในการวิเคราะห์ว่าควรใช้เครื่องมือใดเป็นเครื่องมือหลักในการแก้ปัญหา
+                        <span class="font-bold text-purple-700">วิธีทำ:</span> ผู้เรียนฝึกวิเคราะห์สถานการณ์เพื่อเลือกเครื่องมือหลักที่เหมาะสมที่สุด 🎯
                     </p>
                 </div>
 
@@ -382,21 +370,21 @@
             </div>
         </div>
 
-        <div class="mb-8">
-            <div class="flex items-center mb-4 p-3 bg-blue-50 rounded-lg">
-                <i class="fas fa-database w-6 h-6 text-indigo-500 mr-3"></i>
-                <h4 class="text-xl font-semibold text-blue-800">ช่วงบ่าย: การออกแบบข้อมูลที่ยืดหยุ่นและการประยุกต์ใช้ Low-Code (13:00 - 17:00 น.)</h4>
-            </div>
+        <h3 class="main-section-title" style="border-bottom-color: #10b981;">
+            <i class="fas fa-database w-8 h-8 mr-3 text-teal-600"></i>
+            ส่วนที่ 2: Data Design และ Normalization (13:00 - 14:45 น.)
+        </h3>
 
-            <div class="step-card bg-white p-5 rounded-lg shadow-md mb-4">
+        <div class="mb-8">
+            <div class="step-card bg-white p-5 rounded-xl card-shadow mb-4" style="border-left-color: #10b981;">
                 <div class="flex justify-between items-start mb-2">
                     <span class="text-lg font-bold text-gray-800">13:00 - 14:45 น.: ทฤษฎีฐานข้อมูลสำหรับ No-Code</span>
                     <span class="text-xs font-medium text-teal-500 bg-teal-100 px-2 py-1 rounded-full">รากฐาน & โครงสร้าง</span>
                 </div>
-                <p class="font-semibold text-gray-700 mb-4">หัวข้อหลัก: Normalization เบื้องต้นและการเชื่อมโยงข้อมูลใน Google Sheets (ทักษะ: Google Sheets)</p>
+                <p class="font-semibold text-gray-700 mb-4">หัวข้อหลัก: Normalization เบื้องต้นและการเชื่อมโยงข้อมูลใน Google Sheets</p>
                 
                 <div class="my-4 p-5 bg-gray-50 rounded-lg border border-teal-200 shadow-inner">
-                    <p class="text-sm font-semibold text-gray-700 mb-3 text-center">ภาพที่ 2.1: โครงสร้างความสัมพันธ์ข้อมูลแบบ 1-ต่อ-กลุ่ม (1-to-Many)</p>
+                    <p class="text-sm font-semibold text-gray-700 mb-3 text-center"><i class="fas fa-project-diagram mr-1 text-teal-500"></i> ภาพที่ 2.1: โครงสร้างความสัมพันธ์ข้อมูลแบบ 1-ต่อ-กลุ่ม (1-to-Many)</p>
                     <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
                         
                         <div class="p-3 w-40 bg-teal-50 rounded-lg shadow-md border border-teal-400 text-center">
@@ -417,13 +405,14 @@
                     </div>
                     <p class="text-xs text-center text-gray-500 mt-3">ตัวอย่างแสดง: 1 ลูกค้า สามารถมีรายการซื้อได้หลายรายการ</p>
                 </div>
+                
                 <div class="space-y-4 text-gray-600">
-                    <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1">2.1.1 แนวคิดหลัก (Normalization 1NF, 2NF, 3NF): (ทักษะ: Google Sheets)</h5>
+                    <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1">2.1.1 แนวคิดหลัก (Normalization 1NF, 2NF, 3NF):</h5>
                     
                     <p class="ml-4">
-                        <span class="font-bold text-teal-700">Normalization</span> คือกระบวนการจัดโครงสร้างข้อมูลในฐานข้อมูล (GGS) ให้มีประสิทธิภาพสูงสุด เพื่อลดความซ้ำซ้อน (Redundancy) และเพิ่มความถูกต้อง (Integrity)
+                        <span class="font-bold text-teal-700">Normalization</span> คือกระบวนการจัดโครงสร้างข้อมูลในฐานข้อมูล (**GGS**) ให้มีประสิทธิภาพสูงสุด
                     </p>
-                
+                    
                     <div class="my-6 overflow-x-auto border border-teal-400 rounded-lg shadow-md">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-teal-50">
@@ -436,46 +425,46 @@
                             <tbody class="bg-white divide-y divide-gray-200 text-sm">
                                 <tr>
                                     <td class="px-4 py-3 font-bold text-blue-700">1NF</td>
-                                    <td class="px-4 py-3">**Atomic Value (ข้อมูลห้ามแบ่ง)**: ห้ามมีข้อมูลหลายค่าในเซลล์เดียว (Multi-valued Attributes) และห้ามมี Merged Cells</td>
-                                    <td class="px-4 py-3 text-xs">ป้องกันไม่ให้ AppSheet หรือ Automation Tool อ่านค่าได้ไม่ครบถ้วน (ต้องรู้ว่า 1 เซลล์ = 1 ข้อมูลเสมอ)</td>
+                                    <td class="px-4 py-3">**Atomic Value**: ห้ามมีข้อมูลหลายค่าในเซลล์เดียว (Multi-valued Attributes)</td>
+                                    <td class="px-4 py-3 text-xs">ป้องกันไม่ให้ AppSheet หรือ Automation Tool อ่านค่าได้ไม่ครบถ้วน</td>
                                 </tr>
                                 <tr>
                                     <td class="px-4 py-3 font-bold text-blue-700">2NF</td>
-                                    <td class="px-4 py-3">**Full Dependency (ขึ้นอยู่กับ PK ทั้งหมด)**: ข้อมูลที่ไม่จำเป็นต้องขึ้นอยู่กับ Primary Key (PK) ทั้งหมด **ต้องถูกแยกออก** ไปอยู่ตาราง Master</td>
-                                    <td class="px-4 py-3 text-xs">ป้องกันปัญหาความซ้ำซ้อนและการอัปเดตข้อมูลที่ผิดพลาด (เช่น ถ้าเปลี่ยนราคาสินค้า ต้องแก้หลายแถว)</td>
+                                    <td class="px-4 py-3">**Full Dependency**: ข้อมูลที่ไม่ขึ้นอยู่กับ Primary Key (PK) ทั้งหมด **ต้องถูกแยกออก** ไปอยู่ตาราง Master</td>
+                                    <td class="px-4 py-3 text-xs">ป้องกันปัญหาความซ้ำซ้อนและการอัปเดตข้อมูลที่ผิดพลาด</td>
                                 </tr>
                                 <tr>
                                     <td class="px-4 py-3 font-bold text-blue-700">3NF</td>
-                                    <td class="px-4 py-3">**No Transitive Dependency (ไม่มีข้อมูลซ้อนข้อมูล)**: ข้อมูลที่ไม่ขึ้นอยู่กับ PK โดยตรง แต่ขึ้นอยู่กับคอลัมน์อื่นที่ไม่ใช่คีย์ **ต้องถูกแยกออก** ไปอยู่ตาราง Master</td>
-                                    <td class="px-4 py-3 text-xs">ทำให้การจัดการข้อมูล Master Data ง่ายขึ้น และไม่ต้องเก็บข้อมูลคำอธิบายที่ไม่จำเป็นซ้ำ ๆ</td>
+                                    <td class="px-4 py-3">**No Transitive Dependency**: ข้อมูลที่ไม่ขึ้นอยู่กับ PK โดยตรง แต่ขึ้นอยู่กับคอลัมน์อื่น **ต้องถูกแยกออก**</td>
+                                    <td class="px-4 py-3 text-xs">ทำให้การจัดการข้อมูล Master Data ง่ายขึ้น</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <p class="ml-4 text-sm text-gray-700 italic">
-                        *การทำ Normalization เหล่านี้ทำให้ฐานข้อมูล **Google Sheets** ของเราพร้อมสำหรับการเชื่อมต่อกับ AppSheet และ N8N อย่างมีประสิทธิภาพ*
+                        *Normalization ทำให้ GGS พร้อมสำหรับการเชื่อมต่อกับ AppSheet และ N8N อย่างมีประสิทธิภาพ*
                     </p>
 
                     
-                    <h5 class="font-bold text-lg text-gray-700 border-b pb-1 mt-6">2.1.2 Primary/Foreign Key (PK/FK) ใน AppSheet Ecosystem: (ทักษะ: AppSheet)</h5>
+                    <h5 class="font-bold text-lg text-gray-700 border-b pb-1 mt-6">2.1.2 Primary/Foreign Key (PK/FK) ใน AppSheet Ecosystem:</h5>
                     <p class="ml-4">
                         <span class="font-bold text-blue-700">Primary Key (PK):</span> หัวใจของตาราง **ต้องไม่ซ้ำและไม่เป็นค่าว่าง** (ใช้ Unique ID Generator เช่น GAS Script)
                     </p>
                     <p class="ml-4">
-                        <span class="font-bold text-red-700">Foreign Key (FK) และ Ref Type:</span> คอลัมน์ FK จะถูกกำหนดเป็นชนิดข้อมูล **'Ref'** ใน AppSheet ซึ่งช่วยให้ AppSheet สามารถสร้าง **Virtual Columns** เพื่อดึงข้อมูลจากตาราง Master มาใช้งานได้
+                        <span class="font-bold text-red-700">Foreign Key (FK) และ Ref Type:</span> คอลัมน์ FK จะถูกกำหนดเป็นชนิดข้อมูล **'Ref'** ใน AppSheet เพื่อดึงข้อมูลจากตาราง Master
                     </p>
                     
-                    <h5 class="font-bold text-lg text-gray-700 border-b pb-1 mt-6">2.1.3 การจัดการ Data Validation และ Virtual Tables: (ทักษะ: Google Sheets)</h5>
+                    <h5 class="font-bold text-lg text-gray-700 border-b pb-1 mt-6">2.1.3 การจัดการ Data Validation และ Virtual Tables:</h5>
                     <p class="ml-4">
-                        <span class="font-bold text-teal-700">Data Validation:</span> ใช้ใน GGS เพื่อควบคุมการป้อนข้อมูล เช่น **List from a range** เพื่อดึง Dropdown list จากตาราง Master
+                        <span class="font-bold text-teal-700">Data Validation:</span> ใช้ใน GGS เพื่อควบคุมการป้อนข้อมูล เช่น **List from a range**
                     </p>
                     <p class="ml-4">
-                        <span class="font-bold text-teal-700">Virtual Tables/Reports:</span> การใช้ฟังก์ชัน <span class="code-snippet">QUERY()</span> ใน GGS เพื่อรวมข้อมูลจากหลายตาราง/Sheet มาแสดงเป็น Report หรือ Dashboard
+                        <span class="font-bold text-teal-700">Virtual Tables/Reports:</span> การใช้ฟังก์ชัน <span class="code-snippet">QUERY()</span> ใน GGS เพื่อรวมข้อมูลจากหลายตารางมาแสดงเป็น Report
                     </p>
                 </div>
 
                 <div class="mt-3 text-sm text-gray-500 italic flex items-center">
-                    <i class="fas fa-code-branch w-4 h-4 mr-2 text-teal-500"></i> จุดเน้น: การสร้างโครงสร้างข้อมูลที่ 'ยืดหยุ่น' และ 'สอดคล้อง' กับการทำงานของ Automation.
+                    <i class="fas fa-code-branch w-4 h-4 mr-2 text-teal-500"></i> จุดเน้น: การสร้างโครงสร้างข้อมูลที่ **'ยืดหยุ่น'** และ **'สอดคล้อง'** กับการทำงานของ Automation.
                 </div>
             </div>
 
@@ -484,135 +473,275 @@
                     <i class="fas fa-mug-hot w-5 h-5 mr-2"></i> เบรคบ่าย (14:45 - 15:00 น.)
                 </span>
             </div>
+        </div>
+
+        <h3 class="main-section-title" style="border-bottom-color: #f59e0b;">
+            <i class="fas fa-laptop-code w-8 h-8 mr-3 text-yellow-600"></i>
+            ส่วนที่ 3: Workshop: AI-Driven Google App Script (15:00 - 17:00 น.)
+        </h3>
+        
+        <div class="step-card bg-white p-5 rounded-xl card-shadow mb-4" style="border-left-color: #f87171;">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-fingerprint mr-2 text-red-600"></i> **3.1 Workshop 1:** Low-Code Auto Primary Key (GAS)
+            </h4>
+            <p class="font-semibold text-gray-700 mb-4">หัวข้อหลัก: สร้าง Primary Key อัตโนมัติ (เช่น CUST-YYMMDD-HHMMSS-RANDOM) เพื่อให้ข้อมูลมีความถูกต้อง</p>
             
-            <div class="step-card bg-white p-5 rounded-lg shadow-md mb-4">
-                <div class="flex justify-between items-start mb-2">
-                    <span class="text-lg font-bold text-gray-800">15:00 - 17:00 น.: Workshop: AI-Driven Google App Script (GAS)</span>
-                    <span class="text-xs font-medium text-orange-500 bg-orange-100 px-2 py-1 rounded-full">Workshop ปฏิบัติ / AI Prompt</span>
-                </div>
-                <p class="font-semibold text-gray-700 mb-4">หัวข้อหลัก: การใช้ AI (**Gemini**) ช่วยสร้างโค้ด Google App Script สำหรับ Automation Core (ทักษะ: Google App Script)</p>
-                
-                
-                <h5 class="font-bold text-lg text-red-700 mt-6 border-b pb-1 flex items-center">
-                    <i class="fas fa-brain w-5 h-5 mr-2 text-red-700"></i> Prompt Template 1: Generate Auto ID GAS Script (ใช้ Gemini)
-                </h5>
-                <p class="ml-4 text-sm text-gray-700 font-semibold italic">
-                    การสร้าง Primary Key อัตโนมัติเป็นสิ่งจำเป็น เราจะใช้ **Gemini** ช่วยสร้างโค้ด GAS ที่ทำงานเมื่อมีการเพิ่มข้อมูลใน Google Sheets.
-                </p>
-                
-                <div class="my-4 p-4 ai-prompt-box">
-                    <h6 class="prompt-label mb-2">Prompt ที่ใช้สร้างโค้ด Auto ID (เน้น Ecosystem Google)</h6>
-                    <pre class="p-3 rounded-lg text-gray-800 text-xs overflow-x-auto"><code><span class="font-bold text-blue-600">1. Role & Task:</span> "Act as a Google Apps Script expert. Write a complete GAS script."
+            <h5 class="font-bold text-lg text-red-700 mt-6 border-b pb-1 flex items-center">
+                <i class="fas fa-brain w-5 h-5 mr-2 text-red-700"></i> Prompt Template 1: Generate Auto ID GAS Script (ใช้ Gemini)
+            </h5>
+            <p class="ml-4 text-sm text-gray-700 font-semibold italic">
+                เราจะใช้ **Gemini** ช่วยสร้างโค้ด GAS ที่ทำงานเมื่อมีการเพิ่มข้อมูลใน Google Sheets เพื่อสร้าง Primary Key อัตโนมัติ
+            </p>
+            
+            <div class="my-4 p-4 ai-prompt-box">
+                <h6 class="prompt-label mb-2">Prompt ที่ใช้สร้างโค้ด Auto ID (เน้น Ecosystem Google)</h6>
+                <pre class="p-3 rounded-lg text-gray-800 text-xs overflow-x-auto"><code><span class="font-bold text-blue-600">1. Role & Task:</span> "Act as a Google Apps Script expert. Write a complete GAS script."
 <span class="font-bold text-blue-600">2. Context (Environment):</span> "The script must run using the 'onEdit' simple trigger in Google Sheets."
 <span class="font-bold text-blue-600">3. Requirements (Logic):</span> "The script needs to target the sheet named 'Customers' (Case-sensitive). If a new row is added, and Column A (index 1) is empty, automatically generate a unique ID. The ID must start with 'CUST-' followed by a timestamp (YYMMDD-HHMMSS) and a 4-digit random hex string. Ensure robust error handling."
 <span class="font-bold text-blue-600">4. Output Format:</span> "Provide only the executable code, clearly commented in Thai."</code></pre>
-                </div>
+            </div>
 
-                <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1">Code Output: Google App Script สำหรับ Auto ID (โค้ดที่ได้จาก AI)</h5>
-                
-                <pre class="bg-gray-800 p-4 rounded-lg text-white text-sm overflow-x-auto"><code>// ชื่อไฟล์: AutoIDGenerator.gs
+            <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1">Code Output: Google App Script สำหรับ Auto ID</h5>
+            
+            <pre class="bg-gray-800 p-4 rounded-lg text-white text-sm overflow-x-auto"><code>// ชื่อไฟล์: AutoIDGenerator.gs
 // คำอธิบาย: ฟังก์ชันหลักที่ทำงานเมื่อมีการแก้ไขข้อมูลใน Google Sheet (Trigger 'On Edit')
 
 function onEdit(e) {
-  // กำหนดชื่อชีทและคอลัมน์เป้าหมาย
-  const TARGET_SHEET_NAME = 'Customers';
-  const ID_COLUMN_INDEX = 1; // คอลัมน์ A
-  const FIRST_DATA_ROW = 2; // แถวเริ่มต้นของข้อมูล (ข้าม Header)
+  // กำหนดชื่อชีทและคอลัมน์เป้าหมาย
+  const TARGET_SHEET_NAME = 'Customers';
+  const ID_COLUMN_INDEX = 1; // คอลัมน์ A
+  const FIRST_DATA_ROW = 2; // แถวเริ่มต้นของข้อมูล (ข้าม Header)
 
-  const range = e.range; 
-  const sheet = range.getSheet(); 
-  const sheetName = sheet.getName(); 
+  const range = e.range; 
+  const sheet = range.getSheet(); 
+  const sheetName = sheet.getName(); 
 
-  // ตรวจสอบเงื่อนไขการทำงาน
-  if (sheetName !== TARGET_SHEET_NAME || range.getRow() < FIRST_DATA_ROW) {
-    return; // ไม่ใช่ชีทเป้าหมาย หรือเป็นแถว Header
-  }
-  
-  try {
-    // ใช้ Lock Service เพื่อป้องกันการชนกันของ ID เมื่อมีผู้ใช้หลายคน
-    const lock = LockService.getScriptLock();
-    // พยายาม Lock ภายใน 15 วินาที
-    if (lock.tryLock(15000)) { 
-      
-      const idCell = sheet.getRange(range.getRow(), ID_COLUMN_INDEX);
-      // ตรวจสอบว่า ID ได้ถูกสร้างไปแล้วหรือไม่
-      if (idCell.getValue() === "") {
-        const newId = generateUniqueId('CUST-');
-        idCell.setValue(newId);
-        Logger.log(`สร้าง ID ใหม่สำเร็จ: ${newId}`);
-      }
-      
-      // ปลด Lock เมื่อทำงานเสร็จ
-      lock.releaseLock();
-    } else {
-      Logger.log("ไม่สามารถ Lock ได้ภายใน 15 วินาที");
-    }
+  // ตรวจสอบเงื่อนไขการทำงาน
+  if (sheetName !== TARGET_SHEET_NAME || range.getRow() < FIRST_DATA_ROW) {
+    return; // ไม่ใช่ชีทเป้าหมาย หรือเป็นแถว Header
+  }
+  
+  try {
+    // ใช้ Lock Service เพื่อป้องกันการชนกันของ ID เมื่อมีผู้ใช้หลายคน
+    const lock = LockService.getScriptLock();
+    // พยายาม Lock ภายใน 15 วินาที
+    if (lock.tryLock(15000)) { 
+      
+      const idCell = sheet.getRange(range.getRow(), ID_COLUMN_INDEX);
+      // ตรวจสอบว่า ID ได้ถูกสร้างไปแล้วหรือไม่
+      if (idCell.getValue() === "") {
+        const newId = generateUniqueId('CUST-');
+        idCell.setValue(newId);
+        Logger.log(`สร้าง ID ใหม่สำเร็จ: ${newId}`);
+      }
+      
+      // ปลด Lock เมื่อทำงานเสร็จ
+      lock.releaseLock();
+    } else {
+      Logger.log("ไม่สามารถ Lock ได้ภายใน 15 วินาที");
+    }
 
-  } catch (error) {
-    Logger.log(`ERROR ในการสร้าง Auto ID: ${error.toString()}`);
-    // สามารถเพิ่ม MailApp.sendEmail เพื่อแจ้งเตือน IT Support ได้
-  }
+  } catch (error) {
+    Logger.log(`ERROR ในการสร้าง Auto ID: ${error.toString()}`);
+    // สามารถเพิ่ม MailApp.sendEmail เพื่อแจ้งเตือน IT Support ได้
+  }
 }
 
 // ฟังก์ชันช่วยในการสร้าง Unique ID
 function generateUniqueId(prefix) {
-  // รูปแบบ ID: PREFIX-YYMMDD-HHMMSS-RANDOM_HEX
-  const now = new Date();
-  const year = now.getFullYear().toString().substring(2);
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const seconds = String(now.getSeconds()).padStart(2, '0');
+  // รูปแบบ ID: PREFIX-YYMMDD-HHMMSS-RANDOM_HEX
+  const now = new Date();
+  const year = now.getFullYear().toString().substring(2);
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
 
-  // ส่วน Random String (4 หลัก Hex)
-  const randomHex = Math.random().toString(16).substring(2, 6).toUpperCase(); 
+  // ส่วน Random String (4 หลัก Hex)
+  const randomHex = Math.random().toString(16).substring(2, 6).toUpperCase(); 
 
-  const timestamp = `${year}${month}${day}-${hours}${minutes}${seconds}`;
-  return `${prefix}${timestamp}-${randomHex}`;
+  const timestamp = `${year}${month}${day}-${hours}${minutes}${seconds}`;
+  return `${prefix}${timestamp}-${randomHex}`;
 }</code></pre>
-                
-                <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1">การตั้งค่า Trigger ใน GAS (Low-Code Integration): (ทักษะ: Google App Script)</h5>
-    1. **แก้ไข CSS (ส่วน Summary Card)**: นำ `max-width` ออก และปรับปรุง Class ใน `.summary-card-content` เพื่อให้ใช้พื้นที่เต็ม
-    2. **แก้ไข HTML (ส่วน Summary Card)**: ห่อหุ้ม `summary-card-content` ด้วย Card หลัก (`bg-white p-6...`)
-    3. **แก้ไขลิงก์**: อัปเดต `href` ของปุ่มนำทางให้ชี้ไปที่ **`day2_automation.html`**
-
-```html
-            <p class="ml-4">การตั้งค่า Trigger เป็นสิ่งสำคัญเพื่อให้โค้ดทำงานอัตโนมัติ (เป็นส่วนของ Low-Code ที่เชื่อมโยงกับ No-Code/GAS) โดยมีขั้นตอนดังนี้:</p>
-                <ol class="list-decimal list-inside text-gray-600 space-y-3 ml-4">
-                    <li>ใน GAS IDE, ให้คลิกที่ไอคอนนาฬิกา (Triggers) ทางด้านซ้าย</li>
-                    <li>คลิก **Add Trigger**</li>
-                    <li>**Choose which function to run:** เลือก <span class="code-snippet">onEdit</span></li>
-                    <li>**Choose event source:** เลือก <span class="code-snippet">From spreadsheet</span></li>
-                    <li>**Choose event type:** เลือก <span class="code-snippet">On edit</span></li>
-                    <li>**Save:** บันทึก Trigger นี้เพื่อให้โค้ดทำงานอัตโนมัติเมื่อมีการเพิ่มข้อมูลลูกค้าใน Google Sheet</li>
-                </ol>
-                <div class="mt-3 text-sm text-gray-500 italic flex items-center">
-                    <i class="fas fa-shield w-4 h-4 mr-2 text-indigo-500"></i> จุดเน้น: การใช้ <span class="code-snippet">LockService</span> เพื่อจัดการความเสถียรของระบบ (Stability) เมื่อมีผู้ใช้หลายคนแก้ไขข้อมูลพร้อมกัน
-                </div>
-            </div>
-        </div>
-        
-        <div class="bg-white p-6 rounded-xl card-shadow mb-8 summary-card-wrapper"> 
-            <div class="summary-card-content">
-                <h4><i class="fas fa-graduation-cap w-6 h-6 summary-icon"></i> สรุปสิ่งที่ผู้เรียนได้รับจาก Day 1</h4>
-                <p>
-                    **วันนี้เราได้วางรากฐานที่สำคัญที่สุด** ในการสร้างระบบ Automation คือ **Data Design** โดยผู้เรียนได้เข้าใจปรัชญาของ **No-Code/Low-Code Ecosystem** (AppSheet, n8n, GAS) และได้ฝึกการทำ **Normalization** ของ Google Sheets เพื่อเตรียมข้อมูลให้ยืดหยุ่น 
-                </p>
-                <p class="mt-2 text-gray-600 font-semibold">
-                    **ทักษะที่ได้เรียนรู้:** การวิเคราะห์ความต้องการ, การเลือกใช้เครื่องมือ, Data Normalization (1NF, 2NF, 3NF) และการใช้ AI (Gemini) สร้าง **Google App Script** สำหรับ Auto ID Generator
-                </p>
-                <h4 class="mt-6 text-xl font-bold text-gray-800">เตรียมพร้อมสำหรับ Day 2</h4>
-                <p class="font-bold text-gray-800">
-                    Day 2 เราจะเข้าสู่ Workshop การวิเคราะห์ **Flowchart** และ **Conditional Logic** เพื่อสร้างโครงร่างระบบ Automation 3 MVP ตัวอย่าง ซึ่งเป็นรากฐานสำคัญก่อนเข้าสู่ Workshop สร้าง App (AppSheet) ใน Day 3
-                </p>
-                
-                <a href="day2_automation.html" class="btn-next">
-                    ไปสู่ Day 2: Logic/Flow Automation ขั้นสูง <i class="fas fa-arrow-right ml-2"></i>
-                </a>
+            
+            <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1">การตั้งค่า Trigger ใน GAS (Low-Code Integration):</h5>
+            <p class="ml-4">การตั้งค่า Trigger เป็นสิ่งสำคัญเพื่อให้โค้ดทำงานอัตโนมัติ โดยมีขั้นตอนดังนี้:</p>
+            <ol class="list-decimal list-inside text-gray-600 space-y-3 ml-4">
+                <li>ใน GAS IDE, ให้คลิกที่ไอคอนนาฬิกา (**Triggers**) ทางด้านซ้าย</li>
+                <li>**Choose which function to run:** เลือก <span class="code-snippet">onEdit</span></li>
+                <li>**Choose event type:** เลือก <span class="code-snippet">On edit</span></li>
+                <li>**Save:** บันทึก Trigger นี้เพื่อให้โค้ดทำงานอัตโนมัติเมื่อมีการเพิ่มข้อมูลลูกค้าใน Google Sheet</li>
+            </ol>
+            <div class="mt-3 text-sm text-gray-500 italic flex items-center">
+                <i class="fas fa-shield-alt w-4 h-4 mr-2 text-indigo-500"></i> จุดเน้น: การใช้ <span class="code-snippet">LockService</span> เพื่อจัดการความเสถียรของระบบ (Stability)
             </div>
         </div>
-        </main>
+
+        <div class="step-card bg-white p-5 rounded-xl card-shadow mb-4" style="border-left-color: #6366f1;">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-calculator mr-2 text-indigo-600"></i> **3.2 Workshop 2:** Data Lookup & Calculation (Total Price)
+            </h4>
+            <p class="font-semibold text-gray-700 mb-4">หัวข้อหลัก: การใช้ GAS ทำ VLOOKUP เสมือน โดยดึง Price จากตาราง Products มาคำนวณ Total Price โดยอัตโนมัติ</p>
+
+            <h5 class="font-bold text-lg text-red-700 mt-6 border-b pb-1 flex items-center">
+                <i class="fas fa-brain w-5 h-5 mr-2 text-red-700"></i> Prompt Template 2: Generate Lookup and Calculation Script
+            </h5>
+            <p class="ml-4 text-sm text-gray-700 font-semibold italic">
+                เราจะใช้ **Gemini** สร้างฟังก์ชันที่อ่าน Product ID และดึง Price มาคำนวณ Total Price และบันทึกกลับลงใน GGS.
+            </p>
+            
+            <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1">Code Output: GAS Script สำหรับ Lookup & Calculation</h5>
+            <pre class="bg-gray-800 p-4 rounded-lg text-white text-sm overflow-x-auto"><code>// ชื่อไฟล์: DataLookupAndCalc.gs
+// คำอธิบาย: ฟังก์ชัน VLOOKUP เสมือนและคำนวณราคารวม
+
+function calculateTotalPrice(e) {
+  const TARGET_SHEET_NAME = 'Sales Transactions';
+  const QUANTITY_COL_INDEX = 4; // คอลัมน์ D
+  const PRODUCT_ID_COL_INDEX = 3; // คอลัมน์ C
+  const TOTAL_PRICE_COL_INDEX = 6; // คอลัมน์ F
+  const FIRST_DATA_ROW = 2;
+
+  const range = e.range;
+  const sheet = range.getSheet();
+  const sheetName = sheet.getName();
+
+  // Guard Clause: ทำงานเฉพาะเมื่อแก้ไขคอลัมน์ D ใน Sheet เป้าหมาย
+  if (sheetName !== TARGET_SHEET_NAME || range.getColumn() !== QUANTITY_COL_INDEX || range.getRow() < FIRST_DATA_ROW) {
+    return;
+  }
+
+  try {
+    const row = range.getRow();
+    const productId = sheet.getRange(row, PRODUCT_ID_COL_INDEX).getValue();
+    const quantity = range.getValue();
+
+    if (!productId || typeof quantity !== 'number' || quantity <= 0) {
+      sheet.getRange(row, TOTAL_PRICE_COL_INDEX).setValue("Input Error");
+      return;
+    }
+
+    // ดึงข้อมูลตาราง Products (Master Data)
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const productSheet = ss.getSheetByName('Products');
+    if (!productSheet) throw new Error("Sheet 'Products' not found.");
+    
+    const productData = productSheet.getRange('A:C').getValues();
+
+    // ทำการ Lookup (VLOOKUP เสมือน) หา Price
+    let price = 0;
+    for (let i = 1; i < productData.length; i++) {
+      if (productData[i][0] == productId) {
+        price = productData[i][2]; 
+        break;
+      }
+    }
+    
+    if (price === 0) {
+      sheet.getRange(row, TOTAL_PRICE_COL_INDEX).setValue("Product Not Found");
+      return;
+    }
+
+    // คำนวณและบันทึกผลลัพธ์
+    const totalPrice = quantity * price;
+    sheet.getRange(row, TOTAL_PRICE_COL_INDEX).setValue(totalPrice);
+    
+  } catch (error) {
+    Logger.log(`[FATAL ERROR] Calculation Failed: ${error.toString()}`);
+    sheet.getRange(range.getRow(), TOTAL_PRICE_COL_INDEX).setValue("System Error");
+  }
+}</code></pre>
+        </div>
+
+        <div class="step-card bg-white p-5 rounded-xl card-shadow mb-4" style="border-left-color: #f59e0b;">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-envelope mr-2 text-yellow-600"></i> **3.3 Workshop 3:** Email Notification (Alert Automation)
+            </h4>
+            <p class="font-semibold text-gray-700 mb-4">หัวข้อหลัก: การใช้ GAS ส่งอีเมลแจ้งเตือน (Sales Alert) เมื่อมีการบันทึกข้อมูลการขายใหม่</p>
+
+            <h5 class="font-bold text-lg text-red-700 mt-6 border-b pb-1 flex items-center">
+                <i class="fas fa-brain w-5 h-5 mr-2 text-red-700"></i> Prompt Template 3: Generate Email Notification Script
+            </h5>
+            <p class="ml-4 text-sm text-gray-700 font-semibold italic">
+                ใช้ **Gemini** สร้างฟังก์ชันสำหรับส่งอีเมลสรุปยอดขายเมื่อมีการบันทึกข้อมูลใน Sheet 'Sales Transactions'
+            </p>
+            
+            <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1">Code Output: GAS Script สำหรับ Email Notification</h5>
+            <pre class="bg-gray-800 p-4 rounded-lg text-white text-sm overflow-x-auto"><code>// ชื่อไฟล์: EmailNotifier.gs
+// คำอธิบาย: ฟังก์ชันสำหรับส่งอีเมลแจ้งเตือนเมื่อมีการบันทึกข้อมูลการขายใหม่
+
+function sendNewSaleNotification(e) {
+  try {
+    const range = e.range;
+    const sheet = range.getSheet();
+    const sheetName = sheet.getName();
+
+    const TARGET_SHEET_NAME = 'Sales Transactions';
+    const FIRST_DATA_ROW = 2;
+
+    if (sheetName !== TARGET_SHEET_NAME || range.getRow() < FIRST_DATA_ROW) {
+      return;
+    }
+    
+    const row = range.getRow();
+    const LAST_COLUMN = 6; // ถึงคอลัมน์ F (Total Price)
+    const dataRange = sheet.getRange(row, 1, 1, LAST_COLUMN);
+    const data = dataRange.getValues()[0];  
+
+    const transactionId = data[0]; 
+    if (!transactionId || transactionId.trim() === "") {
+      Logger.log(`Transaction ID missing in row ${row}. Skipping notification.`);
+      return;
+    }
+
+    const customerId = data[1]; 
+    const totalPrice = data[5]; 
+    const date = data[4];      
+    
+    const recipient = 'admin@example.com';
+    const subject = `[ระบบแจ้งเตือน] New Sales Alert: ${transactionId}`;
+    const body = `เรียน Admin,\n\nมีการบันทึกรายการขายใหม่:\n\n`
+          + `Transaction ID: ${transactionId}\n`
+          + `Customer ID: ${customerId}\n`
+          + `Total Price: ${totalPrice.toFixed(2)} บาท\n`
+          + `Date: ${date.toLocaleDateString('th-TH')}\n\n`
+          + `AI Automation System.`;
+
+    MailApp.sendEmail(recipient, subject, body);
+    Logger.log(`Email sent successfully for Transaction ID: ${transactionId}`);
+
+  } catch (error) {
+    Logger.log(`ERROR in sendNewSaleNotification: ${error.toString()}`);
+    MailApp.sendEmail('it-support@example.com', 'GAS Error Alert', 
+                 `เกิดข้อผิดพลาดในการส่งอีเมลแจ้งเตือนการขาย: ${error.toString()}`);
+  }
+}</code></pre>
+            <p class="mt-4 text-sm text-gray-700">
+                **การตั้งค่า Trigger:** ใช้ Trigger **On Edit** กับฟังก์ชัน <span class="code-snippet">sendNewSaleNotification</span> โดยมี Source เป็น Sheet **'Sales Transactions'**
+            </p>
+        </div>
+        
+    </main>
+
+    <div class="bg-white p-6 rounded-xl card-shadow mb-8 summary-card-wrapper"> 
+        <div class="summary-card-content">
+            <h4><i class="fas fa-graduation-cap w-6 h-6 summary-icon"></i> สรุปสิ่งที่ผู้เรียนได้รับจาก Day 1</h4>
+            <p>
+                **วันนี้เราได้วางรากฐานที่สำคัญที่สุด** คือ **Data Design** โดยผู้เรียนได้เข้าใจปรัชญาของ **No-Code/Low-Code Ecosystem** (AppSheet, n8n, GAS) และได้ฝึกการทำ **Normalization** ของ Google Sheets เพื่อเตรียมข้อมูลให้ยืดหยุ่น
+            </p>
+            <p class="mt-2 text-gray-600 font-semibold">
+                **ทักษะที่ได้เรียนรู้:** การวิเคราะห์ความต้องการ, การเลือกใช้เครื่องมือ, Data Normalization (1NF, 2NF, 3NF) และการใช้ AI (Gemini) สร้าง **Google App Script** สำหรับ Auto ID Generator, Data Lookup และ Email Alert.
+            </p>
+            <h4 class="mt-6 text-xl font-bold text-gray-800">เตรียมพร้อมสำหรับ Day 2</h4>
+            <p class="font-bold text-gray-800">
+                Day 2 เราจะเข้าสู่ Workshop การวิเคราะห์ **Flowchart** และ **Conditional Logic** เพื่อสร้างโครงร่างระบบ Automation 3 MVP ตัวอย่าง ซึ่งเป็นรากฐานสำคัญก่อนเข้าสู่ Workshop สร้าง App (AppSheet) ใน Day 3
+            </p>
+            
+            <a href="day2_automation.html" class="btn-next">
+                ไปสู่ Day 2: Logic/Flow Automation ขั้นสูง <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </div>
 
     <footer class="bg-gray-800 text-white py-6 mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
