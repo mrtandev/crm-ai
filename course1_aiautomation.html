@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Automation & Data Integration Master Plan</title>
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Kanit Font for Thai language -->
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Load Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <style>
         /* Custom CSS */
@@ -77,7 +74,7 @@
         }
         .topic-list label {
             display: flex;
-            align-items: flex-start; /* แก้ไขเพื่อให้ checkbox อยู่ด้านบน */
+            align-items: flex-start;
             margin-bottom: 10px;
             font-weight: 400;
             cursor: pointer;
@@ -92,7 +89,7 @@
             height: 16px;
             accent-color: var(--primary-start);
             cursor: pointer;
-            margin-top: 4px; /* ปรับตำแหน่ง checkbox ให้ตรงกับ text */
+            margin-top: 4px;
             flex-shrink: 0;
         }
         .calendar-btn {
@@ -113,14 +110,12 @@
 
     <div class="container-wrapper">
         
-        <!-- Header Section -->
         <div class="text-center mb-12">
             <i class="fas fa-brain text-5xl header-gradient mb-3"></i>
             <h1 class="text-5xl font-extrabold header-gradient mb-2">AI Automation & Data Integration Master</h1>
             <p class="text-2xl text-gray-500">แผนผังการเรียนรู้และปฏิบัติการ (5 วัน)</p>
         </div>
 
-        <!-- Profile Section -->
         <div class="profile-card mb-12 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
             <img 
                 src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
@@ -134,7 +129,6 @@
             </div>
         </div>
 
-        <!-- Course Summary -->
         <div class="course-summary mb-10 p-6 bg-indigo-50 rounded-lg border-l-4 border-indigo-500 shadow-md">
             <div class="flex items-start space-x-3 text-indigo-800 mb-2">
                 <i class="fas fa-chart-line text-2xl pt-1"></i>
@@ -146,11 +140,9 @@
             </div>
         </div>
 
-        <!-- Course Day Cards (Refactored with Checkboxes and File Link Button) -->
         <h2 class="text-3xl font-bold header-gradient mb-6 border-b-2 border-indigo-200 pb-2">แผนปฏิบัติการรายวัน 🗓️</h2>
 
         <div id="course-plan">
-            <!-- Day 1 -->
             <details class="day-card-item" open>
                 <summary class="day-summary">
                     <div class="flex-shrink-0 text-3xl text-indigo-700 mr-4"><i class="fas fa-lightbulb"></i></div>
@@ -158,7 +150,6 @@
                         <div class="text-xl font-bold text-gray-800">Day 1: ปรัชญา No-Code/Low-Code และการออกแบบฐานข้อมูลที่ยืดหยุ่น (5 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 1 & 2: วางรากฐานความคิดและการออกแบบโครงสร้างข้อมูล</div>
                     </div>
-                    <!-- File Link -->
                     <a href="day1_automation.html" class="calendar-btn flex items-center ml-4">
                         <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
                     </a>
@@ -171,7 +162,6 @@
                 </div>
             </details>
 
-            <!-- Day 2 -->
             <details class="day-card-item">
                 <summary class="day-summary">
                     <div class="flex-shrink-0 text-3xl text-purple-700 mr-4"><i class="fas fa-bezier-curve"></i></div>
@@ -179,7 +169,6 @@
                         <div class="text-xl font-bold text-gray-800">Day 2: การวิเคราะห์และออกแบบ Logic/Flow Automation ขั้นสูง (5 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 3: การแปลง Business Process เป็น Automation Logic</div>
                     </div>
-                    <!-- File Link -->
                     <a href="day2_automation.html" class="calendar-btn flex items-center ml-4">
                         <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
                     </a>
@@ -192,7 +181,6 @@
                 </div>
             </details>
 
-            <!-- Day 3 -->
             <details class="day-card-item">
                 <summary class="day-summary">
                     <div class="flex-shrink-0 text-3xl text-pink-700 mr-4"><i class="fas fa-mobile-alt"></i></div>
@@ -200,7 +188,6 @@
                         <div class="text-xl font-bold text-gray-800">Day 3: Workshop: สร้าง Web/Mobile App ด้วย AppSheet (6 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 4: สร้างแอปพลิเคชันธุรกิจเพื่อจัดการข้อมูลและ Dashboard</div>
                     </div>
-                    <!-- File Link -->
                     <a href="day3_automation.html" class="calendar-btn flex items-center ml-4">
                         <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
                     </a>
@@ -213,7 +200,6 @@
                 </div>
             </details>
 
-            <!-- Day 4 -->
             <details class="day-card-item">
                 <summary class="day-summary">
                     <div class="flex-shrink-0 text-3xl text-teal-700 mr-4"><i class="fas fa-link"></i></div>
@@ -221,7 +207,6 @@
                         <div class="text-xl font-bold text-gray-800">Day 4: Workshop: เชื่อมต่อและทำงานอัตโนมัติด้วย N8N (Part 1) (8 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 5: การเริ่มใช้ n8n และการสร้าง Integration Workflow เบื้องต้น</div>
                     </div>
-                    <!-- File Link -->
                     <a href="day4_automation.html" class="calendar-btn flex items-center ml-4">
                         <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
                     </a>
@@ -234,7 +219,6 @@
                 </div>
             </details>
 
-            <!-- Day 5 -->
             <details class="day-card-item">
                 <summary class="day-summary">
                     <div class="flex-shrink-0 text-3xl text-red-700 mr-4"><i class="fas fa-rocket"></i></div>
@@ -242,7 +226,6 @@
                         <div class="text-xl font-bold text-gray-800">Day 5: Project: พัฒนา AI Automation MVP สำหรับ SMEs (6 ชม.)</div>
                         <div class="text-sm text-gray-500">หัวข้อ 6: การทำ Project จบหลักสูตร และสรุปผลลัพธ์</div>
                     </div>
-                    <!-- File Link -->
                     <a href="day5_automation.html" class="calendar-btn flex items-center ml-4">
                         <i class="fas fa-external-link-alt mr-2"></i> เข้าดูไฟล์
                     </a>
@@ -250,7 +233,7 @@
                 <div class="topic-list">
                     <h4 class="text-lg font-semibold mb-2">หัวข้อที่ต้องทำ:</h4>
                     <label><input type="checkbox"> 5.1 การกำหนดขอบเขต (Scope) ของ Project ที่เน้นผลลัพธ์ทางธุรกิจ</label>
-                    <label><input type="checkbox"> 5.2 การบูรณาการ LLMs (เช่น GPT-4) เข้ากับ Workflow เพื่อสร้าง Agent</label>
+                    <label><input type="checkbox"> 5.2 การบูรณาการ LLMs (<span class="font-bold text-indigo-600">เช่น Gemini</span>) เข้ากับ Workflow เพื่อสร้าง Agent</label>
                     <label><input type="checkbox"> 5.3 การ Deploy, Monitoring Workflow และการส่งมอบงาน (Handover)</label>
                 </div>
             </details>
