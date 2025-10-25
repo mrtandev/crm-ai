@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>เฉลย Workshop: AI Automation Master</title>
-    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Noto Sans Thai Font and Inter Font --><style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+Thai:wght@100..900&display=swap');
         :root {
             --primary-color: #0d9488; /* Teal-600 */
@@ -67,19 +67,22 @@
             padding: 2px 4px;
             border-radius: 3px;
         }
+        .red-node {
+            color: #b91c1c;
+            font-weight: 600;
+            font-family: monospace;
+        }
     </style>
-    <!-- Font Awesome Icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
 <body class="p-8">
 
-    <!-- Header Section -->
     <header class="text-center mb-10">
         <h1 class="text-4xl font-extrabold gradient-text mb-2">เฉลย Workshop หลักสูตร</h1>
         <p class="text-xl text-gray-600">AI Automation & Data Integration Master (Day 1 - Day 5)</p>
         <p class="text-sm text-gray-500 mt-1">เอกสารนี้ใช้สำหรับผู้สอนและผู้เรียนเพื่อตรวจสอบความถูกต้องของ Logic และ Code</p>
     </header>
 
-    <!-- Day 1 Solutions -->
     <section class="mb-12">
         <h2 class="text-3xl font-bold text-gray-700 mb-6 border-b-2 border-blue-300 pb-2 flex items-center">
             <i class="fas fa-database mr-3 text-blue-500"></i> Day 1: Data Design และ Google App Script (GAS)
@@ -94,47 +97,19 @@
                 <p class="font-semibold text-teal-600">✅ SOLUTION: Google App Script (GAS)</p>
                 <div class="code-block">
                     <pre>
-// ฟังก์ชันหลัก: ทำงานเมื่อมีการแก้ไขข้อมูลใน GGS (Trigger On Edit)
+// โค้ด GAS สำหรับสร้าง Unique ID และใช้ LockService
+// (โค้ดเต็มอยู่ในเอกสาร Day 1)
 function onEdit(e) {
-  const TARGET_SHEET_NAME = 'Customers';
-  const ID_COLUMN_INDEX = 1; // คอลัมน์ A
-  const FIRST_DATA_ROW = 2;
-
-  const range = e.range; 
-  const sheet = range.getSheet(); 
-  const sheetName = sheet.getName(); 
-
-  if (sheetName !== TARGET_SHEET_NAME || range.getRow() < FIRST_DATA_ROW) {
-    return;
-  }
-  
+  // ... (โค้ดการตั้งค่า)
   try {
-    // การจัดการความเสถียร (Stability) ด้วย Lock Service
     const lock = LockService.getScriptLock();
     if (lock.tryLock(15000)) { 
-      const idCell = sheet.getRange(range.getRow(), ID_COLUMN_INDEX);
-      if (idCell.getValue() === "") {
-        const newId = generateUniqueId('CUST-');
-        idCell.setValue(newId);
-      }
+      // ... (โค้ดสร้าง ID)
       lock.releaseLock();
     }
   } catch (error) {
     Logger.log(`[ERROR] Auto ID Failed: ${error.toString()}`);
   }
-}
-
-// ฟังก์ชันสร้าง Unique ID
-function generateUniqueId(prefix) {
-  const now = new Date();
-  const year = now.getFullYear().toString().substring(2);
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  const time = String(now.getHours()).padStart(2, '0') + String(now.getMinutes()).padStart(2, '0') + String(now.getSeconds()).padStart(2, '0');
-  const randomHex = Math.random().toString(16).substring(2, 6).toUpperCase(); 
-
-  const timestamp = `${year}${month}${day}-${time}`;
-  return `${prefix}${timestamp}-${randomHex}`;
 }
                     </pre>
                 </div>
@@ -142,19 +117,18 @@ function generateUniqueId(prefix) {
         </div>
     </section>
 
-    <!-- Day 2 Solutions -->
     <section class="mb-12">
         <h2 class="text-3xl font-bold text-gray-700 mb-6 border-b-2 border-violet-300 pb-2 flex items-center">
-            <i class="fas fa-sitemap mr-3 text-violet-500"></i> Day 2: Logic Flow Design และ Conditional Logic
+            <i class="fas fa-sitemap mr-3 text-violet-500"></i> Day 2: Logic Flow Design และ Conditional Logic (3 MVP Systems)
         </h2>
         
         <div class="solution-card">
             <div class="card-header">
-                <h3 class="text-xl font-bold text-gray-800">Workshop: AppSheet Lead Scoring Logic (AppSheet Expression)</h3>
-                <p class="text-sm text-gray-600">โจทย์: กำหนด Lead Score (30/15/5) ตาม Keywords ในข้อความ [Line_Message]</p>
+                <h3 class="text-xl font-bold text-gray-800"><i class="fas fa-comments text-red-600 mr-2"></i> System 1: Line OA Lead Scoring Logic</h3>
+                <p class="text-sm text-gray-600">โจทย์: กำหนด Lead Score (30/15/5) ตาม Keywords ใน [Line_Message] (AppSheet / n8n IF Node)</p>
             </div>
             <div class="p-6">
-                <p class="font-semibold text-teal-600">✅ SOLUTION: AppSheet SWITCH Expression</p>
+                <p class="font-semibold text-teal-600">✅ SOLUTION 1.1: AppSheet SWITCH Expression</p>
                 <p class="app-expression p-3 bg-gray-50 border border-gray-200">
                     SWITCH(TRUE, <br>
                     &nbsp;&nbsp;OR(CONTAINS([Line_Message], "สนใจสินค้า"), CONTAINS([Line_Message], "นัด Demo")), 30, <span class="text-gray-500">// Hot Lead</span><br>
@@ -162,17 +136,49 @@ function generateUniqueId(prefix) {
                     &nbsp;&nbsp;5 <span class="text-gray-500">// Default: New Lead</span><br>
                     )
                 </p>
-                <p class="font-semibold text-teal-600 mt-6">✅ SOLUTION: Flowchart Logic (Line OA Lead Scoring)</p>
-                <!-- Simplified Flowchart Text for clarity in the solution document -->
+                <p class="font-semibold text-teal-600 mt-6">✅ SOLUTION 1.2: N8N Flow Path</p>
                 <div class="p-4 bg-yellow-50 rounded-lg text-sm">
-                    <p class="font-bold text-yellow-800">Flow Path หลัก:</p>
-                    <p>Line Webhook (Start) → Lookup Line ID (Task) → **IF** Found (Gateway) → (True) Update Contact / (False) Create New Lead → Send Welcome Message (Task) → End</p>
+                    <p class="font-bold text-yellow-800">Flow Path:</p>
+                    <p><span class="ai-node">Line Webhook</span> → <span class="ai-node">GGS (Lookup ID)</span> → <span class="ai-node">IF Node (Found?)</span> → (True/False Paths) → <span class="ai-node">Line Message</span></p>
                 </div>
             </div>
         </div>
+
+        <div class="solution-card">
+            <div class="card-header">
+                <h3 class="text-xl font-bold text-gray-800"><i class="fas fa-robot text-indigo-600 mr-2"></i> System 2: AI วิเคราะห์ฟีดแบ็ก (Branching Logic)</h3>
+                <p class="text-sm text-gray-600">โจทย์: ใช้ Gemini วิเคราะห์ Sentiment และสร้าง Task/Email ตามผลลัพธ์ (n8n)</p>
+            </div>
+            <div class="p-6">
+                <p class="font-semibold text-teal-600">✅ SOLUTION 2.1: N8N Workflow (Branching)</p>
+                <p class="data-flow-path text-sm text-center mb-4">
+                    <span class="ai-node">Webhook/Schedule</span> → <span class="ai-node">Gemini Node (Sentiment)</span> → <span class="ai-node">IF Node (Sentiment Negative?)</span> → (True: <span class="ai-node">AppSheet (Create Task)</span>) / (False: <span class="ai-node">IF Node (Sentiment Positive?)</span>)
+                </p>
+                <p class="font-semibold text-teal-600 mt-4">✅ SOLUTION 2.2: Gemini Prompt Logic</p>
+                <div class="code-block">
+                    <pre>
+// Gemini Prompt Template สำหรับการวิเคราะห์ Sentiment
+"โปรดวิเคราะห์ข้อความต่อไปนี้ และตอบกลับเป็นคำเดียวเท่านั้น [Negative, Positive, Neutral] : {{ $json['Feedback'] }}"
+                    </pre>
+                </div>
+            </div>
+        </div>
+        
+        <div class="solution-card">
+            <div class="card-header">
+                <h3 class="text-xl font-bold text-gray-800"><i class="fas fa-calendar-alt text-teal-600 mr-2"></i> System 3: AI ผู้ช่วยสร้างคอนเทนต์ (Scheduling Logic)</h3>
+                <p class="text-sm text-gray-600">โจทย์: ตั้งเวลา (Schedule) ดึง Content 'Pending' ส่ง Line Broadcast และ Update Status (n8n)</p>
+            </div>
+            <div class="p-6">
+                <p class="font-semibold text-teal-600">✅ SOLUTION 3.1: N8N Workflow (Scheduling)</p>
+                <p class="data-flow-path text-sm text-center mb-4">
+                    <span class="ai-node">Schedule Trigger</span> → <span class="ai-node">GGS (Read Pending)</span> → <span class="ai-node">IF Node (Content Found?)</span> → (True: <span class="ai-node">Line Broadcast</span> → <span class="ai-node">GGS (Update Status)</span>) / (False: <span class="ai-node">End</span>)
+                </p>
+            </div>
+        </div>
+
     </section>
 
-    <!-- Day 3 Solutions -->
     <section class="mb-12">
         <h2 class="text-3xl font-bold text-gray-700 mb-6 border-b-2 border-emerald-300 pb-2 flex items-center">
             <i class="fas fa-mobile-alt mr-3 text-emerald-500"></i> Day 3: AppSheet App/Bot Creation
@@ -180,26 +186,45 @@ function generateUniqueId(prefix) {
         
         <div class="solution-card">
             <div class="card-header">
-                <h3 class="text-xl font-bold text-gray-800">Workshop: AppSheet Security Filter</h3>
-                <p class="text-sm text-gray-600">โจทย์: กำหนดให้พนักงานเห็นเฉพาะรายการขายที่ตัวเองสร้างเท่านั้น</p>
+                <h3 class="text-xl font-bold text-gray-800"><i class="fas fa-cubes text-blue-500 mr-2"></i> Workshop 1: AppSheet Expressions สำหรับ CRUD</h3>
+                <p class="text-sm text-gray-600">โจทย์: กำหนด Auto Value, Data Validation และ Calculated Value ใน AppSheet Columns</p>
             </div>
             <div class="p-6">
-                <p class="font-semibold text-teal-600">✅ SOLUTION: Security Filter Expression</p>
+                <p class="font-semibold text-teal-600">✅ SOLUTION 1.1: Column Expressions</p>
+                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-3">
+                    <li>
+                        <span class="font-bold text-blue-600">Auto Date:</span> <span class="app-expression font-bold">TODAY()</span>
+                    </li>
+                    <li>
+                        <span class="font-bold text-blue-600">Data Validation:</span> (Valid If) <span class="app-expression font-bold">([Quantity] > 0)</span>
+                    </li>
+                    <li>
+                        <span class="font-bold text-blue-600">Total Price Calculation:</span> (Virtual Column) <span class="app-expression font-bold">[Quantity] * [Product_ID].[Price]</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="solution-card">
+            <div class="card-header">
+                <h3 class="text-xl font-bold text-gray-800"><i class="fas fa-lock text-red-500 mr-2"></i> Workshop 2: Security Filter และ Automation Bot</h3>
+                <p class="text-sm text-gray-600">โจทย์: กำหนดให้พนักงานเห็นเฉพาะรายการขายที่ตัวเองสร้างเท่านั้น พร้อม Bot Trigger</p>
+            </div>
+            <div class="p-6">
+                <p class="font-semibold text-teal-600">✅ SOLUTION 2.1: Security Filter Expression</p>
                 <p class="app-expression p-3 bg-gray-50 border border-gray-200">
-                    <span class="text-gray-500">// AppSheet: Security > Filter > Row Filter Condition</span><br>
-                    ([Sales_Person_Email] = USEREMAIL()) <span class="text-gray-500">// ใช้งานได้เมื่อคอลัมน์ [Sales_Person_Email] ถูกบันทึกไว้ใน GGS</span>
+                    ([Sales_Person_Email] = USEREMAIL())
                 </p>
                 
-                <p class="font-semibold text-teal-600 mt-6">✅ SOLUTION: AppSheet Automation Bot (Trigger)</p>
+                <p class="font-semibold text-teal-600 mt-6">✅ SOLUTION 2.2: Automation Bot (Trigger)</p>
                 <ul class="list-disc ml-6 text-sm text-gray-700 space-y-2">
                     <li>**Event (Trigger):** <span class="app-expression">Data Change (Adds Only)</span> บนตาราง Sales Transactions</li>
-                    <li>**Process (Logic):** <span class="app-expression">Create New File</span> (PDF/Email Body) และ <span class="app-expression">Send an email</span></li>
+                    <li>**Process (Logic):** <span class="app-expression">Create New File</span> และ <span class="app-expression">Send an email</span></li>
                 </ul>
             </div>
         </div>
     </section>
     
-    <!-- Day 4 Solutions -->
     <section class="mb-12">
         <h2 class="text-3xl font-bold text-gray-700 mb-6 border-b-2 border-indigo-300 pb-2 flex items-center">
             <i class="fas fa-network-wired mr-3 text-indigo-500"></i> Day 4: N8N Webhooks และ Data Transformation
@@ -207,24 +232,24 @@ function generateUniqueId(prefix) {
         
         <div class="solution-card">
             <div class="card-header">
-                <h3 class="text-xl font-bold text-gray-800">Workshop 1: AppSheet (Webhook) → N8N → Google Sheets</h3>
+                <h3 class="text-xl font-bold text-gray-800">Workshop 1: สร้าง Workflow Data Entry (AppSheet → N8N → GGS)</h3>
                 <p class="text-sm text-gray-600">โจทย์: รับ JSON จาก AppSheet และ Map Fields ลง GGS</p>
             </div>
             <div class="p-6">
-                <p class="font-semibold text-teal-600">✅ SOLUTION: N8N Node Sequence</p>
+                <p class="font-semibold text-teal-600">✅ SOLUTION 1.1: N8N Node Sequence</p>
                 <p class="data-flow-path text-sm text-center mb-4">
-                    <span class="ai-node">Webhook</span> → <span class="ai-node">Set Node</span> → <span class="ai-node">Google Sheets (Append Row)</span>
+                    <span class="ai-node">Webhook</span> → <span class="ai-node">Set Node (Data Mapping)</span> → <span class="ai-node">Google Sheets (Append Row)</span>
                 </p>
                 
-                <p class="font-semibold text-teal-600">✅ SOLUTION: Data Mapping Expression (Set Node)</p>
+                <p class="font-semibold text-teal-600">✅ SOLUTION 1.2: Data Mapping Expression (Set Node)</p>
                 <div class="code-block">
                     <pre>
 // การดึงข้อมูลจาก JSON Payload ที่มาจาก AppSheet
-// AppSheet Payload จะอยู่ในรูปแบบ { "Data": { "Column1": "Value1", ... } }
+// ใช้ Expression ดึงค่าจาก Payload เช่น:
 {
-  "Transaction_ID": "{{ $json['Data']['TXN_ID'] }}",
-  "Customer_Ref": "{{ $json['Data']['Customer_Ref'] }}",
-  "Total_Price": "{{ $json['Data']['Total_Price'] }}" 
+  "Transaction_ID": "{{ $json.Data.TXN_ID }}",
+  "Customer_Ref": "{{ $json.Data.Customer_Ref }}",
+  "Total_Price": "{{ $json.Data.Total_Price }}" 
 }
                     </pre>
                 </div>
@@ -232,52 +257,78 @@ function generateUniqueId(prefix) {
         </div>
     </section>
 
-    <!-- Day 5 Solutions -->
     <section class="mb-12">
         <h2 class="text-3xl font-bold text-gray-700 mb-6 border-b-2 border-red-300 pb-2 flex items-center">
-            <i class="fas fa-rocket mr-3 text-red-500"></i> Day 5: AI (Gemini) Integration และ Complex Workflow
+            <i class="fas fa-rocket mr-3 text-red-500"></i> Day 5: Project MVP Showcase (Advanced Logic & AI)
         </h2>
         
         <div class="solution-card">
             <div class="card-header">
-                <h3 class="text-xl font-bold text-gray-800">Workshop 4: AI Summarization & Content Automation</h3>
-                <p class="text-sm text-gray-600">โจทย์: ใช้ Gemini สรุปข้อมูลยาวๆ จาก GGS ก่อนส่ง Line Notify</p>
+                <h3 class="text-xl font-bold text-gray-800"><i class="fas fa-comment-alt text-blue-500 mr-2"></i> Logic Flow 1: Line OA Bot + CRM & Stock</h3>
+                <p class="text-sm text-gray-600">โจทย์: Flow การตอบกลับอัตโนมัติ, การตัด Lead และการเชื่อมต่อ Stock</p>
             </div>
             <div class="p-6">
-                <p class="font-semibold text-teal-600">✅ SOLUTION: N8N Workflow (AI Integration)</p>
+                <p class="font-semibold text-teal-600">✅ SOLUTION: N8N/GAS Flow Deconstruction</p>
                 <p class="data-flow-path text-sm text-center mb-4">
-                    <span class="ai-node">Schedule</span> → <span class="ai-node">GGS (Read Data)</span> → <span class="ai-node">Gemini Node (Prompt)</span> → <span class="ai-node">Line Notify (Broadcast)</span>
+                    <span class="ai-node">Line Webhook</span> → <span class="ai-node">IF (Is Lead?)</span> → <span class="ai-node">GGS (Insert Lead)</span> → <span class="ai-node">HTTP (vTiger/Loyverse)</span> → <span class="ai-node">Line Message</span>
                 </p>
-                
-                <p class="font-semibold text-teal-600">✅ SOLUTION: Prompt Template (Gemini Node)</p>
-                <div class="code-block">
-                    <pre>
-// Prompt ที่ถูกสร้างแบบ Dynamic โดยใช้ Expression ดึงเนื้อหาจาก GGS
-"โปรดสรุปสาระสำคัญของรายงานนี้ให้เหลือ 3-4 บรรทัด โดยเน้น 'ปัญหาหลัก' และ 'ข้อเสนอแนะหลัก' เท่านั้น: {{ $json['Report_Content'] }}"
-                    </pre>
-                </div>
+                <p class="text-sm text-gray-700 mt-4">
+                    <span class="font-bold text-red-600">จุดสำคัญ:</span> ใช้ <span class="ai-node">HTTP Request Node</span> (Day 4) เพื่อส่งข้อมูล API ไปยังระบบ CRM/Stock ภายนอก
+                </p>
+            </div>
+        </div>
+
+        <div class="solution-card">
+            <div class="card-header">
+                <h3 class="text-xl font-bold text-gray-800"><i class="fas fa-robot text-indigo-600 mr-2"></i> Logic Flow 2: AI วิเคราะห์ฟีดแบ็ก</h3>
+                <p class="text-sm text-gray-600">โจทย์: ใช้ Gemini วิเคราะห์ Sentiment จาก GGS และสร้าง Action Plan ใน AppSheet</p>
+            </div>
+            <div class="p-6">
+                <p class="font-semibold text-teal-600">✅ SOLUTION: N8N/AI Flow Deconstruction</p>
+                <p class="data-flow-path text-sm text-center mb-4">
+                    <span class="ai-node">Schedule/Webhook</span> → <span class="ai-node">GGS (Read Feedback)</span> → <span class="ai-node">Gemini Node (Sentiment Prompt)</span> → <span class="ai-node">IF Node (Negative?)</span> → <span class="ai-node">AppSheet (Update/Action)</span>
+                </p>
+                <p class="text-sm text-gray-700 mt-4">
+                    <span class="font-bold text-red-600">จุดสำคัญ:</span> การใช้ <span class="ai-node">IF Node</span> (Day 2) เพื่อแยก Branching Path ตามผลลัพธ์ของ AI
+                </p>
             </div>
         </div>
         
         <div class="solution-card">
             <div class="card-header">
-                <h3 class="text-xl font-bold text-gray-800">Project MVP: Error Handling (Advanced Logic)</h3>
+                <h3 class="text-xl font-bold text-gray-800"><i class="fas fa-magic text-purple-500 mr-2"></i> Logic Flow 3: AI ผู้ช่วยสร้างคอนเทนต์</h3>
+                <p class="text-sm text-gray-600">โจทย์: ใช้ AI สร้างแคปชั่นการตลาดจาก GGS และตั้งเวลา Broadcast</p>
+            </div>
+            <div class="p-6">
+                <p class="font-semibold text-teal-600">✅ SOLUTION: N8N/Scheduling Flow Deconstruction</p>
+                <p class="data-flow-path text-sm text-center mb-4">
+                    <span class="ai-node">Schedule Trigger</span> → <span class="ai-node">GGS (Read Pending)</span> → <span class="ai-node">Gemini Node (Content Prompt)</span> → <span class="ai-node">Line Broadcast</span> → <span class="ai-node">GGS (Update Status)</span>
+                </p>
+                <p class="text-sm text-gray-700 mt-4">
+                    <span class="font-bold text-red-600">จุดสำคัญ:</span> ใช้ <span class="ai-node">Schedule Trigger</span> ในการทำงานอัตโนมัติตามเวลาที่กำหนด
+                </p>
+            </div>
+        </div>
+
+        <div class="solution-card">
+            <div class="card-header">
+                <h3 class="text-xl font-bold text-gray-800"><i class="fas fa-bug text-red-600 mr-2"></i> ส่วนสรุป: Error Handling (Try/Catch Concept)</h3>
                 <p class="text-sm text-gray-600">โจทย์: สร้าง Flow Path เพื่อดักจับและแจ้งเตือนข้อผิดพลาด</p>
             </div>
             <div class="p-6">
                 <p class="font-semibold text-teal-600">✅ SOLUTION: N8N Error Handling Sequence</p>
                 <p class="data-flow-path text-sm text-center mb-4">
-                    <span class="ai-node">Main Workflow</span> → **[Error Path]** → <span class="ai-node">Function Node</span> (Format Error Log) → <span class="ai-node">Google Sheets (Log Table)</span> → <span class="ai-node">Line Notify (Admin Alert)</span>
+                    <span class="ai-node">Main Workflow</span> → **[Error Path: Catch Error Node]** → <span class="ai-node">Function Node</span> → <span class="ai-node">Google Sheets (Log)</span> → <span class="ai-node">Line Notify (Admin Alert)</span>
                 </p>
                 <p class="text-sm text-gray-700 mt-4">
-                    <span class="font-bold text-red-600">หลักการ:</span> เมื่อเกิด Error, Workflow จะไหลเข้าสู่ **Error Path** ซึ่งจะทำงาน 3 ขั้นตอน: 1) บันทึกรายละเอียด Error, 2) ส่งแจ้งเตือนหาผู้ดูแลระบบ, 3) จบ Workflow อย่างปลอดภัย
+                    <span class="font-bold text-red-600">หลักการ:</span> เมื่อเกิด Error, Workflow จะไหลเข้าสู่ **Error Path** เพื่อบันทึก/แจ้งเตือน
                 </p>
             </div>
         </div>
+
     </section>
 
 
-    <!-- Footer -->
     <footer class="text-center text-gray-500 mt-10 border-t pt-4">
         <p>เอกสารฉบับนี้เป็นทรัพย์สินทางปัญญาของหลักสูตร AI Automation Master</p>
     </footer>
