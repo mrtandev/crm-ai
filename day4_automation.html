@@ -12,6 +12,7 @@
             --gradient-start: #4f46e5;
             --gradient-end: #818cf8; /* Indigo-400 */
             --node-color: #f97316; /* Orange-500 for N8N Nodes */
+            --flow-bg: #eef2ff;
         }
         body {
             font-family: 'Noto Sans Thai', 'Inter', sans-serif;
@@ -29,10 +30,14 @@
         .step-card {
             border-left: 5px solid var(--primary-color);
             transition: all 0.3s ease;
+            padding: 25px; 
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
         .step-card:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             transform: translateY(-2px);
+            border-left-color: var(--gradient-end);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.2);
         }
         .n8n-tip {
             background-color: #eef2ff; /* Indigo-50 */
@@ -84,6 +89,50 @@
             border-radius: 8px;
             background-color: #faf5ff;
         }
+        /* --- N8N Diagram Styles --- */
+        .n8n-flow-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 10px;
+            background-color: var(--flow-bg);
+            border: 1px solid #c7d2fe;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        .flow-node-box {
+            background-color: #fff;
+            border: 2px solid #4f46e5;
+            border-radius: 8px;
+            padding: 8px 15px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 5px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .flow-arrow-down {
+            height: 20px;
+            width: 0;
+            border-left: 2px solid #9333ea;
+            margin: 0 auto;
+            position: relative;
+        }
+        .flow-arrow-down::after {
+            content: '↓';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #9333ea;
+            font-size: 1.2rem;
+            line-height: 0;
+        }
+        .node-icon {
+            margin-right: 5px;
+            color: #f97316;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
@@ -107,8 +156,8 @@
         <div class="bg-white p-6 rounded-xl card-shadow mb-8 border-t-4 border-indigo-500">
             <div class="flex items-center space-x-4">
                 <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
-                     onerror="this.onerror=null;this.src='https://placehold.co/80x80/4f46e5/ffffff?text=อ.แทน'"
-                     alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-20 h-20 rounded-full object-cover ring-2 ring-indigo-500">
+                    onerror="this.onerror=null;this.src='https://placehold.co/80x80/4f46e5/ffffff?text=อ.แทน'"
+                    alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-20 h-20 rounded-full object-cover ring-2 ring-indigo-500">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800">อ.แทน <span class="text-indigo-600">[ธีรชัย โฉมทัพ]</span></h2>
                     <p class="base text-gray-500">Head of Digital Transformation</p>
@@ -118,11 +167,12 @@
         </div>
 
         <div class="bg-white p-6 rounded-xl card-shadow mb-8">
-            <h3 class="text-2xl font-semibold mb-4 gradient-text">กำหนดการเรียนรู้ Day 4 (6 ชั่วโมง) 🔌</h3>
+            <h3 class="text-2xl font-semibold mb-4 gradient-text">กำหนดการเรียนรู้ Day 4 (6.0 ชั่วโมง) 🔌</h3>
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">เวลา</th>
+                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ระยะเวลา (นาที)</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">หัวข้อ/กิจกรรม</th>
                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ประเภท</th>
                     </tr>
@@ -130,45 +180,66 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr class="hover:bg-indigo-50">
                         <td class="px-6 py-4 text-sm font-semibold text-gray-900">09:00 - 10:15 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 1:** N8N Fundamentals: Core Concepts (Nodes, Workflows, Data Structure)</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">75</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 1:** N8N Fundamentals: Core Concepts</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-indigo-600">รากฐาน Automation</td>
                     </tr>
                     <tr class="bg-yellow-50">
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">10:15 - 10:30 น.</td>
+                        <td class="px-3 py-2 text-center text-sm font-semibold text-yellow-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคเช้า (Coffee Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-indigo-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">10:30 - 12:00 น.</td>
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">10:30 - 11:45 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">75</td>
                         <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 2:** Webhooks & API: การรับ-ส่งข้อมูลระหว่างระบบ</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-indigo-600">ทฤษฎี (I/O)</td>
                     </tr>
                     <tr class="bg-red-50">
                         <td class="px-6 py-2 text-sm font-semibold text-red-800">12:00 - 13:00 น.</td>
+                        <td class="px-3 py-2 text-center text-sm font-semibold text-red-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-red-800">***พักกลางวัน (Lunch Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-red-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-indigo-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">13:00 - 14:45 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**Workshop 1:** สร้าง Workflow: AppSheet (Webhook) → N8N → Google Sheets</td>
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">13:00 - 14:30 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">90</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 3:** Workshop 1: สร้าง Workflow: AppSheet (Webhook) → N8N → Google Sheets</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-indigo-600">ปฏิบัติ (Data Entry)</td>
                     </tr>
                     <tr class="bg-yellow-50">
-                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">14:45 - 15:00 น.</td>
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">14:30 - 14:45 น.</td>
+                        <td class="px-3 py-2 text-center text-sm font-semibold text-yellow-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคบ่าย (Coffee Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-indigo-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">15:00 - 16:30 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**Workshop 2:** การจัดการข้อมูล (Set, Split in Batches, If Node)</td>
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">14:45 - 16:15 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">90</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 4:** Workshop 2: การจัดการข้อมูล (Set, Split in Batches, If Node)</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-indigo-600">Logic Flow</td>
                     </tr>
                     <tr class="hover:bg-indigo-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">16:30 - 17:00 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**สรุป:** การ Debugging และการเตรียมพร้อมสำหรับ Day 5 (Advanced n8n)</td>
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">16:15 - 16:30 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">15</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 5:** ตัวอย่าง 5 Flows ยอดนิยม & Marketplace</td>
+                        <td class="px-6 py-4 text-center text-xs font-bold text-indigo-600">ทฤษฎี</td>
+                    </tr>
+                    <tr class="hover:bg-indigo-50">
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">16:30 - 16:45 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">15</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 6:** สรุป Debugging และการเตรียมพร้อมสำหรับ Day 5 (Advanced n8n)</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-indigo-600">สรุป</td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr class="bg-gray-100">
+                        <td class="px-6 py-2 text-sm font-bold text-gray-800">รวมเวลาเรียนจริง</td>
+                        <td class="px-3 py-2 text-center text-sm font-bold text-red-600">360</td>
+                        <td class="px-6 py-2 text-sm font-bold text-gray-800" colspan="2">(6.0 ชั่วโมง)</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
 
@@ -208,64 +279,44 @@
             <div class="border border-green-300 rounded-lg overflow-x-auto my-4 p-4 bg-green-50 text-sm">
                 <ul class="list-disc ml-6 text-gray-700 space-y-1">
                     <li><span class="font-bold text-green-700">Trigger Nodes (เริ่มต้น):</span> เช่น <span class="node-component">Webhook</span>, <span class="node-component">Schedule</span>, หรือ <span class="node-component">AppSheet Trigger</span> (เมื่อมีการส่งข้อมูลจาก AppSheet)</li>
-                    <li><span class="font-bold text-gray-700">Regular Nodes (ดำเนินการ):</span> เช่น <span class="node-component">Google Sheets</span> (Append Row), <span class="node-component">Email Send</span>, <span class="node-component">Set</span> (ปรับปรุงข้อมูล)</li>
+                    <li><span class="font-bold text-gray-700">Regular Nodes (ดำเนินการ):</span> เช่น <span class="node-component">Google Sheets</span> (Append Row), <span class="node-component">Line Notify</span>, <span class="node-component">Set</span> (ปรับปรุงข้อมูล)</li>
                 </ul>
+            </div>
+            
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-server mr-2 text-blue-600"></i> 1.3 กลยุทธ์การใช้งาน N8N: Self-Host vs. Cloud
+            </h4>
+            <p class="mb-4 text-gray-700">
+                ก่อนเริ่มใช้งานจริง ผู้เรียนควรเข้าใจรูปแบบการติดตั้ง N8N
+            </p>
+            <div class="border border-blue-300 rounded-lg overflow-x-auto my-4 p-4 appsheet-tip">
+                <table class="min-w-full divide-y divide-blue-200 text-sm">
+                    <thead>
+                        <tr class="bg-blue-100">
+                            <th class="px-4 py-2 text-left font-bold text-blue-800">รูปแบบ</th>
+                            <th class="px-4 py-2 text-left font-bold text-blue-800">จุดเด่น (Pros)</th>
+                            <th class="px-4 py-2 text-left font-bold text-blue-800">ข้อจำกัด (Cons)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-blue-200">
+                        <tr>
+                            <td class="px-4 py-3 font-bold text-gray-900">Self-Hosted (Local/Docker)</td>
+                            <td class="px-4 py-3 text-gray-700">ควบคุมข้อมูล 100%, ประหยัดค่าใช้จ่ายระยะยาว, ไม่จำกัด Workflow</td>
+                            <td class="px-4 py-3 text-gray-700">ต้องมีความรู้ DevOps/Server, ต้องดูแลความเสถียรเอง (Maintenance)</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 font-bold text-gray-900">Commercial Cloud (N8N Cloud)</td>
+                            <td class="px-4 py-3 text-gray-700">พร้อมใช้งานทันที (Zero Setup), มีการรับประกัน Uptime และ Security จาก N8N</td>
+                            <td class="px-4 py-3 text-gray-700">มีค่าใช้จ่ายรายเดือน, มีข้อจำกัดด้านปริมาณ Execution/Workflow</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-orange-400 pb-2 flex items-center">
-            <i class="fas fa-cubes w-8 h-8 mr-3 text-orange-600"></i>
-            ตารางสรุปประเภทและตัวอย่าง Nodes ของ N8N (4 หมวดหลัก)
-        </h3>
-        
-        <div class="bg-white p-5 rounded-xl card-shadow mb-8 border-l-4 border-orange-500 overflow-x-auto">
-            <p class="text-gray-700 mb-4">
-                Nodes ใน N8N แบ่งออกเป็นประเภทหลักๆ เพื่อช่วยในการวางแผน Workflow
-            </p>
-            
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-orange-50">
-                    <tr>
-                        <th class="px-4 py-3 text-left text-sm font-bold text-orange-700 uppercase tracking-wider w-1/4">ประเภท Node หลัก</th>
-                        <th class="px-4 py-3 text-left text-sm font-bold text-orange-700 uppercase tracking-wider w-1/4">วัตถุประสงค์</th>
-                        <th class="px-4 py-3 text-left text-sm font-bold text-orange-700 uppercase tracking-wider w-1/2">Nodes ตัวอย่างที่ใช้บ่อย</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200 text-sm">
-                    <tr>
-                        <td class="px-4 py-3 font-bold text-indigo-700">1. Trigger Nodes</td>
-                        <td class="px-4 py-3">เป็นจุดเริ่มต้นของ Workflow (รับข้อมูลเข้า)</td>
-                        <td class="px-4 py-3">
-                            <span class="node-component">Webhook</span>, <span class="node-component">Schedule</span>, <span class="node-component">Form Trigger</span>, <span class="node-component">AppSheet Trigger</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-3 font-bold text-indigo-700">2. Logic / Flow Nodes</td>
-                        <td class="px-4 py-3">ควบคุมทิศทางและสร้างเงื่อนไขการทำงาน</td>
-                        <td class="px-4 py-3">
-                            <span class="node-component">If</span>, <span class="node-component">Switch</span>, <span class="node-component">Wait</span>, <span class="node-component">Split In Batches</span>, <span class="node-component">Merge</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-3 font-bold text-indigo-700">3. Data / Transformation Nodes</td>
-                        <td class="px-4 py-3">ปรับปรุง เปลี่ยนแปลง หรือดึงข้อมูลใน Workflow</td>
-                        <td class="px-4 py-3">
-                            <span class="node-component">Set</span> (สำคัญมาก), <span class="node-component">Code</span>, <span class="node-component">Item Lists</span>, <span class="node-component">JSON</span>, <span class="node-component">Function Item</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-3 font-bold text-indigo-700">4. Application / Service Nodes</td>
-                        <td class="px-4 py-3">เชื่อมต่อและแลกเปลี่ยนข้อมูลกับระบบภายนอก</td>
-                        <td class="px-4 py-3">
-                            <span class="node-component">Google Sheets</span>, <span class="node-component">Line Notify</span>, <span class="node-component">HTTP Request</span>, <span class="node-component">ChatGPT</span>, <span class="node-component">Mailchimp</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
+
         <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-amber-400 pb-2 flex items-center">
-            <i class="fas fa-bell w-8 h-8 mr-3 text-amber-600"></i>
+            <i class="fas fa-cubes w-8 h-8 mr-3 text-amber-600"></i>
             ส่วนที่ 2: Webhooks & API: การเชื่อมต่อภายนอก
         </h3>
 
@@ -307,17 +358,71 @@
             </div>
         </div>
         
-        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-purple-400 pb-2 flex items-center">
-            <i class="fas fa-microchip w-8 h-8 mr-3 text-purple-600"></i>
-            ตัวอย่างสาธิต: JSON Data Flow จาก AppSheet เข้า N8N
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-pink-400 pb-2 flex items-center">
+            <i class="fas fa-list-check w-8 h-8 mr-3 text-pink-600"></i>
+            ส่วนที่ 3: Workshop 1: สร้าง Workflow Data Entry
         </h3>
 
-        <div class="step-card bg-white p-5 rounded-lg shadow-md mb-8 border-l-4 border-purple-500">
+        <div class="step-card bg-white p-5 rounded-lg shadow-md mb-8 border-l-4 border-pink-500">
             <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                <i class="fas fa-file-code mr-2 text-pink-600"></i> 3.0 การทำความเข้าใจโครงสร้าง JSON (JSON Payload)
+                <i class="fas fa-drafting-compass mr-2 text-purple-600"></i> 3.1 การวางแผน Workflow (Plan)
             </h4>
             <p class="mb-4 text-gray-700">
-                เมื่อ AppSheet ส่ง Webhook ข้อมูลจะอยู่ในรูปแบบ **JSON Array** ซึ่ง N8N จะรับเข้ามาเป็น Input Item ที่ต้องถูกประมวลผลต่อ
+                **โจทย์:** เมื่อมีการบันทึกรายการขายใน AppSheet ให้ N8N รับข้อมูลและบันทึกข้อมูลนั้นลงใน GGS อีก Sheet (หรือ GGS อื่น) พร้อมส่ง Line Notify
+            </p>
+            <p class="text-center font-bold text-indigo-700 bg-indigo-100 p-3 rounded-lg mt-4 text-lg">
+                AppSheet (Webhook) → <span class="node-component">N8N Webhook</span> → <span class="node-component">Google Sheets Node</span> → <span class="node-component">Line Notify</span>
+            </p>
+            
+            <h5 class="text-lg font-bold text-gray-800 mb-3 mt-6 border-b pb-1">3.1.1 ภาพจำลอง Workflow ใน N8N UI</h5>
+            <div class="n8n-flow-diagram">
+                <div class="flow-node-box bg-purple-100 border-purple-400">
+                    <i class="fas fa-bolt node-icon"></i> **Webhook** (Trigger Node)
+                </div>
+                <div class="flow-arrow-down"></div>
+                <div class="flow-node-box bg-yellow-100 border-yellow-400">
+                    <i class="fas fa-exchange-alt node-icon"></i> **Set** (Data Mapping & Renaming)
+                </div>
+                <div class="flow-arrow-down"></div>
+                <div class="flow-node-box bg-green-100 border-green-400">
+                    <i class="fas fa-table node-icon"></i> **Google Sheets** (Append Row)
+                </div>
+                <div class="flow-arrow-down"></div>
+                <div class="flow-node-box bg-blue-100 border-blue-400">
+                    <i class="fas fa-comment-dots node-icon"></i> **Line Notify** (Notification)
+                </div>
+            </div>
+
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-code-branch mr-2 text-orange-600"></i> 3.2 การจัดการ Data Flow (Logic Nodes)
+            </h4>
+            <p class="mb-4 text-gray-700">
+                เราใช้ Node เช่น <span class="node-component">Set</span> และ <span class="node-component">If</span> เพื่อเตรียมข้อมูลและสร้างเงื่อนไข
+            </p>
+            
+            <div class="border border-orange-300 rounded-lg overflow-x-auto my-4 p-4 bg-orange-50">
+                <p class="font-bold text-orange-700 mb-2">ตัวอย่างการใช้ Nodes ที่สำคัญ</p>
+                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-2">
+                    <li><span class="node-component">Set Node:</span> ใช้เปลี่ยนชื่อ Key ใน JSON (Map Data) เช่น เปลี่ยน <span class="expression-code">SaleID</span> ที่มาจาก AppSheet เป็น <span class="expression-code">Transaction_ID</span> ที่จะใส่ใน GGS</li>
+                    <li><span class="node-component">If Node:</span> ใช้สร้างเงื่อนไขการทำงาน เช่น "ถ้า <span class="expression-code">${{$json["Total_Price"]}}</span> มากกว่า 10,000 ให้เดินไปที่ Branch A (ส่งอีเมลผู้จัดการ) ถ้าไม่ถึง ให้ไป Branch B (ส่ง Line Notify พนักงาน)"</li>
+                    <li><span class="node-component">Code Node:</span> ใช้เขียน JavaScript เพื่อประมวลผลข้อมูลที่ซับซ้อน เช่น การคำนวณภาษีหลายชั้น หรือการ Format วันที่</li>
+                </ul>
+            </div>
+            
+        </div>
+        
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-purple-400 pb-2 flex items-center">
+            <i class="fas fa-microchip w-8 h-8 mr-3 text-purple-600"></i>
+            ส่วนที่ 4: Workshop 2: การจัดการข้อมูลและ Logic Flow (Set, If, Code)
+        </h3>
+        
+        <div class="step-card bg-white p-5 rounded-lg shadow-md mb-8 border-l-4 border-purple-500">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-bolt mr-2 text-yellow-600"></i> 4.1 ตัวอย่างสาธิต: JSON Data Flow จาก AppSheet เข้า N8N
+            </h4>
+            
+            <p class="mb-4 text-gray-700">
+                การทำความเข้าใจโครงสร้าง JSON ที่มาจาก AppSheet เป็นสิ่งสำคัญที่สุดในการทำ Data Mapping
             </p>
             
             <div class="json-structure p-5">
@@ -348,50 +453,120 @@
                 
                 <div class="mt-3 bg-white p-3 rounded-lg border border-purple-300 text-sm">
                     <ul class="list-disc ml-6 text-gray-700 space-y-1">
-                        <li>ดึง Transaction ID: <span class="expression-code">${{$json.Data.TXN_ID}}</span> → คอลัมน์ A (ID_TRANSACTION)</li>
-                        <li>ดึง Customer ID: <span class="expression-code">${{$json.Data.Customer_Ref}}</span> → คอลัมน์ B (FK_CUSTOMER)</li>
+                        <li>ดึง Transaction ID: <span class="expression-code">${{$json.Data.TXN_ID}}</span> → คอลัมน์ A (ID\_TRANSACTION)</li>
+                        <li>ดึง Customer ID: <span class="expression-code">${{$json.Data.Customer_Ref}}</span> → คอลัมน์ B (FK\_CUSTOMER)</li>
                         <li>ดึง Quantity: <span class="expression-code">${{$json.Data.Quantity}}</span> → คอลัมน์ D (QTY)</li>
                     </ul>
                 </div>
                 
-                <p class="text-sm text-gray-500 italic mt-3">
-                    <i class="fas fa-exclamation-triangle mr-1 text-yellow-500"></i> จุดสำคัญ: N8N จะมองข้อมูลใน JSON Array นี้เป็น 1 Input Item (หรือมากกว่า หาก AppSheet ส่งข้อมูลมาหลายรายการ)
-                </p>
             </div>
-        </div>
+            
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-code mr-2 text-blue-600"></i> 4.2 การใช้ Code Node ใน N8N (Advanced Transformation)
+            </h4>
+            <p class="mb-4 text-gray-700">
+                <span class="node-component">Code Node</span> ช่วยให้คุณสามารถเขียน JavaScript เพื่อทำ Transformation ที่ซับซ้อนกว่า <span class="node-component">Set Node</span>
+            </p>
+            <div class="p-4 n8n-tip rounded-lg my-4">
+                <p class="font-bold text-indigo-800 mb-2 flex items-center">
+                    <i class="fas fa-cogs mr-2"></i> ตัวอย่าง Code Node: การคำนวณภาษีมูลค่าเพิ่ม (VAT)
+                </p>
+                <div class="json-box text-sm">
+                    <pre>// JavaScript in Code Node
+for (const item of items) {
+  // ดึง Total Price จาก Input Item ก่อนหน้า
+  const totalPrice = item.json.Price;
+  const vatRate = 0.07;
+  
+  // คำนวณ VAT และราคารวม
+  const vatAmount = totalPrice * vatRate;
+  const grandTotal = totalPrice + vatAmount;
 
-        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-pink-400 pb-2 flex items-center">
-            <i class="fas fa-list-check w-8 h-8 mr-3 text-pink-600"></i>
-            Workshop 1: สร้าง Workflow Data Entry
+  // เพิ่ม Field ใหม่ใน Output Item
+  item.json.VAT = vatAmount.toFixed(2);
+  item.json.GrandTotal = grandTotal.toFixed(2);
+}
+return items;</pre>
+                </div>
+            </div>
+            
+        </div>
+        
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-red-400 pb-2 flex items-center">
+            <i class="fas fa-trophy w-8 h-8 mr-3 text-red-600"></i>
+            ส่วนที่ 5: ตัวอย่าง 5 Flows ยอดนิยม & Template Marketplace
         </h3>
 
-        <div class="step-card bg-white p-5 rounded-xl card-shadow mb-8 border-l-4 border-pink-500">
+        <div class="step-card bg-white p-5 rounded-lg shadow-md mb-8 border-l-4 border-red-500">
             <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                <i class="fas fa-drafting-compass mr-2 text-purple-600"></i> 3.1 การวางแผน Workflow (Plan)
+                <i class="fas fa-list-ol mr-2 text-red-600"></i> 5.1 ตัวอย่าง 5 Flows ที่ Low-Code Developer ควรทำได้
             </h4>
             <p class="mb-4 text-gray-700">
-                **โจทย์:** เมื่อมีการบันทึกรายการขายใน AppSheet ให้ N8N รับข้อมูลและบันทึกข้อมูลนั้นลงใน GGS อีก Sheet (หรือ GGS อื่น) พร้อมส่ง Line Notify
+                 Flows เหล่านี้เป็นโจทย์ที่พบได้บ่อยในการทำ Automation ธุรกิจ:
             </p>
-            <p class="text-center font-bold text-indigo-700 bg-indigo-100 p-3 rounded-lg mt-4 text-lg">
-                AppSheet (Webhook) → <span class="node-component">N8N Webhook</span> → <span class="node-component">Google Sheets Node</span> → <span class="node-component">Line Notify</span>
-            </p>
+            <ul class="list-decimal ml-6 text-sm text-gray-700 space-y-2">
+                <li><span class="font-bold text-indigo-600">Flow 1: Scheduled GGS to Line Notify:</span> ตั้งเวลาดึงข้อมูล Report สรุปยอดขายจาก GGS ส่ง Line Notify/Email ทุกวันจันทร์ (ใช้ Schedule Node)</li>
+                <li><span class="font-bold text-indigo-600">Flow 2: Email Attachment Processing:</span> รับอีเมลที่มีไฟล์แนบ (PDF/Excel) จากนั้นส่งไฟล์ไปยัง Google Drive และบันทึก Log การรับใน GGS</li>
+                <li><span class="font-bold text-indigo-600">Flow 3: Conditional CRM Update:</span> รับ Lead จาก Google Form → ใช้ If Node เพื่อตรวจสอบ Region → ส่งข้อมูลไปอัปเดต CRM (เช่น HubSpot/vTiger) ใน Pipeline ที่ถูกต้อง</li>
+                <li><span class="font-bold text-indigo-600">Flow 4: AI Text Summarization:</span> รับข้อความ Feedback ลูกค้าที่ยาวเกิน 500 ตัวอักษร → ส่งเข้า Gemini Node เพื่อสรุป → บันทึกสรุปกลับเข้า GGS/AppSheet</li>
+                <li><span class="font-bold text-indigo-600">Flow 5: API Status Checker:</span> ตั้งเวลาตรวจสอบสถานะ API ของระบบสำคัญ (เช่น Loyverse Stock API) ทุก 10 นาที → หากพบ Error ให้ส่งข้อความแจ้งเตือนเข้าช่อง Line Notify/Slack ของ IT Team ทันที</li>
+            </ul>
 
             <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
-                <i class="fas fa-code-branch mr-2 text-orange-600"></i> 3.2 การจัดการ Data Flow (Logic Nodes)
+                <i class="fas fa-star mr-2 text-yellow-600"></i> 5.2 แหล่งรวม Workflow Templates (Marketplace)
             </h4>
             <p class="mb-4 text-gray-700">
-                เราใช้ Node เช่น <span class="node-component">Set</span> และ <span class="node-component">If</span> เพื่อเตรียมข้อมูลและสร้างเงื่อนไข
+                N8N มีชุมชนขนาดใหญ่ที่แบ่งปัน Workflow Templates สำเร็จรูป ซึ่งเป็นแหล่งเรียนรู้และเริ่มต้นที่ดีที่สุด:
             </p>
-            
-            <div class="border border-orange-300 rounded-lg overflow-x-auto my-4 p-4 bg-orange-50">
-                <p class="font-bold text-orange-700 mb-2">ตัวอย่างการใช้ Nodes ที่สำคัญ</p>
-                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-2">
-                    <li><span class="node-component">Set Node:</span> ใช้เปลี่ยนชื่อ Key ใน JSON (Map Data) เช่น เปลี่ยน <span class="expression-code">SaleID</span> ที่มาจาก AppSheet เป็น <span class="expression-code">Transaction_ID</span> ที่จะใส่ใน GGS</li>
-                    <li><span class="node-component">If Node:</span> ใช้สร้างเงื่อนไขการทำงาน เช่น "ถ้า <span class="expression-code">${{$json["Total_Price"]}}</span> มากกว่า 10,000 ให้เดินไปที่ Branch A (ส่งอีเมลผู้จัดการ) ถ้าไม่ถึง ให้ไป Branch B (ส่ง Line Notify พนักงาน)"</li>
-                    <li><span class="node-component">Code Node:</span> ใช้เขียน JavaScript เพื่อประมวลผลข้อมูลที่ซับซ้อน เช่น การคำนวณภาษีหลายชั้น หรือการ Format วันที่</li>
-                </ul>
-            </div>
-            
+            <ul class="list-disc ml-6 text-sm text-gray-700 space-y-2">
+                <li>
+                    <span class="font-bold">N8N Template Library:</span> 
+                    เข้าไปค้นหา Flow ที่คุณต้องการ เช่น "Google Sheets to Slack", "AppSheet Integration" 
+                    <a href="https://n8n.io/workflows/" target="_blank" class="text-blue-600 hover:text-blue-800 underline">[ลิงก์ไปยัง N8N Templates]</a>
+                </li>
+                <li>
+                    <span class="font-bold">GitHub:</span> 
+                    ชุมชนนักพัฒนา N8N มักแชร์ Code Node (JavaScript) และ Workflow JSON File บน GitHub 
+                    <a href="https://github.com/n8n-io/n8n/" target="_blank" class="text-blue-600 hover:text-blue-800 underline">[ลิงก์ไปยัง N8N GitHub]</a>
+                </li>
+                <li>
+                    <span class="font-bold">Google Community:</span> 
+                    ค้นหาตัวอย่างการใช้ AppSheet Webhook + N8N ใน Forum ของ Google Sheets/AppSheet 
+                    <a href="https://community.appsheet.com/" target="_blank" class="text-blue-600 hover:text-blue-800 underline">[ลิงก์ไปยัง AppSheet Community]</a>
+                </li>
+            </ul>
+        </div>
+
+        
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-indigo-400 pb-2 flex items-center">
+            <i class="fas fa-chart-line w-8 h-8 mr-3 text-indigo-600"></i>
+            ส่วนที่ 6: สรุป Debugging และการเตรียมพร้อมสำหรับ Day 5
+        </h3>
+
+        <div class="step-card bg-white p-5 rounded-lg shadow-md mb-8 border-l-4 border-indigo-500">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-bug mr-2 text-red-600"></i> 6.1 กลยุทธ์การ Debugging N8N Workflow
+            </h4>
+            <p class="mb-4 text-gray-700">
+                การทำงานของ Automation มักเกิดข้อผิดพลาด การใช้เครื่องมือใน N8N อย่างถูกต้องจะช่วยประหยัดเวลา:
+            </p>
+            <ul class="list-disc ml-6 text-sm text-gray-700 space-y-2">
+                <li><span class="font-bold">Execution Log:</span> ตรวจสอบ Log ของการรันแต่ละครั้ง เพื่อดูว่า Node ใด Fail และ Error Message คืออะไร</li>
+                <li><span class="font-bold">Input/Output Data:</span> คลิ๊กที่ Node เพื่อตรวจสอบ JSON Input และ Output ว่าข้อมูลที่ส่งต่อถูกต้องหรือไม่ (ปัญหา 90% มาจากการทำ Data Mapping ผิด)</li>
+                <li><span class="font-bold">Test Workflow:</span> ใช้ปุ่ม "Test Workflow" หรือส่ง Test Webhook เพื่อรันทีละ Node และดูผลลัพธ์แบบ Real-Time</li>
+            </ul>
+
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-forward mr-2 text-green-600"></i> 6.2 การเตรียมพร้อมสำหรับ Day 5 (Advanced N8N)
+            </h4>
+            <p class="mb-4 text-gray-700">
+                Day 5 จะมุ่งเน้นไปที่การเชื่อมต่อที่ซับซ้อนขึ้น และการใช้ AI/Code Node ขั้นสูง:
+            </p>
+            <ul class="list-disc ml-6 text-sm text-gray-700 space-y-2">
+                <li><span class="font-bold">Project Goal Setting:</span> กำหนดขอบเขต MVP สำหรับ Project Final</li>
+                <li><span class="font-bold">Code Node Mastery:</span> เตรียมพร้อมสำหรับการใช้ JavaScript ในการจัดการข้อมูล Array, Loop, และ Date/Time Transformation</li>
+                <li><span class="font-bold">Advanced Integration:</span> การใช้ <span class="node-component">HTTP Request Node</span> และ Gemini Node ในการวิเคราะห์ข้อมูล</li>
+            </ul>
         </div>
 
 
@@ -400,10 +575,10 @@
                 <i class="fas fa-check-circle mr-2"></i> สรุปสิ่งที่ผู้เรียนจะได้จาก Day 4 Part 1
             </p>
             <p class="text-gray-700 text-lg">
-                ผู้เรียนเข้าใจหลักการทำงานของ N8N, Webhooks และ API สามารถสร้าง Workflow พื้นฐานเพื่อรับข้อมูลจาก AppSheet และนำไปบันทึก/ส่งต่อในระบบอื่นได้อย่างอัตโนมัติ พร้อมทั้งใช้ Logic Node (Set, If) เพื่อควบคุม Data Flow ได้
+                ผู้เรียนเข้าใจหลักการทำงานของ N8N, Webhooks และ API สามารถสร้าง Workflow พื้นฐานเพื่อรับข้อมูลจาก AppSheet และนำไปบันทึก/ส่งต่อในระบบอื่นได้อย่างอัตโนมัติ พร้อมทั้งใช้ Logic Node (Set, If, Code) เพื่อควบคุม Data Flow ได้
             </p>
             <a href="day5_automation.html" class="inline-flex items-center mt-4 px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition duration-150">
-                <span class="mr-2">ไปยัง Day 5: Workshop เชื่อมต่ออัตโนมัติด้วย N8N (Part 2)</span> <i class="fas fa-arrow-right"></i>
+                <span class="mr-2">ไปยัง Day 5: Project MVP Showcase และสรุปหลักสูตร</span> <i class="fas fa-arrow-right"></i>
             </a>
         </div>
 

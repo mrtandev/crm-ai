@@ -29,6 +29,9 @@
         .step-card {
             border-left: 5px solid var(--primary-color);
             transition: all 0.3s ease;
+            padding: 25px; /* เพิ่ม Padding เล็กน้อย */
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
         .step-card:hover {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -66,6 +69,17 @@
             padding: 2px 4px;
             border-radius: 3px;
         }
+        /* เพิ่มสไตล์สำหรับโค้ด AppSheet */
+        .app-code-block {
+            background-color: #ffffff;
+            border: 1px solid #c7d2fe;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9rem;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
@@ -89,8 +103,8 @@
         <div class="bg-white p-6 rounded-xl card-shadow mb-8 border-t-4 border-emerald-500">
             <div class="flex items-center space-x-4">
                 <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
-                     onerror="this.onerror=null;this.src='https://placehold.co/80x80/6366f1/ffffff?text=อ.แทน'"
-                     alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-20 h-20 rounded-full object-cover ring-2 ring-emerald-500">
+                    onerror="this.onerror=null;this.src='https://placehold.co/80x80/6366f1/ffffff?text=อ.แทน'"
+                    alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-20 h-20 rounded-full object-cover ring-2 ring-emerald-500">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800">อ.แทน <span class="text-emerald-600">[ธีรชัย โฉมทัพ]</span></h2>
                     <p class="text-base text-gray-500">Head of Digital Transformation</p>
@@ -100,11 +114,12 @@
         </div>
 
         <div class="bg-white p-6 rounded-xl card-shadow mb-8">
-            <h3 class="text-2xl font-semibold mb-4 gradient-text">กำหนดการเรียนรู้ Day 3 (6 ชั่วโมง) 📱</h3>
+            <h3 class="text-2xl font-semibold mb-4 gradient-text">กำหนดการเรียนรู้ Day 3 (6.0 ชั่วโมง) 📱</h3>
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">เวลา</th>
+                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ระยะเวลา (นาที)</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">หัวข้อ/กิจกรรม</th>
                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ประเภท</th>
                     </tr>
@@ -112,45 +127,66 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr class="hover:bg-emerald-50">
                         <td class="px-6 py-4 text-sm font-semibold text-gray-900">09:00 - 10:15 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">75</td>
                         <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 1:** AppSheet Ecosystem: การเชื่อมต่อ Data & Column Definition</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-emerald-600">รากฐาน App</td>
                     </tr>
                     <tr class="bg-yellow-50">
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">10:15 - 10:30 น.</td>
+                        <td class="px-3 py-2 text-center text-sm font-semibold text-yellow-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคเช้า (Coffee Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-emerald-50">
                         <td class="px-6 py-4 text-sm font-semibold text-gray-900">10:30 - 12:00 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**Workshop 1:** สร้าง App Sales Transaction (View, Form, Ref)</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">90</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 2:** Workshop 1: สร้าง App Sales Transaction (View, Form, Ref)</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-emerald-600">ปฏิบัติ (CRUD)</td>
                     </tr>
                     <tr class="bg-red-50">
                         <td class="px-6 py-2 text-sm font-semibold text-red-800">12:00 - 13:00 น.</td>
+                        <td class="px-3 py-2 text-center text-sm font-semibold text-red-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-red-800">***พักกลางวัน (Lunch Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-red-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-emerald-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">13:00 - 14:45 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 2:** AppSheet Expressions: Logic & Security Filter</td>
-                        <td class="px-6 py-4 text-center text-xs font-bold text-emerald-600">Logic & Security</td>
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">13:00 - 14:30 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">90</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 3.1:** AppSheet Expressions: Logic & Security Filter</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-xs font-bold text-emerald-600">Logic & Security</td>
                     </tr>
                     <tr class="bg-yellow-50">
-                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">14:45 - 15:00 น.</td>
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">14:30 - 14:45 น.</td>
+                        <td class="px-3 py-2 text-center text-sm font-semibold text-yellow-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคบ่าย (Coffee Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-emerald-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">15:00 - 16:30 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**Workshop 2:** สร้าง Dashboard และ Automation Bot พื้นฐาน</td>
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">14:45 - 15:30 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">45</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 3.2:** Workshop: Automation Bot พื้นฐาน</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-emerald-600">Automation</td>
                     </tr>
                     <tr class="hover:bg-emerald-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">16:30 - 17:00 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**สรุป:** การ Deploy App และการเตรียมพร้อมสำหรับ Day 4 (N8N)</td>
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">15:30 - 16:15 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">45</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 3.3:** สร้าง Dashboard สำหรับผู้บริหาร</td>
+                        <td class="px-6 py-4 text-center text-xs font-bold text-emerald-600">Dashboard</td>
+                    </tr>
+                    <tr class="hover:bg-emerald-50">
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">16:15 - 16:45 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">30</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 4:** สรุปการ Deploy App และเตรียมพร้อมสำหรับ Day 4 (N8N)</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-emerald-600">สรุป</td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr class="bg-gray-100">
+                        <td class="px-6 py-2 text-sm font-bold text-gray-800">รวมเวลาเรียนจริง</td>
+                        <td class="px-3 py-2 text-center text-sm font-bold text-red-600">360</td>
+                        <td class="px-6 py-2 text-sm font-bold text-gray-800" colspan="2">(6.0 ชั่วโมง)</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
 
@@ -243,7 +279,7 @@
 
         <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-app-color pb-2 flex items-center">
             <i class="fas fa-tools w-8 h-8 mr-3 text-app-color"></i>
-            Workshop 1: App CRUD (Sales Transaction)
+            ส่วนที่ 2: Workshop 1: App CRUD (Sales Transaction)
         </h3>
 
         <div class="step-card bg-white p-5 rounded-lg shadow-md mb-8 border-l-4 border-app-color">
@@ -325,15 +361,26 @@
             
             <div class="border border-red-300 rounded-lg overflow-x-auto my-4 p-4 bg-red-50">
                 <p class="font-bold text-red-700 mb-2">Workshop: สร้าง Bot ส่ง Email Report (On New Sales)</p>
+                
+                <p class="font-bold text-gray-800 mt-3">⚙️ Task 1: สร้าง Action (Webhook) สำหรับเรียก n8n</p>
+                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-2">
+                    <li>**Action Type:** <span class="app-component">Webhook</span></li>
+                    <li>**URL:** ใส่ Webhook URL ของ n8n (ปลายทาง)</li>
+                    <li>**HTTP Method:** POST</li>
+                    <li>**Body:** ส่งข้อมูลเป็น JSON Payload ที่ต้องการให้ n8n รับไป เช่น <span class="expression-code">`{ "TxnID": [ID], "Total": [Total_Price] }`</span></li>
+                </ul>
+
+                <p class="font-bold text-gray-800 mt-3">🤖 Task 2: สร้าง Bot (Automation)</p>
                 <ol class="list-decimal ml-6 text-sm text-gray-700 space-y-2">
                     <li>**Event (Trigger):** กำหนดให้ Bot ทำงานเมื่อ **"มีการเพิ่ม (Add) แถวใหม่"** ในตาราง Sales Transactions</li>
+                    <li>**Condition (เงื่อนไข):** <span class="expression-code">[Total\_Price] > 10000</span> (ใช้เพื่อส่งเฉพาะรายการใหญ่)</li>
                     <li>**Process (Logic):** กำหนดให้ Bot มี 2 ขั้นตอน: 
                         <ul class="list-disc ml-6 text-xs text-gray-600">
                             <li>**Step 1:** สร้าง <span class="app-component">Task Report</span> (สร้าง PDF/Email Body)</li>
                             <li>**Step 2:** เรียกใช้ <span class="app-component">Task Email</span> (ส่งอีเมลที่สร้างใน Step 1 ไปที่ <span class="expression-code">admin@example.com</span>)</li>
+                            <li>**(Optional Step 3):** เรียกใช้ Webhook Action ที่สร้างใน Task 1 เพื่อส่งข้อมูลไปยัง n8n</li>
                         </ul>
                     </li>
-                    <li>**Condition (เงื่อนไข):** สามารถกำหนดเงื่อนไขเพิ่มเติม เช่น ส่งเฉพาะเมื่อ <span class="expression-code">[Total\_Price] > 10000</span> เท่านั้น</li>
                 </ol>
             </div>
             
@@ -354,6 +401,37 @@
                 </ul>
             </div>
         </div>
+
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-emerald-500 pb-2 flex items-center mt-8">
+            <i class="fas fa-cogs w-8 h-8 mr-3 text-emerald-600"></i>
+            ส่วนที่ 4: สรุปการ Deploy App และเตรียมพร้อมสำหรับ Day 4 (N8N)
+        </h3>
+        
+        <div class="step-card bg-white p-5 rounded-lg shadow-md mb-8 border-l-4 border-emerald-500">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-upload mr-2 text-blue-600"></i> 4.1 การ Deploy และ Handover AppSheet
+            </h4>
+            <p class="mb-4 text-gray-700">
+                ขั้นตอนสุดท้ายในการทำให้ App ใช้งานได้จริงบน Google Workspace และการส่งมอบให้ผู้ดูแลระบบ:
+            </p>
+            <ul class="list-disc ml-6 text-sm text-gray-700 space-y-1">
+                <li>**Deployment Check:** ตรวจสอบความสมบูรณ์ของ Security, Sync Performance, และ UX/UI</li>
+                <li>**Handover:** มอบสิทธิ์การเป็นเจ้าของ (Owner) ให้ผู้ดูแลระบบ หรือทีม IT</li>
+            </ul>
+
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-link mr-2 text-indigo-600"></i> 4.2 เตรียมพร้อมสำหรับ N8N (Day 4)
+            </h4>
+            <p class="mb-4 text-gray-700">
+                ทบทวนพื้นฐานที่จำเป็นสำหรับการสร้าง Workflow ภายนอก AppSheet:
+            </p>
+            <ul class="list-disc ml-6 text-sm text-gray-700 space-y-1">
+                <li>**Data Structure:** การทำความเข้าใจ JSON Payload ที่จะถูกส่งมาจาก AppSheet Webhook (ส่วนที่ 3.2 Task 1)</li>
+                <li>**API Key:** ความสำคัญของการใช้ Credentials ใน N8N เพื่อเก็บ Line Notify Key หรือ Gemini Key อย่างปลอดภัย (ทบทวนจาก Day 2)</li>
+                <li>**Core Node:** ทบทวนหน้าที่ของ Node พื้นฐาน: Webhook, Set, Function, และ HTTP Request</li>
+            </ul>
+        </div>
+
 
         <div class="mt-12 text-center p-6 bg-emerald-50 rounded-lg card-shadow border-t-4 border-emerald-700">
             <p class="font-bold text-2xl text-emerald-800 mb-2">

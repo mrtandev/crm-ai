@@ -12,7 +12,6 @@
             --gradient-start: #0d9488;
             --gradient-end: #5eead4; /* Teal-300 */
             --node-color: #3b82f6; /* Blue-500 for N8N Nodes */
-            /* สีสำหรับ Bonus Card */
             --bonus-red: #ef4444; /* Red-500 */
             --bonus-orange: #f97316; /* Orange-500 */
         }
@@ -112,6 +111,17 @@
             margin-right: 10px;
             font-size: 1.5rem;
         }
+        /* Style for Sample Code */
+        .code-sample-box {
+            background-color: #1f2937;
+            color: #d1fae5;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            overflow-x: auto;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
@@ -151,6 +161,7 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">เวลา</th>
+                        <th class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ระยะเวลา (นาที)</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">หัวข้อ/กิจกรรม</th>
                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ประเภท</th>
                     </tr>
@@ -158,56 +169,70 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr class="hover:bg-teal-50">
                         <td class="px-6 py-4 text-sm font-semibold text-gray-900">09:00 - 10:15 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">75</td>
                         <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 1:** Advanced Data Flow: ทบทวนการจัดการข้อมูล Array (Split, Merge, Item Lists)</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-teal-600">ทบทวน</td>
                     </tr>
                     <tr class="bg-yellow-50">
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">10:15 - 10:30 น.</td>
+                        <td class="px-3 py-2 text-center text-sm font-semibold text-yellow-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคเช้า (Coffee Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-teal-50">
                         <td class="px-6 py-4 text-sm font-semibold text-gray-900">10:30 - 12:00 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 2:** การเชื่อมต่อ AI/LLM และ Error Handling (ทบทวน Gemini Node และ Try/Catch)</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">90</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 2:** AI/LLM Integration และ Error Handling (ทบทวน Gemini Node และ Try/Catch)</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-teal-600">ทบทวน</td>
                     </tr>
                     <tr class="bg-red-50">
                         <td class="px-6 py-2 text-sm font-semibold text-red-800">12:00 - 13:00 น.</td>
+                        <td class="px-3 py-2 text-center text-sm font-semibold text-red-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-red-800">***พักกลางวัน (Lunch Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-red-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-teal-50">
                         <td class="px-6 py-4 text-sm font-semibold text-gray-900">13:00 - 15:00 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 3: Project MVP Showcase:** แกะรอยระบบต้นแบบ (Line OA, AI Sentiment, CRM/Stock)</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">120</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 3:** Project MVP Showcase: แกะรอยระบบต้นแบบ (Line OA, AI Sentiment, CRM/Stock)</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-red-600">Project Review</td>
                     </tr>
                     <tr class="bg-yellow-50">
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">15:00 - 15:15 น.</td>
+                        <td class="px-3 py-2 text-center text-sm font-semibold text-yellow-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคบ่าย (Coffee Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-teal-50">
                         <td class="px-6 py-4 text-sm font-semibold text-gray-900">15:15 - 17:00 น.</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 4: สรุปหลักสูตร:** การส่งมอบงาน (Handover) และ Roadmap สู่ Digital Transformation</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">105</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 4:** สรุปหลักสูตร: การส่งมอบงาน (Handover) และ Roadmap สู่ Digital Transformation</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-teal-600">สรุป</td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr class="bg-gray-100">
+                        <td class="px-6 py-2 text-sm font-bold text-gray-800">รวมเวลาเรียนจริง</td>
+                        <td class="px-3 py-2 text-center text-sm font-bold text-red-600">390</td>
+                        <td class="px-6 py-2 text-sm font-bold text-gray-800" colspan="2">(6.5 ชั่วโมง)</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
 
 
         <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-emerald-400 pb-2 flex items-center">
             <i class="fas fa-redo-alt w-8 h-8 mr-3 text-emerald-600"></i>
-            ส่วนที่ 1 & 2: ทบทวน Advanced Logic และ AI Integration (09:00 - 12:00 น.)
+            ส่วนที่ 1: ทบทวน Advanced Data Flow (09:00 - 10:15 น.)
         </h3>
         
         <div class="step-card bg-white p-5 rounded-xl card-shadow mb-8 border-l-4 border-emerald-500">
             <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                <i class="fas fa-code-fork mr-2 text-blue-600"></i> 1.1 ทบทวน Advanced Data Flow (Array, Split, Merge)
+                <i class="fas fa-code-fork mr-2 text-blue-600"></i> 1.1 การจัดการข้อมูล Array (Split, Merge, Item Lists)
             </h4>
             
             <p class="mb-4 text-gray-700">
-                ทบทวนการจัดการข้อมูลที่ซับซ้อนที่ต้องใช้ <span class="node-component">Split In Batches</span> และ <span class="node-component">Item Lists</span> เพื่อประมวลผลรายการสินค้า (Order Lines) ทีละรายการ ซึ่งเป็นหัวใจของการทำ Workflow ที่มี Loop ซ่อนอยู่
+                ทบทวนการจัดการข้อมูลที่ซับซ้อน (เช่น รายการสินค้าในใบสั่งซื้อ) ที่ต้องใช้ <span class="node-component">Split In Batches</span> เพื่อแยกรายการออกมาประมวลผลทีละรายการ
             </p>
             <div class="p-4 n8n-tip rounded-lg my-4">
                 <p class="font-bold text-teal-800 mb-2 flex items-center">
@@ -216,52 +241,85 @@
                 <p class="data-flow-path text-center mb-4 text-base bg-teal-100 border-teal-400 text-teal-800">
                     <span class="node-component">Webhook</span> → <span class="node-component">GGS (Header)</span> <span class="font-bold text-red-600">| แยก Array |</span> <span class="node-component">Split In Batches</span> → <span class="node-component">GGS (Lines)</span>
                 </p>
+                <h5 class="text-lg font-bold text-gray-800 mb-3 mt-6 border-b pb-1">ตัวอย่าง Expression ใน Split Node</h5>
+                <div class="code-sample-box">
+                    <p class="text-white">Expression ที่ใช้ระบุ Array ที่ต้องการแยก:</p>
+                    <pre><span style="color:#fcd34d;">{ { $json.Data.Order_Lines } }</span></pre>
+                    <p class="text-white mt-2">
+                        <span class="font-bold text-cyan-400">หลักการ:</span> ข้อมูล Header (เช่น Order ID) จะถูกส่งต่อไปยัง Node Lines เพื่อเป็น Foreign Key โดยอัตโนมัติ
+                    </p>
+                </div>
             </div>
-            
-            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
-                <i class="fas fa-brain mr-2 text-pink-600"></i> 2.1 ทบทวน AI/LLM Integration (<span class="ai-node">Gemini Node</span>) และ Error Handling
+        </div>
+        
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-purple-400 pb-2 flex items-center mt-12">
+            <i class="fas fa-brain w-8 h-8 mr-3 text-purple-600"></i>
+            ส่วนที่ 2: ทบทวน AI/LLM Integration และ Error Handling (10:30 - 12:00 น.)
+        </h3>
+
+        <div class="step-card bg-white p-5 rounded-xl card-shadow mb-8 border-l-4 border-purple-500">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-robot mr-2 text-pink-600"></i> 2.1 ทบทวน <span class="ai-node">Gemini Node</span> และ Prompt Design
             </h4>
             
             <p class="mb-4 text-gray-700">
-                ทบทวนหลักการทำงานของ <span class="ai-node">Gemini Node</span>, การตั้งค่า API Key และการสร้าง **Prompt Template** โดยใช้ <span class="expression-code">Expression</span>
+                ทบทวนการผสานพลัง AI (LLM) เข้ากับ Workflow เพื่อจัดการข้อมูลที่ไม่มีโครงสร้าง (Unstructured Data)
             </p>
+            <h5 class="text-lg font-bold text-gray-800 mb-3 mt-6 border-b pb-1">ตัวอย่าง Prompt ที่ใช้ Expression (สำหรับ Summarization)</h5>
+            <div class="code-sample-box">
+                <pre>// Prompt ที่ส่งให้ Gemini Node
+"ฉันต้องการให้คุณสรุปข้อความนี้ให้เหลือ 3 บรรทัด และเน้นประเด็นสำคัญเท่านั้น: \n\n<span style="color:#fcd34d;">{{ $json.Report_Content }}</span>"</pre>
+            </div>
+            
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
+                <i class="fas fa-bug mr-2 text-red-600"></i> 2.2 ทบทวน Error Handling และ Logging
+            </h4>
+            
             <p class="mb-4 text-gray-700">
-                <span class="font-bold text-red-600">Error Handling:</span> ทบทวนการใช้ **Catch Error Node** เพื่อป้องกัน Workflow ล่ม และบันทึก Log ข้อผิดพลาดเข้า GGS
+                <span class="font-bold text-red-600">Error Handling (Try/Catch)</span> คือสิ่งสำคัญที่สุดในการสร้างระบบที่เสถียร (Reliable)
+            </p>
+            <p class="data-flow-path text-center mb-4 text-base bg-red-100 border-red-400 text-red-700">
+                <span class="node-component">Main Workflow</span> → **[Error Path: Catch Error Node]** → <span class="node-component">GGS (Log Error)</span> → <span class="node-component">Line Notify (Admin Alert)</span>
             </p>
         </div>
         
         <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-red-400 pb-2 flex items-center mt-12">
-            <i class="fas fa-rocket w-8 h-8 mr-3 text-red-600"></i>
+            <i class="fas fa-search w-8 h-8 mr-3 text-red-600"></i>
             ส่วนที่ 3: Project MVP Showcase & Deconstruction (13:00 - 15:00 น.)
         </h3>
 
         <div class="step-card bg-white p-5 rounded-xl card-shadow mb-8 border-l-4 border-red-500">
             <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                <i class="fas fa-search-dollar mr-2 text-yellow-600"></i> 3.1 การแกะรอยระบบต้นแบบ (Deconstruction)
+                <i class="fas fa-code-branch mr-2 text-yellow-600"></i> 3.1 การแกะรอยระบบต้นแบบ (Deconstruction)
             </h4>
             
             <p class="mb-4 text-gray-700">
-                ผู้เรียนจะได้เข้าสู่ระบบต้นแบบ **AI Automation MVP** ที่ <a href="https://idea-crmai.netlify.app/aiautomation-index" target="_blank" class="text-blue-600 underline font-bold hover:text-blue-800">ลิงก์นี้</a> เพื่อวิเคราะห์และระบุว่าแต่ละส่วนถูกสร้างด้วยเครื่องมือใด (AppSheet, N8N, GAS) และ Logic Flow ที่ใช้คืออะไร
+                ผู้เรียนจะได้เข้าสู่ระบบต้นแบบ **AI Automation MVP** ที่ 
+                <a href="https://idea-crmai.netlify.app/aiautomation-index" target="_blank" class="text-blue-600 underline font-bold hover:text-blue-800">https://idea-crmai.netlify.app/aiautomation-index</a> 
+                เพื่อวิเคราะห์และระบุว่าแต่ละส่วนถูกสร้างด้วยเครื่องมือใด (AppSheet, N8N, GAS)
             </p>
             
-            <h5 class="text-lg font-bold text-gray-800 mb-3 mt-6 border-b pb-1">3.2 การวิเคราะห์ระบบย่อย (Sub-System Analysis)</h5>
+            <h5 class="text-lg font-bold text-gray-800 mb-3 mt-6 border-b pb-1">3.2 การวิเคราะห์ 3 MVP Systems</h5>
             <div class="space-y-3 mt-4">
                 <div class="review-item">
                     <i class="fas fa-comment-alt text-blue-500 mr-3"></i>
                     <div>
-                        <span class="font-bold text-gray-800">ระบบที่ 1: Line OA Bot + CRM & Stock</span>
+                        <span class="font-bold text-gray-800">ระบบที่ 1: Line OA Bot + CRM (Lead Scoring)</span><br>
+                        <span class="text-sm text-gray-600">ใช้ Webhook/If Node (Day 2, Day 4) เพื่อตัด Lead และส่ง API ไปยัง CRM (Day 4)</span>
                     </div>
                 </div>
                 <div class="review-item">
                     <i class="fas fa-chart-pie text-green-500 mr-3"></i>
                     <div>
-                        <span class="font-bold text-gray-800">ระบบที่ 2: AI วิเคราะห์ฟีดแบ็ก (GGS → AppSheet/AI)</span>
+                        <span class="font-bold text-gray-800">ระบบที่ 2: AI วิเคราะห์ฟีดแบ็ก (AppSheet/AI)</span><br>
+                        <span class="text-sm text-gray-600">ใช้ AppSheet Forms (Day 3) บันทึก Feedback และใช้ Gemini Node (Day 5) วิเคราะห์ Sentiment ก่อนสร้าง Task</span>
                     </div>
                 </div>
                 <div class="review-item">
                     <i class="fas fa-magic text-purple-500 mr-3"></i>
                     <div>
-                        <span class="font-bold text-gray-800">ระบบที่ 3: AI ผู้ช่วยสร้างคอนเทนต์ (Scheduled Broadcast)</span>
+                        <span class="font-bold text-gray-800">ระบบที่ 3: AI ผู้ช่วยสร้างคอนเทนต์ (Scheduled Broadcast)</span><br>
+                        <span class="text-sm text-gray-600">ใช้ Schedule Node (Day 5) และ Gemini Node สร้างแคปชั่นการตลาดจาก GGS</span>
                     </div>
                 </div>
             </div>
