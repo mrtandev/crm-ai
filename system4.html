@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คู่มือระบบ: AI Animal Monitoring System (System 4)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* [START] FONT & THEME VARIABLES (System 4: Deep Blue/Cyan) */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+Thai:wght@100..900&display=swap');
+        :root {
+            --primary-color: #1d4ed8; /* Blue-700 for main focus */
+            --gradient-start: #1d4ed8;
+            --gradient-end: #38bdf8; /* Sky-400 */
+            --highlight-bg: #eff6ff; /* Blue-50 */
+            --screen-bg: #3f4769; /* Darker Blue-Gray for App Mockup */
+        }
+        body {
+            font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .gradient-text {
+            background-image: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .step-card {
+            padding: 20px 25px; 
+            border-left: 5px solid var(--primary-color);
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        .step-card:hover {
+            transform: translateY(-2px);
+            border-left-color: var(--gradient-end);
+            box-shadow: 0 10px 25px rgba(29, 78, 216, 0.2);
+        }
+        .system-highlight {
+            background-color: var(--highlight-bg); 
+            border-left: 4px solid #06b6d4; /* Cyan-500 */
+        }
+        .control-button {
+            font-family: monospace;
+            background-color: #bfdbfe; /* Blue-200 */
+            color: #1e40af; /* Blue-900 */
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+        .image-container {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f0fdfa; 
+            border-radius: 8px;
+            text-align: center;
+        }
+        .screen-component {
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            background-color: #e0f2fe; 
+            border-left: 4px solid #0ea5e9; 
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: #0c4a6e; 
+        }
+
+        /* Custom GUI Mockup Styling (HTML/CSS Image) */
+        .app-mockup {
+            background-color: var(--screen-bg);
+            border: 2px solid #1e3a8a;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 20px auto;
+            max-width: 400px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .app-title-bar {
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 5px 0;
+        }
+        .control-bar-mockup {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .mock-button {
+            background-color: #60a5fa;
+            color: white;
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .config-section-mockup {
+            color: white;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            padding: 5px 0;
+            border-top: 1px solid #4a5477;
+            border-bottom: 1px solid #4a5477;
+        }
+        .image-screen-mockup {
+            height: 250px;
+            background-color: #2c3144;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b0b4c3;
+            font-style: italic;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        .status-bar-mockup {
+            background-color: #34d399; /* Green for Status OK */
+            color: #064e3b;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        /* Specific Styles for Alert Images */
+        .alert-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(220, 38, 38, 0.4); /* Red tint */
+        }
+        .alert-status-bar {
+            background-color: #dc2626; /* Red for Breach */
+            color: white;
+            padding: 10px 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        .mock-animal {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fcd34d;
+            font-size: 2.5rem;
+            background-color: #2c3144;
+            padding: 5px;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .mock-line-crossing {
+            position: absolute;
+            height: 100%;
+            width: 3px;
+            background-color: yellow;
+            left: 60%;
+            transform: rotate(20deg);
+        }
+        .mock-polygon-area {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 165, 0, 0.3); /* Orange Area */
+            border: 2px dashed orange;
+            clip-path: polygon(10% 10%, 90% 20%, 80% 90%, 20% 80%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* === SPACING & AESTHETICS RESTORATION (The Final Fix) === */
+        main h2, main h3, main h4 {
+            margin-bottom: 0.5rem !important; 
+            margin-top: 2rem !important; 
+            padding-bottom: 0.25rem !important;
+        }
+        main p {
+            margin-bottom: 0.75rem !important;
+            line-height: 1.6;
+        }
+        .step-card h4 {
+            margin-top: 0.5rem !important;
+            margin-bottom: 0.75rem !important;
+        }
+        .step-card p {
+             margin-bottom: 0.5rem !important; 
+        }
+        table td, table th {
+            padding-top: 8px !important;
+            padding-bottom: 8px !important;
+            padding-left: 0.75rem !important; 
+            padding-right: 0.75rem !important;
+        }
+        .list-disc li, .list-decimal li {
+            margin-bottom: 0.25rem !important;
+            line-height: 1.5;
+        }
+        .system-highlight ul, .system-highlight ol {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body class="min-h-screen">
+    <header class="bg-white card-shadow sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="text-center text-xl font-bold text-gray-800">
+                คู่มือการใช้งานระบบ: <span class="gradient-text">AI Animal Monitoring System</span> (System 4)
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <div class="p-6 rounded-xl card-shadow mb-8 border-t-4 border-blue-500">
+            <div class="flex items-center space-x-4">
+                <i class="fas fa-satellite-dish w-20 h-20 text-4xl flex items-center justify-center rounded-full bg-blue-100 text-blue-600 ring-2 ring-blue-500"></i>
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-0 mb-1">
+                        ระบบเฝ้าระวังสัตว์ป่าด้วยปัญญาประดิษฐ์ (Al Animal Monitoring System)
+                    </h2>
+                    <p class="base text-gray-500 mb-0">
+                        คู่มือการใช้งานเทคโนโลยีต้นแบบปัญญาประดิษฐ์สำหรับการประมวลผลจากกล้อง
+                    </p>
+                    <p class="sm text-gray-600 mt-1 mb-0">
+                        **จัดทำโดย:** ภูวนาถ เผือกทอง
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-cyan-400 pb-2 flex items-center mt-8">
+            <i class="fas fa-info-circle w-8 h-8 mr-3 text-cyan-600"></i>
+            1. ข้อมูลทั่วไปของระบบ
+        </h3>
+        
+        <div class="step-card mb-8">
+            <h4 class="text-xl font-bold text-gray-800 flex items-center">
+                <i class="fas fa-microchip mr-2 text-blue-600"></i> ภาพรวมเทคโนโลยีและส่วนประกอบหน้าจอ (รูปที่ 1-1)
+            </h4>
+            
+            <p class="text-gray-700">
+                ระบบ Al Animal Monitoring System เป็นซอฟต์แวร์ที่ใช้รับภาพจากกล้องมาเพื่อเฝ้าระวังการบุกรุกของสัตว์ป่า โดยโปรแกรมพัฒนาบนพื้นฐานภาษา **Python** และมีปัญญาประดิษฐ์แบบ **Realtime Object Detection** ติดตั้งไว้อยู่ด้วย
+            </p>
+            
+            <div class="image-container">
+                <div class="app-mockup">
+                    <div class="app-title-bar">AI Animal Monitoring System</div>
+                    <div class="control-bar-mockup">
+                        <div class="mock-button bg-blue-600">Start Webcam</div>
+                        <div class="mock-button bg-blue-600">Open Video File</div>
+                        <div class="mock-button bg-blue-600">Save Region Config</div>
+                        <div class="mock-button bg-blue-600">Load Default Config</div>
+                        <div class="mock-button bg-red-600">Clear Region</div>
+                    </div>
+                    <div class="config-section-mockup">
+                        <span class="font-bold">Alert Region Mode:</span> Line Crossing | Polygon Area
+                        <div class="mt-1">Confidence Threshold: [---- 60% ----]</div>
+                    </div>
+                    <div class="image-screen-mockup">
+                         Select an input source to begin monitoring.
+                    </div>
+                    <div class="status-bar-mockup bg-green-400">
+                        Config loaded from region_config.json.
+                    </div>
+                    <div class="absolute top-[80px] left-[-15px] text-white text-2xl font-bold">1</div>
+                    <div class="absolute top-[140px] left-[-15px] text-white text-2xl font-bold">2</div>
+                    <div class="absolute top-[200px] left-[-15px] text-white text-2xl font-bold">3</div>
+                    <div class="absolute bottom-[10px] left-[-15px] text-white text-2xl font-bold">4</div>
+                </div>
+                <p class="mt-2 text-sm text-gray-600 font-medium">รูปที่ 1-1 ส่วนประกอบหน้าจอของโปรแกรม</p>
+            </div>
+            <div class="p-4 system-highlight rounded-lg my-4">
+                <p class="font-bold text-cyan-800 mb-2 flex items-center">
+                    <i class="fas fa-cogs mr-2"></i> ส่วนประกอบหน้าจอหลัก (รายละเอียด)
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                    <div class="screen-component">
+                        <span class="mr-3 text-lg font-extrabold text-blue-800">1</span> 
+                        ส่วนที่ 1: **Control Bar** (ปุ่มกดสำหรับควบคุมการทำงานของโปรแกรม)
+                    </div>
+                    <div class="screen-component">
+                        <span class="mr-3 text-lg font-extrabold text-blue-800">2</span> 
+                        ส่วนที่ 2: **Config Section** (ปรับแต่งผลการตรวจจับและเงื่อนไขการแจ้งเตือน)
+                    </div>
+                    <div class="screen-component">
+                        <span class="mr-3 text-lg font-extrabold text-blue-800">3</span> 
+                        ส่วนที่ 3: **Image Screen** (แสดงภาพจากกล้อง ผลของการตรวจจับ และใช้สำหรับการวาด Alert Region)
+                    </div>
+                    <div class="screen-component">
+                        <span class="mr-3 text-lg font-extrabold text-blue-800">4</span> 
+                        ส่วนที่ 4: **Status Bar** (ส่วนสำหรับแสดงสถานะของการทำงานของโปรแกรม)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-green-400 pb-2 flex items-center mt-8">
+            <i class="fas fa-laptop-code w-8 h-8 mr-3 text-green-600"></i>
+            2. การทดสอบและการใช้งานระบบ
+        </h3>
+
+        <div class="step-card mb-8">
+            <h4 class="text-xl font-bold text-gray-800 flex items-center">
+                <i class="fas fa-video mr-2 text-teal-600"></i> 2.1-2.2 การเริ่มต้นและการป้อนข้อมูล (รูปที่ 2-2)
+            </h4>
+            <p class="text-gray-700">
+                ในการเริ่มต้นใช้งานให้เปิดโปรแกรมขึ้นมา และทดสอบระบบโดยการกดปุ่ม **<span class="control-button">Open Video File</span>** เพื่อนำเข้าวีดีโอทดสอบ โดยจะมีวีดีโอขึ้นที่ Image Screen
+            </p>
+             <div class="image-container">
+                <div class="app-mockup">
+                    <div class="app-title-bar">AI Animal Monitoring System</div>
+                    <div class="config-section-mockup">... Confidence Threshold: 60%</div>
+                    <div class="image-screen-mockup">
+                        <i class="fas fa-video text-5xl text-red-500"></i>
+                        <div class="mock-animal">🐂</div>
+                    </div>
+                    <div class="status-bar-mockup bg-green-400">
+                        Status: Monitoring...
+                    </div>
+                </div>
+                <p class="mt-2 text-sm text-gray-600 font-medium">รูปที่ 2-2 การทำงานของโปรแกรมในการแสดงผลภาพและการตรวจจับ</p>
+            </div>
+            <ul class="list-disc ml-6 text-gray-700">
+                <li>สำหรับการใช้งานจริงกับกล้องที่เป็นฮาร์ดแวร์ภายนอก ให้กดปุ่ม **<span class="control-button">Stop Monitoring</span>** ก่อนแล้วกดปุ่ม **<span class="control-button">Start Webcam</span>**</li>
+                <li>ปุ่ม <span class="control-button">Open Video File</span> ใช้เพื่อเปิดหรือนำเข้าวีดีโอจากภายนอกสำหรับการทดสอบ</li>
+            </ul>
+
+            <h4 class="text-xl font-bold text-gray-800 flex items-center mt-6">
+                <i class="fas fa-ruler-combined mr-2 text-purple-600"></i> 2.3 โหมด Line Crossing (การข้ามเส้น) (รูปที่ 2-4)
+            </h4>
+            <ul class="list-disc ml-6 text-gray-700">
+                <li>เลือก **Alert region mode** เป็น **Line Crossing** แล้วลากเมาส์ขีดเส้นแบ่งเขตที่ต้องการ</li>
+                <li>**เงื่อนไขแจ้งเตือน**: หากส่วนใดส่วนหนึ่งของกรอบการตรวจจับ **(Bounding Boxes)** มีการข้ามเส้นที่กำหนดไว้</li>
+                <li>**การแจ้งเตือน**: หน้าจอจะเปลี่ยนเป็นสีแดงและ Status Bar จะแสดงคำว่า **!!! REGION BREACH !!!**</li>
+            </ul>
+             <div class="image-container">
+                <div class="app-mockup">
+                    <div class="app-title-bar">AI Animal Monitoring System</div>
+                    <div class="config-section-mockup">... Alert Region Mode: Line Crossing | Confidence Threshold: 83%</div>
+                    <div class="image-screen-mockup">
+                        <div class="alert-overlay"></div>
+                        <div class="mock-animal" style="left: 40%; top: 40%; font-size: 3rem;">🐂</div>
+                        <div class="mock-line-crossing"></div>
+                    </div>
+                    <div class="alert-status-bar">
+                        !!! REGION BREACH !!!
+                    </div>
+                </div>
+                <p class="mt-2 text-sm text-gray-600 font-medium">รูปที่ 2-4 ผลการตรวจจับและการแจ้งเตือนผ่านหน้าจอ</p>
+            </div>
+            <h4 class="text-xl font-bold text-gray-800 flex items-center mt-6">
+                <i class="fas fa-draw-polygon mr-2 text-pink-600"></i> 2.4 โหมด Polygon Area (เชิงพื้นที่) (รูปที่ 2-6)
+            </h4>
+            <ul class="list-disc ml-6 text-gray-700">
+                <li>เลือก **Alert Region Mode** เป็น **Polygon Area** แล้วทำการคลิกจุดบน Image Screen เพื่อสร้าง Alert Area</li>
+                <li>**เงื่อนไขแจ้งเตือน**: จะมีการแจ้งเตือนเมื่อ **จุดศูนย์กลาง (Centroid)** ของวัตถุอยู่ในขอบเขตของ Polygon Area ที่กำหนดเอาไว้</li>
+            </ul>
+            <div class="image-container">
+                <div class="app-mockup">
+                    <div class="app-title-bar">AI Animal Monitoring System</div>
+                    <div class="config-section-mockup">... Alert Region Mode: Polygon Area | Confidence Threshold: 70%</div>
+                    <div class="image-screen-mockup">
+                        <div class="alert-overlay"></div>
+                        <div class="mock-polygon-area"></div>
+                        <div class="mock-animal" style="top: 50%; left: 55%; font-size: 3rem;">🐂</div>
+                    </div>
+                    <div class="alert-status-bar">
+                        !!! REGION BREACH !!!
+                    </div>
+                </div>
+                <p class="mt-2 text-sm text-gray-600 font-medium">รูปที่ 2-6 การตรวจจับด้วย Alert Polygon Area</p>
+            </div>
+            </div>
+
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-red-400 pb-2 flex items-center mt-8">
+            <i class="fas fa-terminal w-8 h-8 mr-3 text-red-600"></i>
+            3. การขยายโมเดลการตรวจจับ
+        </h3>
+
+        <div class="step-card mb-8">
+            <h4 class="text-xl font-bold text-gray-800 flex items-center">
+                <i class="fas fa-dna mr-2 text-purple-600"></i> 3.1 โมเดลการตรวจจับในปัจจุบัน
+            </h4>
+            <p class="text-gray-700">
+                ในปัจจุบัน โมเดลสำหรับการตรวจจับใช้สำหรับการตรวจจับการบุกรุกของ **กระทิงในพื้นที่โดยเฉพาะ** หากต้องการสร้างโมเดลตรวจจับอื่น ๆ สามารถทำเพิ่มได้โดยกรุณาติดต่อผู้ดูแลระบบ
+            </p>
+
+            <h4 class="text-xl font-bold text-gray-800 flex items-center mt-6">
+                <i class="fas fa-plug mr-2 text-cyan-600"></i> 3.2 การเชื่อมต่อระบบระยะไกล (API Integration)
+            </h4>
+            <p class="text-gray-700">
+                หากต้องการให้โปรแกรมส่งการเชื่อมต่อผ่านระบบระยะไกล จะต้องทำการเชื่อมต่อระบบ Al Animal Monitoring System เข้ากับ **ระบบ API** ของแพลตฟอร์มที่ต้องการส่งการแจ้งเตือน
+            </p>
+
+            <h4 class="text-xl font-bold text-gray-800 flex items-center mt-6">
+                <i class="fas fa-sliders-h mr-2 text-amber-600"></i> การปรับแต่งเพิ่มเติมและบันทึก Config
+            </h4>
+            <ul class="list-disc ml-6 text-gray-700">
+                <li>ผู้ใช้สามารถปรับ **Confidence Threshold** ตามต้องการได้</li>
+                <li>Config ของ Alert Region สามารถบันทึกและโหลดได้ด้วยปุ่ม **<span class="control-button">Save Region Config</span>** และ **<span class="control-button">Load Default Config</span>** ตามลำดับ</li>
+            </ul>
+        </div>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>เอกสารคู่มือระบบ AI Animal Monitoring System (System 4)</p>
+            <p class="text-sm mt-1">จัดทำโดย: ภูวนาถ เผือกทอง</p>
+        </div>
+    </footer>
+
+</body>
+</html>

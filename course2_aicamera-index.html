@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Camera Systems: คู่มือระบบ AI Animal Monitoring & Visual Label Reader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <style>
+        /* Custom CSS */
+        :root {
+            --primary-start: #10b981; /* Emerald-600 (ใหม่) */
+            --primary-end: #3b82f6; /* Blue-500 (ใหม่) */
+            --text-color: #1f2937;
+            --bg-light: #f3f4f6;
+            --button-start: #f59e0b; /* Amber-500 */
+            --button-end: #ef4444; /* Red-500 */
+        }
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-color);
+            padding: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+        .header-gradient {
+            /* Applying gradient to text */
+            background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+        }
+        .container-wrapper {
+            max-width: 960px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 20px 50px rgba(59, 130, 246, 0.15); /* Soft, prominent shadow */
+        }
+        .profile-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff, #f9fafb);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        /* Custom Card Styles for System Manuals */
+        .system-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .system-card-item {
+            padding: 24px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            background-color: #ffffff;
+        }
+        .system-card-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-start);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+        }
+        .start-btn-custom {
+            /* ใช้ Custom Button Gradient สำหรับปุ่มเข้าคู่มือ */
+            background-image: linear-gradient(90deg, #10b981, #06b6d4);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 9999px; 
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3); 
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+        .start-btn-custom:hover {
+             transform: translateY(-2px); 
+             box-shadow: 0 8px 20px rgba(16, 185, 129, 0.5);
+        }
+        .description-box {
+            background-color: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+        /* Custom style for the new blank profile picture */
+        .blank-profile-pic {
+            width: 96px;
+            height: 96px;
+            background-color: #ffffff; 
+            border-radius: 50%;
+            border: 4px solid #3b82f6; /* Blue border to stand out */
+            box-shadow: 0 5px 10px rgba(59, 130, 246, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #3b82f6;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container-wrapper">
+        
+        <div class="text-center mb-12">
+            <i class="fas fa-video text-5xl header-gradient mb-3"></i>
+            <h1 class="text-5xl font-extrabold header-gradient mb-2">AI Camera Systems สำหรับการใช้งานจริง</h1>
+            <p class="text-2xl text-gray-500">คู่มือการใช้งานและโครงสร้างของระบบ AI ภาคปฏิบัติ</p>
+        </div>
+
+        <div class="profile-card mb-12 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+            <div class="blank-profile-pic">
+                 <i class="fas fa-user-circle"></i>
+            </div>
+            
+            <div class="text-center sm:text-left">
+                <h2 class="text-3xl font-bold header-gradient">อ.ไก่ [ภูวนาถ เผือกทอง]</h2>
+                <p class="text-xl font-medium text-gray-700">ผู้เชี่ยวชาญด้าน **Computer Vision, LLM Integration และ Workflow Automation (n8n)**</p>
+            </div>
+            </div>
+        
+        <div class="p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500 shadow-md mb-10">
+            <h3 class="text-xl font-bold text-yellow-800 mb-4 flex items-center">
+                <i class="fas fa-lightbulb mr-2"></i> วัตถุประสงค์โดยรวมของหลักสูตร (Object of Expenditure Glossary)
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-gray-700">
+                <div class="font-medium text-blue-600">SM: Save Money (ประหยัดงบประมาณ)</div>
+                <div class="font-medium text-green-600">ST: Save Time (ประหยัดเวลา)</div>
+                <div class="font-medium text-red-600">AE: Avoid Error (ลดความผิดพลาด)</div>
+                <div class="font-medium text-purple-600">GP: Gain Praise (สร้างความเชื่อมั่น)</div>
+            </div>
+        </div>
+
+        <h2 class="text-3xl font-bold header-gradient mb-6 border-b-2 border-emerald-200 pb-2 flex items-center">
+            <i class="fas fa-eye mr-2"></i> คู่มือระบบ AI Camera Systems ทั้ง 2 ระบบ
+        </h2>
+        
+        <p class="text-gray-700 mb-6">
+            นี่คือคู่มือการใช้งานระบบ AI Camera สองชุดที่ถูกออกแบบมาเพื่อแสดงความสามารถในการประยุกต์ใช้ **Realtime Object Detection** และ **Large Language Model** ในอุตสาหกรรม
+        </p>
+
+        <div class="system-card-grid">
+            
+            <div class="system-card-item border-t-4 border-blue-500">
+                <h3 class="text-2xl font-bold text-gray-800 mb-2 flex items-center">
+                    <i class="fas fa-paw mr-2 text-blue-600"></i> System 4: AI Animal Monitoring
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    **วัตถุประสงค์:** ระบบเฝ้าระวังการบุกรุกของสัตว์ป่าหรือวัตถุอื่น ๆ โดยใช้ **Realtime Object Detection (Python)** และกล้อง
+                </p>
+                <div class="description-box">
+                    <div class="font-semibold text-blue-800 mb-1">ความสามารถหลัก:</div>
+                    <ul class="list-disc ml-5 text-xs text-gray-700">
+                        <li>รองรับ Line Crossing และ Polygon Area Mode</li>
+                        <li>แจ้งเตือนผ่านหน้าจอและพร้อมเชื่อมต่อ API</li>
+                    </ul>
+                </div>
+                <div class="mt-4 text-right">
+                    <a href="system4.html" class="start-btn-custom">
+                        <i class="fas fa-book-open mr-2"></i> คู่มือ System 4 
+                    </a>
+                </div>
+            </div>
+
+            <div class="system-card-item border-t-4 border-emerald-500">
+                <h3 class="text-2xl font-bold text-gray-800 mb-2 flex items-center">
+                    <i class="fas fa-qrcode mr-2 text-emerald-600"></i> System 5: AI Visual Label Reader
+                </h3>
+                <p class="text-sm text-gray-600 mb-4">
+                    **วัตถุประสงค์:** อ่านฉลากชิ้นส่วนงานประกอบในอุตสาหกรรมด้วย **Large Language Model**
+                </p>
+                <div class="description-box">
+                    <div class="font-semibold text-blue-800 mb-1">โครงสร้างระบบ:</div>
+                    <ul class="list-disc ml-5 text-xs text-gray-700">
+                        <li>ใช้ **n8n Workflow** และ Ollama (LLM) ในการประมวลผล</li>
+                        <li>ผลลัพธ์เป็นตารางข้อมูลที่ถูกคัดแยกพร้อม QR Code</li>
+                    </ul>
+                </div>
+                <div class="mt-4 text-right">
+                    <a href="system5.html" class="start-btn-custom">
+                        <i class="fas fa-book-open mr-2"></i> คู่มือ System 5
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-12 text-center text-gray-500 text-sm p-4 bg-white rounded-lg border">
+            <p>⭐ **จัดทำคู่มือโดย:** อ.ภูวนาถ เผือกทอง (ตามเอกสารต้นฉบับ) | เอกสารนี้เป็นส่วนหนึ่งของ AI Automation Master Plan</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

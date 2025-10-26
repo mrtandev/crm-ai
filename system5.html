@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คู่มือระบบ: AI Visual Label Reader (System 5)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* [START] FONT & THEME VARIABLES (System 5: Emerald/Green) */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+Thai:wght@100..900&display=swap');
+        :root {
+            --primary-color: #059669; /* Emerald-600 for main focus */
+            --gradient-start: #059669;
+            --gradient-end: #34d399; /* Emerald-400 */
+            --highlight-bg: #ecfdf5; /* Emerald-50 */
+            --node-color: #3b82f6; /* Blue for Nodes */
+            --node-bg: #1f2937; /* Dark BG for Workflow */
+            --node-text: #e5e7eb; /* Light Text */
+            --node-connector: #9ca3af; /* Gray-400 for arrow lines */
+        }
+        body {
+            font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .gradient-text {
+            background-image: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .step-card {
+            padding: 20px 25px; 
+            border-left: 5px solid var(--primary-color);
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        .step-card:hover {
+            transform: translateY(-2px);
+            border-left-color: var(--gradient-end);
+            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.2);
+        }
+        .system-highlight {
+            background-color: var(--highlight-bg); 
+            border-left: 4px solid #10b981; /* Emerald-500 */
+        }
+        .control-button {
+            font-family: monospace;
+            background-color: #d1fae5; /* Emerald-100 */
+            color: #065f46; /* Emerald-900 */
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+        .image-container {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f0fdfa; /* Teal-50 */
+            border-radius: 8px;
+            text-align: center;
+        }
+        /* Custom N8N Workflow Styling (HTML/CSS Image) - FINAL VERSION */
+        .n8n-workflow-visual {
+            background-color: var(--node-bg);
+            padding: 30px 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: auto;
+        }
+        .node-box {
+            background-color: #4b5563; /* Gray-600 */
+            color: var(--node-text);
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            min-width: 120px;
+            text-align: center;
+            border: 2px solid var(--node-color);
+            position: relative;
+            z-index: 10;
+        }
+        .arrow-line {
+            height: 2px;
+            background-color: var(--node-connector);
+            width: 50px;
+            margin: 0 -5px;
+            position: relative;
+        }
+        .arrow-line::after {
+            content: '>';
+            position: absolute;
+            right: -8px;
+            top: -7px;
+            color: var(--node-connector);
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+        .ai-agent-node {
+             background-color: #3b82f6; /* Blue-500 */
+             border-color: #fcd34d; /* Amber */
+             padding-top: 20px;
+             min-width: 150px;
+        }
+        .ai-agent-node i {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+        .webhook-node {
+            background-color: #fcd34d;
+            color: #78350f;
+            border-color: #f97316;
+            font-weight: 700;
+        }
+        .respond-node {
+             background-color: #6366f1;
+             color: #fff;
+             border-color: #818cf8;
+        }
+
+        /* Custom GUI Styling (HTML/CSS Image) - Used for Mockups */
+        .gui-screen-mockup {
+            background-color: #f7f7f7;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .gui-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .gui-preview-area {
+            height: 200px;
+            background-color: #fff;
+            border: 1px dashed #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-style: italic;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+        .gui-button {
+            padding: 8px 20px;
+            background-color: #10b981;
+            color: white;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .gui-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+        .gui-table th, .gui-table td {
+            border: 1px solid #eee;
+            padding: 8px;
+            text-align: left;
+        }
+        .gui-table th {
+            background-color: #e6fffa;
+            color: var(--primary-color);
+        }
+
+        /* === SPACING & AESTHETICS RESTORATION (The Final Fix) === */
+        main h2, main h3, main h4 {
+            margin-bottom: 0.5rem !important; 
+            margin-top: 2rem !important; 
+            padding-bottom: 0.25rem !important;
+        }
+        
+        main p {
+            margin-bottom: 0.75rem !important;
+            line-height: 1.6;
+        }
+        
+        .step-card h4 {
+            margin-top: 0.5rem !important;
+            margin-bottom: 0.75rem !important;
+        }
+
+        .step-card p {
+             margin-bottom: 0.5rem !important; 
+        }
+
+        table td, table th {
+            padding-top: 8px !important;
+            padding-bottom: 8px !important;
+            padding-left: 0.75rem !important; 
+            padding-right: 0.75rem !important;
+        }
+
+        .list-disc li, .list-decimal li {
+            margin-bottom: 0.25rem !important;
+            line-height: 1.5;
+        }
+        
+        .system-highlight ul, .system-highlight ol {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body class="min-h-screen">
+    <header class="bg-white card-shadow sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="text-center text-xl font-bold text-gray-800">
+                คู่มือการใช้งานระบบ: <span class="gradient-text">AI Visual Label Reader</span> (System 5)
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <div class="p-6 rounded-xl card-shadow mb-8 border-t-4 border-emerald-500">
+            <div class="flex items-center space-x-4">
+                <i class="fas fa-qrcode w-20 h-20 text-4xl flex items-center justify-center rounded-full bg-emerald-100 text-emerald-600 ring-2 ring-emerald-500"></i>
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-0 mb-1">
+                        ระบบอ่านฉลากของชิ้นส่วนของงานประกอบด้วยปัญญาประดิษฐ์
+                    </h2>
+                    <p class="base text-gray-500 mb-0">
+                        คู่มือการใช้งานเทคโนโลยีต้นแบบปัญญาประดิษฐ์สำหรับการประมวลผลจากกล้อง
+                    </p>
+                    <p class="sm text-gray-600 mt-1 mb-0">
+                        **จัดทำโดย:** ภูวนาถ เผือกทอง
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-green-400 pb-2 flex items-center mt-8">
+            <i class="fas fa-info-circle w-8 h-8 mr-3 text-green-600"></i>
+            1. ข้อมูลทั่วไปของระบบ
+        </h3>
+        
+        <div class="step-card mb-8">
+            <h4 class="text-xl font-bold text-gray-800 flex items-center">
+                <i class="fas fa-cube mr-2 text-indigo-600"></i> ภาพรวมและวัตถุประสงค์ (Al Visual Label Reader)
+            </h4>
+            
+            <p class="text-gray-700">
+                ระบบ Al Visual Label Reader เป็นระบบซอฟท์แวร์ที่ใช้รับภาพจากกล้องมาเพื่ออ่านหรือแปลความของตัวอักษรบนฉลากวัตถุ โดยมุ่งเน้นสำหรับงานที่รับภาพฉลากของชิ้นส่วนในอุตสาหกรรมที่ต้องมีการนำชิ้นส่วนต่าง ๆ เข้ามาประกอบด้วยกัน
+            </p>
+            <div class="p-4 system-highlight rounded-lg my-4">
+                <p class="font-bold text-emerald-800 mb-2 flex items-center">
+                    <i class="fas fa-chart-line mr-2"></i> เป้าหมายของระบบ
+                </p>
+                <ul class="list-disc ml-6 text-sm text-gray-700">
+                    <li>ทำให้การประกอบชิ้นงานในโรงงานทำได้รวดเร็วมากขึ้น</li>
+                    <li>แก้ปัญหาเรื่องของการจัดการคลังชิ้นส่วน</li>
+                </ul>
+            </div>
+
+            <h4 class="text-xl font-bold text-gray-800 flex items-center mt-6">
+                <i class="fas fa-server mr-2 text-blue-600"></i> โครงสร้างและเทคโนโลยีหลัก
+            </h4>
+            
+            <ul class="list-disc ml-6 text-gray-700">
+                <li>ระบบใช้ปัญญาประดิษฐ์ร่วมกับภาพจากกล้อง/รูปภาพ นำมาอ่านข้อความบนฉลากด้วยเทคนิค **Large Language Model**</li>
+                <li>ระบบจะทำการแยกข้อมูลพร้อมสร้าง **QR Code** สำหรับนำไปสืบค้นหรือบันทึกในฐานข้อมูล</li>
+                <li>ส่วนประกอบแบ่งเป็น 2 ส่วน: ส่วนของการประมวลผลภาพ และส่วนแสดงผลข้อมูลติดต่อกับผู้ใช้ (**Graphical User Interface: GUI**)</li>
+                <li>ส่วนติดต่อของผู้ใช้ถูกออกแบบให้เป็นแบบ **Web-based GUI** เพื่อให้เข้าถึงได้ง่ายจากหลายอุปกรณ์และประหยัดต้นทุนฮาร์ดแวร์</li>
+            </ul>
+
+            <h4 class="text-xl font-bold text-gray-800 flex items-center mt-6">
+                <i class="fas fa-project-diagram mr-2 text-red-600"></i> Workflow Overview บน n8n Server (รูปที่ 1-1)
+            </h4>
+            <p class="text-gray-700">
+                การติดตั้งระบบประมวลผลส่วนกลางจะกระทำผ่านซอฟท์แวร์ **n8n** โดยมี Workflow Overview ดังต่อไปนี้:
+            </p>
+            
+            <div class="image-container">
+                <div class="n8n-workflow-visual">
+                    <div class="flex items-center space-x-2">
+                        <div class="node-box webhook-node flex items-center space-x-1">
+                            <i class="fas fa-bolt text-lg" style="color:#1f2937;"></i>
+                            <span>Webhook1</span>
+                        </div>
+                        <div class="arrow-line"></div>
+                        <div class="node-box ai-agent-node flex flex-col items-center justify-center">
+                            <i class="fas fa-robot text-lg"></i>
+                            <span>AI Agent</span>
+                            <div class="text-xs font-normal mt-1" style="color: #ccc;">Ollama Chat Model</div>
+                        </div>
+                        <div class="arrow-line"></div>
+                        <div class="node-box respond-node flex items-center space-x-1">
+                            <i class="fas fa-reply text-lg"></i>
+                            <span>Respond to Webhook</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="mt-2 text-sm text-gray-600 font-medium">รูปที่ 1-1 N8N WORKFLOW สำหรับประมวลผลภาพที่ติดตั้งบน SERVER</p>
+            </div>
+            <ol class="list-decimal ml-6 text-gray-700">
+                <li>โมเดลที่ใช้ประมวลผลจะทำงานผ่าน Ollama Platforms</li>
+                <li>รอรับ **Web Hook** มาจากส่วนที่ติดต่อการทำงานร่วมกับผู้ใช้</li>
+                <li>นำภาพมาประมวลผลจากนั้นจึงส่งผลลัพธ์กลับไปที่ส่วนของ User Interface</li>
+            </ol>
+        </div>
+
+        <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-teal-400 pb-2 flex items-center mt-8">
+            <i class="fas fa-cogs w-8 h-8 mr-3 text-teal-600"></i>
+            2. การทดสอบและการใช้งานระบบ
+        </h3>
+
+        <div class="step-card mb-8">
+            <h4 class="text-xl font-bold text-gray-800 flex items-center">
+                <i class="fas fa-desktop mr-2 text-blue-600"></i> 2.1 หน้าจอเริ่มต้นและตัวอย่างผลลัพธ์ (รูปที่ 1-2, 2-1)
+            </h4>
+            <p class="text-gray-700">
+                เมื่อเปิด GUI ขึ้นมา หน้าจอเริ่มต้นโปรแกรมจะแสดงดังตัวอย่างด้านล่างนี้ และหลังจากประมวลผลเสร็จสิ้น ผลลัพธ์ที่ได้จะถูกแสดงเป็นตารางพร้อม QR Code
+            </p>
+            
+            <div class="image-container">
+                <div class="gui-screen-mockup">
+                    <div class="gui-header">Al Visual Label Reader</div>
+                    <p class="text-center text-gray-500 text-sm italic mb-4">Analyze labels and extract structured data from images or camera snapshots</p>
+
+                    <div class="gui-preview-area">Image or Camera Snapshot Preview Area</div>
+
+                    <div class="flex justify-center space-x-6 mb-4">
+                        <div class="text-center">
+                            <i class="fas fa-camera text-gray-600"></i>
+                            <div class="text-xs font-semibold text-gray-700">Capture</div>
+                        </div>
+                        <div class="text-center border-b-2 border-emerald-500 pb-1">
+                            <i class="fas fa-upload text-emerald-600"></i>
+                            <div class="text-xs font-semibold text-emerald-600">Upload</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md mb-2">
+                        <span class="text-sm text-gray-700">Select image file (e.g., JPEG, PNG)</span>
+                        <span class="text-xs text-gray-500 italic">No file chosen</span>
+                    </div>
+
+                    <div class="gui-button bg-blue-600 hover:bg-blue-700 mt-4">Submit Image for Analysis</div>
+
+                    <h5 class="text-center text-sm font-semibold mt-4 text-emerald-700">Extracted Data Table</h5>
+                    <table class="gui-table">
+                        <thead>
+                            <tr>
+                                <th>DATA POINT</th>
+                                <th>EXTRACTED VALUE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>ORDER NO</td><td>TP00163284</td></tr>
+                            <tr><td>ITEM DESCRIPTION</td><td>DREAM SOCK CLAMSHELL TOP COVER</td></tr>
+                            <tr><td>PART NO</td><td>OWL15.0451-VD1</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="text-center text-sm mt-3 text-gray-600">...พร้อม QR Code</p>
+                </div>
+                <p class="mt-2 text-sm text-gray-600 font-medium">รูปที่ 1-2 ตัวอย่างหน้าตาโปรแกรมของส่วนติดต่อกับผู้ใช้ (GUI)</p>
+            </div>
+            <h4 class="text-xl font-bold text-gray-800 flex items-center mt-6">
+                <i class="fas fa-upload mr-2 text-purple-600"></i> 2.2-2.5: การประมวลผลผ่านการอัพโหลดไฟล์ภาพ
+            </h4>
+            
+            <ul class="list-decimal ml-6 text-gray-700">
+                <li>ตั้งค่าระบบบน Server ให้เป็น **Auto Activate** และเปิด GUI ขึ้นมาผ่านเว็บ Browser (หากใช้งานบนเครือข่ายเดียวกันสามารถเข้าถึงได้ผ่าน URL ของ Server)</li>
+                <li>หากต้องการประมวลผลไฟล์ภาพ ให้กดที่ Tab **<span class="control-button">Upload</span>** แล้วกด **Select file** เพื่อเลือกอัพโหลดรูปภาพที่ต้องการประมวลผล (**รูปที่ 2-2**)
+                    <div class="image-container my-4">
+                        <div class="gui-screen-mockup p-5">
+                            <p class="text-center text-gray-500 text-sm italic mb-4">ขั้นตอนการเลือกไฟล์</p>
+                            <div class="flex justify-center space-x-6 mb-4">
+                                <div class="text-center">
+                                    <i class="fas fa-camera text-gray-600"></i>
+                                    <div class="text-xs font-semibold text-gray-700">Capture</div>
+                                </div>
+                                <div class="text-center border-b-2 border-emerald-500 pb-1">
+                                    <i class="fas fa-upload text-emerald-600"></i>
+                                    <div class="text-xs font-semibold text-emerald-600">Upload</div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center bg-gray-100 p-2 rounded-md mb-2">
+                                <button class="gui-button bg-blue-500 text-white px-3 py-1 text-sm">Select image file</button>
+                                <span class="text-xs text-gray-500 italic">No file chosen</span>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-600 font-medium">รูปที่ 2-2 การเลือกอัพโหลดไฟล์รูปภาพ</p>
+                    </div>
+                </li>
+                <li>เมื่อทำการอัพโหลดไฟล์เรียบร้อย ภาพที่อัพโหลดจะแสดงในส่วน Preview (**รูปที่ 2-3**)
+                    <div class="image-container my-4">
+                        <div class="gui-screen-mockup p-5">
+                            <div class="gui-preview-area h-40 border-none bg-white">
+                                <img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20x='50%25'%20y='50%25'%20font-size='10'%20text-anchor='middle'%20alignment-baseline='middle'%20fill='%23059669'%3EImage%20Preview%3C/text%3E%3C/svg%3E" alt="Uploaded Image Preview" style="width: 80%; height: 80%; object-fit: contain;">
+                            </div>
+                            <p class="text-xs text-center text-gray-600">Picture.png</p>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-600 font-medium">รูปที่ 2-3 ตัวอย่างภาพที่อัพโหลดไปแล้ว</p>
+                    </div>
+                </li>
+                <li>เมื่อพร้อม ให้กดปุ่ม **<span class="control-button">Submit Image for Analysis</span>** (**รูปที่ 2-4**) เพื่อส่งภาพไปประมวลผลที่ Server
+                    <div class="image-container my-4">
+                        <div class="gui-screen-mockup p-5">
+                            <p class="text-xs text-center text-gray-600 mb-4">Ready to Submit</p>
+                             <div class="gui-button bg-blue-600 hover:bg-blue-700">Submit Image for Analysis</div>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-600 font-medium">รูปที่ 2-4 การ SUBMIT IMAGE</p>
+                    </div>
+                </li>
+                <li>รอผลการประมวลผลโดยดูสถานะจาก **Status Bar** (**รูปที่ 2-5**)
+                    <div class="image-container my-4">
+                        <div class="gui-screen-mockup p-5">
+                            <div class="bg-yellow-100 border border-yellow-400 text-yellow-800 p-2 rounded-md text-sm font-semibold">
+                                Processing image... please wait.
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-600 font-medium">รูปที่ 2-5 การแสดงสถานะประมวลผลข้อมูลของโมเดล</p>
+                    </div>
+                </li>
+                <li>เมื่อประมวลผลเสร็จสิ้น (สถานะ "**Analysis completed successfully!**") (**รูปที่ 2-6**) ให้เลื่อนลงไปดูข้อมูลที่ถูกประมวลผลและคัดแยกมา และดู **QR Code** ที่ถูกสร้าง (**รูปที่ 2-7**)
+                    <div class="image-container my-4">
+                         <div class="gui-screen-mockup p-5">
+                            <div class="bg-green-100 border border-green-400 text-green-800 p-2 rounded-md text-sm font-semibold">
+                                Analysis completed successfully!
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-600 font-medium">รูปที่ 2-6 สถานะของการประมวลผลที่เสร็จสิ้น</p>
+                    </div>
+                    <div class="image-container my-4">
+                         <div class="gui-screen-mockup p-5">
+                             <h5 class="text-center text-sm font-semibold text-emerald-700">Extracted Data Table</h5>
+                            <table class="gui-table">
+                                <thead>
+                                    <tr>
+                                        <th>DATA POINT</th>
+                                        <th>EXTRACTED VALUE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>To</td><td>BENCHMARK ELECTRONICS</td></tr>
+                                    <tr><td>Cust P/N</td><td>TRIL05145-D-PAC-LF</td></tr>
+                                    <tr><td>Quantity</td><td>400</td></tr>
+                                </tbody>
+                            </table>
+                             <p class="text-center text-sm mt-3 text-gray-600">-- QR Code Generated --</p>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-600 font-medium">รูปที่ 2-7 ตัวอย่างของข้อมูลที่ประมวลผลมาเรียบร้อยพร้อม QR CODE</p>
+                    </div>
+                </li>
+            </ul>
+
+            <h4 class="text-xl font-bold text-gray-800 flex items-center mt-6">
+                <i class="fas fa-camera mr-2 text-pink-600"></i> 2.6-2.7: การประมวลผลผ่านการถ่ายภาพจากกล้อง
+            </h4>
+            
+            <ul class="list-disc ml-6 text-gray-700">
+                <li>หากต้องการถ่ายภาพจากกล้อง ให้เลือก Tab **<span class="control-button">Capture</span>** (**รูปที่ 2-8**)
+                    <div class="image-container my-4">
+                        <div class="gui-screen-mockup p-5">
+                            <div class="flex justify-center space-x-6 mb-4">
+                                <div class="text-center border-b-2 border-emerald-500 pb-1">
+                                    <i class="fas fa-camera text-emerald-600"></i>
+                                    <div class="text-xs font-semibold text-emerald-600">Capture</div>
+                                </div>
+                                <div class="text-center">
+                                    <i class="fas fa-upload text-gray-600"></i>
+                                    <div class="text-xs font-semibold text-gray-700">Upload</div>
+                                </div>
+                            </div>
+                            <button class="gui-button bg-cyan-600 hover:bg-cyan-700">Start Camera</button>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-600 font-medium">รูปที่ 2-8 การเลือกโหมดถ่ายภาพ</p>
+                    </div>
+                </li>
+                <li>กด **<span class="control-button">Start Camera</span>** เพื่อทำการบันทึกภาพด้วยการกดปุ่ม **<span class="control-button">Take Snapshot</span>** (**รูปที่ 2-9**)
+                    <div class="image-container my-4">
+                        <div class="gui-screen-mockup p-5">
+                             <div class="gui-preview-area h-40 border-none bg-white">
+                                <p class="text-sm font-semibold text-gray-600">Live Camera Feed</p>
+                            </div>
+                            <button class="gui-button bg-yellow-500 hover:bg-yellow-600 text-gray-900 mt-4">Take Snapshot</button>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-600 font-medium">รูปที่ 2-9 การถ่ายภาพจากกล้อง</p>
+                    </div>
+                </li>
+                <li>หากต้องการถ่ายใหม่ให้กดปุ่ม **<span class="control-button">Retake Image</span>**</li>
+                <li>เมื่อได้ภาพแล้ว ให้ทำตามกระบวนการของการ Submit Image ก็จะประมวลผลรูปภาพได้เช่นเดียวกับกระบวนการของการอัพโหลดรูปภาพ</li>
+            </ul>
+        </div>
+        
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>เอกสารคู่มือระบบ Al Visual Label Reader (System 5)</p>
+            <p class="text-sm mt-1">จัดทำโดย: อ.ภูวนาถ เผือกทอง</p>
+        </div>
+    </footer>
+
+</body>
+</html>
