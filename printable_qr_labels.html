@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบสร้าง QR Code เพื่อการตรวจสอบย้อนกลับ (Traceability)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        /* Base styles and utility classes */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f9;
+        }
+        .header-gradient {
+            background-image: linear-gradient(to right, #0F766E, #34D399);
+            color: white;
+            padding: 1.5rem 0;
+            border-bottom-left-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+        }
+        .section-title {
+            color: #0F766E;
+            font-weight: 800;
+        }
+        .card {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07);
+        }
+
+        /* --- Dynamic Label Styles --- */
+        :root {
+            --label-width: 6cm; 
+            --label-height: 4cm;
+            --grid-cols: 2; 
+        }
+        
+        #printableContainer {
+            width: 100%;
+            overflow-x: auto; 
+            padding: 1rem 0;
+            margin: 0 auto;
+        }
+
+        .label-grid {
+            display: grid;
+            grid-template-columns: repeat(var(--grid-cols), var(--label-width));
+            gap: 0;
+            justify-content: start; 
+            align-items: center;
+            margin: 0 auto;
+            border: 1px dashed #ccc; 
+        }
+        
+        .qr-label {
+            width: var(--label-width);
+            height: var(--label-height);
+            border: 1px solid #0F766E;
+            padding: 0.5rem;
+            margin: 0;
+            background-color: white;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            text-align: center;
+            font-size: 0.8rem; 
+        }
+        .qr-label .qr-text-small {
+            font-size: 0.6rem;
+            line-height: 1;
+        }
+        /* Ensure QR code canvas elements are sized correctly */
+        .qr-canvas-wrapper {
+            margin: 2px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- Print Specific Styles --- */
+        @media print {
+            body * {
+                visibility: hidden;
+                margin: 0;
+                padding: 0;
+            }
+            #qrOutput, #qrOutput * { 
+                visibility: visible;
+            }
+            #qrOutput {
+                width: 100vw;
+                height: 100vh;
+                position: absolute;
+                left: 0;
+                top: 0;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+            }
+            .label-grid {
+                width: 100%;
+                height: 100%;
+                display: grid;
+                grid-template-columns: repeat(var(--grid-cols), var(--label-width)); 
+                gap: 0;
+                border: none !important; 
+            }
+            .qr-label {
+                border: 1px solid black !important;
+                box-shadow: none !important;
+                width: var(--label-width) !important; 
+                height: var(--label-height) !important;
+                padding: 0.5rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <header class="header-gradient shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                <i data-lucide="scan-line" class="inline-block h-6 w-6 mr-2"></i> 
+                QR Code Generator (Traceability Label)
+            </h1>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <div class="bg-white p-6 sm:p-8 rounded-xl card mb-8">
+            <h2 class="section-title text-2xl font-bold mb-4 flex items-center">
+                <i data-lucide="settings" class="h-6 w-6 mr-2 text-teal-600"></i>
+                1. กำหนด Lot ID และการตั้งค่าป้ายกำกับ
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="col-span-1 lg:col-span-2 space-y-4">
+                    <div>
+                        <label for="lotType" class="block text-sm font-medium text-gray-700 mb-1">ขั้นตอนการผลิต (Lot Type)</label>
+                        <select id="lotType" onchange="updateFormContext()" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md shadow-sm">
+                            <option value="RAW_LOTS">ล็อตวัตถุดิบ (RAW_LOTS)</option>
+                            <option value="PUREES" selected>เพียวเร่ (PUREES)</option>
+                            <option value="WINE_FERMENTATIONS">หมักไวน์ (WINE_FERMENTATIONS)</option>
+                            <option value="VINEGARS">น้ำส้มสายชูสต็อก (VINEGARS)</option>
+                            <option value="PACKAGINGS">สินค้าบรรจุ (PACKAGINGS)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="lotIdSelect" class="block text-sm font-medium text-gray-700 mb-1">รหัส Lot ID ที่มีอยู่ (จากฐานข้อมูล)</label>
+                        <select id="lotIdSelect" onchange="updateContextSummary()" class="mt-1 block w-full shadow-sm sm:text-sm focus:ring-teal-500 focus:border-teal-500 border-gray-300 rounded-md p-2">
+                            </select>
+                    </div>
+                </div>
+                
+                <div class="col-span-1 p-4 border rounded-lg bg-gray-50 space-y-3">
+                    <h3 class="font-semibold text-gray-700">ตั้งค่าการพิมพ์ป้ายกำกับ</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label for="printRows" class="block text-xs font-medium text-gray-700">จำนวนแถว</label>
+                            <input type="number" id="printRows" value="2" min="1" class="mt-1 w-full p-2 border rounded-md text-sm">
+                        </div>
+                        <div>
+                            <label for="printCols" class="block text-xs font-medium text-gray-700">จำนวนคอลัมน์</label>
+                            <input type="number" id="printCols" value="2" min="1" onchange="updateGridStyles()" class="mt-1 w-full p-2 border rounded-md text-sm">
+                        </div>
+                        <div>
+                            <label for="labelWidth" class="block text-xs font-medium text-gray-700">กว้าง (cm)</label>
+                            <input type="number" id="labelWidth" value="6" min="1" step="0.1" onchange="updateGridStyles()" class="mt-1 w-full p-2 border rounded-md text-sm">
+                        </div>
+                        <div>
+                            <label for="labelHeight" class="block text-xs font-medium text-gray-700">สูง (cm)</label>
+                            <input type="number" id="labelHeight" value="4" min="1" step="0.1" onchange="updateGridStyles()" class="mt-1 w-full p-2 border rounded-md text-sm">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-100 p-4 rounded-lg mt-6 border border-gray-300">
+                <h3 class="font-semibold text-gray-700 mb-3 flex items-center"><i data-lucide="info" class="h-4 w-4 mr-2 text-blue-500"></i> ข้อมูลสรุป Lot ที่เลือก (Confirmation Data)</h3>
+                <div class="grid grid-cols-2 gap-y-2 text-sm text-gray-600">
+                    <div><strong>Lot ต้นทาง (Ref):</strong> <span id="summaryFromLot" class="font-medium text-teal-600">...</span></div>
+                    <div><strong>ปริมาณเริ่มต้น:</strong> <span id="summaryQuantity" class="font-medium">...</span></div>
+                    <div><strong>วันที่เริ่มต้น:</strong> <span id="summaryDate" class="font-medium">...</span></div>
+                    <div><strong>สถานะ:</strong> <span id="summaryStatus" class="font-medium">...</span></div>
+                </div>
+            </div>
+
+            <button onclick="generateQRCode()" class="mt-6 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-lg text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition duration-150">
+                <i data-lucide="qr-code" class="h-5 w-5 mr-2"></i>
+                2. สร้าง Grid ป้ายกำกับ (Ready for Print)
+            </button>
+        </div>
+        
+        <div id="qrOutput" class="p-6 sm:p-8 rounded-xl hidden">
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="section-title text-2xl font-bold mb-4 flex items-center">
+                    <i data-lucide="printer" class="h-6 w-6 mr-2 text-teal-600"></i>
+                    3. ผลลัพธ์: ป้ายกำกับ Traceability (พร้อมพิมพ์)
+                </h2>
+                
+                <div id="printableContainer">
+                    </div>
+
+                <button onclick="printLabels()" class="mt-6 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition duration-150">
+                    <i data-lucide="printer" class="h-4 w-4 mr-2"></i>
+                    เปิดหน้าพิมพ์ (Ctrl+P)
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Use a flag to track if initialization is complete
+        let isInitialized = false; 
+
+        // --- Simulated Database Data (for demonstration of Ref lookup) ---
+        const simulatedDB = {
+            RAW_LOTS: [
+                {id: 'RL_MG_001', from: 'FRUIT_MG_A', date: '25/10/2025', qty: 500, status: 'พร้อมใช้'},
+                {id: 'RL_NM_002', from: 'FRUIT_NM_B', date: '24/10/2025', qty: 320, status: 'รอ QC'}
+            ],
+            PUREES: [
+                {id: 'PR_MG_001', from: 'RL_MG_001', date: '26/10/2025', qty: 450, status: 'Frozen puree'},
+                {id: 'PR_NM_002', from: 'RL_NM_002', date: '26/10/2025', qty: 300, status: 'Frozen puree'}
+            ],
+            WINE_FERMENTATIONS: [
+                {id: 'WF_PR_001', from: 'PR_MG_001', date: '27/10/2025', qty: 400, status: 'กำลังหมัก'},
+            ],
+            VINEGARS: [
+                {id: 'VN_WF_001', from: 'WF_PR_001', date: '28/10/2025', qty: 350, status: 'พร้อมบรรจุ'},
+                {id: 'VN_WF_002', from: 'WF_PR_002', date: '29/10/2025', qty: 250, status: 'รอ QC'},
+            ],
+            PACKAGINGS: [
+                {id: 'BT_VN_001', from: 'VN_WF_001', date: '29/10/2025', qty: 700, status: 'เสร็จสมบูรณ์'},
+            ]
+        };
+        
+        // --- Core UI Logic ---
+
+        /** Updates CSS variables for printing based on user input */
+        function updateGridStyles() {
+            try {
+                const root = document.documentElement;
+                const widthCm = document.getElementById('labelWidth').value;
+                const heightCm = document.getElementById('labelHeight').value;
+                const cols = document.getElementById('printCols').value;
+                
+                root.style.setProperty('--label-width', `${widthCm}cm`);
+                root.style.setProperty('--label-height', `${heightCm}cm`);
+                root.style.setProperty('--grid-cols', cols);
+
+                // Re-render the grid display if already visible
+                if (isInitialized && !document.getElementById('qrOutput').classList.contains('hidden')) {
+                    generateQRCode(); 
+                }
+            } catch (error) {
+                console.error("Error in updateGridStyles:", error);
+            }
+        }
+        
+        /** Populates the Lot ID dropdown based on the selected Lot Type. */
+        function updateFormContext() {
+            try {
+                const lotType = document.getElementById('lotType').value;
+                const lotIdSelect = document.getElementById('lotIdSelect');
+                lotIdSelect.innerHTML = ''; 
+                const data = simulatedDB[lotType] || [];
+                
+                if (data.length === 0) {
+                    const opt = document.createElement('option');
+                    opt.value = '';
+                    opt.textContent = 'ไม่พบ Lot ID (จำลอง)';
+                    lotIdSelect.appendChild(opt);
+                } else {
+                    data.forEach(item => {
+                        const opt = document.createElement('option');
+                        opt.value = item.id;
+                        opt.textContent = item.id;
+                        lotIdSelect.appendChild(opt);
+                    });
+                }
+                updateContextSummary(); 
+            } catch (error) {
+                 console.error("Error in updateFormContext:", error);
+            }
+        }
+
+        /** Updates the context summary (Simulated AppSheet Lookups/Dereferences). */
+        function updateContextSummary() {
+            try {
+                const lotType = document.getElementById('lotType').value;
+                const lotId = document.getElementById('lotIdSelect').value;
+                const selectedLot = simulatedDB[lotType] ? simulatedDB[lotType].find(lot => lot.id === lotId) : null;
+                
+                if (selectedLot) {
+                    document.getElementById('summaryFromLot').textContent = selectedLot.from || 'N/A';
+                    document.getElementById('summaryQuantity').textContent = `${selectedLot.qty} kg/L`;
+                    document.getElementById('summaryDate').textContent = selectedLot.date;
+                    document.getElementById('summaryStatus').textContent = selectedLot.status;
+                } else {
+                    document.getElementById('summaryFromLot').textContent = 'N/A';
+                    document.getElementById('summaryQuantity').textContent = '0 kg/L';
+                    document.getElementById('summaryDate').textContent = 'N/A';
+                    document.getElementById('summaryStatus').textContent = 'N/A';
+                }
+            } catch (error) {
+                console.error("Error in updateContextSummary:", error);
+            }
+        }
+
+
+        /**
+         * Generates the QR Code Grid and updates the printable label mockup.
+         */
+        function generateQRCode() {
+            try {
+                const lotType = document.getElementById('lotType').value;
+                const lotId = document.getElementById('lotIdSelect').value;
+                const rows = parseInt(document.getElementById('printRows').value);
+                const cols = parseInt(document.getElementById('printCols').value);
+                const totalLabels = rows * cols;
+                const qrOutputSection = document.getElementById('qrOutput');
+                const printableContainer = document.getElementById('printableContainer');
+                
+                if (!lotId || lotId.includes('ไม่พบ') || totalLabels === 0) {
+                    alert('กรุณาเลือก Lot ID และกำหนดจำนวนป้ายกำกับที่ต้องการพิมพ์'); 
+                    return;
+                }
+
+                // --- 1. Setup Container ---
+                printableContainer.innerHTML = '';
+                printableContainer.className = 'label-grid';
+                
+                // The data encoded in the QR Code (Deep Link URL structure)
+                const encodedData = `appsheet://link?table=${lotType}&row=${lotId}`; 
+                const summaryFromLotText = document.getElementById('summaryFromLot').textContent;
+                
+                // --- 2. Generate all labels ---
+                // We use an immediate function and setTimeout (0ms or 10ms) to ensure the DOM is ready for QRCode.js to draw the canvas.
+                for (let i = 0; i < totalLabels; i++) {
+                    const labelDiv = document.createElement('div');
+                    labelDiv.className = 'qr-label';
+                    
+                    // Content structure
+                    labelDiv.innerHTML = `
+                        <div class="qr-text-small text-gray-500 font-medium uppercase leading-tight">TRACEABILITY LABEL</div>
+                        <div class="text-sm font-bold text-teal-700 mt-[1px] mb-[2px]">${lotType}</div>
+                        <div class="qr-text-small font-extrabold text-gray-900 break-all leading-tight mb-[3px]">${lotId}</div>
+                        <div id="qrCanvas-${i}" class="qr-canvas-wrapper"></div> 
+                        <div class="qr-text-small text-gray-500 mt-[2px] font-medium leading-tight">ต้นทาง: ${summaryFromLotText}</div>
+                        <div class="qr-text-small text-gray-500 leading-tight">สร้าง: ${new Date().toLocaleDateString('th-TH')}</div>
+                        <div class="qr-text-small text-gray-500 leading-tight">สแกนเพื่อตรวจสอบ</div>
+                    `;
+                    printableContainer.appendChild(labelDiv);
+
+                    // Draw the QR Code
+                    const qrId = `qrCanvas-${i}`;
+                    (function(id, data) {
+                        setTimeout(() => {
+                             // Use the global QRCode object provided by the qrcode.min.js library
+                             new QRCode(document.getElementById(id), {
+                                text: data, 
+                                width: 50, 
+                                height: 50,
+                                colorDark : "#000000",
+                                colorLight : "#ffffff",
+                                correctLevel : QRCode.CorrectLevel.M
+                            });
+                        }, 10); // 10ms timeout helps ensure stability 
+                    })(qrId, encodedData);
+                }
+
+                // --- 3. Show Output and Scroll ---
+                qrOutputSection.classList.remove('hidden');
+                qrOutputSection.scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                console.error("Error in generateQRCode:", error);
+                alert("เกิดข้อผิดพลาดในการสร้าง QR Code: " + error.message);
+            }
+        }
+        
+        /** Initiates the browser print dialog. */
+        function printLabels() {
+            window.print();
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            try {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons(); 
+                }
+                updateFormContext(); 
+                updateGridStyles(); 
+                isInitialized = true;
+            } catch (e) {
+                console.error("Initialization failed:", e);
+            }
+        });
+
+    </script>
+</body>
+</html>
