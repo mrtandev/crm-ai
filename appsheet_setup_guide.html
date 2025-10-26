@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คู่มือติดตั้ง AppSheet: Traceability Vinegar Database</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* กำหนด Font Inter เป็นหลัก และใช้สี Gradient */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Sarabun:wght@400;700&display=swap');
+        body {
+            font-family: 'Sarabun', 'Inter', sans-serif;
+            background-color: #f4f7f9;
+        }
+        .header-gradient {
+            background-image: linear-gradient(to right, #0F766E, #34D399);
+            color: white;
+            padding: 3rem 0;
+            border-bottom-left-radius: 2rem;
+            border-bottom-right-radius: 2rem;
+        }
+        .section-title {
+            color: #0F766E;
+            font-weight: 800;
+        }
+        .step-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            border-left: 6px solid;
+            border-radius: 0.5rem;
+        }
+        .step-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+        .step-icon {
+            background-color: #34D399;
+            border-radius: 9999px;
+            color: white;
+            font-weight: 700;
+        }
+        code {
+            background-color: #e0f2f1;
+            color: #047857;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+            display: inline-block;
+        }
+        pre {
+            background-color: #111827;
+            color: #D1FAE5;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 0.85rem;
+        }
+        .border-color-1 { border-left-color: #0F766E; }
+        .border-color-2 { border-left-color: #10B981; }
+        .border-color-3 { border-left-color: #06B6D4; }
+        .border-color-4 { border-left-color: #F59E0B; }
+        .border-color-5 { border-left-color: #EF4444; }
+        .table-ref-data {
+            font-size: 0.85rem;
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .table-ref-data th, .table-ref-data td {
+            padding: 8px 12px;
+            text-align: left;
+            border: 1px solid #E5E7EB;
+        }
+        .table-ref-data th {
+            background-color: #F9FAFB;
+            font-weight: 700;
+            color: #333;
+        }
+        .ref-field {
+            color: #059669; /* Green for REF fields */
+            font-weight: 600;
+        }
+        /* UI Mockup Specific Styles */
+        .ui-mockup-frame {
+            background-color: #333;
+            border-radius: 12px;
+            padding: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .mockup-screen {
+            background-color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 450px;
+            position: relative;
+        }
+        .mockup-header {
+            background-color: #0F766E;
+            color: white;
+            padding: 10px;
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .mockup-card-list {
+            padding: 10px;
+            overflow-y: auto;
+            height: calc(100% - 40px);
+        }
+        .mockup-item-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+        }
+        .mockup-detail-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #eee;
+            padding: 4px 0;
+            font-size: 0.85rem;
+        }
+        .mockup-detail-header {
+            background-color: #E0F2F1;
+            color: #0F766E;
+            padding: 8px 10px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <header class="header-gradient shadow-xl">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center py-10">
+            <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight mb-2">
+                <i data-lucide="wrench-screwdriver" class="inline-block h-10 w-10 mr-3"></i> 
+                คู่มือการติดตั้ง AppSheet
+            </h1>
+            <p class="text-xl font-light opacity-90">Traceability Vinegar Database: จาก Schema สู่ App ใช้งานจริง</p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <div class="mb-10 text-gray-700">
+            <p class="text-lg mb-4">
+                คู่มือนี้สรุปขั้นตอนที่ชัดเจนในการสร้างแอปพลิเคชัน AppSheet จากโครงสร้างฐานข้อมูล (`Structure`) ที่เราได้ออกแบบไว้ โดยเน้นการตั้งค่าความสัมพันธ์ (`Ref`) และ Logic ที่ซับซ้อนในตาราง `PRODUCTION_LINKS`
+            </p>
+            <div class="bg-blue-50 border-l-4 border-blue-400 text-blue-800 p-4 rounded-md">
+                <i data-lucide="lightbulb" class="inline-block h-5 w-5 mr-2"></i>
+                **เป้าหมาย:** สร้างแอปพลิเคชันที่สามารถตรวจสอบย้อนกลับข้อมูล Lot ได้ครบทั้ง 12 ตารางหลัก และเชื่อมโยงข้อมูลผู้ใช้
+            </div>
+        </div>
+
+        <h2 class="text-3xl font-bold section-title mb-8 flex items-center">
+            <i data-lucide="list-ordered" class="h-8 w-8 mr-2"></i>
+            ขั้นตอนการ Setup AppSheet (5 ขั้นตอนหลัก)
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <div class="bg-white p-6 step-card border-color-1">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="step-icon h-8 w-8 flex items-center justify-center text-lg">1</div>
+                    <h3 class="text-2xl font-bold section-title">การเตรียมข้อมูลสุดท้าย</h3>
+                </div>
+                <ul class="space-y-3 text-gray-600 list-disc ml-5">
+                    <li>**สร้างชีต `USERS`:** สร้างชีตชื่อ `USERS` ใน Google Sheets โดยมีคอลัมน์ `User_ID`, `Email`, `Full_Name`, `User_Role` และกรอกอีเมลผู้ใช้งานระบบอย่างน้อย 1 แถว</li>
+                    <li>**ตรวจสอบ Header:** ยืนยันว่าชีตข้อมูลทั้งหมดมี **Header Row** เป็นภาษาอังกฤษตามที่ระบุในชีต `Structure`</li>
+                </ul>
+            </div>
+
+            <div class="bg-white p-6 step-card border-color-2">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="step-icon h-8 w-8 flex items-center justify-center text-lg">2</div>
+                    <h3 class="text-2xl font-bold section-title">นำเข้าตาราง & ตั้งค่าพื้นฐาน</h3>
+                </div>
+                <ul class="space-y-3 text-gray-600 list-disc ml-5">
+                    <li>**สร้างแอป:** เริ่มต้นสร้างแอปใหม่จาก Google Sheet `Traceability_Vinegar_database`</li>
+                    <li>**นำเข้าตาราง:** ไปที่ **Data > Tables** และเพิ่มชีตที่เหลือทั้งหมด (12 Data Tables + `USERS` + `Structure`)</li>
+                    <li>**Authentication:** ไปที่ **Security > Authentication** และตั้งค่าให้ใช้ **Google** เป็น Provider (Recommended)</li>
+                    <li>**Audit Fields:** AppSheet ควรตั้งค่า `Created_By` และ `Modified_By` เป็น `Ref` ไปที่ตาราง `USERS` อัตโนมัติ</li>
+                </ul>
+            </div>
+
+            <div class="bg-white p-6 step-card border-color-3">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="step-icon h-8 w-8 flex items-center justify-center text-lg">3</div>
+                    <h3 class="text-2xl font-bold section-title">ตรวจสอบความสัมพันธ์ (Ref)</h3>
+                </div>
+                <ul class="space-y-3 text-gray-600 list-disc ml-5">
+                    <li>ตรวจสอบว่าคอลัมน์ที่มี `Type = Ref` ในชีต `Structure` ถูกตั้งค่าใน AppSheet ถูกต้อง</li>
+                    <li>**ตัวอย่าง:** ในตาราง `FRUITS`, คอลัมน์ `Farm_ID` ต้องเป็น `Type: Ref` $\rightarrow$ `FARMS`</li>
+                    <li>**App Formula:** ตรวจสอบว่า `Total_Weight_KG` และ `Modified_By/Date` ใช้สูตรตามที่กำหนดในชีต `Structure`</li>
+                </ul>
+            </div>
+
+            <div class="bg-white p-6 step-card border-color-4">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="step-icon h-8 w-8 flex items-center justify-center text-lg">4</div>
+                    <h3 class="text-2xl font-bold section-title">ควบคุม Form `PRODUCTION_LINKS`</h3>
+                </div>
+                <p class="text-gray-600 mb-3">ต้องใช้สูตร **Show If** เพื่อให้ผู้ใช้ป้อน Lot ID เพียงช่องเดียวในกลุ่ม **From** และ **To**</p>
+                
+                <h4 class="font-bold mt-2 text-gray-800">Logic ตัวอย่างสำหรับกลุ่ม From:</h4>
+                <pre><code>// คอลัมน์ From_Wine_ID จะแสดงก็ต่อเมื่อ Lot ก่อนหน้ายังไม่มีค่า
+AND(ISBLANK([From_Raw_Lot_ID]), ISBLANK([From_Puree_Lot_ID]), ...)</code></pre>
+                
+                <p class="text-gray-600 mt-3">**ทำซ้ำ** Logic นี้สำหรับคอลัมน์ `From_..._ID` และ `To_..._ID` ทั้ง 12 คอลัมน์</p>
+            </div>
+
+            <div class="bg-white p-6 step-card border-color-5">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="step-icon h-8 w-8 flex items-center justify-center text-lg">5</div>
+                    <h3 class="text-2xl font-bold section-title">การออกแบบ UX & Report</h3>
+                </div>
+                <ul class="space-y-3 text-gray-600 list-disc ml-5">
+                    <li>**Traceability Dashboard:** สร้าง **Dashboard View** ที่รวม Detail View ของ `PACKAGINGS` และตาราง `Related...` Lot ต่างๆ เข้าไว้ด้วยกัน</li>
+                    <li>**QR Scanning:** สร้าง **Action** ที่ใช้สูตร `LINKTOFILTEREDVIEW()` เพื่อสแกน QR Code แล้วนำค่า Lot ID ไปค้นหาใน Detail View ของตารางที่ถูกต้อง</li>
+                </ul>
+            </div>
+
+        </div> <hr class="my-10 border-gray-300">
+
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold section-title mb-4 flex items-center">
+                <i data-lucide="monitor" class="h-8 w-8 mr-2"></i>
+                AppSheet UI Mockup: ภาพรวมระบบตรวจสอบย้อนกลับ
+            </h2>
+            <p class="text-gray-700 mb-6">
+                ภาพจำลองหน้าจอเหล่านี้แสดงผลลัพธ์ของขั้นตอนที่ 5 (UX Design) โดยเน้นหน้าจอหลักสำหรับผู้ใช้งาน (View 1) และการเชื่อมโยงข้อมูล (View 2 & 3)
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div class="ui-mockup-frame">
+                    <h3 class="text-center text-sm text-gray-300 mb-2">View 1: Main Menu & Scan (Deck View)</h3>
+                    <div class="mockup-screen">
+                        <div class="mockup-header">
+                            <span class="font-bold">TRACE VINEGAR</span>
+                            <i data-lucide="menu" class="h-5 w-5"></i>
+                        </div>
+                        <div class="p-4 bg-gray-100 text-center">
+                            <button class="bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded-full shadow-md flex items-center justify-center mx-auto">
+                                <i data-lucide="scan-line" class="h-5 w-5 mr-2"></i>
+                                สแกน Lot Code (QR/Barcode)
+                            </button>
+                        </div>
+                        <div class="mockup-card-list">
+                             <div class="mockup-item-card border-green-500 border-l-4">
+                                <p class="text-xs text-gray-500">Lot ID: **BT_VN_001**</p>
+                                <p class="font-bold text-sm">สินค้าบรรจุ (PACKAGINGS)</p>
+                                <p class="text-xs text-gray-500">จำนวน: 700 Bottles | สถานะ: พร้อมจำหน่าย</p>
+                            </div>
+                            <div class="mockup-item-card border-teal-500 border-l-4">
+                                <p class="text-xs text-gray-500">Lot ID: **VN_WF_001**</p>
+                                <p class="font-bold text-sm">น้ำส้มสายชูสต็อก (VINEGARS)</p>
+                                <p class="text-xs text-gray-500">ปริมาณ: 350 L | สถานะ: พร้อมบรรจุ</p>
+                            </div>
+                            <div class="mockup-item-card border-cyan-500 border-l-4">
+                                <p class="text-xs text-gray-500">Lot ID: **WF_PR_001**</p>
+                                <p class="font-bold text-sm">หมักไวน์ (WINE_FERMENTATIONS)</p>
+                                <p class="text-xs text-gray-500">ปริมาณ: 400 L | สถานะ: กำลังหมัก</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-mockup-frame">
+                    <h3 class="text-center text-sm text-gray-300 mb-2">View 2: Product Detail (Backward Trace)</h3>
+                    <div class="mockup-screen">
+                        <div class="mockup-header">
+                            <span class="font-bold">PK_AP_010_1 Detail</span>
+                            <i data-lucide="undo" class="h-5 w-5"></i>
+                        </div>
+                        <div class="mockup-detail-header">
+                            สินค้าสำเร็จรูป: **PK_AP_010_1**
+                        </div>
+                        <div class="mockup-card-list">
+                            <div class="px-3 py-2 text-sm">
+                                <p class="font-bold text-teal-600 mb-2">ข้อมูล Lot ปัจจุบัน</p>
+                                <div class="mockup-detail-row"><span>วันที่บรรจุ:</span> <span class="font-medium">05/12/2566</span></div>
+                                <div class="mockup-detail-row"><span>ปริมาณบรรจุ:</span> <span class="font-medium">700 Units</span></div>
+                                <div class="mockup-detail-row"><span>รหัส SKU:</span> <span class="font-medium">PC_001 (Bottle)</span></div>
+                            </div>
+                            <div class="px-3 py-2 text-sm mt-3">
+                                <p class="font-bold text-red-600 mb-2 flex items-center">
+                                    <i data-lucide="corner-left-up" class="h-4 w-4 mr-1"></i> 
+                                    Lot ต้นทาง (Related VINEGARS)
+                                </p>
+                                <div class="mockup-item-card bg-red-50/50">
+                                    <p class="text-xs text-gray-500">Lot ID: **VN_WF_001**</p>
+                                    <p class="font-bold text-sm">Acidity: 5.5% | ปริมาณ: 350 L</p>
+                                </div>
+                            </div>
+                            <div class="px-3 py-2 text-sm mt-3">
+                                <p class="font-bold text-red-600 mb-2 flex items-center">
+                                    <i data-lucide="corner-left-up" class="h-4 w-4 mr-1"></i> 
+                                    Lot ต้นทางถัดไป (Related VINEGAR_FERM)
+                                </p>
+                                <div class="mockup-item-card bg-red-50/50">
+                                    <p class="text-xs text-gray-500">Lot ID: **WF_PR_001**</p>
+                                    <p class="font-bold text-sm">TSS: 2.0 | Alcohol: 0.2%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ui-mockup-frame">
+                    <h3 class="text-center text-sm text-gray-300 mb-2">View 3: Data Entry (RAW_LOTS Form)</h3>
+                    <div class="mockup-screen">
+                        <div class="mockup-header bg-cyan-600">
+                            <span class="font-bold">บันทึกวัตถุดิบใหม่</span>
+                            <i data-lucide="save" class="h-5 w-5"></i>
+                        </div>
+                        <div class="mockup-card-list space-y-4">
+                            <div class="p-3 bg-gray-50 rounded-md">
+                                <p class="text-xs text-gray-500 mb-1">Raw_Lot_ID (Key - Auto)</p>
+                                <p class="font-bold text-cyan-700">RL_NEW_003</p>
+                            </div>
+                            <div class="p-3 bg-white border border-gray-300 rounded-md">
+                                <p class="text-xs text-gray-500 mb-1">Transportation_ID (Ref)</p>
+                                <select class="w-full text-sm border-none bg-white p-0 focus:ring-0">
+                                    <option>TP_002 | บริษัท สุขใจขนส่ง</option>
+                                </select>
+                            </div>
+                             <div class="p-3 bg-white border border-gray-300 rounded-md">
+                                <p class="text-xs text-gray-500 mb-1">Fruit_Inbound_ID (Ref)</p>
+                                <select class="w-full text-sm border-none bg-white p-0 focus:ring-0">
+                                    <option>MG_NM_PE_FM_01 (มะม่วง)</option>
+                                </select>
+                            </div>
+                             <div class="p-3 bg-white border border-gray-300 rounded-md">
+                                <p class="text-xs text-gray-500 mb-1">Quantity_Units</p>
+                                <input type="number" value="25" class="w-full text-sm border-none p-0 focus:ring-0">
+                            </div>
+                            <div class="p-3 bg-white border border-gray-300 rounded-md">
+                                <p class="text-xs text-gray-500 mb-1">Weight_Per_Unit_KG</p>
+                                <input type="number" value="20" class="w-full text-sm border-none p-0 focus:ring-0">
+                            </div>
+                            <div class="p-3 bg-white border border-gray-300 rounded-md">
+                                <p class="text-xs text-gray-500 mb-1">Total_Weight_KG (App Formula)</p>
+                                <p class="font-bold text-sm text-red-600">500.00 KG</p>
+                            </div>
+                            <div class="p-3 bg-white border border-gray-300 rounded-md">
+                                <p class="text-xs text-gray-500 mb-1">Lot_Status</p>
+                                <select class="w-full text-sm border-none bg-white p-0 focus:ring-0">
+                                    <option>พร้อมใช้</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-0 w-full p-3 bg-green-600 text-white text-center font-bold">บันทึกข้อมูล</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <hr class="my-10 border-gray-300">
+
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold section-title mb-4 flex items-center">
+                <i data-lucide="table" class="h-8 w-8 mr-2"></i>
+                ตารางอ้างอิง: โครงสร้างข้อมูล Lot (Master Data)
+            </h2>
+            <p class="text-gray-700 mb-4">
+                นี่คือรายการตารางทั้งหมด (13 ตาราง) ที่เราได้ออกแบบและบันทึกในชีต `Structure` โดยแสดง Key Columns และ Foreign Key (Ref) เพื่อใช้อ้างอิงในการตั้งค่า AppSheet
+            </p>
+
+            <div class="bg-white p-6 rounded-xl shadow-lg space-y-8">
+                <h3 class="text-xl font-bold text-teal-700 mt-4 flex items-center"><i data-lucide="layers-3" class="w-5 h-5 mr-2"></i> 1. Master Data & Logistics (5 Tables)</h3>
+                <table class="table-ref-data">
+                    <thead>
+                        <tr>
+                            <th>Table Name</th>
+                            <th>Key Field (Primary)</th>
+                            <th>Ref Fields (Foreign Keys)</th>
+                            <th>Audit Fields</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>USERS</td><td>`User_ID`</td><td>N/A</td><td>N/A</td></tr>
+                        <tr><td>FARMS</td><td>`Farm_ID`</td><td>N/A</td><td>Created/Modified</td></tr>
+                        <tr><td>TRANSPORTERS</td><td>`Transporter_ID`</td><td>N/A</td><td>Created/Modified</td></tr>
+                        <tr><td>VEHICLES</td><td>`Vehicle_ID`</td><td>N/A</td><td>Created/Modified</td></tr>
+                        <tr><td>TRANSPORTATIONS</td><td>`Transportation_ID`</td><td class="ref-field">`Transporter_ID` $\rightarrow$ `TRANSPORTERS`, `Vehicle_ID` $\rightarrow$ `VEHICLES`</td><td>Created/Modified</td></tr>
+                    </tbody>
+                </table>
+
+                <h3 class="text-xl font-bold text-teal-700 mt-4 flex items-center"><i data-lucide="flask-round" class="w-5 h-5 mr-2"></i> 2. Production Flow (8 Tables)</h3>
+                <table class="table-ref-data">
+                    <thead>
+                        <tr>
+                            <th>Table Name</th>
+                            <th>Key Field (Primary)</th>
+                            <th>Ref Fields (Foreign Keys)</th>
+                            <th>Audit Fields</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>FRUITS</td><td>`Fruit_Inbound_ID`</td><td class="ref-field">`Farm_ID` $\rightarrow$ `FARMS`</td><td>Created/Modified</td></tr>
+                        <tr><td>RAW_LOTS</td><td>`Raw_Lot_ID`</td><td class="ref-field">`Transportation_ID` $\rightarrow$ `TRANSPORTATIONS`, `Fruit_Inbound_ID` $\rightarrow$ `FRUITS`</td><td>Created/Modified</td></tr>
+                        <tr><td>PUREES</td><td>`Puree_Lot_ID`</td><td class="ref-field">`Raw_Lot_ID` $\rightarrow$ `RAW_LOTS`</td><td>Created/Modified</td></tr>
+                        <tr><td>WINE_FERMENTATIONS</td><td>`Wine_Fermentation_ID`</td><td class="ref-field">`Puree_Lot_ID` $\rightarrow$ `PUREES`</td><td>Created/Modified</td></tr>
+                        <tr><td>WINES</td><td>`Wine_Lot_ID`</td><td class="ref-field">`Fermentation_ID` $\rightarrow$ `WINE_FERMENTATIONS`</td><td>Created/Modified</td></tr>
+                        <tr><td>VINEGAR_FERMENTATIONS</td><td>`Vinegar_Fermentation_ID`</td><td class="ref-field">`Wine_Lot_ID` $\rightarrow$ `WINES`</td><td>Created/Modified</td></tr>
+                        <tr><td>VINEGARS</td><td>`Vinegar_Stock_ID`</td><td class="ref-field">`Fermentation_ID` $\rightarrow$ `VINEGAR_FERMENTATIONS`</td><td>Created/Modified</td></tr>
+                        <tr><td>PACKAGINGS</td><td>`Packaging_Lot_ID`</td><td class="ref-field">`Vinegar_Stock_ID` $\rightarrow$ `VINEGARS`, `Product_SKU_ID` $\rightarrow$ `PRODUCT_SKUS`</td><td>Created/Modified</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3 class="text-xl font-bold text-teal-700 mt-4 flex items-center"><i data-lucide="link" class="w-5 h-5 mr-2"></i> 3. Link & Master SKU (3 Tables)</h3>
+                <table class="table-ref-data">
+                    <thead>
+                        <tr>
+                            <th>Table Name</th>
+                            <th>Key Field (Primary)</th>
+                            <th>Ref Fields (Foreign Keys)</th>
+                            <th>Audit Fields</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>PRODUCT_SKUS</td><td>`Product_SKU_ID`</td><td>N/A</td><td>Created/Modified</td></tr>
+                        <tr><td>LOT_ADDITIVE_LINKS</td><td>`Link_ID`</td><td class="ref-field">`Additive_ID` $\rightarrow$ `FOOD_ADDITIVES`, (Conditional Lot Refs)</td><td>Created/Modified</td></tr>
+                        <tr><td>PRODUCTION_LINKS</td><td>`Link_ID`</td><td class="ref-field">6 x From_Lot_ID Refs, 6 x To_Lot_ID Refs</td><td>Created/Modified</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-12">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex items-center justify-center space-x-4 mb-3">
+                <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/60x60/888888/ffffff?text=OT'" 
+                     class="h-12 w-12 rounded-full object-cover shadow-lg ring-2 ring-teal-400">
+                <div>
+                    <p class="text-lg font-bold">อ.แทน [ธีรชัย โฉมทัพ]</p>
+                    <p class="text-sm text-gray-400">Head of Digital Transformation</p>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500">&copy; 2025 Traceability Project. Developed with MrTan:คู่หูเขียนโค้ด.</p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
