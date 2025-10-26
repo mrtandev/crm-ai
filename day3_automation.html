@@ -80,6 +80,36 @@
             word-wrap: break-word;
             font-size: 0.9rem;
         }
+
+        /* === SPACING & AESTHETICS RESTORATION (The Fix) === */
+        
+        /* 1. ควบคุม Margin ทั่วไปของ Header Card และองค์ประกอบหลัก */
+        /* ปรับ padding/margin ของ Card หัวข้อหลักให้กระชับ */
+        .bg-white.p-6.rounded-xl.card-shadow.mb-8 {
+            padding: 1rem 1.5rem !important; /* บีบ Padding ด้านบน/ล่าง */
+            margin-top: 1.5rem !important;
+            margin-bottom: 1.5rem !important;
+        }
+
+        /* 2. ควบคุม Spacing ใต้หัวข้อและ Paragraph ให้กระชับ */
+        main h2, main h3, main h4 {
+            margin-bottom: 0.5rem !important;
+            margin-top: 1.5rem !important; /* เพิ่ม Margin บนหัวข้อหลัก */
+            padding-bottom: 0.25rem !important;
+        }
+        main p {
+            margin-bottom: 0.5rem !important; /* บีบ Margin ใต้ Paragraph */
+        }
+        /* ควบคุมช่องว่างในตารางให้กระชับ */
+        table td, table th {
+            padding-top: 6px !important; 
+            padding-bottom: 6px !important;
+        }
+        /* ควบคุมช่องว่างใน List (ul/ol) ให้กระชับ */
+        .list-disc li, .list-decimal li {
+            margin-bottom: 0.1rem !important;
+            line-height: 1.45;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
@@ -126,55 +156,55 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr class="hover:bg-emerald-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">09:00 - 10:15 น.</td>
-                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">75</td>
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">09:00 - 10:00 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">60</td>
                         <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 1:** AppSheet Ecosystem: การเชื่อมต่อ Data & Column Definition</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-emerald-600">รากฐาน App</td>
                     </tr>
                     <tr class="bg-yellow-50">
-                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">10:15 - 10:30 น.</td>
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">10:00 - 10:15 น.</td>
                         <td class="px-3 py-2 text-center text-sm font-semibold text-yellow-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคเช้า (Coffee Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-emerald-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">10:30 - 12:00 น.</td>
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">10:15 - 11:45 น.</td>
                         <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">90</td>
                         <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 2:** Workshop 1: สร้าง App Sales Transaction (View, Form, Ref)</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-emerald-600">ปฏิบัติ (CRUD)</td>
                     </tr>
                     <tr class="bg-red-50">
-                        <td class="px-6 py-2 text-sm font-semibold text-red-800">12:00 - 13:00 น.</td>
+                        <td class="px-6 py-2 text-sm font-semibold text-red-800">11:45 - 12:45 น.</td>
                         <td class="px-3 py-2 text-center text-sm font-semibold text-red-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-red-800">***พักกลางวัน (Lunch Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-red-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-emerald-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">13:00 - 14:30 น.</td>
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">12:45 - 14:15 น.</td>
                         <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">90</td>
                         <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 3.1:** AppSheet Expressions: Logic & Security Filter</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-xs font-bold text-emerald-600">Logic & Security</td>
                     </tr>
                     <tr class="bg-yellow-50">
-                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">14:30 - 14:45 น.</td>
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">14:15 - 14:30 น.</td>
                         <td class="px-3 py-2 text-center text-sm font-semibold text-yellow-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคบ่าย (Coffee Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-emerald-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">14:45 - 15:30 น.</td>
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">14:30 - 15:15 น.</td>
                         <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">45</td>
                         <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 3.2:** Workshop: Automation Bot พื้นฐาน</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-emerald-600">Automation</td>
                     </tr>
                     <tr class="hover:bg-emerald-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">15:30 - 16:15 น.</td>
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">15:15 - 16:00 น.</td>
                         <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">45</td>
                         <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 3.3:** สร้าง Dashboard สำหรับผู้บริหาร</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-emerald-600">Dashboard</td>
                     </tr>
                     <tr class="hover:bg-emerald-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">16:15 - 16:45 น.</td>
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">16:00 - 16:30 น.</td>
                         <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">30</td>
                         <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 4:** สรุปการ Deploy App และเตรียมพร้อมสำหรับ Day 4 (N8N)</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-emerald-600">สรุป</td>
@@ -209,7 +239,7 @@
                     <i class="fas fa-terminal mr-2"></i> ขั้นตอนการเชื่อมต่อ (สำคัญมาก)
                 </p>
                 <ol class="list-decimal ml-6 text-gray-700 space-y-1 text-sm">
-                    <li>ไปที่ Google Sheets → Extensions → AppSheet → Create App</li>
+                    <li>ไปที่ Google Sheets $\to$ Extensions $\to$ AppSheet $\to$ Create App</li>
                     <li>ตรวจสอบว่า Sheet ที่ใช้เป็น <span class="app-component">Table</span> ถูกต้องหรือไม่ (เช่น 'Customers', 'Products', 'Sales Transactions')</li>
                     <li><span class="font-bold text-red-600">ข้อควรระวัง:</span> AppSheet จะมองเห็นแค่แถวแรกของ Sheet เป็น <span class="expression-code">Column Header</span> ห้ามมีแถวว่างด้านบน!</li>
                 </ol>
@@ -272,6 +302,7 @@
                     <ul class="list-disc ml-6 text-sm">
                         <li>คุณสามารถเข้าถึงข้อมูลของลูกค้าคนนั้นได้ทันที: <span class="expression-code">[Customer\_ID].[Customer\_Name]</span></li>
                         <li>VC ที่ถูกสร้างขึ้นอัตโนมัติ: <span class="expression-code">Related Sales Transactions</span> ใช้แสดงรายการซื้อทั้งหมดของลูกค้ารายนั้น</li>
+                        <li><span class="expression-code">Lookup</span>: ใช้ดึงค่าที่ไม่ได้เป็น Ref แต่ต้องการแสดง (ไม่แนะนำเท่า Ref)</li>
                     </ul>
                 </p>
             </div>

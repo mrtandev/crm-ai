@@ -31,8 +31,8 @@
             border-left: 5px solid var(--primary-color);
             transition: all 0.3s ease;
             padding: 25px; /* เพิ่ม Padding เล็กน้อย */
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 12px; /* เพิ่ม Border Radius เพื่อความกลมกลืน */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* เพิ่ม shadow เล็กน้อย */
         }
         .step-card:hover {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -51,19 +51,17 @@
         pre {
             white-space: pre-wrap;
             word-wrap: break-word;
+            /* เพิ่มสไตล์สำหรับ Code Block ภายในเนื้อหา */
+            background-color: #1f2937; 
+            color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9rem;
         }
         .highlight-logic {
             background-color: #fef2f2;
             border-left: 4px solid #ef4444;
-        }
-        .code-block {
-            background-color: #1f2937; /* Dark BG for code */
-            color: #f3f4f6;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 10px;
-            overflow-x: auto;
-            font-size: 0.9rem;
         }
         /* Custom CSS for Flowchart Diagram */
         .flow-diagram-container {
@@ -166,12 +164,30 @@
             color: #4f46e5;
             font-weight: 700;
         }
-        .error-path-diagram {
-            background-color: #ffe6e6;
-            border: 1px solid #ff4d4d;
-            padding: 15px;
-            border-radius: 8px;
-            color: #990000;
+        
+        /* === FINAL SPACING AESTHETICS RESTORATION === */
+        /* แก้ไขปัญหาช่องว่างเกินจริง (ตามภาพต้นฉบับ) */
+        main h2.text-2xl, main h3.text-3xl {
+            margin-top: 1.5rem !important;
+            margin-bottom: 0.5rem !important; 
+            padding-bottom: 0.5rem !important;
+        }
+        main p {
+            margin-bottom: 0.5rem !important; /* บีบ Margin ใต้ Paragraph */
+        }
+        .step-card h4 {
+            margin-top: 0.25rem !important;
+            margin-bottom: 0.5rem !important;
+        }
+        /* ควบคุมช่องว่างในตารางให้กระชับ */
+        table td, table th {
+            padding-top: 6px !important;
+            padding-bottom: 6px !important;
+        }
+        /* ควบคุมช่องว่างใน List (ul/ol) ให้กระชับ */
+        .list-decimal li, .list-disc li {
+            margin-bottom: 0.1rem !important;
+            line-height: 1.4;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
@@ -400,7 +416,7 @@
             <div class="highlight-logic p-4 rounded-lg my-4">
                 <p class="font-bold text-red-700 mb-2">ตัวอย่าง: Lead Scoring Logic (AppSheet/n8n)</p>
                 <p class="text-sm text-gray-700">
-                    <span class="font-bold">เงื่อนไข:</span> ถ้า `Lead_Score` มากกว่า 80 (Hot Lead) → ให้ทำ Flow A (แจ้งเตือนเซลล์ทันที) **มิฉะนั้น** → ให้ทำ Flow B (ส่งอีเมลติดตามผลอัตโนมัติเท่านั้น)
+                    <span class="font-bold">เงื่อนไข:</span> ถ้า `Lead_Score` มากกว่า 80 (Hot Lead) $\to$ ให้ทำ Flow A (แจ้งเตือนเซลล์ทันที) **มิฉะนั้น** $\to$ ให้ทำ Flow B (ส่งอีเมลติดตามผลอัตโนมัติเท่านั้น)
                 </p>
                 <p class="text-sm text-gray-700 mt-2">
                     <span class="font-bold">ใน n8n:</span> ใช้ **IF Node** เพื่อแบ่ง Path การทำงานออกเป็น 2 เส้น (True/False)
@@ -459,7 +475,7 @@
                 <p class="font-bold text-red-700 mb-2">เป้าหมายของ Logic:</p>
                 <p class="text-sm">
                     ใช้ Conditional Logic 3 ชั้นในการตัดสินใจ:
-                    <ol class="list-decimal ml-6 text-gray-700 space-y-1">
+                    <ol class="list-decimal ml-6 space-y-1">
                         <li>**IF:** ลูกค้ากดปุ่ม "สนใจสินค้า" $\to$ Status: **Hot Lead** (Lead Score +20)</li>
                         <li>**ELSE IF:** ลูกค้าถามคำถามที่มี Keywords ที่กำหนด (เช่น ราคา, โปรโมชั่น) $\to$ Status: **Warm Lead** (Lead Score +10)</li>
                         <li>**ELSE:** ลูกค้าพิมพ์ข้อความทั่วไป $\to$ Status: **New Lead** (Lead Score +5)</li>
@@ -475,10 +491,10 @@
                 <p class="font-bold text-green-700 mb-2">เป้าหมายของ Logic:</p>
                 <p class="text-sm">
                     ใช้ AI (Gemini Node) วิเคราะห์ Sentiment ของ Feedback (จาก GGS) และใช้ Branching Logic เพื่อส่ง Task อัตโนมัติ:
-                    <ol class="list-decimal ml-6 text-gray-700 space-y-1">
-                        <li>**IF:** Sentiment = **Negative** และ Keyword = "สินค้าเสียหาย" → Flow A: สร้าง **Task Urgent** ใน AppSheet (Assign ให้แผนก QC)</li>
-                        <li>**ELSE IF:** Sentiment = **Positive** → Flow B: ส่ง **Email ขอบคุณ** (Log: Satisfied Customer)</li>
-                        <li>**ELSE:** Sentiment = **Neutral/Other** → Flow C: บันทึกเข้า Log เฉยๆ</li>
+                    <ol class="list-decimal ml-6 space-y-1">
+                        <li>**IF:** Sentiment = **Negative** และ Keyword = "สินค้าเสียหาย" $\to$ Flow A: สร้าง **Task Urgent** ใน AppSheet (Assign ให้แผนก QC)</li>
+                        <li>**ELSE IF:** Sentiment = **Positive** $\to$ Flow B: ส่ง **Email ขอบคุณ** (Log: Satisfied Customer)</li>
+                        <li>**ELSE:** Sentiment = **Neutral/Other** $\to$ Flow C: บันทึกเข้า Log เฉยๆ</li>
                     </ol>
                 </p>
                 <p class="text-sm text-gray-700 mt-2"><span class="font-bold">การแปลง Flow:</span> Flowchart จะแสดง **Gateway** ที่มีทางออก 3 ทาง (3 Paths) ตามผลลัพธ์ของ AI</p>
@@ -491,10 +507,10 @@
                 <p class="font-bold text-indigo-700 mb-2">เป้าหมายของ Logic:</p>
                 <p class="text-sm">
                     ใช้ Logic การตั้งเวลา (Scheduling) และ Data Transformation ก่อนส่ง Broadcast:
-                    <ol class="list-decimal ml-6 text-gray-700 space-y-1">
+                    <ol class="list-decimal ml-6 space-y-1">
                         <li>**Start:** Trigger โดย Schedule Node ใน n8n (เช่น ทุกวันศุกร์ เวลา 10:00 น.)</li>
                         <li>**Task 1:** ดึงข้อมูล Content (แคปชั่น) จาก GGS ที่มี Status = "Pending"</li>
-                        <li>**Gateway 1 (Decision):** <span class="font-bold text-red-700">IF:</span> พบ Content ที่ต้องส่ง → ไป **Task 2** <span class="font-bold text-red-700">ELSE:</span> → **End**</li>
+                        <li>**Gateway 1 (Decision):** <span class="font-bold text-red-700">IF:</span> พบ Content ที่ต้องส่ง $\to$ ไป **Task 2** <span class="font-bold text-red-700">ELSE:</span> $\to$ **End**</li>
                         <li>**Task 2:** ส่ง Content และรูปภาพไปที่ Line OA Broadcast API</li>
                         <li>**Task 3:** อัปเดต Status ใน GGS จาก "Pending" เป็น "Sent"</li>
                         <li>**End:** จบ Flow</li>
@@ -527,37 +543,7 @@
                 </ul>
             </div>
             
-            <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1 flex items-center">
-                <i class="fas fa-code mr-2 text-red-600"></i> ตัวอย่างโค้ด GAS: การใช้ Try-Catch เพื่อแจ้งเตือน
-            </h5>
-            <div class="code-block">
-                <pre>
-function mainWorkflow() {
-  try {
-    // 1. ลองทำ: โค้ดส่วนหลักที่เสี่ยงต่อการล่ม (เช่น API Call)
-    // สมมติว่ามีโค้ดที่ทำให้เกิด Error เช่น:
-    throw new Error("API_ERROR: Cannot connect to external service."); 
-    
-    Logger.log("Workflow Completed Successfully.");
-    
-  } catch (e) {
-    // 2. Catch: ดักจับ Error และส่งแจ้งเตือน
-    const ERROR_EMAIL = 'it.support@yourcompany.com';
-    const ERROR_MESSAGE = `FATAL ERROR in Workflow: ${e.toString()}`;
-
-    MailApp.sendEmail(
-      ERROR_EMAIL,
-      `[CRITICAL ALERT] GAS Automation Failed`,
-      ERROR_MESSAGE
-    );
-    // (ใน n8n จะใช้ Catch Error Node เพื่อแยก Flow ไปทำ Task นี้)
-  }
-}
-                </pre>
-            </div>
-
-
-            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-8">
+            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
                 <i class="fas fa-lock mr-2 text-blue-600"></i> 4.2 Security: API Key Management Concept (สำหรับ n8n Day 4)
             </h4>
             <p class="mb-4 text-gray-700">
@@ -572,31 +558,6 @@ function mainWorkflow() {
                     <li>**GAS Best Practice:** ควรใช้ **User Properties Service** หรือ **Script Properties** (Low-Code Storage) แทนการ hardcode ใน Script</li>
                 </ul>
             </div>
-
-            <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1 flex items-center">
-                <i class="fas fa-code mr-2 text-blue-600"></i> ตัวอย่างโค้ด GAS: การดึง API Key อย่างปลอดภัย
-            </h5>
-            <div class="code-block">
-                <pre>
-function getApiKeySafely() {
-  // 1. กำหนดชื่อ Key ที่ถูกเก็บไว้ใน Script Properties
-  const API_KEY_NAME = 'GEMINI_API_KEY'; 
-
-  // 2. ใช้ PropertiesService ในการดึงค่า (ดึงมาใช้งาน ห้าม Hardcode)
-  const properties = PropertiesService.getScriptProperties();
-  const apiKey = properties.getProperty(API_KEY_NAME);
-  
-  if (!apiKey) {
-    throw new Error(`Security Error: API Key '${API_KEY_NAME}' not set in Script Properties.`);
-  }
-  
-  // 3. นำ apiKey ไปใช้งาน (เช่น: UrlFetchApp.fetch(API_ENDPOINT, { headers: { 'Authorization': apiKey } }))
-  Logger.log('API Key loaded successfully (Not logged actual key).');
-  return apiKey;
-}
-                </pre>
-            </div>
-
         </div>
 
 
