@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แผนงานระบบตรวจสอบย้อนกลับน้ำส้มสายชู</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons for aesthetic icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* กำหนด Font Inter เป็นหลัก และใช้สี Gradient */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f9;
+        }
+        .header-gradient {
+            background-image: linear-gradient(to right, #0F766E, #34D399);
+            color: white;
+            padding: 3rem 0;
+            border-bottom-left-radius: 3rem;
+        }
+        .section-title {
+            background-image: linear-gradient(to right, #0F766E, #14B8A6, #34D399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+        .card {
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        .trace-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .flow-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin: 0.5rem;
+            padding: 0.5rem;
+            width: 150px; /* Fixed width for better layout control */
+        }
+        .flow-icon {
+            color: #0F766E;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .arrow {
+            color: #34D399;
+            font-size: 2rem;
+            margin: 0 0.5rem;
+        }
+        /* Mobile adjustments */
+        @media (max-width: 640px) {
+            .trace-flow {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-left: 1rem;
+            }
+            .flow-item {
+                flex-direction: row;
+                text-align: left;
+                width: 100%;
+                margin: 0.25rem 0;
+            }
+            .arrow {
+                display: none; /* Hide horizontal arrow on mobile */
+            }
+            .flow-item:not(:last-child)::after {
+                content: '↓';
+                display: block;
+                color: #34D399;
+                font-size: 1.5rem;
+                margin: 0.25rem 0 0.5rem 0;
+                align-self: flex-start;
+                margin-left: 20px;
+            }
+        }
+        .schema-table-container {
+            max-height: 500px; /* Limit height for scrollability */
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Header Section -->
+    <header class="header-gradient shadow-xl">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+            <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight mb-2">
+                <i data-lucide="scan" class="inline-block h-10 w-10 mr-3"></i> 
+                แผนงานระบบตรวจสอบย้อนกลับน้ำส้มสายชู
+            </h1>
+            <p class="text-xl font-light opacity-90">Traceability Vinegar Database (Schema-Driven AppSheet)</p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Project Overview Card -->
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl mb-12 card">
+            <h2 class="section-title text-3xl font-extrabold mb-4">
+                <i data-lucide="fingerprint" class="inline-block h-7 w-7 mr-2 text-teal-600"></i> สรุปโครงการและวัตถุประสงค์
+            </h2>
+            <p class="text-gray-700 leading-relaxed">
+                โครงการนี้มีวัตถุประสงค์เพื่อสร้างฐานข้อมูลหลักที่สมบูรณ์แบบบน Google Sheets โดยใช้หลักการ **Schema-Driven** เพื่อรองรับการสร้างแอปพลิเคชัน AppSheet อย่างมีประสิทธิภาพสูงสุด ข้อมูลได้ถูกแปลงเป็นชื่อคอลัมน์ภาษาอังกฤษและจัดโครงสร้างความสัมพันธ์ (Ref) อย่างชัดเจน ทำให้สามารถติดตาม Lot การผลิตน้ำส้มสายชูได้ตั้งแต่ต้นน้ำจนถึงปลายน้ำ (Farm-to-Packaging)
+            </p>
+        </div>
+
+        <!-- Section: Traceability Flow -->
+        <div class="mb-12">
+            <h2 class="section-title text-3xl font-extrabold mb-8 text-center">
+                <i data-lucide="workflow" class="inline-block h-7 w-7 mr-2 text-teal-600"></i> โครงสร้างหลัก (The 12-Table Chain)
+            </h2>
+            <div class="trace-flow bg-white p-6 rounded-xl shadow-lg">
+                <div class="flow-item">
+                    <i data-lucide="factory" class="flow-icon"></i>
+                    <p class="text-sm font-semibold">1. FARMS</p>
+                </div>
+                <i data-lucide="arrow-right" class="arrow"></i>
+                <div class="flow-item">
+                    <i data-lucide="carrot" class="flow-icon"></i>
+                    <p class="text-sm font-semibold">2. FRUITS</p>
+                </div>
+                <i data-lucide="arrow-right" class="arrow"></i>
+                <div class="flow-item">
+                    <i data-lucide="truck" class="flow-icon"></i>
+                    <p class="text-sm font-semibold">3. TRANSPORTATIONS</p>
+                </div>
+                <i data-lucide="arrow-right" class="arrow"></i>
+                <div class="flow-item">
+                    <i data-lucide="warehouse" class="flow-icon"></i>
+                    <p class="text-sm font-semibold">4. RAW_LOTS</p>
+                </div>
+                <i data-lucide="arrow-right" class="arrow"></i>
+                <div class="flow-item">
+                    <i data-lucide="blender" class="flow-icon"></i>
+                    <p class="text-sm font-semibold">5. PUREES</p>
+                </div>
+                <i data-lucide="arrow-right" class="arrow"></i>
+                <div class="flow-item">
+                    <i data-lucide="droplet" class="flow-icon"></i>
+                    <p class="text-sm font-semibold">6. WINE_FERMENTATIONS</p>
+                </div>
+                <i data-lucide="arrow-right" class="arrow"></i>
+                <div class="flow-item">
+                    <i data-lucide="wine" class="flow-icon"></i>
+                    <p class="text-sm font-semibold">7. WINES</p>
+                </div>
+                <i data-lucide="arrow-right" class="arrow"></i>
+                <div class="flow-item">
+                    <i data-lucide="flask-conical" class="flow-icon"></i>
+                    <p class="text-sm font-semibold">8. VINEGAR_FERMENTATIONS</p>
+                </div>
+                <i data-lucide="arrow-right" class="arrow"></i>
+                <div class="flow-item">
+                    <i data-lucide="check-circle-2" class="flow-icon"></i>
+                    <p class="text-sm font-semibold">9. VINEGARS</p>
+                </div>
+                <i data-lucide="arrow-right" class="arrow"></i>
+                <div class="flow-item">
+                    <i data-lucide="package" class="flow-icon"></i>
+                    <p class="text-sm font-semibold">10. PACKAGINGS</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Section: Schema Data (New Section) -->
+        <div class="mb-12">
+            <h2 class="section-title text-3xl font-extrabold mb-4">
+                <i data-lucide="database" class="inline-block h-7 w-7 mr-2 text-teal-600"></i> รายละเอียดโครงสร้างคอลัมน์ (Schema Definition)
+            </h2>
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <button id="toggle-schema-btn" class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg font-semibold text-gray-700 transition duration-150 ease-in-out flex justify-between items-center">
+                    <span>แสดงตาราง Structure ทั้งหมด (275 คอลัมน์)</span>
+                    <i data-lucide="chevron-down" id="toggle-icon" class="h-5 w-5 transition-transform duration-300"></i>
+                </button>
+                
+                <div id="schema-data-container" class="mt-4 hidden">
+                    <!-- Search Input -->
+                    <input type="text" id="schema-search" placeholder="ค้นหาตามชื่อตาราง หรือ ชื่อคอลัมน์..." class="w-full p-2 mb-4 border border-gray-300 rounded-lg focus:ring-teal-500 focus:border-teal-500">
+                    
+                    <div class="schema-table-container">
+                        <table id="schema-table" class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50 sticky top-0">
+                                <tr>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                    <th class="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Table Name</th>
+                                    <th class="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Field Name (EN)</th>
+                                    <th class="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data Type</th>
+                                    <th class="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ref To</th>
+                                    <th class="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Initial Value / Formula</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schema-table-body" class="bg-white divide-y divide-gray-200 text-sm">
+                                <!-- Data will be injected here by JavaScript -->
+                            </tbody>
+                        </table>
+                        <p id="no-results" class="text-center py-4 text-gray-500 hidden">ไม่พบผลลัพธ์ที่ตรงกับคำค้นหา</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Remaining Steps -->
+        <h2 class="section-title text-3xl font-extrabold mb-8">
+            <i data-lucide="list-checks" class="inline-block h-7 w-7 mr-2 text-teal-600"></i> ขั้นตอนที่ต้องดำเนินการต่อ (Next Steps)
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- Step 1: Data Preparation -->
+            <div class="bg-white p-6 rounded-xl shadow-lg card border-t-4 border-teal-500">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="bg-teal-500 rounded-full h-8 w-8 flex items-center justify-center text-white font-bold text-lg">1</div>
+                    <h3 class="font-bold text-xl text-gray-800">การเตรียมข้อมูลสุดท้าย</h3>
+                </div>
+                <ul class="space-y-2 text-gray-600 list-disc ml-5">
+                    <li><strong class="text-teal-600">สร้างชีต `USERS`</strong>: สร้างชีตชื่อ `USERS` ใน Google Sheets เพื่อเก็บข้อมูลผู้ใช้งานระบบ (Key: User_ID, Label: Email) สำหรับการอ้างอิง `Ref` ทั้งหมด</li>
+                    <li><strong class="text-teal-600">กรอกข้อมูลตัวอย่าง</strong>: กรอกข้อมูลตัวอย่างในชีตหลักทุกชีต (เช่น `FARMS`, `FRUITS`) อย่างน้อย 1-2 แถว</li>
+                </ul>
+            </div>
+
+            <!-- Step 2: AppSheet Integration -->
+            <div class="bg-white p-6 rounded-xl shadow-lg card border-t-4 border-green-500">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="bg-green-500 rounded-full h-8 w-8 flex items-center justify-center text-white font-bold text-lg">2</div>
+                    <h3 class="font-bold text-xl text-gray-800">การนำเข้าและตั้งค่า AppSheet</h3>
+                </div>
+                <ul class="space-y-2 text-gray-600 list-disc ml-5">
+                    <li><strong class="text-green-600">นำเข้าตารางทั้งหมด</strong>: เชื่อมต่อ AppSheet กับ Google Sheet แล้วนำเข้าตารางทั้งหมดที่เราสร้างไว้</li>
+                    <li><strong class="text-green-600">ตั้งค่า Ref อัตโนมัติ</strong>: AppSheet จะสามารถตั้งค่าความสัมพันธ์ `Ref` ส่วนใหญ่ได้ทันทีตามข้อมูลในตาราง `Structure`</li>
+                    <li><strong class="text-green-600">ตั้งค่า Authentication</strong>: ใช้ Google Sign-In ในส่วน Security</li>
+                </ul>
+            </div>
+            
+            <!-- Step 3: Advanced UX/Logic -->
+            <div class="bg-white p-6 rounded-xl shadow-lg card border-t-4 border-cyan-500">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="bg-cyan-500 rounded-full h-8 w-8 flex items-center justify-center text-white font-bold text-lg">3</div>
+                    <h3 class="font-bold text-xl text-gray-800">การปรับแต่ง Logic ขั้นสูง</h3>
+                </div>
+                <ul class="space-y-2 text-gray-600 list-disc ml-5">
+                    <li><strong class="text-cyan-600">ควบคุม Form `PRODUCTION_LINKS`</strong>: ตั้งค่า `Show If` และ `Valid If` ในฟอร์ม เพื่อบังคับให้ผู้ใช้ป้อนข้อมูล Lot ต้นทาง (From) และ Lot ปลายทาง (To) **เพียงช่องเดียวต่อการทำรายการ**</li>
+                    <li><strong class="text-cyan-600">สร้าง Traceability View</strong>: ออกแบบ Dashboard หรือ View เพื่อให้ผู้ใช้สามารถค้นหา Lot ID และแสดงข้อมูลย้อนกลับของ Lot นั้นทั้งหมด</li>
+                </ul>
+            </div>
+
+        </div> <!-- End Grid -->
+
+        <!-- Action Button (Mockup) -->
+        <div class="text-center mt-12">
+            <a href="javascript:void(0)" onclick="alert('กรุณา Copy โครงสร้าง CSV ไปวางใน Google Sheets และสร้าง AppSheet ก่อน')"
+                class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white shadow-xl"
+                style="background-image: linear-gradient(to right, #0F766E, #34D399); transition: transform 0.2s;">
+                <i data-lucide="external-link" class="h-5 w-5 mr-3"></i>
+                เข้าสู่ AppSheet (เมื่อระบบพร้อม)
+            </a>
+        </div>
+        
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-800 text-white mt-12">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex items-center justify-center space-x-4 mb-3">
+                <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/60x60/888888/ffffff?text=LOGO'" 
+                     class="h-12 w-12 rounded-full object-cover shadow-lg">
+                <div>
+                    <p class="text-lg font-bold">อ.แทน [ธีรชัย โฉมทัพ]</p>
+                    <p class="text-sm text-gray-400">Head of Digital Transformation</p>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500">&copy; 2025 Traceability Project Plan. Developed with MrTan:คู่หูเขียนโค้ด.</p>
+        </div>
+    </footer>
+
+    <!-- Script to render Lucide icons and handle schema display -->
+    <script>
+        lucide.createIcons();
+
+        // Data for schema table (275 rows)
+        const schemaData = [
+            {id: 1, type: "Table", table: "FARMS", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 2, type: "Field", table: "FARMS", field: "Farm_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 3, type: "Field", table: "FARMS", field: "Farm_Name", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 4, type: "Field", table: "FARMS", field: "Farm_Owner_Name", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 5, type: "Field", table: "FARMS", field: "Phone_Number", datatype: "Phone", ref: "N/A", formula: "-"},
+            {id: 6, type: "Field", table: "FARMS", field: "Other_Contact", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 7, type: "Field", table: "FARMS", field: "Address", datatype: "Address", ref: "N/A", formula: "-"},
+            {id: 8, type: "Field", table: "FARMS", field: "GAP_Certification", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 9, type: "Field", table: "FARMS", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 10, type: "Field", table: "FARMS", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 11, type: "Field", table: "FARMS", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 12, type: "Field", table: "FARMS", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 13, type: "Field", table: "FARMS", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 14, type: "Field", table: "FARMS", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 15, type: "Table", table: "FRUITS", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 16, type: "Field", table: "FRUITS", field: "Fruit_Inbound_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 17, type: "Field", table: "FRUITS", field: "Farm_ID", datatype: "Ref", ref: "FARMS", formula: "-"},
+            {id: 18, type: "Field", table: "FRUITS", field: "Fruit_Name", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 19, type: "Field", table: "FRUITS", field: "Source_Type", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 20, type: "Field", table: "FRUITS", field: "Preparation_Type", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 21, type: "Field", table: "FRUITS", field: "Unit_Price", datatype: "Price", ref: "N/A", formula: "-"},
+            {id: 22, type: "Field", table: "FRUITS", field: "Weight_KG", datatype: "Number", ref: "N/A", formula: "-"},
+            {id: 23, type: "Field", table: "FRUITS", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 24, type: "Field", table: "FRUITS", field: "Inbound_Date", datatype: "Date", ref: "N/A", formula: "TODAY()"},
+            {id: 25, type: "Field", table: "FRUITS", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 26, type: "Field", table: "FRUITS", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 27, type: "Field", table: "FRUITS", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 28, type: "Field", table: "FRUITS", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 29, type: "Field", table: "FRUITS", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 30, type: "Table", table: "TRANSPORTERS", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 31, type: "Field", table: "TRANSPORTERS", field: "Transporter_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 32, type: "Field", table: "TRANSPORTERS", field: "Company_Name", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 33, type: "Field", table: "TRANSPORTERS", field: "Contact_Number", datatype: "Phone", ref: "N/A", formula: "-"},
+            {id: 34, type: "Field", table: "TRANSPORTERS", field: "License_Number", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 35, type: "Field", table: "TRANSPORTERS", field: "Certification_Docs", datatype: "File", ref: "N/A", formula: "-"},
+            {id: 36, type: "Field", table: "TRANSPORTERS", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 37, type: "Field", table: "TRANSPORTERS", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 38, type: "Field", table: "TRANSPORTERS", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 39, type: "Field", table: "TRANSPORTERS", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 40, type: "Field", table: "TRANSPORTERS", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 41, type: "Field", table: "TRANSPORTERS", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 42, type: "Table", table: "VEHICLES", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 43, type: "Field", table: "VEHICLES", field: "Vehicle_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 44, type: "Field", table: "VEHICLES", field: "Vehicle_Type", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 45, type: "Field", table: "VEHICLES", field: "License_Plate", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 46, type: "Field", table: "VEHICLES", field: "Max_Load_Weight", datatype: "Number", ref: "N/A", formula: "-"},
+            {id: 47, type: "Field", table: "VEHICLES", field: "Is_Refrigerated", datatype: "Yes/No", ref: "N/A", formula: "FALSE"},
+            {id: 48, type: "Field", table: "VEHICLES", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 49, type: "Field", table: "VEHICLES", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 50, type: "Field", table: "VEHICLES", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 51, type: "Field", table: "VEHICLES", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 52, type: "Field", table: "VEHICLES", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 53, type: "Field", table: "VEHICLES", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 54, type: "Table", table: "TRANSPORTATIONS", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 55, type: "Field", table: "TRANSPORTATIONS", field: "Transportation_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 56, type: "Field", table: "TRANSPORTATIONS", field: "Transporter_ID", datatype: "Ref", ref: "TRANSPORTERS", formula: "-"},
+            {id: 57, type: "Field", table: "TRANSPORTATIONS", field: "Vehicle_ID", datatype: "Ref", ref: "VEHICLES", formula: "-"},
+            {id: 58, type: "Field", table: "TRANSPORTATIONS", field: "Inbound_Date", datatype: "Date", ref: "N/A", formula: "TODAY()"},
+            {id: 59, type: "Field", table: "TRANSPORTATIONS", field: "Outbound_Date", datatype: "Date", ref: "N/A", formula: "-"},
+            {id: 60, type: "Field", table: "TRANSPORTATIONS", field: "Duration_Hours", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 61, type: "Field", table: "TRANSPORTATIONS", field: "Receiver_Name", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 62, type: "Field", table: "TRANSPORTATIONS", field: "Inbound_Condition", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 63, type: "Field", table: "TRANSPORTATIONS", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 64, type: "Field", table: "TRANSPORTATIONS", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 65, type: "Field", table: "TRANSPORTATIONS", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 66, type: "Field", table: "TRANSPORTATIONS", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 67, type: "Field", table: "TRANSPORTATIONS", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 68, type: "Field", table: "TRANSPORTATIONS", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 69, type: "Table", table: "RAW_LOTS", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 70, type: "Field", table: "RAW_LOTS", field: "Raw_Lot_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 71, type: "Field", table: "RAW_LOTS", field: "Transportation_ID", datatype: "Ref", ref: "TRANSPORTATIONS", formula: "-"},
+            {id: 72, type: "Field", table: "RAW_LOTS", field: "Fruit_Inbound_ID", datatype: "Ref", ref: "FRUITS", formula: "-"},
+            {id: 73, type: "Field", table: "RAW_LOTS", field: "Inbound_Date", datatype: "Date", ref: "N/A", formula: "TODAY()"},
+            {id: 74, type: "Field", table: "RAW_LOTS", field: "Receiving_Date", datatype: "Date", ref: "N/A", formula: "-"},
+            {id: 75, type: "Field", table: "RAW_LOTS", field: "Quantity_Units", datatype: "Number", ref: "N/A", formula: "-"},
+            {id: 76, type: "Field", table: "RAW_LOTS", field: "Weight_Per_Unit_KG", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 77, type: "Field", table: "RAW_LOTS", field: "Total_Weight_KG", datatype: "Decimal", ref: "N/A", formula: "[Quantity_Units]*[Weight_Per_Unit_KG]"},
+            {id: 78, type: "Field", table: "RAW_LOTS", field: "Lot_Status", datatype: "Enum", ref: "N/A", formula: "พร้อมใช้"},
+            {id: 79, type: "Field", table: "RAW_LOTS", field: "Storage_Location", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 80, type: "Field", table: "RAW_LOTS", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 81, type: "Field", table: "RAW_LOTS", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 82, type: "Field", table: "RAW_LOTS", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 83, type: "Field", table: "RAW_LOTS", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 84, type: "Field", table: "RAW_LOTS", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 85, type: "Field", table: "RAW_LOTS", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 86, type: "Table", table: "PUREES", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 87, type: "Field", table: "PUREES", field: "Puree_Lot_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 88, type: "Field", table: "PUREES", field: "Raw_Lot_ID", datatype: "Ref", ref: "RAW_LOTS", formula: "-"},
+            {id: 89, type: "Field", table: "PUREES", field: "Production_Date", datatype: "Date", ref: "N/A", formula: "TODAY()"},
+            {id: 90, type: "Field", table: "PUREES", field: "Yield_Percentage", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 91, type: "Field", table: "PUREES", field: "Brix_Percentage", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 92, type: "Field", table: "PUREES", field: "Container_Quantity", datatype: "Number", ref: "N/A", formula: "-"},
+            {id: 93, type: "Field", table: "PUREES", field: "Weight_Per_Container_KG", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 94, type: "Field", table: "PUREES", field: "Total_Weight_KG", datatype: "Decimal", ref: "N/A", formula: "[Container_Quantity]*[Weight_Per_Container_KG]"},
+            {id: 95, type: "Field", table: "PUREES", field: "Storage_Status", datatype: "Enum", ref: "N/A", formula: "Frozen puree"},
+            {id: 96, type: "Field", table: "PUREES", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 97, type: "Field", table: "PUREES", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 98, type: "Field", table: "PUREES", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 99, type: "Field", table: "PUREES", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 100, type: "Field", table: "PUREES", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 101, type: "Field", table: "PUREES", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 102, type: "Table", table: "FOOD_ADDITIVES", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 103, type: "Field", table: "FOOD_ADDITIVES", field: "Additive_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 104, type: "Field", table: "FOOD_ADDITIVES", field: "Additive_Name", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 105, type: "Field", table: "FOOD_ADDITIVES", field: "Supplier", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 106, type: "Field", table: "FOOD_ADDITIVES", field: "Manufacture_Date", datatype: "Date", ref: "N/A", formula: "-"},
+            {id: 107, type: "Field", table: "FOOD_ADDITIVES", field: "Expiry_Date", datatype: "Date", ref: "N/A", formula: "-"},
+            {id: 108, type: "Field", table: "FOOD_ADDITIVES", field: "Storage_Location", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 109, type: "Field", table: "FOOD_ADDITIVES", field: "Remaining_Quantity", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 110, type: "Field", table: "FOOD_ADDITIVES", field: "Inbound_Quantity", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 111, type: "Field", table: "FOOD_ADDITIVES", field: "Unit", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 112, type: "Field", table: "FOOD_ADDITIVES", field: "Unit_Price", datatype: "Price", ref: "N/A", formula: "-"},
+            {id: 113, type: "Field", table: "FOOD_ADDITIVES", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 114, type: "Field", table: "FOOD_ADDITIVES", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 115, type: "Field", table: "FOOD_ADDITIVES", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 116, type: "Field", table: "FOOD_ADDITIVES", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 117, type: "Field", table: "FOOD_ADDITIVES", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 118, type: "Field", table: "FOOD_ADDITIVES", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 119, type: "Table", table: "WINE_FERMENTATIONS", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 120, type: "Field", table: "WINE_FERMENTATIONS", field: "Wine_Fermentation_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 121, type: "Field", table: "WINE_FERMENTATIONS", field: "Puree_Lot_ID", datatype: "Ref", ref: "PUREES", formula: "-"},
+            {id: 122, type: "Field", table: "WINE_FERMENTATIONS", field: "Responsible_Staff", datatype: "Ref", ref: "USER", formula: "-"},
+            {id: 123, type: "Field", table: "WINE_FERMENTATIONS", field: "Start_Date", datatype: "Date", ref: "N/A", formula: "TODAY()"},
+            {id: 124, type: "Field", table: "WINE_FERMENTATIONS", field: "End_Date", datatype: "Date", ref: "N/A", formula: "-"},
+            {id: 125, type: "Field", table: "WINE_FERMENTATIONS", field: "Alcohol_Percentage", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 126, type: "Field", table: "WINE_FERMENTATIONS", field: "TSS_Value", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 127, type: "Field", table: "WINE_FERMENTATIONS", field: "Total_Volume_Litres", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 128, type: "Field", table: "WINE_FERMENTATIONS", field: "Fermentation_Status", datatype: "Enum", ref: "N/A", formula: "กำลังหมัก"},
+            {id: 129, type: "Field", table: "WINE_FERMENTATIONS", field: "Storage_Location", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 130, type: "Field", table: "WINE_FERMENTATIONS", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 131, type: "Field", table: "WINE_FERMENTATIONS", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 132, type: "Field", table: "WINE_FERMENTATIONS", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 133, type: "Field", table: "WINE_FERMENTATIONS", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 134, type: "Field", table: "WINE_FERMENTATIONS", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 135, type: "Field", table: "WINE_FERMENTATIONS", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 136, type: "Table", table: "WINES", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 137, type: "Field", table: "WINES", field: "Wine_Lot_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 138, type: "Field", table: "WINES", field: "Fermentation_ID", datatype: "Ref", ref: "WINE_FERMENTATIONS", formula: "-"},
+            {id: 139, type: "Field", table: "WINES", field: "Responsible_Staff", datatype: "Ref", ref: "USER", formula: "-"},
+            {id: 140, type: "Field", table: "WINES", field: "Packaging_Date", datatype: "Date", ref: "N/A", formula: "TODAY()"},
+            {id: 141, type: "Field", table: "WINES", field: "Analysis_and_Packaging_Date", datatype: "Date", ref: "N/A", formula: "-"},
+            {id: 142, type: "Field", table: "WINES", field: "Alcohol_Percentage", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 143, type: "Field", table: "WINES", field: "TSS_Value", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 144, type: "Field", table: "WINES", field: "Total_Volume_Litres", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 145, type: "Field", table: "WINES", field: "Storage_Location", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 146, type: "Field", table: "WINES", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 147, type: "Field", table: "WINES", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 148, type: "Field", table: "WINES", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 149, type: "Field", table: "WINES", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 150, type: "Field", table: "WINES", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 151, type: "Field", table: "WINES", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 152, type: "Table", table: "VINEGAR_FERMENTATIONS", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 153, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Vinegar_Fermentation_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 154, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Wine_Lot_ID", datatype: "Ref", ref: "WINES", formula: "-"},
+            {id: 155, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Responsible_Staff", datatype: "Ref", ref: "USER", formula: "-"},
+            {id: 156, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Start_Date", datatype: "Date", ref: "N/A", formula: "TODAY()"},
+            {id: 157, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "End_Date", datatype: "Date", ref: "N/A", formula: "-"},
+            {id: 158, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Alcohol_Percentage", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 159, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Acidity_Percentage", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 160, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "TSS_Value", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 161, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Total_Volume_Litres", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 162, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Fermentation_Status", datatype: "Enum", ref: "N/A", formula: "กำลังหมัก"},
+            {id: 163, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Storage_Location", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 164, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 165, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 166, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 167, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 168, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 169, type: "Field", table: "VINEGAR_FERMENTATIONS", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 170, type: "Table", table: "VINEGARS", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 171, type: "Field", table: "VINEGARS", field: "Vinegar_Stock_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 172, type: "Field", table: "VINEGARS", field: "Fermentation_ID", datatype: "Ref", ref: "VINEGAR_FERMENTATIONS", formula: "-"},
+            {id: 173, type: "Field", table: "VINEGARS", field: "Responsible_Staff", datatype: "Ref", ref: "USER", formula: "-"},
+            {id: 174, type: "Field", table: "VINEGARS", field: "Lot_Batch_Number", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 175, type: "Field", table: "VINEGARS", field: "Filtration_Date", datatype: "Date", ref: "N/A", formula: "TODAY()"},
+            {id: 176, type: "Field", table: "VINEGARS", field: "Alcohol_Percentage", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 177, type: "Field", table: "VINEGARS", field: "Acidity_Percentage", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 178, type: "Field", table: "VINEGARS", field: "Total_Volume_Litres", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 179, type: "Field", table: "VINEGARS", field: "Stock_Status", datatype: "Enum", ref: "N/A", formula: "พร้อมบรรจุ"},
+            {id: 180, type: "Field", table: "VINEGARS", field: "Storage_Location", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 181, type: "Field", table: "VINEGARS", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 182, type: "Field", table: "VINEGARS", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 183, type: "Field", table: "VINEGARS", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 184, type: "Field", table: "VINEGARS", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 185, type: "Field", table: "VINEGARS", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 186, type: "Field", table: "VINEGARS", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 187, type: "Table", table: "PRODUCT_SKUS", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 188, type: "Field", table: "PRODUCT_SKUS", field: "Product_SKU_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 189, type: "Field", table: "PRODUCT_SKUS", field: "Product_Name", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 190, type: "Field", table: "PRODUCT_SKUS", field: "Packaging_Volume_ML", datatype: "Number", ref: "N/A", formula: "-"},
+            {id: 191, type: "Field", table: "PRODUCT_SKUS", field: "Shelf_Life_Days", datatype: "Number", ref: "N/A", formula: "-"},
+            {id: 192, type: "Field", table: "PRODUCT_SKUS", field: "Export_Shelf_Life_Days", datatype: "Number", ref: "N/A", formula: "-"},
+            {id: 193, type: "Field", table: "PRODUCT_SKUS", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 194, type: "Field", table: "PRODUCT_SKUS", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 195, type: "Field", table: "PRODUCT_SKUS", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 196, type: "Field", table: "PRODUCT_SKUS", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 197, type: "Field", table: "PRODUCT_SKUS", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 198, type: "Field", table: "PRODUCT_SKUS", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 199, type: "Table", table: "PACKAGINGS", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 200, type: "Field", table: "PACKAGINGS", field: "Packaging_Lot_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 201, type: "Field", table: "PACKAGINGS", field: "Vinegar_Stock_ID", datatype: "Ref", ref: "VINEGARS", formula: "-"},
+            {id: 202, type: "Field", table: "PACKAGINGS", field: "Product_SKU_ID", datatype: "Ref", ref: "PRODUCT_SKUS", formula: "-"},
+            {id: 203, type: "Field", table: "PACKAGINGS", field: "Responsible_Staff", datatype: "Ref", ref: "USER", formula: "-"},
+            {id: 204, type: "Field", table: "PACKAGINGS", field: "Packaging_Date", datatype: "Date", ref: "N/A", formula: "TODAY()"},
+            {id: 205, type: "Field", table: "PACKAGINGS", field: "Quantity_Packed", datatype: "Number", ref: "N/A", formula: "-"},
+            {id: 206, type: "Field", table: "PACKAGINGS", field: "Storage_Location", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 207, type: "Field", table: "PACKAGINGS", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 208, type: "Field", table: "PACKAGINGS", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 209, type: "Field", table: "PACKAGINGS", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 210, type: "Field", table: "PACKAGINGS", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 211, type: "Field", table: "PACKAGINGS", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 212, type: "Field", table: "PACKAGINGS", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 213, type: "Table", table: "LOT_ADDITIVE_LINKS", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 214, type: "Field", table: "LOT_ADDITIVE_LINKS", field: "Link_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 215, type: "Field", table: "LOT_ADDITIVE_LINKS", field: "Lot_Type", datatype: "Enum", ref: "N/A", formula: "Wine"},
+            {id: 216, type: "Field", table: "LOT_ADDITIVE_LINKS", field: "Lot_ID", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 217, type: "Field", table: "LOT_ADDITIVE_LINKS", field: "Additive_ID", datatype: "Ref", ref: "FOOD_ADDITIVES", formula: "-"},
+            {id: 218, type: "Field", table: "LOT_ADDITIVE_LINKS", field: "Usage_Quantity", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 219, type: "Field", table: "LOT_ADDITIVE_LINKS", field: "Unit", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 220, type: "Field", table: "LOT_ADDITIVE_LINKS", field: "Responsible_Staff", datatype: "Ref", ref: "USER", formula: "-"},
+            {id: 221, type: "Field", table: "LOT_ADDITIVE_LINKS", field: "Usage_Date", datatype: "Date", ref: "N/A", formula: "TODAY()"},
+            {id: 222, type: "Field", table: "LOT_ADDITIVE_LINKS", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 223, type: "Field", table: "LOT_ADDITIVE_LINKS", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 224, type: "Field", table: "LOT_ADDITIVE_LINKS", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 225, type: "Field", table: "LOT_ADDITIVE_LINKS", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 226, type: "Field", table: "LOT_ADDITIVE_LINKS", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 227, type: "Field", table: "LOT_ADDITIVE_LINKS", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 228, type: "Table", table: "PRODUCTION_LINKS", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 229, type: "Field", table: "PRODUCTION_LINKS", field: "Link_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 230, type: "Field", table: "PRODUCTION_LINKS", field: "From_Raw_Lot_ID", datatype: "Ref", ref: "RAW_LOTS", formula: "-"},
+            {id: 231, type: "Field", table: "PRODUCTION_LINKS", field: "From_Puree_Lot_ID", datatype: "Ref", ref: "PUREES", formula: "-"},
+            {id: 232, type: "Field", table: "PRODUCTION_LINKS", field: "From_Wine_Ferm_ID", datatype: "Ref", ref: "WINE_FERMENTATIONS", formula: "-"},
+            {id: 233, type: "Field", table: "PRODUCTION_LINKS", field: "From_Wine_ID", datatype: "Ref", ref: "WINES", formula: "-"},
+            {id: 234, type: "Field", table: "PRODUCTION_LINKS", field: "From_Vinegar_Ferm_ID", datatype: "Ref", ref: "VINEGAR_FERMENTATIONS", formula: "-"},
+            {id: 235, type: "Field", table: "PRODUCTION_LINKS", field: "From_Vinegar_ID", datatype: "Ref", ref: "VINEGARS", formula: "-"},
+            {id: 236, type: "Field", table: "PRODUCTION_LINKS", field: "To_Puree_Lot_ID", datatype: "Ref", ref: "PUREES", formula: "-"},
+            {id: 237, type: "Field", table: "PRODUCTION_LINKS", field: "To_Wine_Ferm_ID", datatype: "Ref", ref: "WINE_FERMENTATIONS", formula: "-"},
+            {id: 238, type: "Field", table: "PRODUCTION_LINKS", field: "To_Wine_ID", datatype: "Ref", ref: "WINES", formula: "-"},
+            {id: 239, type: "Field", table: "PRODUCTION_LINKS", field: "To_Vinegar_Ferm_ID", datatype: "Ref", ref: "VINEGAR_FERMENTATIONS", formula: "-"},
+            {id: 240, type: "Field", table: "PRODUCTION_LINKS", field: "To_Vinegar_ID", datatype: "Ref", ref: "VINEGARS", formula: "-"},
+            {id: 241, type: "Field", table: "PRODUCTION_LINKS", field: "To_Packaging_ID", datatype: "Ref", ref: "PACKAGINGS", formula: "-"},
+            {id: 242, type: "Field", table: "PRODUCTION_LINKS", field: "Quantity_Used", datatype: "Decimal", ref: "N/A", formula: "-"},
+            {id: 243, type: "Field", table: "PRODUCTION_LINKS", field: "Unit", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 244, type: "Field", table: "PRODUCTION_LINKS", field: "Responsible_Staff", datatype: "Ref", ref: "USER", formula: "-"},
+            {id: 245, type: "Field", table: "PRODUCTION_LINKS", field: "Usage_Date", datatype: "Date", ref: "N/A", formula: "TODAY()"},
+            {id: 246, type: "Field", table: "PRODUCTION_LINKS", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 247, type: "Field", table: "PRODUCTION_LINKS", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 248, type: "Field", table: "PRODUCTION_LINKS", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 249, type: "Field", table: "PRODUCTION_LINKS", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 250, type: "Field", table: "PRODUCTION_LINKS", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 251, type: "Field", table: "PRODUCTION_LINKS", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 252, type: "Table", table: "MAIN_MATERIAL_STOCKS", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 253, type: "Field", table: "MAIN_MATERIAL_STOCKS", field: "Lot_Type", datatype: "Enum", ref: "N/A", formula: "-"},
+            {id: 254, type: "Field", table: "MAIN_MATERIAL_STOCKS", field: "Lot_ID", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 255, type: "Field", table: "MAIN_MATERIAL_STOCKS", field: "Current_Stock_KG", datatype: "Decimal", ref: "N/A", formula: "0"},
+            {id: 256, type: "Field", table: "MAIN_MATERIAL_STOCKS", field: "Unit", datatype: "Enum", ref: "N/A", formula: "Kg"},
+            {id: 257, type: "Field", table: "MAIN_MATERIAL_STOCKS", field: "Expiry_Date", datatype: "Date", ref: "N/A", formula: "-"},
+            {id: 258, type: "Field", table: "MAIN_MATERIAL_STOCKS", field: "Last_Updated_Date", datatype: "Date", ref: "N/A", formula: "TODAY()"},
+            {id: 259, type: "Field", table: "MAIN_MATERIAL_STOCKS", field: "Notes", datatype: "LongText", ref: "N/A", formula: "-"},
+            {id: 260, type: "Field", table: "MAIN_MATERIAL_STOCKS", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 261, type: "Field", table: "MAIN_MATERIAL_STOCKS", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 262, type: "Field", table: "MAIN_MATERIAL_STOCKS", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 263, type: "Field", table: "MAIN_MATERIAL_STOCKS", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 264, type: "Field", table: "MAIN_MATERIAL_STOCKS", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 265, type: "Table", table: "USERS", field: "-", datatype: "-", ref: "N/A", formula: "-"},
+            {id: 266, type: "Field", table: "USERS", field: "User_ID", datatype: "Text (Key)", ref: "N/A", formula: "UNIQUEID()"},
+            {id: 267, type: "Field", table: "USERS", field: "Email", datatype: "Email (Label)", ref: "N/A", formula: "USEREMAIL()"},
+            {id: 268, type: "Field", table: "USERS", field: "Full_Name", datatype: "Text", ref: "N/A", formula: "-"},
+            {id: 269, type: "Field", table: "USERS", field: "User_Role", datatype: "Enum", ref: "N/A", formula: "-"},
+            {id: 270, type: "Field", table: "USERS", field: "Phone_Number", datatype: "Phone", ref: "N/A", formula: "-"},
+            {id: 271, type: "Field", table: "USERS", field: "Is_Active", datatype: "Yes/No", ref: "N/A", formula: "TRUE"},
+            {id: 272, type: "Field", table: "USERS", field: "Created_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 273, type: "Field", table: "USERS", field: "Created_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+            {id: 274, type: "Field", table: "USERS", field: "Modified_By", datatype: "Ref", ref: "USER", formula: "USEREMAIL()"},
+            {id: 275, type: "Field", table: "USERS", field: "Modified_Date", datatype: "DateTime", ref: "N/A", formula: "NOW()"},
+        ];
+        
+        const tableBody = document.getElementById('schema-table-body');
+        const searchInput = document.getElementById('schema-search');
+        const noResults = document.getElementById('no-results');
+
+        function renderTable(data) {
+            tableBody.innerHTML = '';
+            if (data.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
+            
+            data.forEach(item => {
+                const isTable = item.type === 'Table';
+                const formulaText = item.formula.replace(/"/g, "'"); // Use single quotes for presentation if needed
+                const refText = item.ref === 'USER' ? `<i data-lucide="user" class="inline-block h-4 w-4 mr-1"></i> USER` : item.ref;
+                
+                const row = document.createElement('tr');
+                row.className = isTable 
+                    ? 'bg-gray-100 font-bold text-teal-700 hover:bg-teal-200/50' 
+                    : 'hover:bg-gray-50';
+                
+                row.innerHTML = `
+                    <td class="px-3 py-1 whitespace-nowrap text-xs">${item.id}</td>
+                    <td class="px-6 py-1 whitespace-nowrap text-sm">${item.table}</td>
+                    <td class="px-6 py-1 ${isTable ? 'text-xs italic' : 'text-gray-900'}">${isTable ? '(Table Definition)' : item.field}</td>
+                    <td class="px-6 py-1 whitespace-nowrap text-xs text-blue-600">${item.datatype.replace(/ \(.*\)/, '')}</td>
+                    <td class="px-6 py-1 whitespace-nowrap text-xs text-teal-600">${item.datatype.includes('Ref') ? refText : 'N/A'}</td>
+                    <td class="px-6 py-1 whitespace-nowrap text-xs text-gray-500">${formulaText !== '-' ? formulaText : ''}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+            // Re-render lucide icons after injecting rows
+            lucide.createIcons(); 
+        }
+
+        function filterTable() {
+            const query = searchInput.value.toLowerCase();
+            const filteredData = schemaData.filter(item => 
+                item.table.toLowerCase().includes(query) || 
+                item.field.toLowerCase().includes(query) ||
+                item.ref.toLowerCase().includes(query)
+            );
+            renderTable(filteredData);
+        }
+
+        // Initial render
+        renderTable(schemaData);
+        
+        // Search functionality
+        searchInput.addEventListener('input', filterTable);
+
+        // Toggle functionality
+        const toggleBtn = document.getElementById('toggle-schema-btn');
+        const container = document.getElementById('schema-data-container');
+        const toggleIcon = document.getElementById('toggle-icon');
+
+        toggleBtn.addEventListener('click', () => {
+            const isHidden = container.classList.contains('hidden');
+            if (isHidden) {
+                container.classList.remove('hidden');
+                toggleIcon.classList.add('rotate-180');
+            } else {
+                container.classList.add('hidden');
+                toggleIcon.classList.remove('rotate-180');
+            }
+        });
+
+    </script>
+</body>
+</html>
