@@ -81,7 +81,7 @@
             color: #059669; /* Green for REF fields */
             font-weight: 600;
         }
-        /* UI Mockup Specific Styles */
+        /* UI Mockup Specific Styles (Omitted for brevity) */
         .ui-mockup-frame {
             background-color: #333;
             border-radius: 12px;
@@ -359,8 +359,6 @@ AND(ISBLANK([From_Raw_Lot_ID]), ISBLANK([From_Puree_Lot_ID]), ...)</code></pre>
 
             </div>
         </div>
-        <hr class="my-10 border-gray-300">
-
         <div class="mb-12">
             <h2 class="text-3xl font-bold section-title mb-4 flex items-center">
                 <i data-lucide="table" class="h-8 w-8 mr-2"></i>
@@ -386,7 +384,7 @@ AND(ISBLANK([From_Raw_Lot_ID]), ISBLANK([From_Puree_Lot_ID]), ...)</code></pre>
                         <tr><td>FARMS</td><td>`Farm_ID`</td><td>N/A</td><td>Created/Modified</td></tr>
                         <tr><td>TRANSPORTERS</td><td>`Transporter_ID`</td><td>N/A</td><td>Created/Modified</td></tr>
                         <tr><td>VEHICLES</td><td>`Vehicle_ID`</td><td>N/A</td><td>Created/Modified</td></tr>
-                        <tr><td>TRANSPORTATIONS</td><td>`Transportation_ID`</td><td class="ref-field">`Transporter_ID` $\rightarrow$ `TRANSPORTERS`, `Vehicle_ID` $\rightarrow$ `VEHICLES`</td><td>Created/Modified</td></tr>
+                        <tr><td>TRANSPORTATIONS</td><td>`Transportation_ID`</td><td class="ref-field">`Transporter_ID` -> `TRANSPORTERS`, `Vehicle_ID` -> `VEHICLES`</td><td>Created/Modified</td></tr>
                     </tbody>
                 </table>
 
@@ -401,14 +399,14 @@ AND(ISBLANK([From_Raw_Lot_ID]), ISBLANK([From_Puree_Lot_ID]), ...)</code></pre>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>FRUITS</td><td>`Fruit_Inbound_ID`</td><td class="ref-field">`Farm_ID` $\rightarrow$ `FARMS`</td><td>Created/Modified</td></tr>
-                        <tr><td>RAW_LOTS</td><td>`Raw_Lot_ID`</td><td class="ref-field">`Transportation_ID` $\rightarrow$ `TRANSPORTATIONS`, `Fruit_Inbound_ID` $\rightarrow$ `FRUITS`</td><td>Created/Modified</td></tr>
-                        <tr><td>PUREES</td><td>`Puree_Lot_ID`</td><td class="ref-field">`Raw_Lot_ID` $\rightarrow$ `RAW_LOTS`</td><td>Created/Modified</td></tr>
-                        <tr><td>WINE_FERMENTATIONS</td><td>`Wine_Fermentation_ID`</td><td class="ref-field">`Puree_Lot_ID` $\rightarrow$ `PUREES`</td><td>Created/Modified</td></tr>
-                        <tr><td>WINES</td><td>`Wine_Lot_ID`</td><td class="ref-field">`Fermentation_ID` $\rightarrow$ `WINE_FERMENTATIONS`</td><td>Created/Modified</td></tr>
-                        <tr><td>VINEGAR_FERMENTATIONS</td><td>`Vinegar_Fermentation_ID`</td><td class="ref-field">`Wine_Lot_ID` $\rightarrow$ `WINES`</td><td>Created/Modified</td></tr>
-                        <tr><td>VINEGARS</td><td>`Vinegar_Stock_ID`</td><td class="ref-field">`Fermentation_ID` $\rightarrow$ `VINEGAR_FERMENTATIONS`</td><td>Created/Modified</td></tr>
-                        <tr><td>PACKAGINGS</td><td>`Packaging_Lot_ID`</td><td class="ref-field">`Vinegar_Stock_ID` $\rightarrow$ `VINEGARS`, `Product_SKU_ID` $\rightarrow$ `PRODUCT_SKUS`</td><td>Created/Modified</td></tr>
+                        <tr><td>FRUITS</td><td>`Fruit_Inbound_ID`</td><td class="ref-field">`Farm_ID` -> `FARMS`</td><td>Created/Modified</td></tr>
+                        <tr><td>RAW_LOTS</td><td>`Raw_Lot_ID`</td><td class="ref-field">`Transportation_ID` -> `TRANSPORTATIONS`, `Fruit_Inbound_ID` -> `FRUITS`</td><td>Created/Modified</td></tr>
+                        <tr><td>PUREES</td><td>`Puree_Lot_ID`</td><td class="ref-field">`Raw_Lot_ID` -> `RAW_LOTS`</td><td>Created/Modified</td></tr>
+                        <tr><td>WINE_FERMENTATIONS</td><td>`Wine_Fermentation_ID`</td><td class="ref-field">`Puree_Lot_ID` -> `PUREES`</td><td>Created/Modified</td></tr>
+                        <tr><td>WINES</td><td>`Wine_Lot_ID`</td><td class="ref-field">`Fermentation_ID` -> `WINE_FERMENTATIONS`</td><td>Created/Modified</td></tr>
+                        <tr><td>VINEGAR_FERMENTATIONS</td><td>`Vinegar_Fermentation_ID`</td><td class="ref-field">`Wine_Lot_ID` -> `WINES`</td><td>Created/Modified</td></tr>
+                        <tr><td>VINEGARS</td><td>`Vinegar_Stock_ID`</td><td class="ref-field">`Fermentation_ID` -> `VINEGAR_FERMENTATIONS`</td><td>Created/Modified</td></tr>
+                        <tr><td>PACKAGINGS</td><td>`Packaging_Lot_ID`</td><td class="ref-field">`Vinegar_Stock_ID` -> `VINEGARS`, `Product_SKU_ID` -> `PRODUCT_SKUS`</td><td>Created/Modified</td></tr>
                     </tbody>
                 </table>
                 
@@ -424,7 +422,7 @@ AND(ISBLANK([From_Raw_Lot_ID]), ISBLANK([From_Puree_Lot_ID]), ...)</code></pre>
                     </thead>
                     <tbody>
                         <tr><td>PRODUCT_SKUS</td><td>`Product_SKU_ID`</td><td>N/A</td><td>Created/Modified</td></tr>
-                        <tr><td>LOT_ADDITIVE_LINKS</td><td>`Link_ID`</td><td class="ref-field">`Additive_ID` $\rightarrow$ `FOOD_ADDITIVES`, (Conditional Lot Refs)</td><td>Created/Modified</td></tr>
+                        <tr><td>LOT_ADDITIVE_LINKS</td><td>`Link_ID`</td><td class="ref-field">`Additive_ID` -> `FOOD_ADDITIVES`, (Conditional Lot Refs)</td><td>Created/Modified</td></tr>
                         <tr><td>PRODUCTION_LINKS</td><td>`Link_ID`</td><td class="ref-field">6 x From_Lot_ID Refs, 6 x To_Lot_ID Refs</td><td>Created/Modified</td></tr>
                     </tbody>
                 </table>
