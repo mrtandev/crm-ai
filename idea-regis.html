@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แบบฟอร์มลงทะเบียนสมาชิก IDEA (FINAL STABLE)</title>
+    <title>แบบฟอร์มลงทะเบียนสมาชิก IDEA (FINAL PRODUCTION)</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;700;800&display=swap" rel="stylesheet">
     
     <style>
         /* Base Styles */
@@ -28,6 +28,14 @@
         .text-innovation-color { color: #d84340; }
         .text-digital-color { color: #00008B; }
 
+        /* FIX: ปรับขนาด Font ให้โดดเด่นขึ้น (Font Restoration) */
+        .header-tagline { 
+            font-size: 1.1rem; /* ใหญ่กว่า small ปกติ */
+            font-weight: 500; 
+            margin-top: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+
         .btn-submit {
             background-color: #1e88e5; 
             border-color: #1e88e5;
@@ -43,10 +51,31 @@
             align-items: center;
             justify-content: center;
         }
-        /* Debug Toggle Button Style */
-        .btn-debug-toggle {
-            font-size: 0.75rem;
-            padding: 0.5rem 0.8rem;
+        
+        /* FIX: DEBUG TOGGLE ALIGNMENT */
+        .debug-switch-wrapper {
+            /* ใช้ Flexbox เพื่อจัดปุ่มให้อยู่ในแนวเดียวกันและอยู่ตรงกลาง */
+            display: flex;
+            align-items: center; 
+            height: 100%; /* ให้มีความสูงเท่าปุ่มอื่น ๆ */
+            padding: 0.75rem 1.25rem; /* Padding ที่เข้ากับปุ่ม btn-lg */
+            border: 1px solid #ced4da;
+            border-radius: 0.3rem;
+            transition: all 0.2s;
+        }
+        .debug-switch-wrapper:hover {
+            background-color: #f8f9fa;
+            cursor: pointer;
+        }
+        .form-check-input {
+            cursor: pointer;
+        }
+        .form-check-input:checked ~ #debug-label-text {
+            color: #dc3545; /* Red when checked/ON */
+            font-weight: 700;
+        }
+        .form-check-input:not(:checked) ~ #debug-label-text {
+            color: #6c757d; /* Gray when unchecked/OFF */
         }
     </style>
 </head>
@@ -57,7 +86,7 @@
             <div class="text-center mb-4">
                 <img src="https://idea.ass.in.th/assets/idea-logo.png" alt="โลโก้สมาคม IDEA" class="mx-auto mb-2 object-contain logo-size">
                 <h3 class="h4 fw-bold main-title-blue">สมัครสมาชิกสมาคม IDEA</h3> 
-                <p class="text-muted small">
+                <p class="text-muted header-tagline">
                     <span class="text-innovation-color">I</span>nnovation and 
                     <span class="text-digital-color">D</span>igital 
                     <span class="text-innovation-color">E</span>conomy 
@@ -155,11 +184,11 @@
                                 <div class="col-md-6">
                                     <label for="cf_899" class="form-label small fw-bold">ประเภทสมาชิก <span class="text-danger">*</span></label>
                                     <select id="cf_899" name="member_type" data-label="label:Member+Type" required class="form-select">
-                                        <option value="สามัญ">สมาชิก สามัญ</option>
-                                        <option value="วิสามัญ">สมาชิก วิสามัญ</option>
+                                        <option value="สามัญ">สามัญ</option>
+                                        <option value="วิสามัญ">วิสามัญ</option>
                                         <option value="ที่ปรึกษา">ที่ปรึกษา</option>
-                                        <option value="สมทบ">สมาชิก สมทบ</option>
-                                        <option value="ทั่วไป">สมาชิก ทั่วไป</option>
+                                        <option value="สมทบ">สมทบ</option>
+                                        <option value="ทั่วไป">ทั่วไป</option>
                                     </select>
                                 </div>
                             </div>
@@ -265,9 +294,12 @@
                     <button type="button" id="submitBtn" class="btn btn-submit text-white btn-lg px-4">
                         <i class="fas fa-save me-2"></i> บันทึกข้อมูล
                     </button>
-                    <button type="button" id="debugToggleBtn" class="btn btn-debug-toggle btn-outline-danger">
-                        <i class="fas fa-bug me-1"></i> สลับโหมด DEBUG
-                    </button>
+                    
+                    <label id="debugToggleBtnWrapper" class="debug-switch-container">
+                        <input type="checkbox" id="debug-checkbox" class="form-check-input me-2">
+                        <span id="debug-label-text" class="debug-label fw-bold">เปิด DEBUG</span>
+                    </label>
+
                     <a href="https://idea.ass.in.th/" class="btn btn-outline-secondary btn-lg btn-link-style">
                         <i class="fas fa-arrow-left me-2"></i> กลับสู่ Dashboard
                     </a>
@@ -289,8 +321,9 @@
             // DEBUG MODE & TOGGLE LOGIC
             // ===============================================================
             const DEBUG_KEY = 'v_form_debug_mode';
-            const debugToggleBtn = document.getElementById('debugToggleBtn');
-            const debugStatusText = document.getElementById('debug-status');
+            const debugToggleBtn = document.getElementById('debug-checkbox');
+            const debugLabelText = document.getElementById('debug-label-text');
+            const submitButton = document.getElementById("submitBtn");
             
             function isDebugMode() {
                 return localStorage.getItem(DEBUG_KEY) === 'true';
@@ -298,30 +331,33 @@
 
             function updateDebugStatus() {
                 const mode = isDebugMode();
-                debugToggleBtn.classList.toggle('btn-outline-danger', !mode);
-                debugToggleBtn.classList.toggle('btn-danger', mode);
-                debugToggleBtn.textContent = mode ? 'ปิด DEBUG' : 'เปิด DEBUG';
-                debugStatusText.textContent = mode ? '🚩 **DEBUG MODE IS ON**' : '';
+                
+                // Update Checkbox State
+                debugToggleBtn.checked = mode;
 
-                // ปรับปุ่ม Submit
-                const submitButton = document.getElementById("submitBtn");
+                // Update Label Text and Button Text
+                debugLabelText.textContent = mode ? 'ปิด DEBUG' : 'เปิด DEBUG';
                 submitButton.textContent = mode ? 'บันทึกข้อมูล (DEBUG ON)' : 'บันทึกข้อมูล';
-                submitButton.classList.toggle('btn-submit-debug', mode);
+                
+                // console.info(`Debug Status: ${mode ? 'ON' : 'OFF'}`);
             }
 
             // Load initial status
             if (localStorage.getItem(DEBUG_KEY) === null) {
                 localStorage.setItem(DEBUG_KEY, 'false'); // Default to OFF
             }
-            updateDebugStatus();
+            updateDebugStatus(); // Initial setup
 
-            debugToggleBtn.addEventListener('click', () => {
-                const newStatus = !isDebugMode();
-                localStorage.setItem(DEBUG_KEY, newStatus);
+            // Listener for the new Checkbox Switch
+            debugToggleBtn.addEventListener('change', () => {
+                const newStatus = debugToggleBtn.checked;
+                localStorage.setItem(DEBUG_KEY, newStatus ? 'true' : 'false');
                 updateDebugStatus();
                 if (newStatus) {
+                    console.warn("⚠️ DEBUG MODE เปิดอยู่: ข้อมูลจะไม่ถูกส่งไปยัง vTiger (จะแสดงใน Console)");
                     alert("⚠️ เปิด DEBUG MODE แล้ว: เมื่อกดบันทึกข้อมูล ข้อมูลจะถูกแสดงใน Console (F12) และไม่ถูกส่งจริง");
                 } else {
+                    console.info("✅ PRODUCTION MODE เปิดอยู่: ข้อมูลจะถูกส่งไปยัง vTiger");
                     alert("✅ ปิด DEBUG MODE แล้ว: เมื่อกดบันทึกข้อมูล ระบบจะส่งข้อมูลไปยัง vTiger ทันที");
                 }
             });
@@ -363,7 +399,6 @@
             // 🛑 FINAL SUBMIT LOGIC (ถูกเรียกเมื่อคลิกปุ่ม)
             // -----------------------------------------------------------------
             const form = document.getElementById("__vtigerWebForm");
-            const submitButton = document.getElementById("submitBtn");
             const formActionUrl = "https://crm.idea.or.th/modules/Webforms/capture.php";
             const redirectUrl = document.querySelector('input[name="redirecturl"]').value;
 
@@ -430,7 +465,7 @@
                       })
                       .catch(error => {
                           console.error('Fetch Error:', error);
-                          alert('เกิดข้อผิดพลาดในการส่งข้อมูล: กรุณาตรวจสอบ Console (F12) หากยังพบปัญหา'); // FIX: ลบข้อความแจ้งปัญหา Local File Security
+                          alert('เกิดข้อผิดพลาดในการส่งข้อมูล: กรุณาตรวจสอบ Console (F12) หากยังพบปัญหา');
                       });
                 }
             });
