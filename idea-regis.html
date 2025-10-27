@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แบบฟอร์มลงทะเบียนสมาชิก IDEA (FINAL PRODUCTION)</title>
+    <title>แบบฟอร์มลงทะเบียนสมาชิก IDEA</title>
     
     <link rel="icon" href="https://crm.idea.or.th/layouts/v7/skins/images/favicon.ico" type="image/x-icon">
     
@@ -61,9 +61,11 @@
             justify-content: center;
         }
         
-        /* FIX: DEBUG TOGGLE ALIGNMENT */
-        .debug-switch-container {
-            /* ทำให้สูงเท่าปุ่มปกติ */
+        /* ************************************************** */
+        /* FIX: DEBUG TOGGLE ALIGNMENT & STYLE */
+        /* ************************************************** */
+        .debug-switch-wrapper {
+            /* ทำให้มีความสูงเท่าปุ่ม Submit/Dashboard */
             height: 47px; 
             display: flex;
             align-items: center; 
@@ -73,20 +75,24 @@
             transition: all 0.2s;
             line-height: normal;
         }
-        .debug-switch-container:hover {
+        .debug-switch-wrapper:hover {
             background-color: #f8f9fa;
             cursor: pointer;
         }
-        .form-check-input {
+        /* ใช้ Bootstrap Switch Style */
+        .form-switch .form-check-input {
+            width: 2.2rem;
+            height: 1.2rem;
             cursor: pointer;
-            margin-top: 0;
-            margin-right: 0.5rem;
         }
-        .form-check-input:checked ~ #debug-label-text {
+        .debug-label-text {
+            font-size: 1rem; /* ทำให้ตัวหนังสือใหญ่ขึ้น */
+        }
+        .form-check-input:checked ~ .debug-label-text {
             color: #dc3545; /* Red when checked/ON */
             font-weight: 700;
         }
-        .form-check-input:not(:checked) ~ #debug-label-text {
+        .form-check-input:not(:checked) ~ .debug-label-text {
             color: #6c757d; /* Gray when unchecked/OFF */
         }
     </style>
@@ -366,7 +372,7 @@
                 localStorage.setItem(DEBUG_KEY, newStatus ? 'true' : 'false');
                 updateDebugStatus();
                 if (newStatus) {
-                    console.warn("⚠️ DEBUG MODE เปิดอยู่: ข้อมูลจะไม่ถูกส่งไปยัง vTiger (จะแสดงใน Console)");
+                    console.warn("⚠️ เปิด DEBUG MODE แล้ว: ข้อมูลจะไม่ถูกส่งไปยัง vTiger (จะแสดงใน Console)");
                     alert("⚠️ เปิด DEBUG MODE แล้ว: เมื่อกดบันทึกข้อมูล ข้อมูลจะถูกแสดงใน Console (F12) และไม่ถูกส่งจริง");
                 } else {
                     console.info("✅ PRODUCTION MODE เปิดอยู่: ข้อมูลจะถูกส่งไปยัง vTiger");
@@ -380,7 +386,7 @@
             // -----------------------------------------------------------------
             function debugSubmit(formData) {
                 let debugData = [];
-                const formActionUrl = "https://crm.idea.or.th/modules/Webforms/capture.php"; // ใช้ URL จริงสำหรับแสดงผล
+                const formActionUrl = "https://crm.idea.or.th/modules/Webforms/capture.php"; 
 
                 for (const pair of formData.entries()) {
                     const [key, value] = pair;
