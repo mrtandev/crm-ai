@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vtiger Web Form Stylizer Tool</title>
+    <title>Vtiger Web Form Stylizer Tool (Simplified)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -12,11 +12,32 @@
         .header-gradient { background: linear-gradient(135deg, #1f6fe5 0%, #00d4ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .subheader-gradient { background: linear-gradient(90deg, #10b981 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .card { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
-        .styled-preview-form input:not([type="hidden"]), .styled-preview-form select, .styled-preview-form textarea {
-            display: block !important; width: 100% !important; padding: 0.5rem !important; margin-top: 0.25rem !important; border-radius: 0.375rem !important; border-width: 1px !important; border-color: #d1d5db !important; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+        
+        /* Base styling for form fields in the preview */
+        .styled-preview-form input:not([type="hidden"]), 
+        .styled-preview-form select, 
+        .styled-preview-form textarea {
+            display: block !important;
+            width: 100% !important;
+            padding: 0.5rem !important;
+            margin-top: 0.25rem !important;
+            border-radius: 0.375rem !important;
+            border-width: 1px !important;
+            border-color: #d1d5db !important;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
         }
-        .styled-preview-form label { display: block !important; font-size: 0.875rem !important; font-weight: 500 !important; color: #4b5563 !important; margin-bottom: 0.25rem !important; }
-        .styled-preview-form input[type="submit"] { @apply w-full py-2 px-4 border border-transparent rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-md transition duration-150; }
+        .styled-preview-form label {
+            display: block !important; 
+            font-size: 0.875rem !important;
+            font-weight: 500 !important;
+            color: #4b5563 !important;
+            margin-bottom: 0.25rem !important;
+        }
+        .styled-preview-form input[type="submit"] {
+            @apply w-full py-2 px-4 border border-transparent rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-md transition duration-150;
+        }
+
+        /* ซ่อนส่วนแสดงผลทั้งหมดตามค่าเริ่มต้น */
         .hidden-on-start { display: none; }
     </style>
 </head>
@@ -24,8 +45,12 @@
     <div class="max-w-4xl mx-auto bg-white rounded-3xl overflow-hidden shadow-2xl">
         
         <header class="p-8 text-center bg-gray-50 border-b border-gray-100">
-            <h1 class="text-4xl sm:text-5xl font-extrabold mb-2 header-gradient">เครื่องมือจัด Style Vtiger Web Form</h1>
-            <p class="text-gray-600 text-lg">แปลงโค้ด vTiger เป็น Form สวยงามด้วย Tailwind CSS (พร้อมใช้)</p>
+            <h1 class="text-4xl sm:text-5xl font-extrabold mb-2 header-gradient">
+                เครื่องมือจัด Style Vtiger Web Form
+            </h1>
+            <p class="text-gray-600 text-lg">
+                แปลงโค้ด vTiger เป็น Form สวยงามด้วย Tailwind CSS (พร้อมใช้)
+            </p>
         </header>
 
         <div class="text-center p-4 border-b border-gray-100">
@@ -40,14 +65,18 @@
             
             <section class="card p-6 bg-white rounded-xl border border-gray-200">
                 <h2 class="text-2xl font-bold mb-4 subheader-gradient flex items-center">
-                    <i data-lucide="upload" class="w-5 h-5 mr-2 text-green-500"></i> ขั้นตอนที่ 1: วางโค้ด HTML จาก Vtiger
+                    <i data-lucide="upload" class="w-5 h-5 mr-2 text-green-500"></i>
+                    ขั้นตอนที่ 1: วางโค้ด HTML จาก Vtiger
                 </h2>
                 <p class="text-gray-700 mb-3">คัดลอกโค้ด HTML Form **ทั้งหมด** ที่ได้จาก Vtiger Web Form แล้ววางลงในช่องด้านล่าง</p>
+                
                 <div class="mb-4">
                     <textarea id="vtiger-code-input" rows="7" class="w-full p-3 border rounded-md font-mono text-sm" placeholder="<meta http-equiv='...'><form id='...' action='...' method='post'>...</form><script>...</script>"></textarea>
                 </div>
+
                 <button id="activate-form-btn" class="w-full py-2 px-4 border border-transparent rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-lg transition duration-150">
-                    <i data-lucide="zap" class="w-5 h-5 inline mr-1"></i> ขั้นตอนที่ 2: จัด Style และสร้างโค้ดสำเร็จรูป
+                    <i data-lucide="zap" class="w-5 h-5 inline mr-1"></i>
+                    ขั้นตอนที่ 2: จัด Style และสร้างโค้ดสำเร็จรูป
                 </button>
             </section>
 
@@ -55,20 +84,24 @@
 
                 <section class="card p-6 bg-white rounded-xl border border-gray-200">
                     <h2 class="text-2xl font-bold mb-4 subheader-gradient flex items-center">
-                        <i data-lucide="eye" class="w-5 h-5 mr-2 text-purple-500"></i> ขั้นตอนที่ 3: ตัวอย่าง Form ที่จัด Style แล้ว (Preview)
+                        <i data-lucide="eye" class="w-5 h-5 mr-2 text-purple-500"></i>
+                        ขั้นตอนที่ 3: ตัวอย่าง Form ที่จัด Style แล้ว (Preview)
                     </h2>
+
                     <div id="form-preview-area" class="p-6 border rounded-xl bg-gray-50 min-h-[150px] flex items-center justify-center text-gray-400">
                         </div>
                 </section>
 
                 <section class="card p-6 bg-white rounded-xl border border-gray-200">
                     <h2 class="text-2xl font-bold mb-4 subheader-gradient flex items-center">
-                        <i data-lucide="download" class="w-5 h-5 mr-2 text-red-500"></i> ขั้นตอนที่ 4: โค้ด HTML สุดท้ายที่พร้อมใช้
+                        <i data-lucide="download" class="w-5 h-5 mr-2 text-red-500"></i>
+                        ขั้นตอนที่ 4: โค้ด HTML สุดท้ายที่พร้อมใช้
                     </h2>
                     <p class="text-gray-700 mb-3">คัดลอกโค้ดทั้งหมดด้านล่างนี้ไปฝังในเว็บไซต์ของคุณ หรือกดปุ่มดาวน์โหลดเพื่อบันทึกเป็นไฟล์ .html</p>
                     <textarea id="final-code-output" rows="10" class="w-full p-3 border rounded-md font-mono text-xs bg-gray-100" readonly>โค้ดสุดท้ายจะปรากฏที่นี่...</textarea>
                     <button id="download-html-btn" class="mt-4 w-full py-2 px-4 border border-transparent rounded-lg font-semibold text-white bg-teal-600 hover:bg-teal-700 shadow-md transition duration-150" disabled>
-                        <i data-lucide="download-cloud" class="w-5 h-5 inline mr-1"></i> ดาวน์โหลดไฟล์ HTML สำเร็จรูป
+                        <i data-lucide="download-cloud" class="w-5 h-5 inline mr-1"></i>
+                        ดาวน์โหลดไฟล์ HTML สำเร็จรูป
                     </button>
                 </section>
             </div>
@@ -76,6 +109,171 @@
         </main>
     </div>
 
-    <script src="./script.js"></script>
+    <script>
+        // ** ฟังก์ชันดาวน์โหลดข้อความใน textarea เป็นไฟล์ HTML **
+        function downloadHtmlFile() {
+            const finalCodeOutput = document.getElementById('final-code-output');
+            const fileContent = finalCodeOutput.value;
+            const fileName = 'vtiger_styled_form.html';
+
+            if (!fileContent || finalCodeOutput.value.includes('โค้ดสุดท้ายจะปรากฏที่นี่')) {
+                alert('⚠️ กรุณาสร้างโค้ด HTML ก่อนทำการดาวน์โหลด');
+                return;
+            }
+
+            const blob = new Blob([fileContent], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('🚀 ดาวน์โหลดไฟล์ ' + fileName + ' สำเร็จแล้ว!');
+        }
+
+        // ** Event Listeners **
+        window.addEventListener('load', function() {
+            lucide.createIcons();
+            
+            const activateBtn = document.getElementById('activate-form-btn');
+            const downloadBtn = document.getElementById('download-html-btn');
+            const outputContainer = document.getElementById('output-container');
+            
+            activateBtn.addEventListener('click', function() {
+                const vtigerCode = document.getElementById('vtiger-code-input').value;
+                const previewArea = document.getElementById('form-preview-area');
+                const finalCodeOutput = document.getElementById('final-code-output');
+
+                if (!vtigerCode.includes('<form')) {
+                    previewArea.innerHTML = '<p class="text-red-500">❌ กรุณาวางโค้ด HTML Form ที่คัดลอกมาจาก vTiger (ต้องมีแท็ก &lt;form&gt;)</p>';
+                    finalCodeOutput.value = 'โค้ดสุดท้ายจะปรากฏที่นี่...';
+                    downloadBtn.disabled = true;
+                    outputContainer.classList.remove('hidden-on-start');
+                    return;
+                }
+
+                try {
+                    // --- 1. SIMPLIFIED PARSING: ดึง Script และ Form แยกออกมา ---
+                    const scriptMatch = vtigerCode.match(/<script\s*type=["']text\/javascript["']\s*>([\s\S]*?)<\/script>/i);
+                    const validationScript = scriptMatch ? scriptMatch[0] : '';
+                    const formOnlyCode = vtigerCode.replace(validationScript, '').trim();
+
+                    // --- 2. TRANSFORMATION LOGIC: ใช้ DOM API ในการจัดการโค้ด ---
+                    const tempDiv = document.createElement('div');
+                    // ลบ meta, table และ script ที่อาจจะตกค้าง
+                    tempDiv.innerHTML = formOnlyCode
+                        .replace(/<meta\s+[^>]*>/gi, '') 
+                        .replace(/<\/?table>/gi, '').replace(/<\/?tbody>/gi, '') 
+                        .replace(/<\/?tr>/gi, '').replace(/<\/?td>/gi, '')
+                        .trim();
+                    
+                    const form = tempDiv.querySelector('form');
+                    
+                    if (!form) throw new Error("ไม่พบ Form Tag ในโค้ด Vtiger");
+
+                    form.classList.add('styled-preview-form', 'space-y-4'); 
+
+                    const gridContainer = document.createElement('div');
+                    gridContainer.classList.add('grid', 'grid-cols-1', 'sm:grid-cols-2', 'gap-4');
+                    
+                    let elementsToKeep = [];
+                    let submitButton = null;
+
+                    // A. จัดการ Hidden Fields และปุ่ม Submit ก่อน
+                    Array.from(form.querySelectorAll('input, select, textarea')).forEach(el => {
+                        if (el.type === 'hidden') {
+                            elementsToKeep.push(el);
+                        } else if (el.type === 'submit') {
+                            el.value = 'บันทึกข้อมูลและสร้าง Lead'; 
+                            el.classList.add('form-submit-button');
+                            submitButton = el; 
+                        } else {
+                            // B. นำ Fields ที่เหลือมาจัด Grid
+                            const wrapper = document.createElement('div');
+                            wrapper.classList.add('col-span-1', 'space-y-1');
+                            
+                            // หา Label ที่ถูกต้อง (ใน Vtiger โค้ดที่ใส่มา Label อยู่ใน td ถัดไป)
+                            // ใน Form Code ที่คุณให้มา, Label อยู่ใน tag <label>
+                            let labelNode = null;
+                            const labelText = el.getAttribute('data-label') || el.previousElementSibling?.textContent || el.closest('td')?.previousElementSibling?.querySelector('label')?.textContent || '';
+
+                            if (labelText) {
+                                labelNode = document.createElement('label');
+                                labelNode.textContent = labelText.trim().replace(/\*$/, '');
+                            }
+                            
+                            if (labelNode) wrapper.appendChild(labelNode);
+                            wrapper.appendChild(el);
+                            gridContainer.appendChild(wrapper);
+                        }
+                    });
+
+                    // C. ประกอบ Form ใหม่
+                    form.innerHTML = '';
+                    elementsToKeep.forEach(node => form.appendChild(node));
+                    form.appendChild(gridContainer);
+                    if (submitButton) {
+                        const submitWrapper = document.createElement('div');
+                        submitWrapper.classList.add('pt-6', 'sm:col-span-2');
+                        submitWrapper.appendChild(submitButton);
+                        form.appendChild(submitWrapper);
+                    }
+                    
+                    const styledFormHtml = form.outerHTML;
+                    const validationScriptContent = validationScript.replace(/<\/?script[^>]*>/gi, '').trim();
+
+                    // --- 3. GENERATE FINAL HTML ---
+                    const finalHtml = `
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Form สมาชิก Vtiger - จัด Style ด้วย Tailwind</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .styled-preview-form { max-width: 600px; margin-left: auto; margin-right: auto; }
+        .styled-preview-form .grid { display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 1rem; }
+        @media (min-width: 640px) { .styled-preview-form .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        .styled-preview-form input:not([type="hidden"]), .styled-preview-form select, .styled-preview-form textarea { border-width: 1px; border-color: #d1d5db; border-radius: 0.375rem; padding: 0.5rem; margin-top: 0.25rem; display: block; width: 100%; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .styled-preview-form label { display: block; font-size: 0.875rem; font-weight: 500; color: #1f2937; margin-bottom: 0.25rem; }
+        .styled-preview-form input[type="submit"] { width: 100%; padding-top: 0.5rem; padding-bottom: 0.5rem; border-width: 1px; border-color: transparent; border-radius: 0.5rem; font-weight: 600; color: white; background-color: #2563eb; cursor: pointer; }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-2xl">
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-6 border-b pb-2">แบบฟอร์มลงทะเบียนสมาชิก</h1>
+        <p class="mb-6 text-gray-600">กรุณากรอกข้อมูลเพื่อลงทะเบียน โดยข้อมูลจะถูกบันทึกเข้าสู่ระบบ CRM ทันที</p>
+        ${styledFormHtml}
+    </div>
+    <script type="text/javascript">${validationScriptContent}</script>
+</body>
+</html>`;
+                    
+                    // --- 4. OUTPUT RESULTS ---
+                    previewArea.innerHTML = styledFormHtml;
+                    previewArea.classList.remove('items-center', 'justify-center', 'text-gray-400');
+                    finalCodeOutput.value = finalHtml.trim();
+                    downloadBtn.disabled = false;
+                    outputContainer.classList.remove('hidden-on-start');
+
+                } catch (error) {
+                    previewArea.innerHTML = `<p class="text-red-500">❌ เกิดข้อผิดพลาดในการประมวลผลโค้ด: ${error.message}</p>`;
+                    finalCodeOutput.value = 'โค้ดสุดท้ายจะปรากฏที่นี่...';
+                    downloadBtn.disabled = true;
+                    outputContainer.classList.remove('hidden-on-start');
+                    console.error("Styling Error:", error);
+                }
+            });
+            
+            downloadBtn.addEventListener('click', downloadHtmlFile);
+        });
+    </script>
 </body>
 </html>
