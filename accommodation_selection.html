@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตัวเลือกที่พักสำหรับผู้เข้าร่วมอบรม</title>
+    <!-- Load Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font import for better Thai display */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+Thai:wght@100..900&display=swap');
+        body {
+            font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+            background-color: #f7f9fb;
+        }
+        /* Style for map links */
+        .map-link {
+            transition: color 0.2s, transform 0.2s;
+        }
+        .map-link:hover {
+            color: #10b981; /* emerald-500 */
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden">
+        
+        <!-- Header -->
+        <header class="bg-emerald-600 p-6 text-white text-center rounded-t-2xl">
+            <!-- Project Image Banner -->
+            <img src="https://lh3.googleusercontent.com/d/1E7Z5y-T2KR0sfkfrBMNbd_QAILy29a0F" 
+                 alt="รูปภาพโครงการพัฒนากำลังคนสมรรถนะสูงฯ" 
+                 class="w-full h-auto max-h-60 object-cover rounded-lg mb-4 mx-auto shadow-lg border-2 border-white">
+            
+            <h1 class="text-xl sm:text-2xl font-extrabold mb-1">
+                ตัวเลือกที่พักสำหรับผู้เข้าร่วมอบรม
+            </h1>
+            <p class="text-sm sm:text-lg font-light mt-2 break-words">
+                ชื่อโครงการ: โครงการพัฒนากำลังคนสมรรถนะสูงด้านปัญญาประดิษฐ์สำหรับระบบอัตโนมัติและการประมวลผลจากกล้องด้วยเครื่องมือ No-Code/Low-Code เพื่อยกระดับผู้ประกอบการ SMEs ของประเทศไทย
+            </p>
+            <p class="text-xs mt-2 opacity-80">
+                (ที่พักตั้งอยู่ใกล้ บริษัท พี.เค.ซิลเวอร์ กรุ๊ป จำกัด / MRT ท่าพระ)
+            </p>
+        </header>
+
+        <!-- Table Container -->
+        <div class="p-4 sm:p-6 lg:p-8">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <!-- Table Head for Desktop -->
+                    <thead class="bg-gray-50 hidden lg:table-header-group">
+                        <tr>
+                            <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ลำดับ
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ชื่อที่พัก
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                เบอร์ติดต่อ
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ราคาเริ่มต้น/คืน
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ประเภทห้อง (ตัวอย่าง)
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                อาหารเช้า
+                            </th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                แผนที่ (Google Maps)
+                            </th>
+                        </tr>
+                    </thead>
+                    
+                    <!-- Table Body -->
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <!-- Data Rows -->
+                        
+                        <!-- Row 1: iCheck Inn Thapra -->
+                        <tr class="hover:bg-gray-50 flex flex-col lg:table-row mb-4 lg:mb-0 rounded-lg shadow lg:shadow-none p-3 lg:p-0">
+                            <td class="px-3 py-2 text-sm font-medium text-emerald-600 lg:text-gray-900 lg:table-cell">
+                                <span class="lg:hidden font-bold">ลำดับ: </span>1
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm font-semibold text-gray-900 lg:font-normal">
+                                <span class="lg:hidden font-bold">ชื่อที่พัก: </span>iCheck Inn Thapra
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">เบอร์ติดต่อ: </span>+66 (0)2 878 9709
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ราคา: </span>750 - 1,100 บาท
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ประเภทห้อง: </span>Standard Double/Twin
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-yellow-600 font-medium">
+                                <span class="lg:hidden font-bold">อาหารเช้า: </span>โปรดตรวจสอบ
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
+                                <a href="https://www.google.com/maps/search/?api=1&query=iCheck+Inn+Thapra" target="_blank" class="text-emerald-500 map-link">
+                                    <span class="lg:hidden font-bold">แผนที่: </span>ดูแผนที่
+                                </a>
+                            </td>
+                        </tr>
+
+                        <!-- Row 2: Bed by Thaphra -->
+                        <tr class="hover:bg-gray-50 flex flex-col lg:table-row mb-4 lg:mb-0 rounded-lg shadow lg:shadow-none p-3 lg:p-0">
+                            <td class="px-3 py-2 text-sm font-medium text-emerald-600 lg:text-gray-900 lg:table-cell">
+                                <span class="lg:hidden font-bold">ลำดับ: </span>2
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm font-semibold text-gray-900 lg:font-normal">
+                                <span class="lg:hidden font-bold">ชื่อที่พัก: </span>Bed by Thaphra
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">เบอร์ติดต่อ: </span>02 868 6888
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ราคา: </span>550 - 850 บาท
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ประเภทห้อง: </span>Standard Room
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-yellow-600 font-medium">
+                                <span class="lg:hidden font-bold">อาหารเช้า: </span>โปรดตรวจสอบ
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
+                                <a href="https://www.google.com/maps/search/?api=1&query=Bed+by+Thaphra+Phetkasem+26%2F1" target="_blank" class="text-emerald-500 map-link">
+                                    <span class="lg:hidden font-bold">แผนที่: </span>ดูแผนที่
+                                </a>
+                            </td>
+                        </tr>
+                        
+                        <!-- Row 3: Toptel Thaphra -->
+                        <tr class="hover:bg-gray-50 flex flex-col lg:table-row mb-4 lg:mb-0 rounded-lg shadow lg:shadow-none p-3 lg:p-0">
+                            <td class="px-3 py-2 text-sm font-medium text-emerald-600 lg:text-gray-900 lg:table-cell">
+                                <span class="lg:hidden font-bold">ลำดับ: </span>3
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm font-semibold text-gray-900 lg:font-normal">
+                                <span class="lg:hidden font-bold">ชื่อที่พัก: </span>Toptel Thaphra
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">เบอร์ติดต่อ: </span>086-033-7334
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ราคา: </span>800 - 1,200 บาท
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ประเภทห้อง: </span>Standard/Superior
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-yellow-600 font-medium">
+                                <span class="lg:hidden font-bold">อาหารเช้า: </span>โปรดตรวจสอบ
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
+                                <a href="https://www.google.com/maps/search/?api=1&query=Toptel+Thaphra+Phetkasem+16" target="_blank" class="text-emerald-500 map-link">
+                                    <span class="lg:hidden font-bold">แผนที่: </span>ดูแผนที่
+                                </a>
+                            </td>
+                        </tr>
+
+                        <!-- Row 4: Siamotif Boutique Hotel -->
+                        <tr class="hover:bg-gray-50 flex flex-col lg:table-row mb-4 lg:mb-0 rounded-lg shadow lg:shadow-none p-3 lg:p-0">
+                            <td class="px-3 py-2 text-sm font-medium text-emerald-600 lg:text-gray-900 lg:table-cell">
+                                <span class="lg:hidden font-bold">ลำดับ: </span>4
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm font-semibold text-gray-900 lg:font-normal">
+                                <span class="lg:hidden font-bold">ชื่อที่พัก: </span>Siamotif Boutique Hotel
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">เบอร์ติดต่อ: </span>083-074-7057
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ราคา: </span>1,500 - 2,200 บาท
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ประเภทห้อง: </span>Deluxe King/Twin
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-emerald-600 font-medium">
+                                <span class="lg:hidden font-bold">อาหารเช้า: </span>**มี**
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
+                                <a href="https://www.google.com/maps/search/?api=1&query=Siamotif+Boutique+Hotel+Bang+Khun+Non" target="_blank" class="text-emerald-500 map-link">
+                                    <span class="lg:hidden font-bold">แผนที่: </span>ดูแผนที่
+                                </a>
+                            </td>
+                        </tr>
+
+                        <!-- Row 5: NIL BKK -->
+                        <tr class="hover:bg-gray-50 flex flex-col lg:table-row mb-4 lg:mb-0 rounded-lg shadow lg:shadow-none p-3 lg:p-0">
+                            <td class="px-3 py-2 text-sm font-medium text-emerald-600 lg:text-gray-900 lg:table-cell">
+                                <span class="lg:hidden font-bold">ลำดับ: </span>5
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm font-semibold text-gray-900 lg:font-normal">
+                                <span class="lg:hidden font-bold">ชื่อที่พัก: </span>NIL BKK
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">เบอร์ติดต่อ: </span>081-488-8004
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ราคา: </span>2,700 - 3,500 บาท
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ประเภทห้อง: </span>Standard Room
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-yellow-600 font-medium">
+                                <span class="lg:hidden font-bold">อาหารเช้า: </span>โปรดตรวจสอบ
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
+                                <a href="https://www.google.com/maps/search/?api=1&query=NIL+BKK+Phetkasem+16" target="_blank" class="text-emerald-500 map-link">
+                                    <span class="lg:hidden font-bold">แผนที่: </span>ดูแผนที่
+                                </a>
+                            </td>
+                        </tr>
+
+                        <!-- Row 6: โรงแรมบีรพันธ์ (B.P. Hotel) -->
+                        <tr class="hover:bg-gray-50 flex flex-col lg:table-row mb-4 lg:mb-0 rounded-lg shadow lg:shadow-none p-3 lg:p-0">
+                            <td class="px-3 py-2 text-sm font-medium text-emerald-600 lg:text-gray-900 lg:table-cell">
+                                <span class="lg:hidden font-bold">ลำดับ: </span>6
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm font-semibold text-gray-900 lg:font-normal">
+                                <span class="lg:hidden font-bold">ชื่อที่พัก: </span>โรงแรมบีรพันธ์ (B.P. Hotel)
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">เบอร์ติดต่อ: </span>02-466-2679
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ราคา: </span>700 - 1,000 บาท
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ประเภทห้อง: </span>Standard Room
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-yellow-600 font-medium">
+                                <span class="lg:hidden font-bold">อาหารเช้า: </span>โปรดตรวจสอบ
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
+                                <a href="https://www.google.com/maps/search/?api=1&query=โรงแรมบีรพันธ์+บางกอกใหญ่" target="_blank" class="text-emerald-500 map-link">
+                                    <span class="lg:hidden font-bold">แผนที่: </span>ดูแผนที่
+                                </a>
+                            </td>
+                        </tr>
+
+                        <!-- Row 7: SP Park Thaphra (รายวัน) -->
+                        <tr class="hover:bg-gray-50 flex flex-col lg:table-row mb-4 lg:mb-0 rounded-lg shadow lg:shadow-none p-3 lg:p-0">
+                            <td class="px-3 py-2 text-sm font-medium text-emerald-600 lg:text-gray-900 lg:table-cell">
+                                <span class="lg:hidden font-bold">ลำดับ: </span>7
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm font-semibold text-gray-900 lg:font-normal">
+                                <span class="lg:hidden font-bold">ชื่อที่พัก: </span>SP Park Thaphra (รายวัน)
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">เบอร์ติดต่อ: </span>02-116-4309
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ราคา: </span>500 - 950 บาท
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ประเภทห้อง: </span>Studio/1 Bedroom
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-red-600 font-medium">
+                                <span class="lg:hidden font-bold">อาหารเช้า: </span>**ไม่มี**
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
+                                <a href="https://www.google.com/maps/search/?api=1&query=SP+Park+Thaphra+Phetkasem+11" target="_blank" class="text-emerald-500 map-link">
+                                    <span class="lg:hidden font-bold">แผนที่: </span>ดูแผนที่
+                                </a>
+                            </td>
+                        </tr>
+
+                        <!-- Row 8: The Star Hotel -->
+                        <tr class="hover:bg-gray-50 flex flex-col lg:table-row mb-4 lg:mb-0 rounded-lg shadow lg:shadow-none p-3 lg:p-0">
+                            <td class="px-3 py-2 text-sm font-medium text-emerald-600 lg:text-gray-900 lg:table-cell">
+                                <span class="lg:hidden font-bold">ลำดับ: </span>8
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm font-semibold text-gray-900 lg:font-normal">
+                                <span class="lg:hidden font-bold">ชื่อที่พัก: </span>The Star Hotel (ใช้ชื่ออื่นเนื่องจากชื่อซ้ำ)
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">เบอร์ติดต่อ: </span>02-250-5500 (ส่วนกลาง)
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ราคา: </span>850 - 1,300 บาท
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ประเภทห้อง: </span>Superior Room
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-emerald-600 font-medium">
+                                <span class="lg:hidden font-bold">อาหารเช้า: </span>**มี**
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
+                                <a href="https://www.google.com/maps/search/?api=1&query=โรงแรมเดอะสตาร์+ท่าพระ+Phetkasem" target="_blank" class="text-emerald-500 map-link">
+                                    <span class="lg:hidden font-bold">แผนที่: </span>ดูแผนที่
+                                </a>
+                            </td>
+                        </tr>
+
+                        <!-- Row 9: Baan Plu Resort -->
+                        <tr class="hover:bg-gray-50 flex flex-col lg:table-row mb-4 lg:mb-0 rounded-lg shadow lg:shadow-none p-3 lg:p-0">
+                            <td class="px-3 py-2 text-sm font-medium text-emerald-600 lg:text-gray-900 lg:table-cell">
+                                <span class="lg:hidden font-bold">ลำดับ: </span>9
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm font-semibold text-gray-900 lg:font-normal">
+                                <span class="lg:hidden font-bold">ชื่อที่พัก: </span>Baan Plu Resort
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">เบอร์ติดต่อ: </span>02-468-2000
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ประเภทห้อง: </span>Standard/Deluxe
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-yellow-600 font-medium">
+                                <span class="lg:hidden font-bold">อาหารเช้า: </span>โปรดตรวจสอบ
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
+                                <a href="https://www.google.com/maps/search/?api=1&query=Baan+Plu+Resort+Bangkok+Yai" target="_blank" class="text-emerald-500 map-link">
+                                    <span class="lg:hidden font-bold">แผนที่: </span>ดูแผนที่
+                                </a>
+                            </td>
+                        </tr>
+
+                        <!-- Row 10: Bang Luang House -->
+                        <tr class="hover:bg-gray-50 flex flex-col lg:table-row mb-4 lg:mb-0 rounded-lg shadow lg:shadow-none p-3 lg:p-0">
+                            <td class="px-3 py-2 text-sm font-medium text-emerald-600 lg:text-gray-900 lg:table-cell">
+                                <span class="lg:hidden font-bold">ลำดับ: </span>10
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm font-semibold text-gray-900 lg:font-normal">
+                                <span class="lg:hidden font-bold">ชื่อที่พัก: </span>Bang Luang House
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">เบอร์ติดต่อ: </span>084-646-5151
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ราคา: </span>600 - 900 บาท
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                <span class="lg:hidden font-bold">ประเภทห้อง: </span>Private Room
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-sm text-yellow-600 font-medium">
+                                <span class="lg:hidden font-bold">อาหารเช้า: </span>โปรดตรวจสอบ
+                            </td>
+                            <td class="px-6 py-2 whitespace-nowrap text-center text-sm font-medium">
+                                <a href="https://www.google.com/maps/search/?api=1&query=Bang+Luang+House+Charansanitwong+3" target="_blank" class="text-emerald-500 map-link">
+                                    <span class="lg:hidden font-bold">แผนที่: </span>ดูแผนที่
+                                </a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Disclaimer -->
+            <div class="mt-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 rounded-lg text-sm">
+                <p class="font-bold">ข้อควรทราบ:</p>
+                <ul class="list-disc list-inside mt-1 space-y-0.5">
+                    <li>**ราคาที่แสดง** เป็นราคาเริ่มต้นโดยประมาณต่อคืน และอาจมีการเปลี่ยนแปลงตามช่วงเวลาและช่องทางการจอง</li>
+                    <li>**อาหารเช้า** โปรดติดต่อที่พักโดยตรงเพื่อยืนยันว่าราคาห้องพักรวมอาหารเช้าหรือไม่</li>
+                    <li>**ลิงก์แผนที่** ได้ทำการเปลี่ยนเป็นรูปแบบการค้นหาที่แน่นอน (Search Query Links) เพื่อความเสถียรในการใช้งาน</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
