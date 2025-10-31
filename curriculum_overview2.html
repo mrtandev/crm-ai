@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographic: 5 สุดยอดหลักสูตรดิจิทัล</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        .chart-container-bar {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 450px;
+            max-height: 500px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #0369A1, #0284C7);
+        }
+        .stat-card-alt {
+            background: linear-gradient(135deg, #F97316, #EAB308);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-3 flex justify-center space-x-4 md:space-x-8">
+            <a href="#overview" class="text-gray-600 hover:text-blue-600 font-semibold">ภาพรวม</a>
+            <a href="#comparison" class="text-gray-600 hover:text-blue-600 font-semibold">เปรียบเทียบ</a>
+            <a href="#ai-deepdive" class="text-gray-600 hover:text-blue-600 font-semibold">เจาะลึก AI</a>
+            <a href="#web-deepdive" class="text-gray-600 hover:text-blue-600 font-semibold">เจาะลึก Web/Infra</a>
+            <a href="#whos-who" class="text-gray-600 hover:text-blue-600 font-semibold">กลุ่มเป้าหมาย</a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center my-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-cyan-500 mb-4">5 สุดยอดหลักสูตรดิจิทัล</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">วิเคราะห์และเปรียบเทียบ 5 หลักสูตรสำคัญเพื่อการ Upskill แห่งอนาคต จากกรมพัฒนาฝีมือแรงงาน</p>
+        </header>
+
+        <section id="overview" class="mb-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-white text-center">
+                <div class="stat-card p-8 rounded-lg shadow-lg">
+                    <div class="text-6xl font-bold">5</div>
+                    <div class="text-xl font-semibold mt-2">หลักสูตร</div>
+                    <p class="mt-2">ครอบคลุม 3 สายงานหลัก</p>
+                </div>
+                <div class="stat-card p-8 rounded-lg shadow-lg">
+                    <div class="text-6xl font-bold">30</div>
+                    <div class="text-xl font-semibold mt-2">ชั่วโมง</div>
+                    <p class="mt-2">ระยะเวลาฝึกอบรมต่อหลักสูตร</p>
+                </div>
+                <div class="stat-card-alt p-8 rounded-lg shadow-lg">
+                    <div class="text-6xl font-bold">1</div>
+                    <div class="text-xl font-semibold mt-2">เป้าหมาย</div>
+                    <p class="mt-2">ยกระดับทักษะดิจิทัล SME ไทย</p>
+                </div>
+            </div>
+
+            <div class="mt-12">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">3 สายงานหลัก สู่ทักษะอนาคต</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-b-4 border-blue-600">
+                        <h3 class="text-2xl font-semibold text-blue-700 mb-3">1. AI & Automation</h3>
+                        <p class="text-gray-600">สร้างระบบอัตโนมัติและปัญญาประดิษฐ์เพื่อเพิ่มประสิทธิภาพทางธุรกิจ</p>
+                        <ul class="list-disc list-inside mt-3 text-gray-700">
+                            <li>Agentic AI with N8N</li>
+                            <li>Chatbot (Dialogflow)</li>
+                            <li>Image Processing (Python)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md border-b-4 border-orange-500">
+                        <h3 class="text-2xl font-semibold text-orange-600 mb-3">2. Web Development</h3>
+                        <p class="text-gray-600">พัฒนาและออกแบบเว็บไซต์สำหรับธุรกิจ SME หรือ OTOP ด้วยเครื่องมือยอดนิยม</p>
+                        <ul class="list-disc list-inside mt-3 text-gray-700">
+                            <li>Wordpress Design</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md border-b-4 border-green-500">
+                        <h3 class="text-2xl font-semibold text-green-600 mb-3">3. Infrastructure & DevOps</h3>
+                        <p class="text-gray-600">วางรากฐานและจัดการระบบเบื้องหลัง เพื่อการพัฒนาซอฟต์แวร์ที่มั่นคง</p>
+                        <ul class="list-disc list-inside mt-3 text-gray-700">
+                            <li>Docker for Developer</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="comparison" class="bg-white p-6 md:p-10 rounded-lg shadow-xl mb-16">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">เปรียบเทียบเนื้อหา: ทฤษฎี vs. ปฏิบัติ</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-8">
+                ทุกหลักสูตรเน้นการลงมือทำจริง (ปฏิบัติ) มากกว่าทฤษฎี โดยเฉพาะหลักสูตร Chatbot และ Wordpress ที่มีสัดส่วนการปฏิบัติสูงถึง 80% (24 ชั่วโมง) เพื่อให้ผู้ประกอบการสามารถสร้างผลงานได้จริงหลังจบหลักสูตร
+            </p>
+            <div class="chart-container-bar">
+                <canvas id="barChart"></canvas>
+            </div>
+        </section>
+
+        <section id="ai-deepdive" class="bg-white p-6 md:p-10 rounded-lg shadow-xl mb-16">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">เจาะลึกกลุ่มหลักสูตร AI & Automation</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-8">
+                แผนภาพนี้แสดงจุดโฟกัสของหลักสูตร AI ทั้ง 3 ด้าน จะเห็นว่า "Agentic AI" เน้นการทำงานอัตโนมัติและเชื่อมต่อ API, "Chatbot" เน้นการประมวลผลภาษา (NLP), และ "Image AI" เน้นการประมวลผลภาพ (Vision) อย่างชัดเจน
+            </p>
+            <div class="chart-container">
+                <canvas id="radarChart"></canvas>
+            </div>
+        </section>
+
+        <section id="web-deepdive" class="bg-white p-6 md:p-10 rounded-lg shadow-xl mb-16">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">เจาะลึก Web & Infrastructure</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-8">
+                สำหรับสาย Web Development หลักสูตร Wordpress จะเน้นหนักที่การจัดการ 'ปลั๊กอินและเนื้อหา' และ 'การตั้งค่าและธีม' ในขณะที่สาย Infrastructure หลักสูตร Docker จะปูพื้นฐาน 4 เสาหลัก (Image, Network, Volumes, Logic) อย่างเท่าเทียมกัน
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold text-center text-gray-700 mb-3">สัดส่วนเนื้อหา Wordpress</h3>
+                    <div class="chart-container">
+                        <canvas id="donutChartWordpress"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-center text-gray-700 mb-3">สัดส่วนเนื้อหา Docker</h3>
+                    <div class="chart-container">
+                        <canvas id="donutChartDocker"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="whos-who" class="mb-12">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">หลักสูตรนี้...เหมาะกับใคร?</h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                    <h3 class="text-xl font-semibold text-green-700 mb-2">กลุ่มเริ่มต้น (Beginner Friendly)</h3>
+                    <p class="text-gray-600 mb-3">ต้องการเพียงทักษะการใช้งานคอมพิวเตอร์และอินเทอร์เน็ตพื้นฐาน</p>
+                    <span class="inline-block bg-green-200 text-green-800 px-3 py-1 rounded-full font-medium">Wordpress Design</span>
+                    <span class="inline-block bg-green-200 text-green-800 px-3 py-1 rounded-full font-medium">Chatbot (Dialogflow)</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-red-700 mb-2">กลุ่มนักพัฒนา (Developer Focus)</h3>
+                    <p class="text-gray-600 mb-3">ต้องการความเข้าใจพื้นฐานด้าน API, ตรรกะการเขียนโปรแกรม, หรือ Linux Command</p>
+                    <span class="inline-block bg-red-200 text-red-800 px-3 py-1 rounded-full font-medium">Agentic AI with N8N</span>
+                    <span class="inline-block bg-red-200 text-red-800 px-3 py-1 rounded-full font-medium">Docker for Developer</span>
+                    <span class="inline-block bg-red-200 text-red-800 px-3 py-1 rounded-full font-medium">Image Processing (Python)</span>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center mt-16 py-8 border-t border-gray-300">
+            <p class="text-lg font-semibold text-blue-700">เลือกเส้นทาง...แล้วเริ่ม Upskill วันนี้!</p>
+            <p class="text-gray-500 mt-2">ข้อมูลจากหลักสูตรกรมพัฒนาฝีมือแรงงาน | สร้างสรรค์ Infographic โดย Canvas Infographics</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const p_blue = '#0369A1';
+        const p_sky = '#0284C7';
+        const p_lime = '#A3E635';
+        const p_orange = '#F97316';
+        const p_pink = '#EC4899';
+        const p_gray = '#6B7280';
+        const p_text = '#374151';
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            } else {
+                return label;
+            }
+        };
+        
+        const labelWrapper = (label) => {
+            const maxChars = 16;
+            if (label.length > maxChars) {
+                const words = label.split(' ');
+                let newLabel = [];
+                let line = '';
+                words.forEach(word => {
+                    if ((line + word).length > maxChars) {
+                        newLabel.push(line);
+                        line = word;
+                    } else {
+                        line += (line ? ' ' : '') + word;
+                    }
+                });
+                newLabel.push(line);
+                return newLabel;
+            }
+            return label;
+        };
+
+        const initBarChart = () => {
+            const ctx = document.getElementById('barChart').getContext('2d');
+            const rawLabels = [
+                'สร้างระบบ AI แบบเอเจนต์ด้วย N8N',
+                'สร้าง Chatbot (Dialogflow)',
+                'ประมวลผลภาพและ AI (Python)',
+                'Docker สำหรับนักพัฒนา',
+                'ออกแบบเว็บไซต์ (Wordpress)'
+            ];
+            const processedLabels = rawLabels.map(labelWrapper);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: processedLabels,
+                    datasets: [
+                        {
+                            label: 'ทฤษฎี (ชั่วโมง)',
+                            data: [10, 6, 10, 10, 6],
+                            backgroundColor: p_sky,
+                        },
+                        {
+                            label: 'ปฏิบัติ (ชั่วโมง)',
+                            data: [20, 24, 20, 20, 24],
+                            backgroundColor: p_blue,
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: true,
+                            title: { display: true, text: 'ชั่วโมง' }
+                        },
+                        y: {
+                            stacked: true
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: tooltipTitleCallback
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                        }
+                    }
+                }
+            });
+        };
+        
+        const initRadarChart = () => {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['การทำงานอัตโนมัติ (Logic)', 'การประมวลผลภาษา (NLP/Chat)', 'การประมวลผลภาพ (Vision)', 'การจัดการข้อมูล (Data/RAG)', 'การเชื่อมต่อระบบ (Infra/API)'],
+                    datasets: [
+                        {
+                            label: 'Agentic AI',
+                            data: [5, 3, 1, 4, 5],
+                            borderColor: p_blue,
+                            backgroundColor: 'rgba(3, 105, 161, 0.2)',
+                            fill: true
+                        },
+                        {
+                            label: 'Chatbot',
+                            data: [2, 5, 1, 3, 3],
+                            borderColor: p_pink,
+                            backgroundColor: 'rgba(236, 72, 153, 0.2)',
+                            fill: true
+                        },
+                        {
+                            label: 'Image AI (Python)',
+                            data: [2, 1, 5, 2, 2],
+                            borderColor: p_orange,
+                            backgroundColor: 'rgba(249, 115, 22, 0.2)',
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: tooltipTitleCallback
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: p_gray },
+                            grid: { color: p_gray },
+                            pointLabels: {
+                                color: p_text,
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            ticks: {
+                                backdropColor: 'rgba(255, 255, 255, 0.75)',
+                                color: p_gray,
+                                stepSize: 1
+                            },
+                            min: 0,
+                            max: 5
+                        }
+                    }
+                }
+            });
+        };
+
+        const initDonutCharts = () => {
+            const ctxWordpress = document.getElementById('donutChartWordpress').getContext('2d');
+            new Chart(ctxWordpress, {
+                type: 'doughnut',
+                data: {
+                    labels: ['ตั้งค่า & ธีม', 'ปลั๊กอิน & เนื้อหา', 'Responsive & Admin'],
+                    datasets: [{
+                        data: [10, 15, 5],
+                        backgroundColor: [p_lime, p_sky, p_orange],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: tooltipTitleCallback
+                            }
+                        },
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+
+            const ctxDocker = document.getElementById('donutChartDocker').getContext('2d');
+            new Chart(ctxDocker, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Image', 'Network', 'Volumes', 'Container Logic & Install'],
+                    datasets: [{
+                        data: [6, 6, 5, 13],
+                        backgroundColor: [p_blue, p_pink, p_lime, p_orange],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: tooltipTitleCallback
+                            }
+                        },
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+        };
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            initBarChart();
+            initRadarChart();
+            initDonutCharts();
+        });
+    </script>
+</body>
+</html>
