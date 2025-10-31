@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 1: ปรัชญา No-Code & Data Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f8fafc; 
+            line-height: 1.6;
+            color: #1e293b;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #0369A1, #0284C7); 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #0369A1;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #0369A1;
+        }
+        .session-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+        .session-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        .time-tag {
+            background-color: #0284C7;
+            color: white;
+            font-weight: 700;
+            border-radius: 8px 0 0 8px;
+            padding: 8px 15px;
+            font-size: 0.95rem;
+        }
+        .type-tag {
+            background-color: #bae6fd;
+            color: #0369A1;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+        .type-tag.workshop {
+            background-color: #ffedd5;
+            color: #F97316;
+        }
+        .break-card {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            font-weight: 600;
+        }
+        .content-body p {
+            margin-bottom: 12px;
+            text-indent: 10px;
+        }
+        .content-body strong {
+            color: #F97316;
+        }
+        .content-body a {
+            color: #1d4ed8;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        .note {
+            background-color: #fef9e7;
+            border-left: 4px solid #F97316;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        /* Style for Ecosystem Matrix Table */
+        .matrix-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .matrix-table th, .matrix-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+        }
+        .matrix-table th {
+            background-color: #0369A1;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+        .matrix-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        .matrix-table tr:hover {
+            background-color: #f3f4f6;
+        }
+        .matrix-table td:first-child {
+            font-weight: 600;
+            color: #1f2937;
+            width: 30%;
+        }
+        /* Style for Normalization Example */
+        .normalization-example {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0fdf4;
+            border-radius: 8px;
+            border: 1px solid #dcfce7;
+        }
+        .normalization-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+        .normalization-table th, .normalization-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        .normalization-table th {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .code-block {
+            background-color: #1e293b;
+            color: #a7f3d0;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: monospace;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+    <div class="container mx-auto">
+
+        <header class="text-center my-8 md:my-12">
+            <h1 class="header-title">กำหนดการเรียนรู้ Day 1: ปรัชญา No-Code & Data Design 🧱</h1>
+            <div class="mt-4 flex items-center justify-center space-x-4">
+                <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-16 h-16 rounded-full object-cover border-4 border-orange-500 shadow-md">
+                <div>
+                    <p class="text-xl font-bold">อ.แทน [ธีรชัย โฉมทัพ]</p>
+                    <p class="text-sm text-gray-500">Head of Digital Transformation</p>
+                </div>
+            </div>
+            <p class="text-lg text-gray-600 mt-4 font-semibold">สร้างรากฐานของ Data Design และ Low-Code Automation ที่แข็งแกร่ง!</p>
+        </header>
+
+        <div class="space-y-8">
+
+            <!-- SESSION GROUP 1: Morning Strategy & Theory -->
+            <h2 class="section-title mb-6">ภาคเช้า: กลยุทธ์และปรัชญา (No-Code Philosophy & Ecosystem)</h2>
+
+            <!-- 09:00 - 10:00: พิธีเปิดและ Vision -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">09:00 - 10:00 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">พิธีการ: การต้อนรับและกำหนดวิสัยทัศน์ (Vision)</h3>
+                            <span class="type-tag bg-sky-200 text-sky-800">พิธีการ & Vision</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <p>ช่วงเวลาสำคัญในการ **ต้อนรับผู้เข้าร่วม** แนะนำ อ.แทน และกำหนด **วิสัยทัศน์ (Vision)** ของหลักสูตร "AI Automation & Data Integration Master" โดยเน้นถึงการเปลี่ยนงานซ้ำซากให้เป็น Automation</p>
+                            <p>มีการแนะนำภาพรวมของ Ecosystem หลักที่ใช้ในหลักสูตร: **Google Sheets** (หัวใจของข้อมูล), **AppSheet** (มือถือ/แอปพลิเคชัน), **<a href="https://n8n.io/" target="_blank">n8n</a>** (เส้นเลือด Automation) และ **<a href="https://ai.google/gemini/" target="_blank">Gemini</a>** (สมอง AI) เพื่อให้เห็นภาพรวมของเครื่องมือทั้งหมด</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10:00 - 11:00: ส่วนที่ 1: ปรัชญา No-Code/Low-Code -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">10:00 - 11:00 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">ส่วนที่ 1: บทนำและปรัชญา No-Code/Low-Code</h3>
+                            <span class="type-tag">ทฤษฎี & กลยุทธ์</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <p><strong>นิยามและความแตกต่าง:</strong> หัวข้อนี้จะชี้แจงความแตกต่างระหว่าง **No-Code** (เน้นการสร้าง Application Interface ด้วยการลากวาง เช่น <a href="https://www.appsheet.com/" target="_blank">AppSheet</a>) กับ **Low-Code** (เน้นการสร้าง Workflow Logic ที่ซับซ้อนขึ้น เช่น <a href="https://n8n.io/" target="_blank">n8n</a> และ Google App Script หรือ GAS) โดยเน้นบทบาทและผู้ใช้งานที่แตกต่างกัน</p>
+                            
+                            <div class="mt-4">
+                                <h4 class="text-lg font-bold text-gray-700 mb-2">เปรียบเทียบเครื่องมือ: AppSheet vs. n8n/GAS</h4>
+                                <table class="matrix-table">
+                                    <thead>
+                                        <tr>
+                                            <th>คุณสมบัติ</th>
+                                            <th>AppSheet (No-Code)</th>
+                                            <th>n8n / GAS (Low-Code)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>เป้าหมายหลัก</td>
+                                            <td>สร้าง Mobile/Web App Interface (ส่วนหน้า)</td>
+                                            <td>สร้าง Logic และ Workflow Automation (ส่วนหลัง)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>ทักษะที่ใช้</td>
+                                            <td>Excel/Spreadsheet Formulas, ตรรกะธุรกิจ</td>
+                                            <td>JavaScript/Python Basics, ตรรกะ API/Integration</td>
+                                        </tr>
+                                        <tr>
+                                            <td>บทบาทใน Ecosystem</td>
+                                            <td>มือ (เป็น Application Interface ที่ผู้ใช้โต้ตอบ)</td>
+                                            <td>เส้นเลือด (เป็นตัวเชื่อมต่อและประมวลผล Logic)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <p class="mt-4"><strong>บทบาทของ AI (Gemini) ใน Ecosystem:</strong> อธิบายว่า AI (เช่น <a href="https://ai.google/gemini/" target="_blank">Gemini API</a>) เข้ามาเพิ่ม **"สมอง"** 🧠 ในระบบได้อย่างไร โดยเฉพาะใน Low-Code เพื่อจัดการกับ Unstructured Data หรือข้อมูลที่ไม่มีโครงสร้าง</p>
+                            <p><strong>การวางแผน Ecosystem:</strong> ทำความเข้าใจแนวคิดการวางแผนโดยมอง **Google Sheets (GGS)** เป็น **ศูนย์กลางของข้อมูล (The Center)** ที่เครื่องมืออื่น ๆ จะมาเชื่อมต่อ เพื่อสร้างระบบที่ยืดหยุ่นและมีประสิทธิภาพ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                ☕ พักเบรคเช้า (11:00 - 11:15 น.)
+            </div>
+
+            <!-- 11:15 - 12:15: ส่วนที่ 1 (ต่อ): การวิเคราะห์ความต้องการ -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">11:15 - 12:15 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">ส่วนที่ 1 (ต่อ): การวิเคราะห์ความต้องการและการเลือกใช้เครื่องมือ</h3>
+                            <span class="type-tag">ทฤษฎี & กลยุทธ์</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <p>หัวข้อนี้จะนำเสนอ **Ecosystem Matrix** เพื่อวิเคราะห์จุดเด่นของแต่ละเครื่องมือ (AppSheet, n8n, GGS) และใช้เป็น **เกณฑ์การตัดสินใจ** ในการเลือกแพลตฟอร์มที่เหมาะสมกับ "ฟังก์ชันหลัก" ที่ธุรกิจต้องการ</p>
+
+                            <!-- ECOSYSTEM MATRIX -->
+                            <div class="mt-4">
+                                <h4 class="text-lg font-bold text-gray-700 mb-2">Ecosystem Matrix: การเลือกเครื่องมือตามฟังก์ชันหลัก</h4>
+                                <table class="matrix-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ประเภทงานหลัก</th>
+                                            <th>เครื่องมือแนะนำ</th>
+                                            <th>จุดเด่น / บทบาท</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>สร้าง Web/Mobile App (UI/UX)</td>
+                                            <td>AppSheet</td>
+                                            <td>No-Code, สร้าง Data Forms, CRUD (Create, Read, Update, Delete)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>เชื่อมต่อ/ทำงานอัตโนมัติ (Logic)</td>
+                                            <td>n8n, Google App Script (GAS)</td>
+                                            <td>Low-Code, API Integration, Scheduling, Data Transformation</td>
+                                        </tr>
+                                        <tr>
+                                            <td>จัดการฐานข้อมูลหลัก (Storage)</td>
+                                            <td>Google Sheets (GGS)</td>
+                                            <td>ศูนย์กลางข้อมูล (The Center), ความยืดหยุ่น, Collaboration</td>
+                                        </tr>
+                                        <tr>
+                                            <td>เพิ่มความฉลาด (AI)</td>
+                                            <td>Gemini API (ผ่าน Low-Code)</td>
+                                            <td>เพิ่ม "สมอง", จัดการ Unstructured Data, สร้าง Logic ซับซ้อน</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- END ECOSYSTEM MATRIX -->
+                            
+                            <p class="mt-4">ช่วงนี้จะมี **Workshop Case Study** ให้ผู้เรียนฝึก **วิเคราะห์สถานการณ์จริง 3 เคส** (เช่น การสร้างระบบ CRM, การแจ้งเตือนสต็อก, การประมวลผลเอกสาร) เพื่อเลือกเครื่องมือหลักที่เหมาะสมที่สุด 🎯</p>
+                            <div class="note">จุดเน้น: ทำความเข้าใจข้อจำกัดและขีดความสามารถของเครื่องมือหลัก และวางแผนการเชื่อมต่อที่ยืดหยุ่น</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                🥗 พักกลางวัน (12:15 - 13:15 น.)
+            </div>
+
+            <!-- SESSION GROUP 2: Afternoon Data Foundation -->
+            <h2 class="section-title mt-10 mb-6 border-l-4 border-orange-500 pl-3">ภาคบ่าย: รากฐานข้อมูล (Data Design & Normalization)</h2>
+
+            <!-- 13:15 - 14:15: ส่วนที่ 2: Data Normalization -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">13:15 - 14:15 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">ส่วนที่ 2: Data Normalization และ Data Validation (GGS)</h3>
+                            <span class="type-tag">รากฐาน & โครงสร้าง</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <p>หัวข้อนี้เป็นการวาง **โครงสร้างข้อมูล** โดยเน้นแนวคิด **Normalization (1NF, 2NF, 3NF)** เพื่อให้ข้อมูลใน Google Sheets มีประสิทธิภาพสูงสุด และพร้อมสำหรับการเชื่อมต่อกับ AppSheet/n8n</p>
+                            
+                            <!-- NORMALIZATION EXAMPLE -->
+                            <div class="normalization-example">
+                                <h4 class="text-lg font-bold text-gray-800 mb-2">โจทย์ตัวอย่าง: ทำไมต้องทำ Normalization?</h4>
+                                <p class="text-sm italic">สมมติว่าคุณมีตาราง "รายการขายสินค้า" ที่ยังไม่ได้รับการจัดโครงสร้าง:</p>
+
+                                <h5 class="text-base font-semibold mt-3 text-red-600">ตารางก่อน Normalization (มีปัญหาความซ้ำซ้อน)</h5>
+                                <table class="normalization-table">
+                                    <thead>
+                                        <tr>
+                                            <th>รหัสรายการขาย</th>
+                                            <th>รหัสสินค้า</th>
+                                            <th>ชื่อสินค้า</th>
+                                            <th>ราคาต่อหน่วย</th>
+                                            <th>จำนวน</th>
+                                            <th>ชื่อลูกค้า</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>S001</td>
+                                            <td>P101</td>
+                                            <td>กาแฟสูตรพิเศษ</td>
+                                            <td>85</td>
+                                            <td>2</td>
+                                            <td>คุณ A</td>
+                                        </tr>
+                                        <tr>
+                                            <td>S002</td>
+                                            <td>P101</td>
+                                            <td>กาแฟสูตรพิเศษ</td>
+                                            <td>85</td>
+                                            <td>1</td>
+                                            <td>คุณ B</td>
+                                        </tr>
+                                        <tr>
+                                            <td>S003</td>
+                                            <td>P205</td>
+                                            <td>ชาเขียวมัทฉะ</td>
+                                            <td>90</td>
+                                            <td>3</td>
+                                            <td>คุณ A</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                                <p class="text-sm mt-3">ปัญหาที่พบ: ข้อมูล **"ชื่อสินค้า"** และ **"ราคาต่อหน่วย"** ของสินค้า P101 (กาแฟสูตรพิเศษ) ถูกบันทึกซ้ำซ้อนกันหลายครั้ง หากราคาเปลี่ยนจาก 85 บาทเป็น 95 บาท เราต้องตามแก้ทุกบรรทัด ซึ่งเสี่ยงต่อการเกิดข้อมูลผิดพลาด</p>
+
+                                <h5 class="text-base font-semibold mt-4 text-green-600">ตารางหลัง Normalization (แยกเป็นตาราง Master/Transaction)</h5>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-sm font-semibold mb-1">ตาราง 1: รายการขาย (Transaction Table)</p>
+                                        <table class="normalization-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>รหัสรายการขาย (PK)</th>
+                                                    <th>รหัสสินค้า (FK)</th>
+                                                    <th>จำนวน</th>
+                                                    <th>ชื่อลูกค้า</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>S001</td>
+                                                    <td>P101</td>
+                                                    <td>2</td>
+                                                    <td>คุณ A</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>S002</td>
+                                                    <td>P101</td>
+                                                    <td>1</td>
+                                                    <td>คุณ B</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>S003</td>
+                                                    <td>P205</td>
+                                                    <td>3</td>
+                                                    <td>คุณ A</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold mb-1">ตาราง 2: ข้อมูลสินค้า (Master Table)</p>
+                                        <table class="normalization-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>รหัสสินค้า (PK)</th>
+                                                    <th>ชื่อสินค้า</th>
+                                                    <th>ราคาต่อหน่วย</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>P101</td>
+                                                    <td>กาแฟสูตรพิเศษ</td>
+                                                    <td class="bg-yellow-100">95</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>P205</td>
+                                                    <td>ชาเขียวมัทฉะ</td>
+                                                    <td>90</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <p class="text-sm mt-3 font-semibold text-green-700">ผลลัพธ์: หากราคา "กาแฟสูตรพิเศษ" เปลี่ยนเป็น 95 บาท เราแก้เพียงบรรทัดเดียวในตาราง Master ตาราง Transaction จะดึงราคานี้ไปคำนวณใหม่โดยอัตโนมัติ (ด้วยสูตร VLOOKUP/XLOOKUP)</p>
+
+                            </div>
+                            <!-- END NORMALIZATION EXAMPLE -->
+
+                            <p>เน้นการสร้าง **Primary Key (PK)** และ **Foreign Key (FK)** (ซึ่งคือ 'Ref Type' ใน AppSheet) เพื่อให้การดึงข้อมูล Master (เช่น ข้อมูลสินค้า, ข้อมูลลูกค้า) เป็นไปอย่างถูกต้อง ป้องกันปัญหาความซ้ำซ้อนและการอัปเดตข้อมูลผิดพลาด</p>
+                            
+                            <p>นอกจากนี้ ยังรวมถึงการใช้ **Data Validation** (การควบคุมการป้อนข้อมูล) เพื่อกำหนดเงื่อนไขว่าผู้ใช้สามารถป้อนข้อมูลอะไรลงในช่องนั้นได้บ้าง (เช่น ให้เลือกจากลิสต์, จำกัดตัวเลข/วันที่) ซึ่งช่วยลดความผิดพลาดในการกรอกข้อมูลให้พร้อมสำหรับ Automation ต่อไป</p>
+                            <p>และการใช้ **Virtual Tables/Reports** (ฟังก์ชัน <span class="text-red-600">QUERY()</span>) ใน GGS เพื่อรวมข้อมูลจากหลายตารางมาแสดงเป็นรายงานที่ครบถ้วน โดยไม่ต้องจัดเก็บข้อมูลซ้ำซ้อน</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                ☕ พักเบรคบ่าย (14:15 - 14:30 น.)
+            </div>
+            
+            <!-- SESSION GROUP 3: Afternoon Workshop -->
+            <h2 class="section-title mt-10 mb-6 border-l-4 border-green-600 pl-3">ภาคปฏิบัติ: Workshop (Low-Code/GAS Implementation)</h2>
+
+            <!-- 14:30 - 15:00: Workshop 1: Auto Primary Key (30 นาที) -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">14:30 - 15:00 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">ส่วนที่ 3.1: Workshop: Low-Code Auto Primary Key (GAS)</h3>
+                            <span class="type-tag workshop">ปฏิบัติ (30 นาที)</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <p>กิจกรรมนี้คือการสร้าง **Primary Key อัตโนมัติ** (เช่น CUST-YYMMDD-...) โดยใช้ **Google Apps Script (GAS)** ซึ่งเป็น Low-Code Tool เพื่อให้ข้อมูลทุกแถวมี Unique ID ที่ไม่ซ้ำกัน ซึ่งเป็นพื้นฐานที่สำคัญที่สุดของฐานข้อมูล</p>
+                            <p>เราจะเรียนรู้การใช้ <span class="text-red-600">Gemini</span> ช่วยสร้างโค้ด GAS ที่รันเมื่อมีการเพิ่มข้อมูล (onEdit Trigger) โดยโค้ดจะทำการตรวจสอบและสร้าง ID ให้อัตโนมัติทันที</p>
+                            
+                            <div class="note">ผลลัพธ์: โค้ด GAS จะสร้าง ID ที่มีรูปแบบเฉพาะ เช่น: **CUST-251031-143545-A1C2**</div>
+                            
+                            <p>รวมถึงการใช้ <span class="text-red-600">Lock Service</span> เพื่อป้องกันการชนกันของ ID เมื่อมีการบันทึกข้อมูลพร้อมกันหลายคน</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 15:00 - 15:45: Workshop 2: Data Lookup & Calculation (45 นาที) -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">15:00 - 15:45 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">ส่วนที่ 3.2: Workshop: Data Lookup & Calculation (Total Price)</h3>
+                            <span class="type-tag workshop">ปฏิบัติ (45 นาที)</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <p>กิจกรรมเน้นการสร้าง Low-Code Calculation โดยใช้สูตร Google Sheets ขั้นสูง เช่น **<span class="text-red-600">VLOOKUP / XLOOKUP</span>** เพื่อดึงข้อมูลราคาจากตาราง Master เข้ามาคำนวณราคารวม (Total Price) ในตาราง Transaction โดยอัตโนมัติ</p>
+                            <p>หัวข้อนี้จะรวมถึงการใช้ **<span class="text-red-600">ArrayFormula</span>** เพื่อให้การคำนวณเกิดขึ้นกับทั้งคอลัมน์โดยไม่จำเป็นต้องลากสูตร ซึ่งช่วยให้ระบบมีความแข็งแรงและประหยัดเวลาอย่างมาก</p>
+                            <div class="note">ผลลัพธ์: ระบบจะคำนวณยอดรวมสุทธิได้ทันทีเมื่อผู้ใช้กรอกรหัสสินค้าและจำนวน โดยไม่ต้องกรอกราคาสินค้าซ้ำ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 15:45 - 16:30: Workshop 3: Email Notification & Summary (45 นาที) -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">15:45 - 16:30 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">ส่วนที่ 3.3: Workshop: Email Notification (Alert Automation) และ สรุป Day 1</h3>
+                            <span class="type-tag workshop">ปฏิบัติ & สรุป (45 นาที)</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <p>กิจกรรมสุดท้ายของวันคือการสร้าง **Alert Automation** โดยใช้ GAS หรือ AppSheet Action เพื่อ **ส่ง Email Notification** ไปยังผู้ที่เกี่ยวข้องทันทีเมื่อเกิดเงื่อนไขที่กำหนด (เช่น ยอดขายถึงเป้า, การร้องเรียนลูกค้าเข้ามา)</p>
+                            
+                            <div class="note">ผลลัพธ์: ระบบจะส่งอีเมลแจ้งเตือนถึงผู้จัดการเมื่อพบรายการขายที่มียอดเกิน 50,000 บาท โดยอัตโนมัติ</div>
+                            
+                            <p>ปิดท้ายด้วยการ **สรุปเนื้อหาและภาพรวม** ทั้งหมดของ Day 1 (ปรัชญาและรากฐาน) และเปิดโอกาสให้ผู้เรียน **<span class="text-red-600">Q&A</span>** ถามตอบข้อสงสัยก่อนจบคลาส เพื่อให้เกิดความเข้าใจที่สมบูรณ์</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-blue-100 p-6 rounded-xl text-center shadow-md">
+                <p class="text-2xl font-bold text-blue-800">รวมเวลาเรียนจริง: 6.0 ชั่วโมง (360 นาที)</p>
+            </div>
+
+        </div>
+
+        <footer class="text-center mt-12 py-4 text-gray-500 text-sm">
+            <p>Content Source: Day 1: ปรัชญา No-Code & Data Design (อ.แทน ธีรชัย โฉมทัพ) | <a href="https://idea-crmai.netlify.app/day1_automation.html" target="_blank">ลิงก์ต้นฉบับ</a></p>
+        </footer>
+    </div>
+</body>
+</html>

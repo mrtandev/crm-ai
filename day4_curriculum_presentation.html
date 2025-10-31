@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 4: Workshop เชื่อมต่ออัตโนมัติด้วย N8N (Part 1)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f8fafc; 
+            line-height: 1.7; 
+            color: #1e293b;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #9333ea, #c084fc); 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #9333ea;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #9333ea;
+        }
+        .session-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+        .session-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        .time-tag {
+            background-color: #a855f7;
+            color: white;
+            font-weight: 700;
+            border-radius: 8px 0 0 8px;
+            padding: 8px 15px;
+            font-size: 0.95rem;
+        }
+        .type-tag {
+            background-color: #f3e8ff;
+            color: #7e22ce;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+        .type-tag.logic {
+            background-color: #faf5ff;
+            color: #581c87;
+        }
+        .break-card {
+            background-color: #f5f3ff;
+            color: #7c3aed;
+            font-weight: 600;
+        }
+        .content-body p {
+            margin-bottom: 12px;
+            text-indent: 10px;
+        }
+        .content-body strong {
+            color: #F97316; 
+        }
+        .content-body a {
+            color: #8B5CF6;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        .note {
+            background-color: #f0fdf4;
+            border-left: 4px solid #10b981;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .data-table th, .data-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+            font-size: 0.9em;
+        }
+        .data-table th {
+            background-color: #ede9fe;
+            color: #6d28d9;
+            font-weight: 600;
+        }
+        .data-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        .data-table td:first-child {
+            font-weight: 600;
+        }
+        .data-caption {
+            font-size: 0.9em;
+            color: #6b7280;
+            margin-top: 5px;
+            text-align: center;
+        }
+        .diagram-container {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px dashed #c084fc;
+            background-color: #f3e8ff;
+            border-radius: 8px;
+        }
+        .node-box {
+            background-color: #fff;
+            border: 1px solid #c084fc;
+            padding: 8px 12px;
+            margin: 10px auto;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .node-trigger {
+            background-color: #d8b4fe; 
+            border: 1px solid #a855f7;
+        }
+        .node-action {
+            background-color: #e9d5ff;
+            border: 1px solid #c084fc;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+    <div class="container mx-auto">
+
+        <header class="text-center my-8 md:my-12">
+            <h1 class="header-title">กำหนดการเรียนรู้ Day 4: Workshop เชื่อมต่ออัตโนมัติด้วย N8N (Part 1) 🔌</h1>
+            <div class="mt-4 flex items-center justify-center space-x-4">
+                <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-16 h-16 rounded-full object-cover border-4 border-purple-500 shadow-md">
+                <div>
+                    <p class="text-xl font-bold">อ.แทน [ธีรชัย โฉมทัพ]</p>
+                    <p class="text-sm text-gray-500">Head of Digital Transformation</p>
+                </div>
+            </div>
+            <p class="text-lg text-gray-600 mt-4 font-semibold">วันนี้เราจะยกระดับ AppSheet/GGS ด้วยการเชื่อมต่อกับโลกภายนอกผ่าน N8N ซึ่งเป็นเครื่องมือ Automation ที่ทรงพลัง!</p>
+        </header>
+
+        <div class="space-y-8">
+
+            <!-- SECTION 1: N8N Fundamentals -->
+            <h2 class="section-title mb-6">ส่วนที่ 1: N8N Fundamentals: รากฐานของ Automation</h2>
+
+            <!-- 09:00 - 10:15: N8N Core Concepts -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">09:00 - 10:15 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">1.1-1.3 Workflows, Nodes, Data Structure และกลยุทธ์การใช้งาน N8N</h3>
+                            <span class="type-tag logic">รากฐาน Automation</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <h4 class="text-lg font-bold text-gray-800">1.1 Workflows, Nodes, และ Data Structure</h4>
+                            <p>N8N ทำงานบนแนวคิดของ **Workflows** ซึ่งคือชุดของขั้นตอนที่ประกอบด้วย **Nodes** แต่ละ Node ทำหน้าที่เฉพาะเจาะจงกับข้อมูลที่ไหลผ่าน (Data Item)</p>
+                            <ul class="list-disc ml-6 space-y-2 mt-2">
+                                <li>**Workflow:** เส้นทางของข้อมูลตั้งแต่จุดเริ่มต้น (Trigger) ไปจนถึงจุดสิ้นสุด เปรียบเหมือน **Flowchart ที่ทำงานได้จริง**</li>
+                                <li>**Node:** กล่องคำสั่งที่รับข้อมูลเข้า (Input Item) ประมวลผล และส่งข้อมูลออก (Output Item) Node เป็นกุญแจสำคัญในการเชื่อมต่อกับ Service ต่างๆ</li>
+                                <li>**Input/Output Item:** ข้อมูลจะถูกส่งผ่านเป็น **Array ของ JSON Objects** ซึ่งต้องใช้ความเข้าใจในการดึงค่าออกมา</li>
+                                <li>**Expression (สำคัญมาก):** คือ Code เล็กๆ ที่ใช้ดึง/ปรับปรุงค่าจาก JSON เช่น <code>${{$json["Customer_Name"]}}</code></li>
+                            </ul>
+                            
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">1.2 Trigger Nodes vs. Regular Nodes</h4>
+                            <p>Workflow จะเริ่มต้นทำงานได้ด้วย **Trigger Node** เท่านั้น ซึ่งเป็นการ "เปิดสวิตช์" ให้ Flow เริ่มต้น</p>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ประเภท Node</th>
+                                        <th>หน้าที่</th>
+                                        <th>ตัวอย่าง (Use Case)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>**Trigger Nodes** (เริ่มต้น)</td>
+                                        <td>เป็นจุดเริ่มต้นของ Workflow และรอรับสัญญาณจากภายนอก</td>
+                                        <td>Webhook (รับข้อมูลจาก AppSheet), Schedule (ตั้งเวลา), AppSheet Trigger</td>
+                                    </tr>
+                                    <tr>
+                                        <td>**Regular Nodes** (ดำเนินการ)</td>
+                                        <td>ดำเนินการตามคำสั่ง (Action) เมื่อได้รับข้อมูลจาก Node ก่อนหน้า</td>
+                                        <td>Google Sheets (Append Row), Line Notify (ส่งแจ้งเตือน), Set (ปรับปรุงข้อมูล)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">1.3 กลยุทธ์การใช้งาน N8N: Self-Host vs. Cloud</h4>
+                            <p>ก่อนเริ่มใช้งานจริง ผู้เรียนควรเข้าใจรูปแบบการติดตั้ง N8N ว่าแบบใดเหมาะสมกับธุรกิจของตน</p>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>รูปแบบ</th>
+                                        <th>จุดเด่น (Pros)</th>
+                                        <th>ข้อจำกัด (Cons)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>**Self-Hosted** (Local/Docker)</td>
+                                        <td>ควบคุมข้อมูล 100%, ประหยัดค่าใช้จ่ายระยะยาว, ไม่จำกัด Workflow</td>
+                                        <td>ต้องมีความรู้ DevOps/Server, ต้องดูแลความเสถียรเอง (Maintenance)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>**Commercial Cloud** (N8N Cloud)</td>
+                                        <td>พร้อมใช้งานทันที (Zero Setup), มีการรับประกัน Uptime และ Security</td>
+                                        <td>มีค่าใช้จ่ายรายเดือน, มีข้อจำกัดด้านปริมาณ Execution/Workflow</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                ☕ พักเบรคเช้า (10:15 - 10:30 น.)
+            </div>
+
+            <!-- SECTION 2: Webhooks & API -->
+            <h2 class="section-title mt-10 mb-6 border-l-4 border-indigo-500 pl-3">ส่วนที่ 2: Webhooks & API: การเชื่อมต่อภายนอก</h2>
+
+            <!-- 10:30 - 11:45: Webhooks & API -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">10:30 - 11:45 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">2.1 Webhooks (The Listener) และ 2.2 API (The Sender)</h3>
+                            <span class="type-tag logic">ทฤษฎี (I/O)</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <h4 class="text-lg font-bold text-gray-800">2.1 Webhooks (The Listener)</h4>
+                            <p>**Webhook** คือ URL พิเศษที่ N8N สร้างขึ้น เพื่อรอรับข้อมูลจากระบบภายนอก (AppSheet, Line OA, Payment Gateway) เปรียบเสมือน **"ประตูรับสัญญาณ"** ของ Workflow</p>
+                            <p><strong>ขั้นตอนการรับข้อมูลจาก AppSheet Automation (ทบทวนจาก Day 3):</strong></p>
+                            <ol class="list-decimal ml-6 space-y-2 mt-2">
+                                <li>**ใน N8N:** สร้าง Webhook Node และ Copy URL ที่ได้มา (จะเป็น URL เฉพาะของ Flow นั้น)</li>
+                                <li>**ใน AppSheet:** สร้าง Task Webhook โดยกำหนด URL ปลายทางเป็น Webhook URL ของ N8N</li>
+                                <li>**ผลลัพธ์:** เมื่อ AppSheet บันทึกข้อมูล จะส่ง **JSON Data** ไปที่ Webhook URL ของ N8N ทันที</li>
+                            </ol>
+                            
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">2.2 API (The Sender)</h4>
+                            <p>**API** คือการส่งคำสั่งออกไปนอกระบบ (เช่น Google Sheets Node ที่ N8N ส่งคำสั่งให้ไปเพิ่มแถวใน GGS หรือ Line Notify Node ที่ส่งข้อความแจ้งเตือน)</p>
+                            <p><strong>บทบาทของ HTTP Request Node:</strong></p>
+                            <p>HTTP Request Node ใช้สำหรับเชื่อมต่อกับ API ใดๆ ที่ N8N ยังไม่มี Node สำเร็จรูปให้ (เช่น ระบบ CRM เฉพาะกิจของบริษัท) โดยการกำหนด</p>
+                            <ul class="list-disc ml-6 space-y-2 mt-2">
+                                <li>**Method:** POST (สำหรับส่ง/สร้างข้อมูลใหม่) หรือ GET (สำหรับดึงข้อมูล)</li>
+                                <li>**Header:** ใช้สำหรับส่ง API Key หรือ Token เพื่อยืนยันตัวตน</li>
+                                <li>**Body:** เนื้อหาข้อมูล JSON ที่ต้องการส่งไปยัง API ปลายทาง</li>
+                            </ul>
+                            <div class="note">Key Concept: **Webhook** เป็นแบบ "Push" (AppSheet ผลักข้อมูลมา), **API** (ผ่าน HTTP Request) เป็นแบบ "Pull/Request" (N8N ส่งคำสั่งออกไป)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                🥗 พักกลางวัน (11:45 - 12:45 น.)
+            </div>
+
+            <!-- SECTION 3: Workshop 1 -->
+            <h2 class="section-title mt-10 mb-6 border-l-4 border-fuchsia-500 pl-3">ส่วนที่ 3: Workshop 1: สร้าง Workflow Data Entry</h2>
+
+            <!-- 12:45 - 14:15: Workshop 1 -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">12:45 - 14:15 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">3.1-3.2 Workshop 1: เชื่อม AppSheet $\to$ N8N $\to$ GGS และจัดการ Logic Nodes</h3>
+                            <span class="type-tag workshop">ปฏิบัติ (Data Entry)</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <h4 class="text-lg font-bold text-gray-800">3.1 การวางแผน Workflow (Plan & UI Mockup)</h4>
+                            <p>**โจทย์:** เมื่อมีการบันทึกรายการขายใน AppSheet (Day 3) ให้ N8N รับข้อมูลและบันทึกข้อมูลนั้นลงใน GGS อีก Sheet (เพื่อทำ Backup หรือแยก Report) พร้อมส่ง Line Notify ให้ทีมงาน</p>
+                            <p>**เส้นทางการทำงาน:** AppSheet (Webhook) $\to$ N8N Webhook $\to$ Google Sheets Node $\to$ Line Notify</p>
+                            
+                            <div class="diagram-container">
+                                <p class="text-center font-bold text-lg text-fuchsia-700 mb-2">ภาพจำลอง Workflow ใน N8N UI</p>
+                                <div class="flex items-center justify-center space-x-2">
+                                    <div class="node-box node-trigger">1. Webhook (Trigger)</div>
+                                    <span class="text-3xl text-gray-500">→</span>
+                                    <div class="node-box node-action">2. Set (Data Mapping)</div>
+                                    <span class="text-3xl text-gray-500">→</span>
+                                    <div class="node-box node-action">3. Google Sheets (Append Row)</div>
+                                    <span class="text-3xl text-gray-500">→</span>
+                                    <div class="node-box node-action">4. Line Notify (Notification)</div>
+                                </div>
+                                <p class="data-caption">นี่คือโครงสร้างพื้นฐานที่ใช้ในการรับ-ส่งและประมวลผลข้อมูลใน N8N</p>
+                            </div>
+
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">3.2 การจัดการ Data Flow (Logic Nodes)</h4>
+                            <p>เราใช้ Node ประเภท Logic เพื่อเตรียมข้อมูล, สร้างเงื่อนไข และปรับปรุงค่าที่จำเป็นก่อนส่งต่อไปยังปลายทาง</p>
+                            <ul class="list-disc ml-6 space-y-2 mt-2">
+                                <li>**Set Node:** **Node ที่สำคัญที่สุด** ใช้สำหรับเปลี่ยนชื่อ Key ใน JSON (Map Data) เช่น เปลี่ยนชื่อ Key จาก AppSheet **"Total"** ให้เป็นชื่อคอลัมน์ใน GGS **"ยอดรวม\_สุทธิ"**</li>
+                                <li>**If Node:** ใช้สร้างเงื่อนไขการทำงาน เช่น "ถ้า <code>${{$json["Total\_Price"]}}</code> มากกว่า 10,000 ให้เดินไปที่ Branch A (ส่งอีเมลผู้จัดการ) ถ้าไม่ถึง ให้ไป Branch B (ส่ง Line Notify พนักงาน)"</li>
+                                <li>**Code Node:** ใช้เขียน JavaScript สั้นๆ เพื่อประมวลผลข้อมูลที่ซับซ้อน เช่น การคำนวณภาษีหลายชั้น หรือการ Format วันที่ (จะเรียนเชิงลึกใน Day 5)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                ☕ พักเบรคบ่าย (14:15 - 14:30 น.)
+            </div>
+            
+            <!-- SECTION 4: Workshop 2 -->
+            <h2 class="section-title mt-10 mb-6 border-l-4 border-yellow-500 pl-3">ส่วนที่ 4: Workshop 2: การจัดการข้อมูลและ Logic Flow (Set, If, Code)</h2>
+
+            <!-- 14:30 - 16:30: Workshop 2 -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag" style="background-color: #FBBF24;">14:30 - 16:30 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">4.1 JSON Data Flow, 4.2 การใช้ Code Node และสรุป Day 4</h3>
+                            <span class="type-tag workshop">Logic Flow & สรุป (120 นาที)</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <h4 class="text-lg font-bold text-gray-800">4.1 ตัวอย่างสาธิต: JSON Data Flow จาก AppSheet เข้า N8N</h4>
+                            <p>การทำความเข้าใจโครงสร้าง **JSON Payload** ที่มาจาก AppSheet เป็นสิ่งสำคัญที่สุดในการทำ Data Mapping</p>
+                            <p><strong>ภาพจำลอง: JSON Payload ที่มาจาก AppSheet (Data Structure)</strong></p>
+                            <div class="bg-gray-100 p-4 rounded-md text-sm whitespace-pre-wrap overflow-x-auto my-3">
+<pre>
+[
+    {
+        "Action Type": "Add",
+        "TableName": "Sales_Transactions",
+        "Data": {
+            "TXN_ID": "TXN-251025-ABCD", 
+            "Customer_Ref": "CUST-001", 
+            "Quantity": 5,
+            "Price": 1500.00
+        }
+    }
+]
+</pre>
+                            </div>
+                            <p><strong>Data Mapping ใน N8N (Set Node):</strong> เราต้องดึงค่าออกมาจาก Path ที่ถูกต้อง</p>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>JSON Path (AppSheet)</th>
+                                        <th>Target Column (Google Sheets)</th>
+                                        <th>Expression ที่ใช้</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>TXN\_ID</td>
+                                        <td>ID\_TRANSACTION</td>
+                                        <td><code>${{$json.Data.TXN\_ID}}</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Customer\_Ref</td>
+                                        <td>FK\_CUSTOMER</td>
+                                        <td><code>${{$json.Data.Customer\_Ref}}</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Quantity</td>
+                                        <td>QTY</td>
+                                        <td><code>${{$json.Data.Quantity}}</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">4.2 การใช้ Code Node ใน N8N (Advanced Transformation)</h4>
+                            <p>Code Node ช่วยให้คุณสามารถเขียน JavaScript เพื่อทำ Transformation ที่ซับซ้อนกว่า Set Node หรือการคำนวณพื้นฐาน (เช่น การคำนวณภาษีมูลค่าเพิ่ม, การวนลูป Array) เป็นการยกระดับ Logic ให้มีความยืดหยุ่นสูง</p>
+                            <p><strong>ตัวอย่าง Code Node: การคำนวณภาษีมูลค่าเพิ่ม (VAT)</strong></p>
+                            <div class="bg-gray-100 p-4 rounded-md text-sm whitespace-pre-wrap overflow-x-auto my-3">
+<pre>
+// JavaScript in Code Node
+for (const item of items) {
+  const totalPrice = item.json.Data.Price;
+  const vatRate = 0.07;
+  
+  // คำนวณ VAT และราคารวม
+  const vatAmount = totalPrice * vatRate;
+  const grandTotal = totalPrice + vatAmount;
+
+  // เพิ่ม Field ใหม่ใน Output Item
+  item.json.VAT_Amount = vatAmount;
+  item.json.GrandTotal = grandTotal;
+}
+return items; // ต้องส่งค่า items กลับคืน
+</pre>
+                            </div>
+                            
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Input JSON (Node ก่อนหน้า)</th>
+                                        <th>Output JSON (หลังผ่าน Code Node)</th>
+                                        <th>วัตถุประสงค์</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>มีแค่ <code>"Price": 1500.00</code></td>
+                                        <td>มี <code>"VAT_Amount": 105</code> และ <code>"GrandTotal": 1605</code></td>
+                                        <td>เพิ่ม Field ที่ถูกคำนวณด้วย JavaScript ก่อนส่งไปบันทึกใน GGS</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="note mt-6">สรุป: ผู้เรียนสามารถควบคุม **Data Flow** ได้อย่างสมบูรณ์ ตั้งแต่การรับข้อมูลจาก AppSheet, การปรับปรุงข้อมูลด้วย **Set Node** และ **Code Node**, และการตัดสินใจ Logic ด้วย **If Node** ซึ่งเป็นพื้นฐานสำคัญสู่การสร้าง AI Automation ใน Day 5</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-purple-100 p-6 rounded-xl text-center shadow-md">
+                <p class="text-2xl font-bold text-purple-800">รวมเวลาเรียนจริง: 6.0 ชั่วโมง (360 นาที)</p>
+            </div>
+
+        </div>
+
+        <footer class="text-center mt-12 py-4 text-gray-500 text-sm">
+            <p>Content Source: Day 4: Workshop เชื่อมต่ออัตโนมัติด้วย N8N (Part 1) (อ.แทน ธีรชัย โฉมทัพ) | <a href="https://idea-crmai.netlify.app/day4_automation" target="_blank">ลิงก์ต้นฉบับ</a></p>
+        </footer>
+    </div>
+</body>
+</html>

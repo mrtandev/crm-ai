@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 3: Workshop สร้าง App ด้วย AppSheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f8fafc; 
+            line-height: 1.7; 
+            color: #1e293b;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #10B981, #34D399); 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #10B981;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #10B981;
+        }
+        .session-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+        .session-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        .time-tag {
+            background-color: #34D399;
+            color: white;
+            font-weight: 700;
+            border-radius: 8px 0 0 8px;
+            padding: 8px 15px;
+            font-size: 0.95rem;
+        }
+        .type-tag {
+            background-color: #f0f9ff;
+            color: #10B981;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+        .type-tag.logic {
+            background-color: #ecfdf5;
+            color: #065f46;
+        }
+        .break-card {
+            background-color: #ecfdf5;
+            color: #047857;
+            font-weight: 600;
+        }
+        .content-body p {
+            margin-bottom: 12px;
+            text-indent: 10px;
+        }
+        .content-body strong {
+            color: #EF4444; 
+        }
+        .content-body a {
+            color: #3B82F6;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        .note {
+            background-color: #f3f4f6;
+            border-left: 4px solid #1f2937;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .data-table th, .data-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+            font-size: 0.9em;
+        }
+        .data-table th {
+            background-color: #d1fae5;
+            color: #065f46;
+            font-weight: 600;
+        }
+        .data-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        .data-table td:first-child {
+            font-weight: 600;
+        }
+        .data-caption {
+            font-size: 0.9em;
+            color: #6b7280;
+            margin-top: 5px;
+            text-align: center;
+        }
+        .diagram-container {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px dashed #9ca3af;
+            background-color: #f9fafb;
+            border-radius: 8px;
+        }
+        .diagram-item {
+            background-color: #bfdbfe; 
+            border: 1px solid #3b82f6;
+            padding: 8px 12px;
+            margin: 10px auto;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            position: relative;
+        }
+        .diagram-label {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #fef3c7;
+            color: #92400e;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+    <div class="container mx-auto">
+
+        <header class="text-center my-8 md:my-12">
+            <h1 class="header-title">กำหนดการเรียนรู้ Day 3: Workshop สร้าง Web/Mobile App ด้วย AppSheet 📱</h1>
+            <div class="mt-4 flex items-center justify-center space-x-4">
+                <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-16 h-16 rounded-full object-cover border-4 border-green-500 shadow-md">
+                <div>
+                    <p class="text-xl font-bold">อ.แทน [ธีรชัย โฉมทัพ]</p>
+                    <p class="text-sm text-gray-500">Head of Digital Transformation</p>
+                </div>
+            </div>
+            <p class="text-lg text-gray-600 mt-4 font-semibold">วันนี้เราจะเปลี่ยน GGS ที่ออกแบบไว้ใน Day 1 ให้กลายเป็น App ธุรกิจที่สวยงามและใช้งานง่าย!</p>
+        </header>
+
+        <div class="space-y-8">
+
+            <!-- SECTION 1: AppSheet Ecosystem & Data Definition -->
+            <h2 class="section-title mb-6">ส่วนที่ 1: AppSheet Ecosystem และการสร้าง App</h2>
+
+            <!-- 09:00 - 10:00: Data & Column Definition -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">09:00 - 10:00 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">1.1-1.3 การเชื่อมต่อ Data Design และ Column Definition ที่ถูกต้อง</h3>
+                            <span class="type-tag logic">รากฐาน App</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <h4 class="text-lg font-bold text-gray-800">1.1 การเชื่อมต่อ AppSheet กับ Google Sheets (GGS)</h4>
+                            <p>หัวใจของ AppSheet คือการใช้ GGS (Google Sheets) เป็นฐานข้อมูลหลักที่เราได้ออกแบบโครงสร้างแบบ **Normalization** ไว้แล้วใน Day 1</p>
+                            <p><strong>ขั้นตอนสำคัญ:</strong> 1. ไปที่ GGS $\to$ Extensions $\to$ AppSheet $\to$ Create App 2. AppSheet จะทำการสแกน Sheet (ตาราง) เพื่อสร้าง Data Model อัตโนมัติ 3. **ข้อควรระวัง:** AppSheet จะมองเห็นแค่แถวแรกของ Sheet เป็น Column Header ห้ามมีแถวว่างด้านบน!</p>
+                            
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">1.2 Column Definitions และ Type Setting</h4>
+                            <p>การกำหนดประเภทข้อมูล **(Column Type)** ที่ถูกต้องคือหัวใจของการทำงานของ AppSheet หากกำหนดผิด ระบบจะไม่สามารถสร้างความสัมพันธ์หรือใช้ Expression คำนวณได้</p>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Column Name (GGS)</th>
+                                        <th>AppSheet Type ที่ถูกต้อง</th>
+                                        <th>ความสำคัญ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>ID (PK)</td>
+                                        <td><strong>Key / Text / Unique ID</strong></td>
+                                        <td>หัวใจหลักของตาราง, ห้ามซ้ำ, ทำให้เกิดความสัมพันธ์</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Customer\_ID (FK)</td>
+                                        <td><strong>Ref (ชี้ไปที่ตาราง Customers)</strong></td>
+                                        <td>สร้างความสัมพันธ์แบบ **1-to-Many** เพื่อดึงข้อมูล Master</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sale\_Date</td>
+                                        <td><strong>DateTime หรือ Date</strong></td>
+                                        <td>ทำให้ AppSheet จัดการ Timezone ได้ถูกต้องและสามารถใช้ปฏิทินได้</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Product\_Image\_URL</td>
+                                        <td><strong>Image หรือ URL</strong></td>
+                                        <td>แสดงผลรูปภาพสินค้าใน App ได้ทันทีจากลิงก์</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">1.3 Virtual Columns (VC) และการดึงข้อมูล Ref</h4>
+                            <p><strong>Virtual Column (VC)</strong> เป็นคอลัมน์ที่ถูกคำนวณใน AppSheet **ไม่ได้อยู่ใน GGS** แต่มีประโยชน์อย่างยิ่งในการแสดงผลข้อมูลที่เชื่อมโยงกัน</p>
+                            <p><strong>การใช้งาน VC:</strong> เมื่อคุณกำหนด Customer\_ID เป็น **Ref** $\to$ AppSheet จะสร้าง VC อัตโนมัติชื่อ **Related Sales Transactions** ในตาราง Customers $\to$ ทำให้ผู้บริหารสามารถกดดูประวัติการซื้อทั้งหมดของลูกค้ารายนั้นได้ในหน้าเดียว</p>
+                            <p><strong>ตัวอย่างการดึงข้อมูล:</strong> การเข้าถึงชื่อลูกค้าจากตาราง Transaction ทำได้ง่ายๆ ผ่าน Expression: <code>[Customer\_ID].[Customer\_Name]</code> (ดึงชื่อลูกค้าจากตาราง Master ผ่าน PK)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                ☕ พักเบรคเช้า (10:00 - 10:15 น.)
+            </div>
+
+            <!-- SECTION 2: Workshop 1: App CRUD (Sales Transaction) -->
+            <h2 class="section-title mt-10 mb-6 border-l-4 border-yellow-500 pl-3">ส่วนที่ 2: Workshop 1: App CRUD (Sales Transaction)</h2>
+
+            <!-- 10:15 - 11:45: Workshop 1: App CRUD -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">10:15 - 11:45 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">2.1-2.2 Workshop: การสร้าง App CRUD และ Expression พื้นฐาน</h3>
+                            <span class="type-tag logic">ปฏิบัติ (CRUD)</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <h4 class="text-lg font-bold text-gray-800">2.1 การออกแบบ UX/UI (UX Tab) และประเภท View</h4>
+                            <p>เราจะเริ่มสร้างหน้าจอหลัก **(View)** สำหรับการบันทึกรายการขายและการดูรายงาน โดยเน้นการเลือกประเภท View ที่เหมาะสมกับวัตถุประสงค์</p>
+                            
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ประเภท View</th>
+                                        <th>เหมาะสำหรับ (วัตถุประสงค์)</th>
+                                        <th>จุดเด่น</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Deck/Card View</td>
+                                        <td>การแสดงรายการสินค้าหรือรายการขายที่ต้องการภาพประกอบ</td>
+                                        <td>สวยงาม, ดูง่ายบนมือถือ, เน้นภาพ (Showcase)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Table View</td>
+                                        <td>การแสดงข้อมูลดิบ, รายงานที่ต้องค้นหาและคัดกรอง</td>
+                                        <td>จัดการข้อมูลง่าย (Report/Data Management)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Form View</td>
+                                        <td>การกรอกข้อมูลใหม่เข้าตาราง</td>
+                                        <td>ถูกสร้างอัตโนมัติ (CRUD: Create)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">2.2 AppSheet Expressions สำหรับ Logic พื้นฐาน</h4>
+                            <p>ใช้ Expression เพื่อกำหนดค่าเริ่มต้น, บังคับเงื่อนไข, และคำนวณผลลัพธ์อัตโนมัติ</p>
+                            <p><strong>ตัวอย่างการปฏิบัติ:</strong></p>
+                            <ul class="list-disc ml-6 space-y-2">
+                                <li>**Auto Date:** กำหนดให้คอลัมน์ <code>Sale\_Date</code> มีค่าเริ่มต้นเป็นวันที่ปัจจุบัน (Initial Value): <code>TODAY()</code></li>
+                                <li>**บังคับกรอก (Data Validation):** กำหนดให้คอลัมน์ <code>Quantity</code> ต้องมากกว่า 0 (Valid If): <code>[_THIS] > 0</code> หากผู้ใช้กรอกค่าผิด AppSheet จะไม่อนุญาตให้บันทึก</li>
+                                <li>**คำนวณหา Total Price (Crucial):** ใช้ App Formula ใน Virtual Column หรือคอลัมน์ <code>[Total\_Price]</code>: <code>[Quantity] * [Product\_ID].[Price]</code></li>
+                            </ul>
+                            <p><strong>Key Takeaway:</strong> Expression ที่ใช้ Ref Type (<code>[Product\_ID].[Price]</code>) ช่วยให้เราดึงราคาสินค้าจากตาราง Master มาคำนวณได้ทันทีโดยไม่ต้องเขียนโค้ดซับซ้อน</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                🥗 พักกลางวัน (11:45 - 12:45 น.)
+            </div>
+
+            <!-- SECTION 3: Security Filter and Automation Bot -->
+            <h2 class="section-title mt-10 mb-6 border-l-4 border-red-500 pl-3">ส่วนที่ 3: Security Filter และ Automation Bot (Action)</h2>
+
+            <!-- 12:45 - 15:15: Security, Automation Bot -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag" style="background-color: #EF4444;">12:45 - 15:15 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">3.1 Security Filter, 3.2 Automation Bot และ 3.3 Dashboard</h3>
+                            <span class="type-tag logic" style="background-color: #fee2e2; color: #991b1b;">Logic & Security</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <h4 class="text-lg font-bold text-gray-800">3.1 Security Filter (ความปลอดภัยระดับ Row)</h4>
+                            <p>การจำกัดการเข้าถึงข้อมูลให้พนักงานแต่ละคนเห็นเฉพาะข้อมูลที่เกี่ยวข้องกับตนเองเท่านั้น (เช่น พนักงานขายควรเห็นรายการขายของตัวเองเท่านั้น) เป็นการทำ **WHERE CLAUSE** อัตโนมัติในฐานข้อมูลก่อนโหลดเข้า App</p>
+                            <p><strong>Expression ที่ใช้:</strong> <code>[Sales\_Person\_Email] = USEREMAIL()</code></p>
+                            <ul class="list-disc ml-6 space-y-2 mt-2">
+                                <li>**<code>USEREMAIL()</code>:** เป็น Function ใน AppSheet ที่ดึงอีเมลของผู้ใช้ที่กำลังเปิด App อยู่</li>
+                                <li>AppSheet จะใช้ Expression นี้เป็นตัวกรองหลักในแท็บ Security $\to$ **Filter**</li>
+                            </ul>
+                            
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">3.2 Automation Bot: การส่ง Notification และ Report</h4>
+                            <p>AppSheet Automation Bot เป็นเครื่องมือ No-Code สำหรับ Logic ภายใน App ที่ใช้ในการตอบสนองต่อ Event ต่างๆ (เช่น การเพิ่มข้อมูล) และสามารถทำงานได้หลายขั้นตอน</p>
+                            
+                            <p><strong>Workshop: สร้าง Bot ส่ง Webhook ไปยัง n8n (On New Sales)</strong></p>
+                            <ol class="list-decimal ml-6 space-y-2 mt-2">
+                                <li>**Task 1: สร้าง Webhook Action:** กำหนด URL ปลายทางเป็น Webhook ของ **n8n** ที่เตรียมไว้ใน Day 2 $\to$ ส่งข้อมูล **JSON Payload** ที่จำเป็น (เช่น <code>{ "TxnID": [ID], "Total": [Total\_Price] }</code>)</li>
+                                <li>**Task 2: สร้าง Bot (Automation):**
+                                    <ul>
+                                        <li>**Event (Trigger):** กำหนดให้ Bot ทำงานเมื่อ **"มีการเพิ่ม (Add) แถวใหม่"** ในตาราง Sales Transactions</li>
+                                        <li>**Condition (เงื่อนไข):** <code>[Total\_Price] > 10000</code> (ใช้เพื่อส่งเฉพาะรายการใหญ่เข้า Flow n8n)</li>
+                                        <li>**Process (Logic):** สั่งให้ Bot เรียกใช้ **Webhook Action** ที่สร้างไว้ใน Task 1 เพื่อส่งข้อมูลไปให้ n8n ประมวลผลต่อ (เช่น ส่ง Line Notify, บันทึก Loyverse)</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                            
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">3.3 การสร้าง Dashboard สำหรับผู้บริหาร (ช่วง 15:15 - 16:00 น.)</h4>
+                            <p>ใช้ **Dashboard View** ใน AppSheet เพื่อรวม Views ต่างๆ เข้ามาแสดงผลในหน้าจอเดียว ทำให้ผู้บริหารสามารถเห็นภาพรวมธุรกิจได้อย่างรวดเร็ว</p>
+                            <p><strong>ส่วนประกอบของ Dashboard ที่ดี:</strong></p>
+                            <ul class="list-disc ml-6 space-y-2">
+                                <li>**Card View:** แสดงยอดขายรวม (Aggregate Summary) ในรูปแบบ Big Number</li>
+                                <li>**Table View:** แสดงรายการขายล่าสุด 5 รายการ (ง่ายต่อการตรวจสอบ)</li>
+                                <li>**Chart View:** แสดงกราฟยอดขายแยกตามสินค้า/พนักงาน (Trend Analysis)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                ☕ พักเบรคบ่าย (14:15 - 14:30 น.)
+            </div>
+
+            <!-- SECTION 4: Summary -->
+            <h2 class="section-title mt-10 mb-6 border-l-4 border-gray-500 pl-3">ส่วนที่ 4: สรุปการ Deploy App และเตรียมพร้อมสำหรับ Day 4 (N8N)</h2>
+
+            <!-- 16:00 - 16:30: Summary -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag" style="background-color: #9CA3AF;">16:00 - 16:30 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">4.1 Deploy App และ 4.2 เตรียมพร้อมสำหรับ N8N</h3>
+                            <span class="type-tag" style="background-color: #E5E7EB; color: #4B5563;">สรุป</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <h4 class="text-lg font-bold text-gray-800">4.1 การ Deploy และ Handover AppSheet</h4>
+                            <p>ขั้นตอนสุดท้ายในการทำให้ App ใช้งานได้จริงบน Google Workspace และการส่งมอบให้ผู้ดูแลระบบ:</p>
+                            <ul class="list-disc ml-6 space-y-2 mt-2">
+                                <li>**Deployment Check:** ตรวจสอบความสมบูรณ์ของ Security Filter, Sync Performance, และ UX/UI ก่อนกด Deploy จริง</li>
+                                <li>**Handover:** มอบสิทธิ์การเป็นเจ้าของ (Owner) ให้ผู้ดูแลระบบ หรือทีม IT เพื่อให้เกิดความยั่งยืนในการดูแล App</li>
+                            </ul>
+                            
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">4.2 เตรียมพร้อมสำหรับ N8N (Day 4)</h4>
+                            <p>ทบทวนพื้นฐานที่จำเป็นสำหรับการสร้าง Workflow ภายนอก AppSheet ในวันพรุ่งนี้:</p>
+                            <ul class="list-disc ml-6 space-y-2 mt-2">
+                                <li>**Data Structure:** การทำความเข้าใจ **JSON Payload** ที่จะถูกส่งมาจาก AppSheet Webhook (จากการสร้าง Automation Bot ในวันนี้) คือหัวใจของการทำงานร่วมกัน</li>
+                                <li>**API Key Security:** ทบทวนความสำคัญของการใช้ **Credentials** ใน N8N เพื่อเก็บ Line Notify Key หรือ Gemini Key อย่างปลอดภัย (ทบทวนจาก Day 2)</li>
+                            </ul>
+                            
+                            <div class="note">สรุป: ผู้เรียนสามารถสร้าง App ธุรกิจ (MVP) ที่ใช้งานได้จริงบนมือถือและเว็บจาก Google Sheets, สามารถใช้ Expression คำนวณ Logic พื้นฐาน และกำหนด Security Filter ได้สำเร็จ พร้อมสร้าง Automation Bot สำหรับส่ง Webhook ไปยัง n8n</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-green-100 p-6 rounded-xl text-center shadow-md">
+                <p class="text-2xl font-bold text-green-800">รวมเวลาเรียนจริง: 6.0 ชั่วโมง (360 นาที)</p>
+            </div>
+
+        </div>
+
+        <footer class="text-center mt-12 py-4 text-gray-500 text-sm">
+            <p>Content Source: Day 3: Workshop สร้าง Web/Mobile App ด้วย AppSheet (อ.แทน ธีรชัย โฉมทัพ) | <a href="https://idea-crmai.netlify.app/day3_automation" target="_blank">ลิงก์ต้นฉบับ</a></p>
+        </footer>
+    </div>
+</body>
+</html>

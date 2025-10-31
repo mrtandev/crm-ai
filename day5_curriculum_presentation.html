@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 5: Project MVP Showcase และการสรุปหลักสูตร</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f8fafc; 
+            line-height: 1.7; 
+            color: #1e293b;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #9333ea, #c084fc); 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #9333ea;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #9333ea;
+        }
+        .session-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+        .session-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        .time-tag {
+            background-color: #a855f7;
+            color: white;
+            font-weight: 700;
+            border-radius: 8px 0 0 8px;
+            padding: 8px 15px;
+            font-size: 0.95rem;
+        }
+        .type-tag {
+            background-color: #f3e8ff;
+            color: #7e22ce;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+        .type-tag.logic {
+            background-color: #faf5ff;
+            color: #581c87;
+        }
+        .break-card {
+            background-color: #f5f3ff;
+            color: #7c3aed;
+            font-weight: 600;
+        }
+        .content-body p {
+            margin-bottom: 12px;
+            text-indent: 10px;
+        }
+        .content-body strong {
+            color: #F97316; 
+        }
+        .content-body a {
+            color: #8B5CF6;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        .note {
+            background-color: #f0fdf4;
+            border-left: 4px solid #10b981;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .data-table th, .data-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+            font-size: 0.9em;
+        }
+        .data-table th {
+            background-color: #ede9fe;
+            color: #6d28d9;
+            font-weight: 600;
+        }
+        .data-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        .data-table td:first-child {
+            font-weight: 600;
+        }
+        .data-caption {
+            font-size: 0.9em;
+            color: #6b7280;
+            margin-top: 5px;
+            text-align: center;
+        }
+        .diagram-container {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px dashed #c084fc;
+            background-color: #f3e8ff;
+            border-radius: 8px;
+        }
+        .node-box {
+            background-color: #fff;
+            border: 1px solid #c084fc;
+            padding: 8px 12px;
+            margin: 10px auto;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .node-trigger {
+            background-color: #d8b4fe; 
+            border: 1px solid #a855f7;
+        }
+        .node-action {
+            background-color: #e9d5ff;
+            border: 1px solid #c084fc;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+    <div class="container mx-auto">
+
+        <header class="text-center my-8 md:my-12">
+            <h1 class="header-title">กำหนดการเรียนรู้ Day 5: Project MVP Showcase และการสรุปหลักสูตร 🚀</h1>
+            <div class="mt-4 flex items-center justify-center space-x-4">
+                <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-16 h-16 rounded-full object-cover border-4 border-purple-500 shadow-md">
+                <div>
+                    <p class="text-xl font-bold">อ.แทน [ธีรชัย โฉมทัพ]</p>
+                    <p class="text-sm text-gray-500">Head of Digital Transformation</p>
+                </div>
+            </div>
+            <p class="text-lg text-gray-600 mt-4 font-semibold">วันสุดท้ายคือการ **แกะรอยระบบจริง**! เราจะทบทวนความรู้ทั้งหมดผ่านระบบ AI Automation MVP และวางแผนสู่การใช้งานจริง</p>
+        </header>
+
+        <div class="space-y-8">
+
+            <!-- SECTION 1: Advanced Data Flow -->
+            <h2 class="section-title mb-6">ส่วนที่ 1: ทบทวน Advanced Data Flow (09:00 - 10:30 น.)</h2>
+
+            <!-- 09:00 - 10:30: Advanced Data Flow -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">09:00 - 10:30 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">1.1 การจัดการข้อมูล Array (Split, Merge, Item Lists) ใน N8N</h3>
+                            <span class="type-tag logic">ทบทวน & ขั้นสูง</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <p>หัวใจของการจัดการข้อมูลที่ซับซ้อนใน N8N คือการจัดการ **Array ของ JSON Objects** ซึ่งพบมากในใบสั่งซื้อที่มีหลายรายการ (Order Lines) หรือการรับข้อมูลจาก API ที่ส่งมาพร้อมกันหลายชุด</p>
+                            
+                            <h4 class="text-lg font-bold text-gray-800">1.1.1 หลักการ Split In Batches (การแยกรายการสินค้า)</h4>
+                            <p>ใช้ Node **Split In Batches** เพื่อแยก Array ที่ซับซ้อน (เช่น รายการสินค้าในใบสั่งซื้อ) ออกมาประมวลผลทีละรายการ เพื่อให้สามารถบันทึกข้อมูลแต่ละรายการลงในตารางย่อย (Order Lines GGS Sheet) ได้อย่างถูกต้อง</p>
+                            <p><strong>โครงสร้าง Workflow ใบสั่งซื้อ (Order Header/Lines):</strong></p>
+                            <div class="diagram-container">
+                                <p class="text-center font-bold text-lg text-fuchsia-700 mb-2">Flow การจัดการใบสั่งซื้อที่มีหลายรายการ</p>
+                                <div class="flex items-center justify-center space-x-2">
+                                    <div class="node-box node-trigger">1. Webhook (Order Header)</div>
+                                    <span class="text-3xl text-gray-500">→</span>
+                                    <div class="node-box node-action">2. GGS (บันทึก Order Header)</div>
+                                    <span class="text-3xl text-gray-500">→</span>
+                                    <div class="node-box node-action bg-yellow-100">3. Split In Batches (แยก Array)</div>
+                                    <span class="text-3xl text-gray-500">→</span>
+                                    <div class="node-box node-action">4. GGS (บันทึก Order Lines ทีละรายการ)</div>
+                                </div>
+                                <p class="data-caption">การใช้ Split In Batches ทำให้มั่นใจว่าข้อมูล Header (Order ID) ถูกส่งต่อไปเป็น Foreign Key ในทุก Item Line</p>
+                            </div>
+                            
+                            <p><strong>ตัวอย่าง Expression ใน Split Node:</strong> Expression ที่ใช้ระบุ Array ที่ต้องการแยก:</p>
+                            <div class="bg-gray-100 p-3 rounded-md text-sm my-3">
+                                <code>{{ $json.Data.Order\_Lines }}</code>
+                            </div>
+                            <p>หลักการ: N8N จะวนลูป (Loop) ประมวลผลแต่ละ Item ใน Array นี้ และส่งไปยัง Node ถัดไป (GGS Lines) โดยที่ข้อมูลจาก Node ก่อนหน้า (Order Header ID) ยังคงอยู่</p>
+                            
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">1.1.2 การทบทวน Merge Node และ Item Lists</h4>
+                            <p><strong>Merge Node:</strong> ใช้รวมข้อมูลจาก 2 Path ที่แยกกันใน Workflow เข้ามาเป็น Array เดียวกัน เพื่อนำไปประมวลผลต่อ (เช่น การรวมข้อมูลลูกค้าจาก CRM และข้อมูลการซื้อจาก AppSheet เข้าด้วยกัน)</p>
+                            <p><strong>Item Lists Node:</strong> ใช้ในการรวมข้อมูลที่ถูกแยกออกจากกัน (Split) ให้กลับมาเป็น Array เดียวกันอีกครั้งหลังจากการประมวลผลย่อยเสร็จสิ้น</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                ☕ พักเบรคเช้า (10:30 - 10:45 น.)
+            </div>
+
+            <!-- SECTION 2: AI/LLM Integration & Error Handling -->
+            <h2 class="section-title mt-10 mb-6 border-l-4 border-indigo-500 pl-3">ส่วนที่ 2: ทบทวน AI/LLM Integration และ Error Handling (10:45 - 12:00 น.)</h2>
+
+            <!-- 10:45 - 12:00: AI/LLM Integration -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">10:45 - 12:00 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">2.1 AI/LLM Integration (Gemini Node) และ 2.2 ทบทวน Error Handling (Try/Catch)</h3>
+                            <span class="type-tag logic">ทบทวน & Logic</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <h4 class="text-lg font-bold text-gray-800">2.1 ทบทวน Gemini Node และ Prompt Design</h4>
+                            <p>การผสานพลัง AI (LLM) เข้ากับ Workflow คือหัวใจของหลักสูตรนี้ โดยใช้ **Gemini Node** ใน N8N เพื่อจัดการข้อมูลที่ไม่มีโครงสร้าง **(Unstructured Data)** เช่น การวิเคราะห์ Sentiment, การสรุปข้อความ หรือการสร้างคอนเทนต์</p>
+                            <p><strong>Prompt Design (การออกแบบคำสั่ง):</strong> ต้องใช้ Expression เพื่อส่งข้อมูลจาก Workflow เข้าไปใน Prompt (Context-Aware Prompting)</p>
+                            <p><strong>ตัวอย่าง Prompt ที่ใช้ Expression (สำหรับ Summarization):</strong></p>
+                            <div class="bg-gray-100 p-3 rounded-md text-sm my-3">
+                                <code>"ฉันต้องการให้คุณสรุปข้อความนี้ให้เหลือ 3 บรรทัด และเน้นประเด็นสำคัญเท่านั้น: \n\n{{ $json.Report\_Content }}"</code>
+                            </div>
+                            <p><strong>ตารางโครงสร้าง Prompt สำหรับ AI Sentiment Analysis:</strong></p>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>องค์ประกอบ</th>
+                                        <th>รายละเอียด</th>
+                                        <th>ข้อมูลที่ใช้ (Expression)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>**System Instruction** (Role)</td>
+                                        <td>กำหนดบทบาทให้ AI (เช่น นักวิเคราะห์ Sentiment ผู้เชี่ยวชาญ)</td>
+                                        <td><code>"Act as a professional sentiment analyst..."</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td>**Context Data**</td>
+                                        <td>ข้อมูลที่จะให้ AI วิเคราะห์ (ข้อความ Feedback, รายละเอียดสินค้า)</td>
+                                        <td><code>{{ $json.Feedback\_Message }}</code> (ดึงมาจาก AppSheet)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>**Output Format**</td>
+                                        <td>กำหนดรูปแบบผลลัพธ์ (เช่น JSON Format, คำตอบสั้น ๆ)</td>
+                                        <td><code>"Return only the word: [Positive/Negative/Neutral]"</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">2.2 ทบทวน Error Handling และ Logging (Try/Catch)</h4>
+                            <p>**Error Handling (Try/Catch)** คือสิ่งสำคัญที่สุดในการสร้างระบบที่เสถียร (Reliable) โดยเฉพาะเมื่อเชื่อมต่อกับ API ภายนอกอย่าง Gemini</p>
+                            <p><strong>หลักการ:</strong> ถ้า **Gemini Node** (Try Path) ล้มเหลว $\to$ Workflow ต้องเปลี่ยนไปทำงานใน **Error Path (Catch Error Node)**</p>
+                            <ul class="list-disc ml-6 space-y-2 mt-2">
+                                <li>**Action in Catch:** ต้องทำ 2 อย่างเสมอ: **1) บันทึก Log ข้อผิดพลาดเข้า GGS** (พร้อมรายละเอียด Error Message) และ **2) ส่ง Line Notify/Email Alert** หา IT Support ทันที</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                🥗 พักกลางวัน (12:00 - 13:00 น.)
+            </div>
+
+            <!-- SECTION 3: Project MVP Showcase -->
+            <h2 class="section-title mt-10 mb-6 border-l-4 border-fuchsia-500 pl-3">ส่วนที่ 3: Project MVP Showcase & Deconstruction (13:00 - 14:15 น.)</h2>
+
+            <!-- 13:00 - 14:15: Project MVP Showcase -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">13:00 - 14:15 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">3.1-3.2 การแกะรอยระบบต้นแบบ (Deconstruction) และวิเคราะห์ 3 MVP Systems</h3>
+                            <span class="type-tag workshop">Project Review</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <p>ผู้เรียนจะเข้าสู่ระบบต้นแบบ **AI Automation MVP** เพื่อวิเคราะห์และระบุว่าแต่ละส่วนของระบบ (UI, Data, Logic, AI) ถูกสร้างด้วยเครื่องมือใด **(AppSheet, N8N, GAS, Gemini)**</p>
+                            
+                            <h4 class="text-lg font-bold text-gray-800">ตารางสรุปการทำงานร่วมกันของ 3 MVP Systems</h4>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ระบบ MVP</th>
+                                        <th>UI/Data Entry (Day 3)</th>
+                                        <th>Automation Logic (Day 4)</th>
+                                        <th>AI/Smart Logic (Day 5)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>**1. Line OA Bot + CRM (Lead Scoring)**</td>
+                                        <td>AppSheet (Dashboard, Customer Ref)</td>
+                                        <td>N8N (Webhook, If Node, GGS Update)</td>
+                                        <td>N/A (ใช้ Conditional Logic ล้วนๆ)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>**2. AI วิเคราะห์ฟีดแบ็ก**</td>
+                                        <td>AppSheet Form (บันทึก Feedback)</td>
+                                        <td>N8N (Webhook $\to$ Gemini $\to$ If Node)</td>
+                                        <td>**Gemini Node** (Sentiment Analysis, Keyword Extraction)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>**3. AI ผู้ช่วยสร้างคอนเทนต์**</td>
+                                        <td>GGS Sheet (ตาราง Content List)</td>
+                                        <td>N8N (Schedule Trigger, Line Broadcast API)</td>
+                                        <td>**Gemini Node** (Content Generation)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p class="data-caption">การวิเคราะห์นี้ทำให้เห็นภาพรวมของ Ecosystem ว่าแต่ละเครื่องมือมีบทบาทอย่างไรในระบบจริง</p>
+
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">บทบาทของ AI (Gemini) ในระบบจริง:</h4>
+                            <ul class="list-disc ml-6 space-y-2">
+                                <li>**Sentiment Analysis:** แปลงข้อความ (Unstructured Data) ให้เป็นข้อมูลที่มีโครงสร้าง (Structured Data: Positive/Negative)</li>
+                                <li>**Content Creation:** สร้างแคปชั่นการตลาดที่สดใหม่และหลากหลายเพื่อส่งผ่าน Line Broadcast</li>
+                                <li>**Data Enrichment:** เพิ่มข้อมูลเชิงลึกที่มนุษย์ต้องใช้เวลาวิเคราะห์ (เช่น สรุปรายงานจากข้อความยาวๆ)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                ☕ พักเบรคบ่าย (14:15 - 14:30 น.)
+            </div>
+            
+            <!-- SECTION 4: Summary -->
+            <h2 class="section-title mt-10 mb-6 border-l-4 border-yellow-500 pl-3">ส่วนที่ 4: สรุปหลักสูตรและการส่งมอบ (14:30 - 16:30 น.)</h2>
+
+            <!-- 14:30 - 16:30: Summary -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag" style="background-color: #FBBF24;">14:30 - 16:30 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">4.1 การส่งมอบงาน (Handover) และ 4.2 Roadmap สู่ Digital Transformation</h3>
+                            <span class="type-tag workshop">สรุป & Roadmap (120 นาที)</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <h4 class="text-lg font-bold text-gray-800">4.1 การส่งมอบงาน (Handover) และการทำ Document</h4>
+                            <p>ความสำเร็จของโครงการไม่ได้อยู่ที่การสร้าง App ได้ แต่อยู่ที่การส่งมอบงานให้ทีมอื่นดูแลต่อได้ โดยเน้นย้ำถึงความสำคัญของ **การทำเอกสาร (Documentation)**</p>
+                            
+                            <p><strong>Checklist การ Handover ที่สำคัญ:</strong></p>
+                            <ul class="list-disc ml-6 space-y-2 mt-2">
+                                <li>**Data Structure Document:** เอกสารโครงสร้าง GGS (PK/FK) และความสัมพันธ์ของตาราง</li>
+                                <li>**Flowchart Document:** แผนผัง Logic ของ N8N Workflow ทั้งหมด (Day 2)</li>
+                                <li>**Credential Security:** การส่งมอบ API Key/Credentials ผ่านระบบ **N8N Credentials** อย่างปลอดภัย (ห้ามส่งเป็นไฟล์ข้อความ)</li>
+                                <li>**AppSheet Owner Transfer:** การมอบสิทธิ์ Owner ของ AppSheet ให้ผู้ดูแลระบบ (IT Team)</li>
+                            </ul>
+
+                            <h4 class="text-lg font-bold text-gray-800 mt-4">4.2 Roadmap สู่ Digital Transformation และ Scalability</h4>
+                            <p>สรุปภาพรวมของการพัฒนาตนเองในฐานะ **Low-Code Developer** และขั้นตอนถัดไปในการสร้างระบบที่รองรับการเติบโตของธุรกิจ (Scalability)</p>
+                            
+                            <p><strong>การวัดผลความสำเร็จ (KPIs):</strong></p>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>KPI</th>
+                                        <th>ตัวชี้วัด (วัดผลจากระบบที่สร้าง)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>**Efficiency Gain**</td>
+                                        <td>ลดเวลาทำงานซ้ำซาก (Man-hours Saved) จาก Automation</td>
+                                    </tr>
+                                    <tr>
+                                        <td>**Data Quality**</td>
+                                        <td>ลดข้อผิดพลาดในการป้อนข้อมูล (Error Rate) หลังใช้ AppSheet/Normalization</td>
+                                    </tr>
+                                    <tr>
+                                        <td>**Automation Reliability**</td>
+                                        <td>ความเสถียรของ Flow (วัดจาก Error Log ใน GGS/N8N)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <p>**ขั้นตอนถัดไป (Next Step for Scalability):** เมื่อธุรกิจเติบโตและข้อมูลซับซ้อนขึ้น อาจต้องพิจารณาการย้ายฐานข้อมูลหลักจาก GGS ไปสู่ **External Database (เช่น SQL/PostgreSQL)** ซึ่ง N8N รองรับการเชื่อมต่ออย่างเต็มรูปแบบ</p>
+
+                            <div class="note mt-6">จบหลักสูตร: ผู้เรียนได้เรียนรู้ครบถ้วนตั้งแต่รากฐานข้อมูล, Logic Flow, การสร้าง App, การเชื่อมต่อ API/Automation (N8N) และการผสานพลัง AI (Gemini) เข้าสู่ระบบจริง!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-purple-100 p-6 rounded-xl text-center shadow-md">
+                <p class="text-2xl font-bold text-purple-800">รวมเวลาเรียนจริง: 6.0 ชั่วโมง (360 นาที)</p>
+            </div>
+
+        </div>
+
+        <footer class="text-center mt-12 py-4 text-gray-500 text-sm">
+            <p>Content Source: Day 5: Project MVP Showcase และการสรุปหลักสูตร (อ.แทน ธีรชัย โฉมทัพ)</p>
+        </footer>
+    </div>
+</body>
+</html>

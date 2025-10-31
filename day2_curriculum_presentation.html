@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 2: Logic/Flow Automation ขั้นสูง</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f8fafc; 
+            line-height: 1.6;
+            color: #1e293b;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #EC4899, #F472B6); 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #EC4899;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EC4899;
+        }
+        .session-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+        .session-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        .time-tag {
+            background-color: #F472B6;
+            color: white;
+            font-weight: 700;
+            border-radius: 8px 0 0 8px;
+            padding: 8px 15px;
+            font-size: 0.95rem;
+        }
+        .type-tag {
+            background-color: #f0f9ff;
+            color: #EC4899;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+        .type-tag.logic {
+            background-color: #fce7f3;
+            color: #9d174d;
+        }
+        .break-card {
+            background-color: #fdf2f8;
+            color: #db2777;
+            font-weight: 600;
+        }
+        .content-body p {
+            margin-bottom: 12px;
+            text-indent: 10px;
+        }
+        .content-body strong {
+            color: #F97316;
+        }
+        .content-body a {
+            color: #F472B6;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        .note {
+            background-color: #f0fdf4;
+            border-left: 4px solid #10b981;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .data-table th, .data-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+            font-size: 0.9em;
+        }
+        .data-table th {
+            background-color: #f3e8ff;
+            color: #4c1d95;
+            font-weight: 600;
+        }
+        .data-table tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        .data-table td:first-child {
+            font-weight: 600;
+        }
+        .data-caption {
+            font-size: 0.9em;
+            color: #6b7280;
+            margin-top: 5px;
+            text-align: center;
+        }
+        /* Custom Flowchart Element Mockup */
+        .flow-diagram-mockup {
+            border: 1px dashed #ccc;
+            padding: 15px;
+            margin-top: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+        .flow-diagram-mockup .flow-item {
+            padding: 8px;
+            margin: 5px auto;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .flow-diagram-mockup .flow-box {
+            background-color: #e0f2fe;
+            border: 1px solid #38bdf8;
+        }
+        .flow-diagram-mockup .flow-diamond {
+            width: 150px;
+            height: 60px;
+            line-height: 1.2;
+            margin: 10px auto;
+            background-color: #fecaca;
+            border: 1px solid #ef4444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(45deg);
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #b91c1c;
+        }
+        .flow-diagram-mockup .flow-diamond-text {
+            transform: rotate(-45deg);
+        }
+        .flow-diagram-mockup .flow-arrow {
+            text-align: center;
+            font-weight: 700;
+            color: #1d4ed8;
+            margin: 5px 0;
+        }
+        .flow-diagram-mockup .flow-line {
+            display: flex;
+            justify-content: space-around;
+        }
+        .flow-diagram-mockup .flow-end {
+            background-color: #d1d5db;
+            border: 1px solid #6b7280;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+    <div class="container mx-auto">
+
+        <header class="text-center my-8 md:my-12">
+            <h1 class="header-title">กำหนดการเรียนรู้ Day 2: Logic/Flow Automation ขั้นสูง 📐</h1>
+            <div class="mt-4 flex items-center justify-center space-x-4">
+                <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" alt="อาจารย์แทน ธีรชัย โฉมทัพ" class="w-16 h-16 rounded-full object-cover border-4 border-pink-500 shadow-md">
+                <div>
+                    <p class="text-xl font-bold">อ.แทน [ธีรชัย โฉมทัพ]</p>
+                    <p class="text-sm text-gray-500">Head of Digital Transformation</p>
+                </div>
+            </div>
+            <p class="text-lg text-gray-600 mt-4 font-semibold">เปลี่ยนกระบวนการที่น่าเบื่อ ให้เป็น Flowchart ที่สวยงามและชาญฉลาด!</p>
+        </header>
+
+        <div class="space-y-8">
+
+            <!-- SECTION 1: Flowcharting -->
+            <h2 class="section-title mb-6">ส่วนที่ 1: การวิเคราะห์ Business Process → Flowcharting</h2>
+
+            <!-- 09:00 - 10:15: Business Process Mapping -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">09:00 - 10:15 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">1.1 ความสำคัญของการออกแบบ Logic และ Business Process Mapping (BPMN Lite)</h3>
+                            <span class="type-tag logic">ทฤษฎี & Flow</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <p>ข้อผิดพลาดอันดับหนึ่งของการทำ Automation คือการกระโดดไปใช้ Tool (AppSheet/n8n) ก่อนที่จะมีแผนงานที่ชัดเจน Day 2 จะเน้นย้ำว่า **"Flowchart คือภาษาของ Low-Code Developer"** การออกแบบ Flowchart ให้ถูกต้องครั้งเดียวสามารถประหยัดเวลาการแก้ไขโค้ดได้มากกว่า 80%</p>
+                            <p><strong>ความสำคัญของการวางแผน:</strong> หากคุณเริ่มสร้าง AppSheet Action หรือ n8n Workflow ทันที โดยไม่มี Flowchart จะพบปัญหาการเขียนซ้ำ แก้ไขซ้ำ และการจัดการเงื่อนไขที่ซับซ้อนได้ยาก การลงทุนใน Flowchart ก่อน จะช่วยให้โค้ด (Low-Code) ของคุณมีเสถียรภาพสูง</p>
+                            
+                            <h4 class="text-lg font-bold text-gray-700 mt-4 mb-2">BPMN Lite: 3 องค์ประกอบหลักของ Flowchart</h4>
+                            <p>เราจะใช้หลักการของ BPMN (Business Process Model and Notation) ในรูปแบบง่ายๆ เพื่อสร้าง Flowchart ที่สื่อสารได้อย่างชัดเจนและแปลงเป็น Automation Logic ได้ทันที</p>
+                            
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>สัญลักษณ์</th>
+                                        <th>ความหมาย (ใน Workflow)</th>
+                                        <th>เทียบเท่าใน n8n / AppSheet</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>วงกลม ⚪</td>
+                                        <td>จุดเริ่มต้น/จุดสิ้นสุด (Trigger)</td>
+                                        <td>Webhooks, Scheduled Events, On Add/Update Bot</td>
+                                    </tr>
+                                    <tr>
+                                        <td>สี่เหลี่ยมผืนผ้า 🟦</td>
+                                        <td>กิจกรรมที่ต้องทำ (Task/Action)</td>
+                                        <td>AppSheet Action, n8n Node (Function, HTTP Request)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>เพชร/สี่เหลี่ยมขนมเปียกปูน ♦️</td>
+                                        <td>การตัดสินใจ/เงื่อนไข (Conditional Logic)</td>
+                                        <td>AppSheet Branching Logic, n8n IF Node</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 class="text-lg font-bold text-gray-700 mt-4 mb-2">1.2 Workshop: แปลงโจทย์ธุรกิจเป็น Flowchart (Line OA Lead Scoring)</h4>
+                            <p>ผู้เรียนฝึกทำ Flowchart จากโจทย์ **"Line OA Chatbot & Lead Scoring"** (System 1 MVP) เพื่อให้เห็นการทำงานของสัญลักษณ์ทั้ง 3 ตัว</p>
+                            
+                            <div class="flow-diagram-mockup">
+                                <p class="flow-item flow-box bg-green-200 border-green-700">Start: Line OA Webhook Trigger (วงกลม)</p>
+                                <p class="flow-arrow">↓</p>
+                                <p class="flow-item flow-box">Task 1: Lookup Line ID (ใน GGS Customers) (สี่เหลี่ยม)</p>
+                                <p class="flow-arrow">↓</p>
+                                <div class="flow-diagram-mockup-line flow-line">
+                                    <div class="flow-diamond"><span class="flow-diamond-text">Gateway 1: IF Found?</span></div>
+                                </div>
+                                <p class="flow-arrow" style="display: flex; justify-content: space-around;">⬇️ (TRUE) &nbsp;&nbsp;&nbsp; ⬇️ (FALSE)</p>
+                                <div class="flow-line">
+                                    <p class="flow-item flow-box bg-yellow-200 border-yellow-700 w-1/2 mx-1">Task 3: Update Last_Contact_Date (ลูกค้าเก่า)</p>
+                                    <p class="flow-item flow-box bg-red-200 border-red-700 w-1/2 mx-1">Task 2: Insert New Lead (Status: New Lead)</p>
+                                </div>
+                                <p class="flow-arrow">↓ (รวมกัน)</p>
+                                <p class="flow-item flow-box">Task 4: Send Welcome Message (Line OA API)</p>
+                                <p class="flow-arrow">↓</p>
+                                <p class="flow-item flow-box flow-end">End: Workflow Complete</p>
+                            </div>
+                            <p class="data-caption">ภาพ Flowchart: การจัดการ Lead เมื่อลูกค้าทัก Line OA (จาก Webhook Trigger) โดยใช้ Conditional Logic</p>
+                            <p>Flow จะเริ่มต้นจาก Webhook Trigger แล้วตรวจสอบ ID ในฐานข้อมูล (GGS) ก่อนจะแตก Flow ด้วย **Gateway (เพชร)** เป็น 2 ทาง คือ ลูกค้าใหม่ (New Lead) และ ลูกค้าเก่า (Old Customer) เพื่อให้ระบบทำงานตอบสนองได้อย่างเหมาะสม</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                ☕ พักเบรคเช้า (10:15 - 10:30 น.)
+            </div>
+
+            <!-- SECTION 2: Conditional Logic & Data Mapping -->
+            <h2 class="section-title mt-10 mb-6 border-l-4 border-purple-500 pl-3">ส่วนที่ 2: Conditional Logic และ Data Mapping</h2>
+
+            <!-- 10:30 - 12:00: Conditional Logic and Transformation -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">10:30 - 12:00 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">2.1 Conditional Logic (IF/ELSE/SWITCH) และ 2.2 Data Mapping & Transformation</h3>
+                            <span class="type-tag logic">Logic Core</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <p><strong>Conditional Logic:</strong> คือการทำให้ระบบของคุณฉลาดขึ้น โดยการกำหนด "เงื่อนไข" ในการตัดสินใจ (เช่น **IF** ลูกค้าเป็น Hot Lead $\to$ แจ้งเซลล์ทันที **ELSE** $\to$ ส่งอีเมลติดตามผล) เราจะเน้นการใช้งาน **IF Node** ใน <a href="https://n8n.io/" target="_blank">n8n</a> และ **SWITCH/IF Expression** ใน AppSheet</p>
+                            
+                            <h4 class="text-lg font-bold text-gray-700 mt-4 mb-2">ตัวอย่าง Logic (AppSheet Expression)</h4>
+                            <p>เพื่อให้เห็นภาพชัดเจน เราสามารถสร้างเงื่อนไข Lead Score โดยใช้ Expression ใน AppSheet ได้ดังนี้:</p>
+                            <div class="code-block">
+                                SWITCH(<br>
+                                &nbsp;&nbsp;&nbsp;TRUE,<br>
+                                &nbsp;&nbsp;&nbsp;OR(CONTAINS([Line_Message], "สนใจสินค้า"), CONTAINS([Line_Message], "นัด Demo")), 30, <br>
+                                &nbsp;&nbsp;&nbsp;OR(CONTAINS([Line_Message], "ราคา"), CONTAINS([Line_Message], "โปรโมชั่น")), 15,<br>
+                                &nbsp;&nbsp;&nbsp;5<br>
+                                )
+                            </div>
+                            <p>Logic นี้จะกำหนด Score อัตโนมัติ: ถ้าข้อความเข้ามีคีย์เวิร์ด Hot Lead ได้ 30 คะแนน, Warm Lead ได้ 15 คะแนน, หากไม่เข้าเงื่อนไขใดเลยได้ 5 คะแนน</p>
+
+                            <h4 class="text-lg font-bold text-gray-700 mt-4 mb-2">Data Mapping และ Transformation (JSON → Tabular)</h4>
+                            <p>เนื่องจากระบบ Automation ต้องเชื่อมต่อระหว่างกัน (เช่น Line OA ส่งข้อมูล JSON แต่ Google Sheets เก็บข้อมูลแบบตาราง) จึงต้องมีกระบวนการ **Data Mapping** เพื่อแปลงรูปแบบข้อมูล</p>
+                            
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>รูปแบบข้อมูล</th>
+                                        <th>ตัวอย่าง (จาก Line Webhook)</th>
+                                        <th>เทคนิคการแปลง (ใน n8n)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>ข้อมูลต้นทาง (JSON)</td>
+                                        <td><code>{ "source": { "userId": "U47ac..." }, "timestamp": 16788... }</code></td>
+                                        <td>ข้อมูลซับซ้อน, n8n รับผ่าน Webhook Node</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ข้อมูลปลายทาง (Tabular)</td>
+                                        <td><code>Line_ID, Timestamp, Message</code></td>
+                                        <td>ใช้ **Set Node** เพื่อดึงค่า <code>$json["source"]["userId"]</code> (ดึงค่าจาก Path ที่กำหนด)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p class="data-caption">ตารางเปรียบเทียบ: การแปลงข้อมูลจาก JSON (ต้นทาง) ให้เป็นรูปแบบตาราง (ปลายทาง) ด้วย n8n</p>
+
+                            <p><strong>เทคนิค:</strong> ใน n8n เราจะใช้ **Set Node** ในการกำหนดชื่อคอลัมน์ใหม่ (เช่น `Line_ID`) และระบุ Path เพื่อดึงค่าจาก JSON ที่ซับซ้อน (เช่น `$json["source"]["userId"]`) มาใส่ในคอลัมน์นั้น ซึ่งเป็นหัวใจของการเชื่อมต่อระบบ Low-Code</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                🥗 พักกลางวัน (12:00 - 13:00 น.)
+            </div>
+
+            <!-- SECTION 3: Workshop MVP -->
+            <h2 class="section-title mt-10 mb-6 border-l-4 border-orange-500 pl-3">ส่วนที่ 3: Workshop: ออกแบบ Logic Flow สำหรับ 3 MVP Systems</h2>
+
+            <!-- 13:00 - 14:45: Workshop 3 MVP Systems -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">13:00 - 14:45 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">3.1 - 3.3 Workshop: ออกแบบ Flow Logic (Lead Scoring, AI Feedback, Content Scheduling)</h3>
+                            <span class="type-tag workshop">ปฏิบัติ (105 นาที)</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <p>ช่วงเวลาที่สำคัญที่สุดคือการลงมือออกแบบ Flowchart สำหรับระบบ MVP (Minimum Viable Product) 3 ระบบหลัก:</p>
+
+                            <h4 class="text-lg font-semibold text-gray-800 mt-4">System 1 MVP: Line OA Bot & CRM (Lead Scoring Logic)</h4>
+                            <p>เป้าหมาย: ใช้ **Conditional Logic 3 ชั้น** ในการตัดสินใจสถานะ Lead (Hot, Warm, New) โดยการแปลง Flowchart จะแสดง **Gateway (เพชร)** ติดกัน 2 ตัว เพื่อทดสอบเงื่อนไขจากบนลงล่างอย่างมีลำดับ</p>
+                            <p><strong>ตัวอย่างเงื่อนไข 3 ชั้น:</strong> 1. ลูกค้ากดปุ่ม "สนใจ" (Hot) 2. ข้อความมีคีย์เวิร์ด "ราคา/โปรโมชั่น" (Warm) 3. ข้อความทั่วไป (New)</p>
+
+                            <h4 class="text-lg font-semibold text-gray-800 mt-4">System 2 MVP: AI วิเคราะห์ฟีดแบ็ก (Branching Logic)</h4>
+                            <p>เป้าหมาย: ใช้ **AI (Gemini Node)** ใน <a href="https://n8n.io/" target="_blank">n8n</a> วิเคราะห์ Sentiment ของ Feedback (จาก GGS) และใช้ Branching Logic (IF/ELSE IF/ELSE) เพื่อส่ง Task อัตโนมัติ (เช่น Negative $\to$ Task Urgent ให้ QC)</p>
+                            <p><strong>กระบวนการ AI:</strong> n8n ดึง Feedback $\to$ ส่งให้ Gemini พร้อม Prompt: "วิเคราะห์ Sentiment และระบุคีย์เวิร์ดที่เป็นปัญหา" $\to$ n8n รับผลลัพธ์ (Positive/Negative)</p>
+                            
+                            <div class="flow-diagram-mockup">
+                                <p class="flow-item flow-box bg-indigo-200 border-indigo-700">Start: New Feedback (Webhook/GGS)</p>
+                                <p class="flow-arrow">↓</p>
+                                <p class="flow-item flow-box">Task 1: AI (Gemini) Analyze Sentiment</p>
+                                <p class="flow-arrow">↓</p>
+                                <div class="flow-diagram-mockup-line flow-line">
+                                    <div class="flow-diamond"><span class="flow-diamond-text">Gateway: Negative?</span></div>
+                                </div>
+                                <p class="flow-arrow" style="display: flex; justify-content: space-around;">⬇️ (TRUE) &nbsp;&nbsp;&nbsp; ⬇️ (FALSE)</p>
+                                <div class="flow-line">
+                                    <p class="flow-item flow-box bg-red-200 border-red-700 w-1/3 mx-1">Flow A: Create Urgent Task (QC)</p>
+                                    <div class="w-2/3 mx-1">
+                                        <div class="flow-diagram-mockup-line flow-line">
+                                            <div class="flow-diamond"><span class="flow-diamond-text">Gateway: Positive?</span></div>
+                                        </div>
+                                        <p class="flow-arrow" style="display: flex; justify-content: space-around;">⬇️ (TRUE) &nbsp;&nbsp;&nbsp; ⬇️ (FALSE)</p>
+                                        <div class="flow-line">
+                                            <p class="flow-item flow-box bg-green-200 border-green-700 w-1/2 mx-1">Flow B: Send Thank You Email</p>
+                                            <p class="flow-item flow-box bg-yellow-200 border-yellow-700 w-1/2 mx-1">Flow C: Log Neutral</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="flow-arrow">↓ (รวมกัน) &nbsp;&nbsp;&nbsp; End</p>
+                            </div>
+                            <p class="data-caption">ภาพ Flowchart: Logic การแตก Path 3 ทาง ตามผลลัพธ์ Sentiment Analysis จาก AI</p>
+
+                            <h4 class="text-lg font-semibold text-gray-800 mt-4">System 3 MVP: AI ผู้ช่วยสร้างคอนเทนต์ (Scheduling Logic)</h4>
+                            <p>เป้าหมาย: ใช้ **Scheduling Logic** (ตั้งเวลา) ใน <a href="https://n8n.io/" target="_blank">n8n</a> เพื่อดึงข้อมูล Content จาก GGS ที่มี Status="Pending" แล้วส่งผ่าน **Line OA Broadcast API** โดยอัตโนมัติ</p>
+                            <p><strong>ลำดับการทำงาน:</strong> 1. **Schedule Trigger** (วงกลมนาฬิกา) $\to$ 2. **Google Sheet Node** (Read Content List) $\to$ 3. **IF Node** (Check Status='Pending') $\to$ 4. **Line Node** (Broadcast API) $\to$ 5. **Google Sheet Node** (Update Status='Sent')</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Break Card -->
+            <div class="break-card p-4 rounded-lg shadow-md text-center text-lg">
+                ☕ พักเบรคบ่าย (14:45 - 15:00 น.)
+            </div>
+            
+            <!-- SECTION 4: Advanced Flow -->
+            <h2 class="section-title mt-10 mb-6 border-l-4 border-red-500 pl-3">ส่วนที่ 4: Error Handling และ Security ใน Logic Flow</h2>
+
+            <!-- 15:00 - 16:30: Error Handling & Security -->
+            <div class="session-card overflow-hidden">
+                <div class="flex items-start">
+                    <div class="time-tag">15:00 - 16:30 น.</div>
+                    <div class="p-6 flex-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">4.1 Error Handling (Try-Catch) และ 4.2 Security: API Key Management</h3>
+                            <span class="type-tag logic">สรุป & ขั้นสูง</span>
+                        </div>
+                        <div class="content-body text-gray-700">
+                            <h4 class="text-lg font-semibold text-gray-800 mt-4">4.1 Error Handling ใน Flow (Try-Catch Concept)</h4>
+                            <p>ระบบ Low-Code ที่เชื่อมต่อ API มีโอกาสล้มเหลวได้เสมอ (เช่น API Down, ข้อมูลไม่ครบถ้วน) จึงต้องออกแบบ Flow ที่รองรับความผิดพลาด โดยใช้แนวคิด **Try...Catch**</p>
+                            
+                            <div class="flow-diagram-mockup">
+                                <p class="flow-item flow-box bg-green-200 border-green-700">Try Block (Main Logic)</p>
+                                <p class="flow-arrow">↓</p>
+                                <p class="flow-item flow-box">Send API Call / Update GGS</p>
+                                <p class="flow-arrow" style="display: flex; justify-content: space-around;">⬇️ (Success) &nbsp;&nbsp;&nbsp; ❌ (Error)</p>
+                                <div class="flow-line">
+                                    <p class="flow-item flow-box flow-end bg-blue-200 border-blue-700 w-1/2 mx-1">End Workflow</p>
+                                    <div class="w-1/2 mx-1">
+                                        <p class="flow-item flow-box bg-red-200 border-red-700">Catch Block (Error Path)</p>
+                                        <p class="flow-arrow">↓</p>
+                                        <p class="flow-item flow-box bg-yellow-200 border-yellow-700">Task 1: Log Error to GGS</p>
+                                        <p class="flow-arrow">↓</p>
+                                        <p class="flow-item flow-box bg-red-200 border-red-700">Task 2: Send Line Notify/Email to IT</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="data-caption">ภาพประกอบ: แนวคิด Try...Catch ใน n8n/GAS</p>
+                            
+                            <p>**Try (Main Path):** คือ Logic ที่ทำงานปกติ (เช่น พยายามส่ง API Call) ถ้าสำเร็จจะจบ Flow</p>
+                            <p>**Catch (Error Path):** คือ Flow พิเศษที่ถูก Trigger เมื่อ Logic หลักล้มเหลว โดยต้องทำ 2 อย่างเสมอ คือ **1) บันทึก Log ข้อผิดพลาดเข้า GGS** และ **2) ส่ง Email/Line Notify หา IT Support** เพื่อให้ IT เข้ามาแก้ไขปัญหาได้อย่างทันท่วงที</p>
+
+                            <h4 class="text-lg font-semibold text-gray-800 mt-4">4.2 Security: API Key Management Concept</h4>
+                            <p>หลักการรักษาความปลอดภัยของ Key คือ **ห้ามเก็บ Key ในโค้ด** (Hardcode) แต่ควรใช้กลไกของเครื่องมือนั้น ๆ เพื่อเก็บ Key อย่างปลอดภัย</p>
+                            
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>เครื่องมือ</th>
+                                        <th>วิธีการเก็บ Key ที่ถูกต้อง</th>
+                                        <th>เหตุผล</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>n8n</td>
+                                        <td>ใช้ระบบ **Credentials**</td>
+                                        <td>มีการเข้ารหัส (Encryption) และไม่แสดง Key ใน Workflow Node ป้องกันการเข้าถึงจากผู้ใช้ที่ไม่ได้รับอนุญาต</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Google App Script (GAS)</td>
+                                        <td>ใช้ **Script Properties** หรือ **User Properties**</td>
+                                        <td>เป็นการเก็บ Key แยกจาก Source Code ทำให้โค้ดปลอดภัย แม้จะถูกเปิดดู</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="note">สรุป: ผู้เรียนสามารถ **วิเคราะห์โจทย์ธุรกิจ** และ **ออกแบบ Flowchart** ขั้นสูงสำหรับระบบ Automation ทั้ง 3 MVP ได้อย่างครบถ้วน พร้อมทำความเข้าใจหลักการ Conditional Logic และการจัดการข้อมูล ซึ่งเป็นรากฐานสำคัญก่อนเข้าสู่ Workshop สร้าง App (AppSheet) ใน Day 3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-pink-100 p-6 rounded-xl text-center shadow-md">
+                <p class="text-2xl font-bold text-pink-800">รวมเวลาเรียนจริง: 6.0 ชั่วโมง (360 นาที)</p>
+            </div>
+
+        </div>
+
+        <footer class="text-center mt-12 py-4 text-gray-500 text-sm">
+            <p>Content Source: Day 2: Logic/Flow Automation ขั้นสูง (อ.แทน ธีรชัย โฉมทัพ) | <a href="https://idea-crmai.netlify.app/day2_automation" target="_blank">ลิงก์ต้นฉบับ</a></p>
+        </footer>
+    </div>
+</body>
+</html>
