@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
+    <base target="_top">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Day 2: การออกแบบ Logic/Flow Automation ขั้นสูง</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -217,7 +217,7 @@
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800">อ.แทน <span class="text-violet-600">[ธีรชัย โฉมทัพ]</span></h2>
                     <p class="text-base text-gray-500">Head of Digital Transformation</p>
-                    <p class="text-sm text-gray-600 mt-1">Day 2 คือการเปลี่ยน **กระบวนการ** ที่น่าเบื่อ ให้เป็น **Flowchart** ที่สวยงามและชาญฉลาด!</p>
+                    <p class="text-sm text-gray-600 mt-1">Day 2 คือการเปลี่ยน <b>กระบวนการ</b> ที่น่าเบื่อ ให้เป็น <b>Flowchart</b> ที่สวยงามและชาญฉลาด!</p>
                 </div>
             </div>
         </div>
@@ -235,45 +235,51 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr class="hover:bg-violet-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">09:00 - 10:15 น.</td>
-                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">75</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 1:** การวิเคราะห์ Business Process → Flowcharting (BPMN Lite)</td>
+                        <!-- FIX: Part 1 - 09:00 - 10:30 น. (90 นาที) -->
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">09:00 - 10:30 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">90</td>
+                        <td class="px-6 py-4 text-sm text-gray-800"><b>ส่วนที่ 1:</b> การวิเคราะห์ Business Process → Flowcharting (BPMN Lite)</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-violet-600">ทฤษฎี & Flow</td>
                     </tr>
                     <tr class="bg-yellow-50">
-                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">10:15 - 10:30 น.</td>
+                        <!-- FIX: Break 1 - 10:30 - 10:45 น. -->
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">10:30 - 10:45 น.</td>
                         <td class="px-3 py-2 text-center text-sm font-semibold text-yellow-800">-</td>
-                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคเช้า (Coffee Break)***</td>
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800"><b>พักเบรคเช้า (Coffee Break)</b></td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-violet-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">10:30 - 12:00 น.</td>
-                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">90</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 2:** Conditional Logic, Data Mapping และ Transformation</td>
+                        <!-- FIX: Part 2 - 10:45 - 12:00 น. (75 นาที) -->
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">10:45 - 12:00 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">75</td>
+                        <td class="px-6 py-4 text-sm text-gray-800"><b>ส่วนที่ 2:</b> Conditional Logic, Data Mapping และ Transformation</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-violet-600">Logic Core</td>
                     </tr>
                     <tr class="bg-red-50">
                         <td class="px-6 py-2 text-sm font-semibold text-red-800">12:00 - 13:00 น.</td>
                         <td class="px-3 py-2 text-center text-sm font-semibold text-red-800">-</td>
-                        <td class="px-6 py-2 text-sm font-semibold text-red-800">***พักกลางวัน (Lunch Break)***</td>
+                        <td class="px-6 py-2 text-sm font-semibold text-red-800"><b>พักกลางวัน (Lunch Break)</b></td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-red-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-violet-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">13:00 - 14:45 น.</td>
-                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">105</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 3:** Workshop: ออกแบบ Logic Flow สำหรับ 3 MVP Systems</td>
+                        <!-- FIX: Part 3 - 13:00 - 14:30 น. (90 นาที) -->
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">13:00 - 14:30 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">90</td>
+                        <td class="px-6 py-4 text-sm text-gray-800"><b>ส่วนที่ 3:</b> Workshop: ออกแบบ Logic Flow สำหรับ 3 MVP Systems</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-violet-600">ปฏิบัติ</td>
                     </tr>
                     <tr class="bg-yellow-50">
-                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">14:45 - 15:00 น.</td>
+                        <!-- FIX: Break 2 - 14:30 - 14:45 น. -->
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">14:30 - 14:45 น.</td>
                         <td class="px-3 py-2 text-center text-sm font-semibold text-yellow-800">-</td>
-                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคบ่าย (Coffee Break)***</td>
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800"><b>พักเบรคบ่าย (Coffee Break)</b></td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-violet-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">15:00 - 16:30 น.</td>
-                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">90</td>
-                        <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 4:** Error Handling, Security และสรุป Flow Design</td>
+                        <!-- FIX: Part 4 - 14:45 - 16:30 น. (105 นาที) -->
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">14:45 - 16:30 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">105</td>
+                        <td class="px-6 py-4 text-sm text-gray-800"><b>ส่วนที่ 4:</b> Error Handling, Security และสรุป Flow Design</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-violet-600">สรุป & ขั้นสูง</td>
                     </tr>
                 </tbody>
@@ -299,7 +305,7 @@
             </h4>
             
             <p class="mb-4 text-gray-700">
-                ข้อผิดพลาดอันดับหนึ่งของการทำ Automation คือการกระโดดไปใช้ Tool (AppSheet/n8n) ก่อนที่จะมีแผนงาน (Flowchart) ที่ชัดเจน Day 2 จะเน้นย้ำว่า **"Flowchart คือภาษาของ Low-Code Developer"**
+                ข้อผิดพลาดอันดับหนึ่งของการทำ Automation คือการกระโดดไปใช้ Tool (AppSheet/n8n) ก่อนที่จะมีแผนงาน (Flowchart) ที่ชัดเจน Day 2 จะเน้นย้ำว่า "Flowchart คือภาษาของ Low-Code Developer"
             </p>
 
             <div class="my-6 p-4 highlight-logic rounded-lg">
@@ -351,19 +357,19 @@
                 <i class="fas fa-chalkboard-teacher mr-2 text-blue-600"></i> 1.3 Workshop: แปลงโจทย์ธุรกิจเป็น Flowchart
             </h4>
             <p class="mb-4 text-gray-700">
-                ผู้เรียนฝึกทำ Flowchart จากโจทย์ **"Line OA Chatbot & Lead Scoring"** (System 1 MVP) ที่เราจะเริ่มทำจริงใน Day 4
+                ผู้เรียนฝึกทำ Flowchart จากโจทย์ "Line OA Chatbot & Lead Scoring" (System 1 MVP) ที่เราจะเริ่มทำจริงใน Day 4
             </p>
             
             <h5 class="font-bold text-lg text-red-700 mt-4 border-b pb-1">โจทย์: Line OA Lead Scoring (Line → GGS → CRM)</h5>
             <div class="p-4 bg-gray-100 rounded-lg text-sm text-gray-700 mb-6">
                 <ol class="list-decimal ml-6 space-y-1">
-                    <li>**Start:** ลูกค้าทัก Line OA เข้ามา (Webhook Trigger)</li>
-                    <li>**Task 1:** ตรวจสอบว่า Line_ID นี้มีใน GGS (ตาราง Customers) หรือยัง</li>
-                    <li>**Gateway 1 (Decision):** <span class="font-bold text-red-700">ถ้า (IF)</span> เป็นลูกค้าใหม่ → ไป **Task 2** <span class="font-bold text-red-700">ถ้า (ELSE)</span> เป็นลูกค้าเก่า → ไป **Task 3**</li>
-                    <li>**Task 2 (New):** บันทึก Line_ID และชื่อเข้า GGS (Status: New Lead)</li>
-                    <li>**Task 3 (Old):** อัปเดต Last_Contact_Date ใน GGS</li>
-                    <li>**Task 4:** ส่งข้อความต้อนรับอัตโนมัติกลับไปทาง Line OA</li>
-                    <li>**End:** จบ Flow</li>
+                    <li><b>Start:</b> ลูกค้าทัก Line OA เข้ามา (Webhook Trigger)</li>
+                    <li><b>Task 1:</b> ตรวจสอบว่า Line_ID นี้มีใน GGS (ตาราง Customers) หรือยัง</li>
+                    <li><b>Gateway 1 (Decision):</b> <span class="font-bold text-red-700">ถ้า (IF)</span> เป็นลูกค้าใหม่ → ไป <b>Task 2</b> <span class="font-bold text-red-700">ถ้า (ELSE)</span> เป็นลูกค้าเก่า → ไป <b>Task 3</b></li>
+                    <li><b>Task 2 (New):</b> บันทึก Line_ID และชื่อเข้า GGS (Status: New Lead)</li>
+                    <li><b>Task 3 (Old):</b> อัปเดต Last_Contact_Date ใน GGS</li>
+                    <li><b>Task 4:</b> ส่งข้อความต้อนรับอัตโนมัติกลับไปทาง Line OA</li>
+                    <li><b>End:</b> จบ Flow</li>
                 </ol>
             </div>
             
@@ -416,10 +422,10 @@
             <div class="highlight-logic p-4 rounded-lg my-4">
                 <p class="font-bold text-red-700 mb-2">ตัวอย่าง: Lead Scoring Logic (AppSheet/n8n)</p>
                 <p class="text-sm text-gray-700">
-                    <span class="font-bold">เงื่อนไข:</span> ถ้า `Lead_Score` มากกว่า 80 (Hot Lead) $\to$ ให้ทำ Flow A (แจ้งเตือนเซลล์ทันที) **มิฉะนั้น** $\to$ ให้ทำ Flow B (ส่งอีเมลติดตามผลอัตโนมัติเท่านั้น)
+                    <span class="font-bold">เงื่อนไข:</span> ถ้า <code>Lead_Score</code> มากกว่า 80 (Hot Lead) → ให้ทำ Flow A (แจ้งเตือนเซลล์ทันที) <b>มิฉะนั้น</b> → ให้ทำ Flow B (ส่งอีเมลติดตามผลอัตโนมัติเท่านั้น)
                 </p>
                 <p class="text-sm text-gray-700 mt-2">
-                    <span class="font-bold">ใน n8n:</span> ใช้ **IF Node** เพื่อแบ่ง Path การทำงานออกเป็น 2 เส้น (True/False)
+                    <span class="font-bold">ใน n8n:</span> ใช้ <b>IF Node</b> เพื่อแบ่ง Path การทำงานออกเป็น 2 เส้น (True/False)
                 </p>
             </div>
 
@@ -432,9 +438,6 @@
             
             <div class="border border-orange-300 rounded-lg overflow-x-auto my-4 p-4 bg-yellow-50 text-sm">
                 <p class="font-bold text-orange-700 mb-2">การแปลงรูปแบบข้อมูล (Mapping JSON → Tabular)</p>
-                <p class="text-gray-700">
-                    เมื่อ n8n รับข้อมูลจาก Line OA (รูปแบบ JSON ที่ซับซ้อน) แต่ต้องการบันทึกเข้า GGS (รูปแบบตาราง) เราต้องทำการ Mapping
-                </p>
                 <pre class="bg-gray-800 p-3 rounded-lg text-white text-xs mt-2"><code>// ข้อมูลต้นทาง (Source: Line Webhook - JSON)
 { "source": { "userId": "U47ac..." }, "timestamp": 16788... }
 
@@ -442,7 +445,7 @@
 [ "Line_ID", "Timestamp", "Message" ]
 [ $json["source"]["userId"], $json["timestamp"], "สวัสดีครับ" ]</code></pre>
                 <p class="text-gray-700 mt-2">
-                    <span class="font-bold text-orange-700">เทคนิค:</span> ใน n8n ใช้ **Set Node** หรือ **Function Node** เพื่อดึงค่าที่ต้องการ (เช่น <span class="code-snippet">$json["userId"]</span>) และจัดเรียงให้ตรงกับคอลัมน์ใน GGS
+                    <span class="font-bold text-orange-700">เทคนิค:</span> ใน n8n ใช้ <b>Set Node</b> หรือ <b>Function Node</b> เพื่อดึงค่าที่ต้องการ (เช่น <span class="code-snippet">$json["source"]["userId"]</span>) และจัดเรียงให้ตรงกับคอลัมน์ใน GGS
                 </p>
             </div>
             
@@ -476,12 +479,12 @@
                 <p class="text-sm">
                     ใช้ Conditional Logic 3 ชั้นในการตัดสินใจ:
                     <ol class="list-decimal ml-6 space-y-1">
-                        <li>**IF:** ลูกค้ากดปุ่ม "สนใจสินค้า" $\to$ Status: **Hot Lead** (Lead Score +20)</li>
-                        <li>**ELSE IF:** ลูกค้าถามคำถามที่มี Keywords ที่กำหนด (เช่น ราคา, โปรโมชั่น) $\to$ Status: **Warm Lead** (Lead Score +10)</li>
-                        <li>**ELSE:** ลูกค้าพิมพ์ข้อความทั่วไป $\to$ Status: **New Lead** (Lead Score +5)</li>
+                        <li><b>IF:</b> ลูกค้ากดปุ่ม "สนใจสินค้า" → Status: <b>Hot Lead</b> (Lead Score +20)</li>
+                        <li><b>ELSE IF:</b> ลูกค้าถามคำถามที่มี Keywords ที่กำหนด (เช่น ราคา, โปรโมชั่น) → Status: <b>Warm Lead</b> (Lead Score +10)</li>
+                        <li><b>ELSE:</b> ลูกค้าพิมพ์ข้อความทั่วไป → Status: <b>New Lead</b> (Lead Score +5)</li>
                     </ol>
                 </p>
-                <p class="text-sm text-gray-700 mt-2"><span class="font-bold">การแปลง Flow:</span> Flowchart จะมี **Gateway (เพชร)** ติดกัน 2 ตัว เพื่อทดสอบเงื่อนไขจากบนลงล่าง</p>
+                <p class="text-sm text-gray-700 mt-2"><span class="font-bold">การแปลง Flow:</span> Flowchart จะมี <b>Gateway (เพชร)</b> ติดกัน 2 ตัว เพื่อทดสอบเงื่อนไขจากบนลงล่าง</p>
             </div>
 
             <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
@@ -492,12 +495,12 @@
                 <p class="text-sm">
                     ใช้ AI (Gemini Node) วิเคราะห์ Sentiment ของ Feedback (จาก GGS) และใช้ Branching Logic เพื่อส่ง Task อัตโนมัติ:
                     <ol class="list-decimal ml-6 space-y-1">
-                        <li>**IF:** Sentiment = **Negative** และ Keyword = "สินค้าเสียหาย" $\to$ Flow A: สร้าง **Task Urgent** ใน AppSheet (Assign ให้แผนก QC)</li>
-                        <li>**ELSE IF:** Sentiment = **Positive** $\to$ Flow B: ส่ง **Email ขอบคุณ** (Log: Satisfied Customer)</li>
-                        <li>**ELSE:** Sentiment = **Neutral/Other** $\to$ Flow C: บันทึกเข้า Log เฉยๆ</li>
+                        <li><b>IF:</b> Sentiment = <b>Negative</b> และ Keyword = "สินค้าเสียหาย" → Flow A: สร้าง <b>Task Urgent</b> ใน AppSheet (Assign ให้แผนก QC)</li>
+                        <li><b>ELSE IF:</b> Sentiment = <b>Positive</b> → Flow B: ส่ง <b>Email ขอบคุณ</b> (Log: Satisfied Customer)</li>
+                        <li><b>ELSE:</b> Sentiment = <b>Neutral/Other</b> → Flow C: บันทึกเข้า Log เฉยๆ</li>
                     </ol>
                 </p>
-                <p class="text-sm text-gray-700 mt-2"><span class="font-bold">การแปลง Flow:</span> Flowchart จะแสดง **Gateway** ที่มีทางออก 3 ทาง (3 Paths) ตามผลลัพธ์ของ AI</p>
+                <p class="text-sm text-gray-700 mt-2"><span class="font-bold">การแปลง Flow:</span> Flowchart จะแสดง <b>Gateway</b> ที่มีทางออก 3 ทาง (3 Paths) ตามผลลัพธ์ของ AI</p>
             </div>
             
             <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
@@ -508,15 +511,15 @@
                 <p class="text-sm">
                     ใช้ Logic การตั้งเวลา (Scheduling) และ Data Transformation ก่อนส่ง Broadcast:
                     <ol class="list-decimal ml-6 space-y-1">
-                        <li>**Start:** Trigger โดย Schedule Node ใน n8n (เช่น ทุกวันศุกร์ เวลา 10:00 น.)</li>
-                        <li>**Task 1:** ดึงข้อมูล Content (แคปชั่น) จาก GGS ที่มี Status = "Pending"</li>
-                        <li>**Gateway 1 (Decision):** <span class="font-bold text-red-700">IF:</span> พบ Content ที่ต้องส่ง $\to$ ไป **Task 2** <span class="font-bold text-red-700">ELSE:</span> $\to$ **End**</li>
-                        <li>**Task 2:** ส่ง Content และรูปภาพไปที่ Line OA Broadcast API</li>
-                        <li>**Task 3:** อัปเดต Status ใน GGS จาก "Pending" เป็น "Sent"</li>
-                        <li>**End:** จบ Flow</li>
+                        <li><b>Start:</b> Trigger โดย Schedule Node ใน n8n (เช่น ทุกวันศุกร์ เวลา 10:00 น.)</li>
+                        <li><b>Task 1:</b> ดึงข้อมูล Content (แคปชั่น) จาก GGS ที่มี Status = "Pending"</li>
+                        <li><b>Gateway 1 (Decision):</b> <span class="font-bold text-red-700">IF:</span> พบ Content ที่ต้องส่ง → ไป <b>Task 2</b> <span class="font-bold text-red-700">ELSE:</span> → <b>End</b></li>
+                        <li><b>Task 2:</b> ส่ง Content และรูปภาพไปที่ Line OA Broadcast API</li>
+                        <li><b>Task 3:</b> อัปเดต Status ใน GGS จาก "Pending" เป็น "Sent"</li>
+                        <li><b>End:</b> จบ Flow</li>
                     </ol>
                 </p>
-                <p class="text-sm text-gray-700 mt-2"><span class="font-bold">การแปลง Flow:</span> Flowchart จะแสดง **วงกลม** ที่มีรูปนาฬิกา (Schedule Trigger) และมีการทำ Task 2 (API Call) อย่างชัดเจน</p>
+                <p class="text-sm text-gray-700 mt-2"><span class="font-bold">การแปลง Flow:</span> Flowchart จะแสดง <b>วงกลม</b> ที่มีรูปนาฬิกา (Schedule Trigger) และมีการทำ Task 2 (API Call) อย่างชัดเจน</p>
             </div>
         </div>
 
@@ -537,8 +540,8 @@
             <div class="p-4 bg-red-50 rounded-lg border-l-4 border-red-500 my-4">
                 <p class="font-bold text-red-700 mb-2">แนวคิด Try...Catch ใน n8n/GAS</p>
                 <ul class="list-disc ml-6 text-gray-700 space-y-1 text-sm">
-                    <li>**Try (Main Path):** คือ Logic ที่ทำงานปกติ (เช่น พยายามส่ง API Call)</li>
-                    <li>**Catch (Error Path):** คือ Flow พิเศษที่ถูก Trigger เมื่อ Logic หลักล้มเหลว</li>
+                    <li><b>Try (Main Path):</b> คือ Logic ที่ทำงานปกติ (เช่น พยายามส่ง API Call)</li>
+                    <li><b>Catch (Error Path):</b> คือ Flow พิเศษที่ถูก Trigger เมื่อ Logic หลักล้มเหลว</li>
                     <li><span class="font-bold text-red-700">Action in Catch:</span> ต้องทำ 2 อย่างเสมอ คือ 1) บันทึก Log ข้อผิดพลาดเข้า GGS และ 2) ส่ง Email/Line Notify หา IT Support</li>
                 </ul>
             </div>
@@ -553,9 +556,9 @@
             <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500 my-4">
                 <p class="font-bold text-blue-700 mb-2">หลักการรักษาความปลอดภัยของ Key</p>
                 <ul class="list-disc ml-6 text-gray-700 space-y-1 text-sm">
-                    <li>**ห้ามเก็บ Key ในโค้ด:** ห้ามเขียน API Key โดยตรงในโค้ด GAS หรือ Node ใน n8n</li>
-                    <li>**ใช้ Credentials/Environment Variables:** n8n มีระบบ **Credentials** ในตัวที่ปลอดภัยสำหรับการเก็บ Key โดยเฉพาะ</li>
-                    <li>**GAS Best Practice:** ควรใช้ **User Properties Service** หรือ **Script Properties** (Low-Code Storage) แทนการ hardcode ใน Script</li>
+                    <li><b>ห้ามเก็บ Key ในโค้ด:</b> ห้ามเขียน API Key โดยตรงในโค้ด GAS หรือ Node ใน n8n</li>
+                    <li><b>ใช้ Credentials/Environment Variables:</b> n8n มีระบบ <b>Credentials</b> ในตัวที่ปลอดภัยสำหรับการเก็บ Key โดยเฉพาะ</li>
+                    <li><b>GAS Best Practice:</b> ควรใช้ <b>User Properties Service</b> หรือ <b>Script Properties</b> (Low-Code Storage) แทนการ hardcode ใน Script</li>
                 </ul>
             </div>
         </div>
@@ -566,7 +569,7 @@
                 <i class="fas fa-graduation-cap mr-2"></i> สรุปสิ่งที่ผู้เรียนจะได้จาก Day 2
             </p>
             <p class="text-gray-700 text-lg">
-                ผู้เรียนสามารถ **วิเคราะห์โจทย์ธุรกิจ** และ **ออกแบบ Flowchart** ขั้นสูงสำหรับระบบ Automation ทั้ง 3 MVP ได้อย่างครบถ้วน พร้อมทำความเข้าใจหลักการ Conditional Logic และการจัดการข้อมูล ซึ่งเป็นรากฐานสำคัญก่อนเข้าสู่ Workshop สร้าง App (AppSheet) ใน Day 3
+                ผู้เรียนสามารถ <b>วิเคราะห์โจทย์ธุรกิจ</b> และ <b>ออกแบบ Flowchart</b> ขั้นสูงสำหรับระบบ Automation ทั้ง 3 MVP ได้อย่างครบถ้วน พร้อมทำความเข้าใจหลักการ Conditional Logic และการจัดการข้อมูล ซึ่งเป็นรากฐานสำคัญก่อนเข้าสู่ Workshop สร้าง App (AppSheet) ใน Day 3
             </p>
             <a href="day3_automation.html" class="inline-flex items-center mt-4 px-6 py-3 bg-violet-600 text-white font-bold rounded-lg hover:bg-violet-700 transition duration-150">
                 <span class="mr-2">ไปยัง Day 3: Workshop สร้าง App ด้วย AppSheet</span> <i class="fas fa-arrow-right"></i>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+    <base target="_top">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Day 4: Workshop เชื่อมต่ออัตโนมัติด้วย N8N (Part 1)</title>
@@ -70,6 +71,7 @@
             padding: 2px 4px;
             border-radius: 3px;
         }
+        /* เพิ่มสไตล์สำหรับโค้ด AppSheet */
         .json-box {
             background-color: #1f2937; /* Gray-800 */
             color: #38bdf8; /* Sky-400 */
@@ -226,42 +228,49 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr class="hover:bg-indigo-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">09:00 - 10:15 น.</td>
-                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">75</td>
+                        <!-- Part 1: 09:00 - 10:30 น. (90 นาที) -->
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">09:00 - 10:30 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">90</td>
                         <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 1:** N8N Fundamentals: Core Concepts</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-indigo-600">รากฐาน Automation</td>
                     </tr>
                     <tr class="bg-yellow-50">
-                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">10:15 - 10:30 น.</td>
+                        <!-- FIX: Break 1: 10:30 - 10:45 น. (15 นาที) -->
+                        <td class="px-6 py-2 text-sm font-semibold text-yellow-800">10:30 - 10:45 น.</td>
                         <td class="px-3 py-2 text-center text-sm font-semibold text-yellow-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคเช้า (Coffee Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-indigo-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">10:30 - 11:45 น.</td>
+                        <!-- FIX: Part 2: 10:45 - 12:00 น. (75 นาที) -->
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">10:45 - 12:00 น.</td>
                         <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">75</td>
                         <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 2:** Webhooks & API: การรับ-ส่งข้อมูลระหว่างระบบ</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-indigo-600">ทฤษฎี (I/O)</td>
                     </tr>
                     <tr class="bg-red-50">
-                        <td class="px-6 py-2 text-sm font-semibold text-red-800">11:45 - 12:45 น.</td>
+                        <!-- FIX: Lunch: 12:00 - 13:00 น. (60 นาที) -->
+                        <td class="px-6 py-2 text-sm font-semibold text-red-800">12:00 - 13:00 น.</td>
                         <td class="px-3 py-2 text-center text-sm font-semibold text-red-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-red-800">***พักกลางวัน (Lunch Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-red-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-indigo-50">
-                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">12:45 - 14:15 น.</td>
-                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">90</td>
+                        <!-- FIX: Part 3: 13:00 - 14:15 น. (75 นาที) -->
+                        <td class="px-6 py-4 text-sm font-semibold text-gray-900">13:00 - 14:15 น.</td>
+                        <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">75</td>
                         <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 3:** Workshop 1: สร้าง Workflow: AppSheet (Webhook) $\to$ N8N $\to$ Google Sheets</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-indigo-600">ปฏิบัติ (Data Entry)</td>
                     </tr>
                     <tr class="bg-yellow-50">
+                        <!-- FIX: Break 2: 14:15 - 14:30 น. (15 นาที) -->
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">14:15 - 14:30 น.</td>
                         <td class="px-3 py-2 text-center text-sm font-semibold text-yellow-800">-</td>
                         <td class="px-6 py-2 text-sm font-semibold text-yellow-800">***พักเบรคบ่าย (Coffee Break)***</td>
                         <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-indigo-50">
+                        <!-- FIX: Part 4: 14:30 - 16:30 น. (120 นาที) -->
                         <td class="px-6 py-4 text-sm font-semibold text-gray-900">14:30 - 16:30 น.</td>
                         <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">120</td>
                         <td class="px-6 py-4 text-sm text-gray-800">**ส่วนที่ 4:** Workshop 2: การจัดการข้อมูล (Set, Split, If Node) และ **สรุป Day 4**</td>
@@ -488,8 +497,8 @@
                 
                 <div class="mt-3 bg-white p-3 rounded-lg border border-purple-300 text-sm">
                     <ul class="list-disc ml-6 text-gray-700">
-                        <li>ดึง Transaction ID: <span class="expression-code">${{$json.Data.TXN_ID}}</span> $\to$ คอลัมน์ A (ID\_TRANSACTION)</li>
-                        <li>ดึง Customer ID: <span class="expression-code">${{$json.Data.Customer_Ref}}</span> $\to$ คอลัมน์ B (FK\_CUSTOMER)</li>
+                        <li>ดึง Transaction ID: <span class="expression-code">${{$json.Data.TXN_ID}}</span> $\to$ คอลัมน์ A (ID_TRANSACTION)</li>
+                        <li>ดึง Customer ID: <span class="expression-code">${{$json.Data.Customer_Ref}}</span> $\to$ คอลัมน์ B (FK_CUSTOMER)</li>
                         <li>ดึง Quantity: <span class="expression-code">${{$json.Data.Quantity}}</span> $\to$ คอลัมน์ D (QTY)</li>
                     </ul>
                 </div>
@@ -509,17 +518,17 @@
                 <div class="json-box text-sm">
                     <pre>// JavaScript in Code Node
 for (const item of items) {
-  // ดึง Total Price จาก Input Item ก่อนหน้า
-  const totalPrice = item.json.Price;
-  const vatRate = 0.07;
-  
-  // คำนวณ VAT และราคารวม
-  const vatAmount = totalPrice * vatRate;
-  const grandTotal = totalPrice + vatAmount;
+  // ดึง Total Price จาก Input Item ก่อนหน้า
+  const totalPrice = item.json.Price;
+  const vatRate = 0.07;
+  
+  // คำนวณ VAT และราคารวม
+  const vatAmount = totalPrice * vatRate;
+  const grandTotal = totalPrice + vatAmount;
 
-  // เพิ่ม Field ใหม่ใน Output Item
-  item.json.VAT = vatAmount.toFixed(2);
-  item.json.GrandTotal = grandTotal.toFixed(2);
+  // เพิ่ม Field ใหม่ใน Output Item
+  item.json.VAT = vatAmount.toFixed(2);
+  item.json.GrandTotal = grandTotal.toFixed(2);
 }
 return items;</pre>
                 </div>
