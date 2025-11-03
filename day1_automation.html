@@ -634,7 +634,7 @@ function generateUniqueId(prefix) {
 // คำอธิบาย: ฟังก์ชัน VLOOKUP เสมือนและคำนวณราคารวม
 
 function calculateTotalPrice(e) {
-  const TARGET_SHEET_NAME = 'Sales Transactions';
+  const TARGET_SHEET_NAME = 'Transactions';
   const QUANTITY_COL_INDEX = 4; // คอลัมน์ D
   const PRODUCT_ID_COL_INDEX = 3; // คอลัมน์ C
   const TOTAL_PRICE_COL_INDEX = 6; // คอลัมน์ F
@@ -1072,7 +1072,7 @@ AI Code Assistant
   }
 }</code></pre>
             <p class="mt-4 text-sm text-gray-700">
-                **การตั้งค่า Trigger:** ใช้ Trigger **On Edit** กับฟังก์ชัน <span class="code-snippet">sendNewSaleNotification</span> โดยมี Source เป็น Sheet **'Sales Transactions'**
+                **การตั้งค่า Trigger:** ใช้ Trigger **On Edit** กับฟังก์ชัน <span class="code-snippet">sendNewSaleNotification</span> โดยมี Source เป็น Sheet **'Transactions'**
             </p>
         </div>
         
