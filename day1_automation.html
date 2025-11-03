@@ -709,53 +709,366 @@ function calculateTotalPrice(e) {
             </p>
             
             <h5 class="font-bold text-lg text-gray-700 mt-6 border-b pb-1">Code Output: GAS Script สำหรับ Email Notification</h5>
-            <pre class="bg-gray-800 p-4 rounded-lg text-white text-sm overflow-x-auto"><code>// ชื่อไฟล์: EmailNotifier.gs
-// คำอธิบาย: ฟังก์ชันสำหรับส่งอีเมลแจ้งเตือนเมื่อมีการบันทึกข้อมูลการขายใหม่
+            <pre class="bg-gray-800 p-4 rounded-lg text-white text-sm overflow-x-auto"><code>// =======================================================================
+// ⚙️ Configuration Variables (กรุณาตรวจสอบและแก้ไขค่าเหล่านี้) 
+// =======================================================================
 
-function sendNewSaleNotification(e) {
+// **สำคัญ:** แทนที่ 'YOUR_SPREADSHEET_ID_HERE' ด้วย ID ของ Google Sheet ของคุณ
+const SPREADSHEET_ID = '15OxbiPa5vwmAgiC5573pF8SkiDcHtl-MfnTMIyxGnHY'; 
+const TARGET_SHEET_NAME = 'Transaction';
+const CUSTOMER_SHEET_NAME = 'Customer';
+const FIRST_DATA_ROW = 2; // แถวที่ข้อมูลเริ่มต้นในชีต Transaction (แถว 1 คือหัวตาราง)
+
+// คอลัมน์ในชีต TRANSACTION
+const CUS_ID_COL_TRAN = 3;    // คอลัมน์ C: CusID
+const TRAN_STATUS_COL = 8;    // คอลัมน์ H: TranStatus
+const LAST_DATA_COL_TRAN = 7; // ถึงคอลัมน์ G: TranRemark
+
+// คอลัมน์ในชีต CUSTOMER
+const ID_COLUMN_CUS = 1;      // คอลัมน์ A: CusID (ต้องเป็นคอลัมน์ที่เก็บ ID)
+const EMAIL_COLUMN_CUS = 6;   // คอลัมน์ F: CusEmail
+
+// =======================================================================
+// 1. Menu Trigger (การสร้างเมนู)
+// =======================================================================
+
+/**
+ * ฟังก์ชันสร้างเมนูที่กำหนดเองใน Google Sheet เมื่อเปิดไฟล์
+ */
+function onOpen() {
+  SpreadsheetApp.getUi()
+      .createMenu('📧 ส่งอีเมลลูกค้า')
+      .addItem('ส่งอีเมลแถวที่เลือก', 'sendAllPendingEmails')
+      .addToUi();
+}
+
+// =======================================================================
+// 2. Manual Run (ฟังก์ชันสั่งงานด้วยเมนู)
+// =======================================================================
+
+/**
+ * ฟังก์ชันนี้จะวนลูปอ่านทุกแถวในชีต Transaction 
+ * และจะส่งอีเมลสำหรับรายการที่มีสถานะ 'Sent' เท่านั้น 
+ * จากนั้นจะอัปเดตสถานะเป็น 'ส่งแล้ว' หรือ 'ล้มเหลว'
+ * * *ฟังก์ชันนี้เหมาะสำหรับการรันแบบ Manual หรือตั้งเป็น Time-driven trigger (เช่น รันทุก 10 นาที)
+ */
+function sendAllPendingEmails() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(TARGET_SHEET_NAME); // TARGET_SHEET_NAME = 'Transaction'
+
+  if (!sheet) {
+    SpreadsheetApp.getUi().alert(`ERROR: ไม่พบชีต ${TARGET_SHEET_NAME} กรุณาตรวจสอบชื่อชีต`);
+    return;
+  }
+  
+  // 1. กำหนดขอบเขตข้อมูลที่จะอ่าน
+  const lastRow = sheet.getLastRow();
+  if (lastRow < FIRST_DATA_ROW) { // FIRST_DATA_ROW = 2
+    SpreadsheetApp.getUi().alert('ไม่มีข้อมูลในชีต Transaction ที่จะดำเนินการ');
+    return;
+  }
+  
+  // อ่านข้อมูลทั้งหมดตั้งแต่แถวที่ 2 จนถึงแถวสุดท้าย 
+  // TRAN_STATUS_COL คือ 8 (คอลัมน์ H)
+  const numColumns = TRAN_STATUS_COL; // อ่านข้อมูลจนถึงคอลัมน์ H
+  const dataRange = sheet.getRange(FIRST_DATA_ROW, 1, lastRow - FIRST_DATA_ROW + 1, numColumns);
+  const data = dataRange.getValues();
+  
+  let totalSent = 0;
+  let totalFailed = 0;
+
+  // 2. วนลูปผ่านทุกแถวข้อมูลที่อ่านมา
+  for (let i = 0; i < data.length; i++) {
+    const rowData = data[i];
+    const currentRow = i + FIRST_DATA_ROW; // หมายเลขแถวในชีตจริง (เช่น 2, 3, 4...)
+    
+    // คอลัมน์สถานะ (H) คือ index 7 ในอาร์เรย์ rowData (เนื่องจากอาร์เรย์เป็น 0-indexed)
+    const statusValue = rowData[TRAN_STATUS_COL - 1].toString().trim(); 
+    
+    // 3. ตรวจสอบเงื่อนไขการส่งอีเมล
+    if (statusValue === 'รอส่งอีเมล์') { // ตรวจสอบว่ามีค่า 'รอส่งอีเมล์' ที่รอการส่งหรือไม่
+      
+      // 4. เรียกใช้ฟังก์ชันส่งอีเมลสำหรับแถวนี้
+      const isSent = processAndSendEmail(sheet, currentRow);
+      
+      // 5. อัปเดตสถานะในชีต
+      if (isSent) {
+        sheet.getRange(currentRow, TRAN_STATUS_COL).setValue('ส่งแล้ว');
+        totalSent++;
+      } else {
+        sheet.getRange(currentRow, TRAN_STATUS_COL).setValue('ล้มเหลว');
+        totalFailed++;
+      }
+    }
+  }
+
+  // 6. แสดงผลสรุป
+  const finalSummary = `สรุปผลการส่งอีเมล:\nส่งสำเร็จ: ${totalSent} รายการ\nล้มเหลว: ${totalFailed} รายการ`;
+  
+  // ใช้ Logger เสมอเพื่อบันทึกผล
+  Logger.log(finalSummary);
+
+  // 💡 การแก้ไข: พยายามแสดง Alert เฉพาะเมื่ออยู่ในบริบทของ UI เท่านั้น
   try {
-    const range = e.range;
-    const sheet = range.getSheet();
-    const sheetName = sheet.getName();
+    const ui = SpreadsheetApp.getUi();
+    ui.alert('Batch Email Summary', finalSummary, ui.ButtonSet.OK);
+  } catch(e) {
+    // ถ้าไม่มี UI ให้ทำแค่ Logger.log ก็พอ
+    Logger.log("Skipping UI alert due to no UI context.");
+  }
+}
 
-    const TARGET_SHEET_NAME = 'Sales Transactions';
-    const FIRST_DATA_ROW = 2;
 
-    if (sheetName !== TARGET_SHEET_NAME || range.getRow() < FIRST_DATA_ROW) {
-      return;
-    }
+// =======================================================================
+// 3. Automatic Run (Installable Trigger)
+// =======================================================================
+
+/**
+ * ฟังก์ชันหลักที่ทำงานอัตโนมัติเมื่อมีการแก้ไขข้อมูล (Installable Trigger: On Edit)
+ * ตรวจสอบว่าเป็นการแก้ไขคอลัมน์ TranStatus (H) เป็น 'SendMail' หรือไม่
+ */
+function sendEmailOnStatusChange(e) {
+  
+  // ตรวจสอบ Event Object และ e.range
+  if (!e || !e.range) return;
+
+  const range = e.range;
+  const sheet = range.getSheet();
+  const sheetName = sheet.getName();
+
+  // 1. ตรวจสอบเงื่อนไขการทำงาน (ชีต, แถว, คอลัมน์ที่แก้ไข)
+  if (sheetName !== TARGET_SHEET_NAME || 
+      range.getRow() < FIRST_DATA_ROW || 
+      range.getColumn() !== TRAN_STATUS_COL) {
+    return;
+  }
+  
+  // 2. ตรวจสอบค่าที่แก้ไข
+  const statusValue = range.getValue().toString().trim();
+  if (statusValue !== 'SendMail') {
+    return;
+  }
+  
+  const row = range.getRow();
+  
+  // 3. เรียกใช้ฟังก์ชันส่งอีเมล
+  const isSent = processAndSendEmail(sheet, row);
+  
+  // 4. อัพเดทสถานะ
+  if (isSent) {
+    sheet.getRange(row, TRAN_STATUS_COL).setValue('Sent'); 
+    Logger.log(`Status updated to 'Sent' for row ${row}.`);
+  } else {
+    // อัพเดทเป็น 'Failed' หากมีข้อผิดพลาด (เช่น ไม่พบอีเมลลูกค้า)
+    sheet.getRange(row, TRAN_STATUS_COL).setValue('Failed');
+  }
+}
+
+// =======================================================================
+// 4. Main Logic (Logic การดึงข้อมูลและส่งอีเมล)
+// =======================================================================
+
+/**
+ * ฟังก์ชันสำหรับดึงข้อมูลและส่งอีเมล (Logic ถูกแยกออกมาเพื่อใช้ซ้ำได้)
+ * @param {GoogleAppsScript.Spreadsheet.Sheet} sheet ชีต Transaction
+ * @param {number} row หมายเลขแถวที่จะดำเนินการ
+ * @returns {boolean} true ถ้าส่งสำเร็จ, false ถ้าล้มเหลว
+ */
+function processAndSendEmail(sheet, row) {
     
-    const row = range.getRow();
-    const LAST_COLUMN = 6; // ถึงคอลัมน์ F (Total Price)
-    const dataRange = sheet.getRange(row, 1, 1, LAST_COLUMN);
-    const data = dataRange.getValues()[0]; 
+    try {
+        // ดึงข้อมูลถึงคอลัมน์ G
+        const dataRange = sheet.getRange(row, 1, 1, LAST_DATA_COL_TRAN); 
+        const data = dataRange.getValues()[0]; 
 
-    const transactionId = data[0]; 
-    if (!transactionId || transactionId.trim() === "") {
-      Logger.log(`Transaction ID missing in row ${row}. Skipping notification.`);
-      return;
+        // ดึงข้อมูลหลักจาก Transaction
+        const transactionId = data[0]; // A: TranID
+        const customerId = data[2];    // C: CusID
+        const tranQty = data[3];       // D: TranQty
+        const unitPrice = data[4];     // E: TranUnitPrice
+        const totalAmount = data[5];   // F: TranAmt
+        const remark = data[6];        // G: TranRemark
+        
+        if (!transactionId || transactionId.toString().trim() === "") {
+            Logger.log(`Transaction ID missing in row ${row}. Cannot send email.`);
+            return false;
+        }
+
+        // 1. Look Up Email
+        const recipientEmail = getCustomerEmail(customerId);
+        
+        // 💡 แก้ไข: ตรวจสอบและ Log เมื่อไม่พบอีเมล
+        if (!recipientEmail || recipientEmail.toString().trim() === "") {
+            Logger.log(`Customer Email not found or is empty for CusID: ${customerId}.`);
+            return false;
+        }
+        
+        // 2. สร้างและส่งอีเมล
+        const subject = `[Order Alert] รายการสั่งซื้อของคุณ: ${transactionId}`;
+        const body = `เรียน ลูกค้า,\n\nระบบยืนยันรายการสั่งซื้อใหม่ของคุณแล้ว:\n\n`
+                  + `รหัสรายการ: ${transactionId}\n`
+                  + `รหัสลูกค้า: ${customerId}\n`
+                  + `จำนวนสินค้า: ${tranQty} ชิ้น\n`
+                  + `ราคาต่อหน่วย: ${unitPrice} บาท\n`
+                  + `ยอดรวม: ${totalAmount} บาท\n` 
+                  + (remark ? `หมายเหตุ: ${remark}\n\n` : '\n')
+                  + `ขอบคุณที่ใช้บริการ AI Automation System.`;
+
+        MailApp.sendEmail(recipientEmail, subject, body);
+        Logger.log(`Email sent successfully to ${recipientEmail} for TranID: ${transactionId}`);
+        return true;
+
+    } catch (error) {
+        Logger.log(`ERROR in processAndSendEmail for row ${row}: ${error.toString()}`);
+        // ส่งอีเมลแจ้งเตือนไปยังฝ่าย IT Support เมื่อมีข้อผิดพลาด
+        MailApp.sendEmail('it-support@example.com', 'GAS Error Alert', 
+              `เกิดข้อผิดพลาดในการส่งอีเมลแจ้งเตือนการขาย: ${error.toString()}`);
+        return false;
     }
+}
 
-    const customerId = data[1]; 
-    const totalPrice = data[5]; 
-    const date = data[4]; 
+// =======================================================================
+// 5. Lookup Logic (ฟังก์ชันค้นหาอีเมลลูกค้า)
+// =======================================================================
+
+/**
+ * ฟังก์ชันค้นหาอีเมลลูกค้าจาก CusID ในชีต Customer
+ * @param {string} customerId รหัสลูกค้าที่ต้องการค้นหา
+ * @returns {string | null} อีเมลลูกค้า หรือ null ถ้าไม่พบ
+ */
+function getCustomerEmail(customerId) {
     
-    const recipient = 'admin@example.com';
-    const subject = `[ระบบแจ้งเตือน] New Sales Alert: ${transactionId}`;
-    const body = `เรียน Admin,\n\nมีการบันทึกรายการขายใหม่:\n\n`
-          + `Transaction ID: ${transactionId}\n`
-          + `Customer ID: ${customerId}\n`
-          + `Total Price: ${totalPrice.toFixed(2)} บาท\n`
-          + `Date: ${date.toLocaleDateString('th-TH')}\n\n`
-          + `AI Automation System.`;
+    try {
+        const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+        const sheet = ss.getSheetByName(CUSTOMER_SHEET_NAME);
+        
+        if (!sheet) {
+            Logger.log(`ERROR: Customer Sheet not found with name: ${CUSTOMER_SHEET_NAME}`);
+            return null;
+        }
 
-    MailApp.sendEmail(recipient, subject, body);
-    Logger.log(`Email sent successfully for Transaction ID: ${transactionId}`);
+        const lastRow = sheet.getLastRow();
+        if (lastRow < FIRST_DATA_ROW) return null; // ไม่มีข้อมูล
+        
+        // ดึงข้อมูลตั้งแต่แถวที่ 2 (FIRST_DATA_ROW) ถึงคอลัมน์ CusEmail (F)
+        const numColsToFetch = EMAIL_COLUMN_CUS - ID_COLUMN_CUS + 1;
+        const dataRange = sheet.getRange(FIRST_DATA_ROW, ID_COLUMN_CUS, lastRow - (FIRST_DATA_ROW - 1), numColsToFetch);
+        const values = dataRange.getValues();
 
+        // ค้นหาอีเมลจาก CusID
+        for (let i = 0; i < values.length; i++) {
+            const rowData = values[i];
+            const currentCusId = rowData[0]; // CusID อยู่ที่ Index 0 (คอลัมน์ A)
+            const email = rowData[EMAIL_COLUMN_CUS - ID_COLUMN_CUS]; // Index 5 สำหรับคอลัมน์ F (CusEmail)
+
+            // 💡 สำคัญ: ใช้ trim() เพื่อกำจัดช่องว่างที่อาจทำให้การเปรียบเทียบล้มเหลว
+            if (currentCusId && currentCusId.toString().trim() === customerId.toString().trim()) {
+                // 💡 ใช้ trim() ก่อน return เพื่อป้องกันช่องว่างในอีเมล
+                return email.toString().trim(); 
+            }
+        }
+        
+        return null;
+
+    } catch (error) {
+        Logger.log(`ERROR in getCustomerEmail: ${error.toString()}`);
+        return null;
+    }
+}
+
+// =======================================================================
+// 6. AutoIDGenerator Logic (สำหรับชีต Customer)
+// =======================================================================
+
+/**
+ * สคริปต์นี้จะสร้าง ID ลูกค้าที่ไม่ซ้ำกัน (Primary Key) โดยอัตโนมัติ 
+ * เมื่อมีการแก้ไขหรือเพิ่มแถวใหม่ในชีต "Customers"
+ */
+function onEdit(e) {
+  
+  // 💡 แก้ไข: ใช้ TARGET_SHEET_NAME จาก Configs เพื่อความสอดคล้อง
+  const TARGET_SHEET_NAME = CUSTOMER_SHEET_NAME; 
+  // 💡 แก้ไข: คอลัมน์ A คือคอลัมน์ที่จะใส่ ID (Index 1)
+  const ID_TARGET_COLUMN = ID_COLUMN_CUS; 
+
+  if (!e || !e.range) return;
+
+  const range = e.range;
+  const sheet = range.getSheet();
+  
+  if (sheet.getName() !== TARGET_SHEET_NAME) return;
+
+  const row = range.getRow();
+  const column = range.getColumn();
+
+  // 1. ตรวจสอบแถว: ต้องไม่เป็นแถวส่วนหัว
+  if (row < FIRST_DATA_ROW) return;
+
+  // 2. ตรวจสอบว่าเป็นการแก้ไขในคอลัมน์ ID (A) หรือไม่
+  if (column === ID_TARGET_COLUMN) return; // หากแก้ไขคอลัมน์ ID โดยตรง ให้หยุด
+
+  // 3. ตรวจสอบว่าคอลัมน์ ID ในแถวนั้นว่างเปล่าหรือไม่
+  const idCell = sheet.getRange(row, 2);
+  const existingId = idCell.getValue().toString().trim(); 
+
+  if (existingId === "") {
+    try {
+      const newId = generateUniqueCustomerId();
+      idCell.setValue(newId);
+
+    } catch (error) {
+      Logger.log(`[ERROR] ไม่สามารถสร้างหรือตั้งค่า ID แถวที่ ${row}: ${error.toString()}`);
+    }
+  }
+}
+
+/**
+ * ฟังก์ชันช่วยในการสร้าง ID ลูกค้าที่ไม่ซ้ำกัน
+ * รูปแบบ: CUST-YYMMDD-HHMMSS-RANDOM_HEX
+ * @returns {string} ID ลูกค้าที่ไม่ซ้ำกัน
+ */
+function generateUniqueCustomerId() {
+  const now = new Date();
+
+  // ส่วนของ Timestamp: YYMMDD-HHMMSS
+  const YY = now.getFullYear().toString().slice(-2); 
+  const MM = ('0' + (now.getMonth() + 1)).slice(-2); 
+  const DD = ('0' + now.getDate()).slice(-2); 
+  const HH = ('0' + now.getHours()).slice(-2); 
+  const MI = ('0' + now.getMinutes()).slice(-2); 
+  const SS = ('0' + now.getSeconds()).slice(-2); 
+
+  const timestampPart = `${YY}${MM}${DD}-${HH}${MI}${SS}`;
+
+  // ส่วนของ Random Hex String 4 หลัก
+  const randomHexPart = Math.floor(Math.random() * 0x10000).toString(16).toUpperCase().padStart(4, '0');
+
+  // ประกอบ ID ทั้งหมด
+  return `CUST-${timestampPart}-${randomHexPart}`;
+}
+
+/**
+ * ฟังก์ชันทดสอบการส่งอีเมลโดยตรงเพื่อยืนยันสิทธิ์การทำงานของ MailApp
+ * (ถูกแก้ไขเพื่อลบ getUi().alert() ออก)
+ */
+function testSendEmailFunction() {
+  
+  const TEST_RECIPIENT = 'mrtan.dev@gmail.com'; 
+  const TEST_SUBJECT = '[GAS TEST] การทดสอบส่งอีเมลจาก Apps Script สำเร็จ';
+  const TEST_BODY = `เรียน อ.แทน,\n\n
+นี่คืออีเมลทดสอบที่ส่งโดยตรงผ่าน MailApp.sendEmail()
+... (ข้อความเดิม) ...
+---
+AI Code Assistant
+`;
+
+  try {
+    MailApp.sendEmail(TEST_RECIPIENT, TEST_SUBJECT, TEST_BODY);
+    // 💡 ลบบรรทัด SpreadsheetApp.getUi().alert() ที่ทำให้เกิด Error ออก
+    Logger.log(`SUCCESS: อีเมลทดสอบถูกส่งไปที่ ${TEST_RECIPIENT} แล้ว`);
   } catch (error) {
-    Logger.log(`ERROR in sendNewSaleNotification: ${error.toString()}`);
-    MailApp.sendEmail('it-support@example.com', 'GAS Error Alert', 
-             `เกิดข้อผิดพลาดในการส่งอีเมลแจ้งเตือนการขาย: ${error.toString()}`);
+    // 💡 ลบบรรทัด SpreadsheetApp.getUi().alert() ที่ทำให้เกิด Error ออก
+    Logger.log(`ERROR: การส่งอีเมลทดสอบล้มเหลว: ${error.toString()}`);
   }
 }</code></pre>
             <p class="mt-4 text-sm text-gray-700">
