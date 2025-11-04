@@ -185,7 +185,7 @@
                         <td class="px-6 py-2 text-center text-xs font-bold text-red-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-emerald-50">
-                        <!-- FIX: Part 3.1 - 13:00 - 14:30 น. (90 นาที) -->
+                        <!-- Part 3.1 - 13:00 - 14:30 น. (90 นาที) -->
                         <td class="px-6 py-4 text-sm font-semibold text-gray-900">13:00 - 14:30 น.</td>
                         <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">90</td>
                         <td class="px-6 py-4 text-sm text-gray-800"><b>ส่วนที่ 3.1:</b> AppSheet Expressions: Logic & Security Filter</td>
@@ -199,24 +199,24 @@
                         <td class="px-6 py-2 text-center text-xs font-bold text-yellow-600">พัก</td>
                     </tr>
                     <tr class="hover:bg-emerald-50">
-                        <!-- FIX: Part 3.2 - 14:45 - 15:30 น. (45 นาที) -->
+                        <!-- Part 3.2 - 14:45 - 15:30 น. (45 นาที) -->
                         <td class="px-6 py-4 text-sm font-semibold text-gray-900">14:45 - 15:30 น.</td>
                         <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">45</td>
-                        <td class="px-6 py-4 text-sm text-gray-800"><b>ส่วนที่ 3.2:</b> Workshop: Automation Bot พื้นฐาน</td>
+                        <td class="px-6 py-4 text-sm text-gray-800"><b>ส่วนที่ 3.2:</b> Workshop: Automation Bot พื้นฐาน (Webhook ➔ GAS)</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-emerald-600">Automation</td>
                     </tr>
                     <tr class="hover:bg-emerald-50">
-                        <!-- FIX: Part 3.3 - 15:30 - 16:00 น. (30 นาที) - ลด 15 นาทีจาก 45 -->
+                        <!-- Part 3.3 - 15:30 - 16:00 น. (30 นาที) -->
                         <td class="px-6 py-4 text-sm font-semibold text-gray-900">15:30 - 16:00 น.</td>
                         <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">30</td>
                         <td class="px-6 py-4 text-sm text-gray-800"><b>ส่วนที่ 3.3:</b> สร้าง Dashboard สำหรับผู้บริหาร</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-emerald-600">Dashboard</td>
                     </tr>
                     <tr class="hover:bg-emerald-50">
-                        <!-- FIX: Part 4 - 16:00 - 16:30 น. (30 นาที) -->
+                        <!-- Part 4 - 16:00 - 16:30 น. (30 นาที) -->
                         <td class="px-6 py-4 text-sm font-semibold text-gray-900">16:00 - 16:30 น.</td>
                         <td class="px-3 py-4 text-center text-sm font-semibold text-gray-900">30</td>
-                        <td class="px-6 py-4 text-sm text-gray-800"><b>ส่วนที่ 4:</b> สรุปการ Deploy App และเตรียมพร้อมสำหรับ Day 4 (N8N)</td>
+                        <td class="px-6 py-4 text-sm text-gray-800"><b>ส่วนที่ 4:</b> สรุปการ Deploy App และเตรียมพร้อมสำหรับ External Webhook</td>
                         <td class="px-6 py-4 text-center text-xs font-bold text-emerald-600">สรุป</td>
                     </tr>
                 </tbody>
@@ -250,7 +250,7 @@
                 </p>
                 <ol class="list-decimal ml-6 text-gray-700 space-y-1 text-sm">
                     <li>ไปที่ Google Sheets → Extensions → AppSheet → Create App</li>
-                    <li>ตรวจสอบว่า Sheet ที่ใช้เป็น <span class="app-component">Table</span> ถูกต้องหรือไม่ (เช่น 'Customers', 'Products', 'Sales Transactions')</li>
+                    <li>ตรวจสอบว่า Sheet ที่ใช้เป็น <span class="app-component">Table</span> ถูกต้องหรือไม่ (เช่น <b>'Customers'</b>, <b>'Masters'</b>, <b>'Transactions'</b>)</li>
                     <li><span class="font-bold text-red-600">ข้อควรระวัง:</span> AppSheet จะมองเห็นแค่แถวแรกของ Sheet เป็น <span class="expression-code">Column Header</span> ห้ามมีแถวว่างด้านบน!</li>
                 </ol>
             </div>
@@ -273,24 +273,24 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-indigo-200">
                         <tr>
-                            <td class="px-4 py-3 font-bold text-gray-900">ID (PK)</td>
+                            <td class="px-4 py-3 font-bold text-gray-900">TranID (PK) / MasID (PK)</td>
                             <td class="px-4 py-3"><span class="app-component">Key / Text / Unique ID</span></td>
                             <td class="px-4 py-3">หัวใจหลักของตาราง, ห้ามซ้ำ</td>
                         </tr>
                         <tr>
-                            <td class="px-4 py-3 font-bold text-gray-900">Customer_ID (FK)</td>
-                            <td class="px-4 py-3"><span class="app-component">Ref</span> (ชี้ไปที่ตาราง Customers)</td>
+                            <td class="px-4 py-3 font-bold text-gray-900">CusID (FK) / MasID (FK)</td>
+                            <td class="px-4 py-3"><span class="app-component">Ref</span> (ชี้ไปที่ตาราง <b>Customers</b> หรือ <b>Masters</b>)</td>
                             <td class="px-4 py-3">สร้างความสัมพันธ์ (Relation) ข้อมูล</td>
                         </tr>
                         <tr>
-                            <td class="px-4 py-3 font-bold text-gray-900">Date/Time</td>
-                            <td class="px-4 py-3"><span class="app-component">DateTime</span> หรือ <span class="app-component">Date</span></td>
-                            <td class="px-4 py-3">ทำให้ AppSheet จัดการ Timezone ได้อัตโนมัติ</td>
+                            <td class="px-4 py-3 font-bold text-gray-900">TranQty / TranUnitPrice</td>
+                            <td class="px-4 py-3"><span class="app-component">Number</span> หรือ <span class="app-component">Price</span></td>
+                            <td class="px-4 py-3">คอลัมน์คำนวณ (ใช้ในสูตร)</td>
                         </tr>
                         <tr>
-                            <td class="px-4 py-3 font-bold text-gray-900">Image_URL</td>
-                            <td class="px-4 py-3"><span class="app-component">Image</span> หรือ <span class="app-component">URL</span></td>
-                            <td class="px-4 py-3">แสดงผลรูปภาพหรือลิงก์ได้โดยตรง</td>
+                            <td class="px-4 py-3 font-bold text-gray-900">TranStatus</td>
+                            <td class="px-4 py-3"><span class="app-component">Enum</span> หรือ <span class="app-component">Text</span></td>
+                            <td class="px-4 py-3">ใช้กรองข้อมูลหรือกำหนดสถานะ</td>
                         </tr>
                     </tbody>
                 </table>
@@ -308,11 +308,10 @@
                     <i class="fas fa-link mr-2"></i> การดึงข้อมูลจากตารางแม่ (Master Data)
                 </p>
                 <p class="text-sm text-gray-700">
-                    เมื่อคุณกำหนด <span class="expression-code">Customer_ID</span> เป็น <span class="app-component">Ref</span>:
+                    เมื่อคุณกำหนด <span class="expression-code">CusID</span> เป็น <span class="app-component">Ref</span>:
                     <ul class="list-disc ml-6 text-sm">
-                        <li>คุณสามารถเข้าถึงข้อมูลของลูกค้าคนนั้นได้ทันที: <span class="expression-code">[Customer_ID].[Customer_Name]</span></li>
-                        <li>VC ที่ถูกสร้างขึ้นอัตโนมัติ: <span class="expression-code">Related Sales Transactions</span> ใช้แสดงรายการซื้อทั้งหมดของลูกค้ารายนั้น</li>
-                        <li><span class="expression-code">Lookup</span>: ใช้ดึงค่าที่ไม่ได้เป็น Ref แต่ต้องการแสดง (ไม่แนะนำเท่า Ref)</li>
+                        <li>คุณสามารถเข้าถึงข้อมูลของลูกค้าคนนั้นได้ทันที: <span class="expression-code">[CusID].[CusName]</span></li>
+                        <li>VC ที่ถูกสร้างขึ้นอัตโนมัติ: <span class="expression-code">Related Transactions</span> ใช้แสดงรายการซื้อทั้งหมดของลูกค้ารายนั้น</li>
                     </ul>
                 </p>
             </div>
@@ -320,7 +319,7 @@
 
         <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-app-color pb-2 flex items-center">
             <i class="fas fa-tools w-8 h-8 mr-3 text-app-color"></i>
-            ส่วนที่ 2: Workshop 1: App CRUD (Sales Transaction)
+            ส่วนที่ 2: Workshop 1: App CRUD (Transactions)
         </h3>
 
         <div class="step-card bg-white p-5 rounded-lg shadow-md mb-8 border-l-4 border-app-color">
@@ -350,14 +349,14 @@
             </p>
             
             <div class="border border-purple-300 rounded-lg overflow-x-auto my-4 p-4 bg-purple-50">
-                <p class="font-bold text-purple-700 mb-2">ตัวอย่าง AppSheet Expression</p>
+                <p class="font-bold text-purple-700 mb-2">ตัวอย่าง AppSheet Expression (จากฐานข้อมูลของคุณ)</p>
                 <ul class="list-disc ml-6 text-sm text-gray-700 space-y-2">
-                    <li><b>Auto Date:</b> กำหนดให้คอลัมน์ <code>Sale_Date</code> มีค่าเริ่มต้นเป็นวันที่ปัจจุบัน (Initial Value): <span class="expression-code">TODAY()</span></li>
-                    <li><b>บังคับกรอก:</b> กำหนดให้คอลัมน์ <code>Quantity</code> ต้องมากกว่า 0 (Valid If): <span class="expression-code">[_THIS] > 0</span></li>
-                    <li><b>คำนวณหา Total Price:</b>
-                        <span class="expression-code">[Quantity] * [Product_ID].[Price]</span>
+                    <li><b>Auto TranID:</b> กำหนดให้คอลัมน์ <code>TranID</code> มีค่าเริ่มต้นเป็น Unique ID (Initial Value): <span class="expression-code">UNIQUEID()</span></li>
+                    <li><b>บังคับกรอก:</b> กำหนดให้คอลัมน์ <code>TranQty</code> ต้องมากกว่า 0 (Valid If): <span class="expression-code">[_THIS] > 0</span></li>
+                    <li><b>คำนวณหา TranAmt (ราคารวม):</b>
+                        <span class="expression-code">[TranQty] * [MasID].[MasPrice]</span>
                         <p class="text-xs text-gray-500 mt-1 italic">
-                            *ใช้ Expression นี้ใน Virtual Column หรือ App Formula ของคอลัมน์ [Total_Price]
+                            *ใช้ Expression นี้ใน Virtual Column หรือ App Formula ของคอลัมน์ [TranAmt]
                         </p>
                     </li>
                 </ul>
@@ -382,10 +381,10 @@
                     <i class="fas fa-user-shield mr-2"></i> Expression สำหรับ Security Filter
                 </p>
                 <p class="text-sm text-gray-700">
-                    <b>โจทย์:</b> พนักงานขายแต่ละคน (Sales Person) ควรเห็นรายการขายของตัวเองเท่านั้น
+                    <b>โจทย์:</b> พนักงานขาย (User) ควรเห็นรายการขาย (<span class="app-component">Transactions</span>) ของตนเองเท่านั้น (สมมติว่าตาราง Transactions มีคอลัมน์ [UserEmail])
                 </p>
                 <p class="text-sm text-gray-700 mt-2">
-                    <span class="expression-code">[Sales_Person_Email] = USEREMAIL()</span>
+                    <span class="expression-code">[UserEmail] = USEREMAIL()</span>
                     <ul class="list-disc ml-6 text-xs text-gray-500 mt-1">
                         <li><span class="expression-code">USEREMAIL()</span>: ดึงอีเมลของผู้ใช้ที่กำลังเปิด App อยู่</li>
                         <li>AppSheet จะทำการ <b>WHERE CLAUSE</b> อัตโนมัติในฐานข้อมูล (GGS) ก่อนโหลดข้อมูลขึ้นมาแสดง</li>
@@ -394,32 +393,33 @@
             </div>
 
             <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
-                <i class="fas fa-robot mr-2 text-red-600"></i> 3.2 Automation Bot: การส่ง Notification และ Report
+                <i class="fas fa-robot mr-2 text-red-600"></i> 3.2 Automation Bot (Webhook ➔ GAS)
             </h4>
             <p class="mb-4 text-gray-700">
-                <span class="font-bold text-red-600">AppSheet Automation Bot</span> เป็นเครื่องมือ No-Code สำหรับ Logic ภายใน App
+                ใช้ Automation Bot ส่ง Webhook ไปยัง **Google Apps Script (GAS)** เพื่อ Trigger ฟังก์ชันส่งอีเมลที่คุณเตรียมไว้
             </p>
             
             <div class="border border-red-300 rounded-lg overflow-x-auto my-4 p-4 bg-red-50">
                 <p class="font-bold text-red-700 mb-2">Workshop: สร้าง Bot ส่ง Email Report (On New Sales)</p>
                 
-                <p class="font-bold text-gray-800 mt-3">⚙️ Task 1: สร้าง Action (Webhook) สำหรับเรียก n8n</p>
+                <p class="font-bold text-gray-800 mt-3">⚙️ Task 1: สร้าง Action (Webhook) สำหรับเรียก GAS Web App</p>
                 <ul class="list-disc ml-6 text-sm text-gray-700 space-y-2">
                     <li><b>Action Type:</b> <span class="app-component">Webhook</span></li>
-                    <li><b>URL:</b> ใส่ Webhook URL ของ n8n (ปลายทาง)</li>
+                    <li><b>URL:</b> ใส่ Web App URL ของ **GAS Web App** (ปลายทาง: ฟังก์ชัน <code>doPost</code>)</li>
                     <li><b>HTTP Method:</b> POST</li>
-                    <li><b>Body:</b> ส่งข้อมูลเป็น JSON Payload ที่ต้องการให้ n8n รับไป เช่น <span class="expression-code">`{ "TxnID": [ID], "Total": [Total_Price] }`</span></li>
+                    <li><b>Body:</b> ส่งเฉพาะรหัสรายการสั่งซื้อ (Primary Key) ที่จำเป็น: <span class="expression-code"><code>{ "TranID": "[TranID]" }</code></span></li>
+                    <li><span class="font-bold text-blue-600 mt-2 block">GAS Logic:</span> ฟังก์ชัน <code>doPost</code> จะรับ <code>TranID</code> ไปค้นหา <b>หมายเลขแถว (Row Number)</b> ในชีต <b>Transactions</b></li>
                 </ul>
 
-                <p class="font-bold text-gray-800 mt-3">🤖 Task 2: สร้าง Bot (Automation)</p>
+                <p class="font-bold text-gray-800 mt-3">🤖 Task 2: สร้าง Bot (Automation) [Flow Logics]</p>
                 <ol class="list-decimal ml-6 text-sm text-gray-700 space-y-2">
-                    <li><b>Event (Trigger):</b> กำหนดให้ Bot ทำงานเมื่อ <b>"มีการเพิ่ม (Add) แถวใหม่"</b> ในตาราง Sales Transactions</li>
-                    <li><b>Condition (เงื่อนไข):</b> <span class="expression-code">[Total_Price] > 10000</span> (ใช้เพื่อส่งเฉพาะรายการใหญ่)</li>
-                    <li><b>Process (Logic):</b> กำหนดให้ Bot มี 2 ขั้นตอน: 
+                    <li><b>Event (Trigger):</b> กำหนดให้ Bot ทำงานเมื่อ <b>"มีการเพิ่ม (Add) แถวใหม่"</b> ในตาราง <b>Transactions</b></li>
+                    <li><b>Condition (เงื่อนไข):</b> <span class="expression-code">[TranAmt] > 1000</span> (ใช้เพื่อส่งเฉพาะรายการใหญ่)</li>
+                    <li><b>Process (Logic):</b> กำหนดให้ Bot มี 3 ขั้นตอน: 
                         <ul class="list-disc ml-6 text-xs text-gray-600">
                             <li><b>Step 1:</b> สร้าง <span class="app-component">Task Report</span> (สร้าง PDF/Email Body)</li>
-                            <li><b>Step 2:</b> เรียกใช้ <span class="app-component">Task Email</span> (ส่งอีเมลที่สร้างใน Step 1 ไปที่ <span class="expression-code">admin@example.com</span>)</li>
-                            <li><b>(Optional Step 3):</b> เรียกใช้ Webhook Action ที่สร้างใน Task 1 เพื่อส่งข้อมูลไปยัง n8n</li>
+                            <li><b>Step 2:</b> เรียกใช้ <span class="app-component">Task Email</span> (ส่งอีเมลที่สร้างใน Step 1 ไปที่ <span class="expression-code">mrtan.dev@gmail.com</span>)</li>
+                            <li><b>Step 3 (Optional):</b> เรียกใช้ Webhook Action (Task 1) เพื่อส่ง <code>TranID</code> ไปยัง GAS Web App เพื่อ Trigger ฟังก์ชัน **<code>processAndSendEmail(sheet, row)</code>**</li>
                         </ul>
                     </li>
                 </ol>
@@ -445,7 +445,7 @@
 
         <h3 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-emerald-500 pb-2 flex items-center mt-8">
             <i class="fas fa-cogs w-8 h-8 mr-3 text-emerald-600"></i>
-            ส่วนที่ 4: สรุปการ Deploy App และเตรียมพร้อมสำหรับ Day 4 (N8N)
+            ส่วนที่ 4: สรุปการ Deploy App และเตรียมพร้อมสำหรับ Day 4 (External Webhook)
         </h3>
         
         <div class="step-card bg-white p-5 rounded-lg shadow-md mb-8 border-l-4 border-emerald-500">
@@ -461,15 +461,15 @@
             </ul>
 
             <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center mt-6">
-                <i class="fas fa-link mr-2 text-indigo-600"></i> 4.2 เตรียมพร้อมสำหรับ N8N (Day 4)
+                <i class="fas fa-link mr-2 text-indigo-600"></i> 4.2 เตรียมพร้อมสำหรับ External Webhook
             </h4>
             <p class="mb-4 text-gray-700">
                 ทบทวนพื้นฐานที่จำเป็นสำหรับการสร้าง Workflow ภายนอก AppSheet:
             </p>
             <ul class="list-disc ml-6 text-sm text-gray-700 space-y-1">
                 <li><b>Data Structure:</b> การทำความเข้าใจ JSON Payload ที่จะถูกส่งมาจาก AppSheet Webhook (ส่วนที่ 3.2 Task 1)</li>
-                <li><b>API Key:</b> ความสำคัญของการใช้ Credentials ใน N8N เพื่อเก็บ Line Notify Key หรือ Gemini Key อย่างปลอดภัย (ทบทวนจาก Day 2)</li>
-                <li><b>Core Node:</b> ทบทวนหน้าที่ของ Node พื้นฐาน: Webhook, Set, Function, และ HTTP Request</li>
+                <li><b>API Key/Token:</b> ความสำคัญของการใช้ Credentials ในการเก็บ API Key สำหรับ Line Notify หรือ Google Cloud Vision API อย่างปลอดภัย</li>
+                <li><b>Core Tool:</b> ทบทวนหน้าที่ของ <span class="node-component">Google Apps Script</span>, <span class="node-component">n8n/Zapier (ถ้ามี)</span> และ <span class="node-component">Code Node</span> ในการจัดการข้อมูล</li>
             </ul>
         </div>
 
@@ -482,7 +482,7 @@
                 ผู้เรียนสามารถสร้าง App ธุรกิจ (MVP) ที่ใช้งานได้จริงบนมือถือและเว็บจาก Google Sheets, สามารถใช้ Expression คำนวณ Logic พื้นฐาน และกำหนด Security Filter ได้สำเร็จ พร้อมสร้าง Automation Bot สำหรับส่งรายงานอัตโนมัติ
             </p>
             <a href="day4_automation.html" class="inline-flex items-center mt-4 px-6 py-3 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700 transition duration-150">
-                <span class="mr-2">ไปยัง Day 4: Workshop เชื่อมต่ออัตโนมัติด้วย N8N (Part 1)</span> <i class="fas fa-arrow-right"></i>
+                <span class="mr-2">ไปยัง Day 4: Workshop เชื่อมต่ออัตโนมัติด้วย External Webhook</span> <i class="fas fa-arrow-right"></i>
             </a>
         </div>
 
