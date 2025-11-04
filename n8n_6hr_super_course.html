@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ หลักสูตร n8n Super เร่งรัด: สร้างระบบอัตโนมัติ 6 ชั่วโมง</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap');
+        
+        :root {
+            /* สี Gradient ที่เน้นพลังงานและเทคโนโลยี */
+            --primary-gradient: linear-gradient(90deg, #FF6F61 0%, #DE483C 100%); /* แดงส้มร้อนแรง */
+            --secondary-gradient: linear-gradient(90deg, #F9D423 0%, #FF4E50 100%); /* เหลืองส้มสดใส */
+            --card-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+            --text-color: #333;
+            --bg-color: #ffeef2; /* พื้นหลังสีชมพูอ่อนมาก */
+            --highlight-color: #FF6F61;
+            --detail-bg: #fff0f5; /* สีพื้นหลังสำหรับรายละเอียด */
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        /* --- Header/Banner Styles (Unchanged) --- */
+        .header-banner {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-banner::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .header-banner h1 {
+            font-size: 2.8em;
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+
+        .header-banner p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+        
+        .profile-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .profile-info img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 5px solid white;
+            margin-right: 20px;
+            object-fit: cover;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .profile-text {
+            text-align: left;
+        }
+
+        .profile-text strong {
+            display: block;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .profile-text span {
+            display: block;
+            font-size: 1em;
+            opacity: 0.8;
+        }
+
+        /* --- Gradient Headings (Unchanged) --- */
+        h2.section-heading {
+            font-size: 2em;
+            font-weight: 800;
+            display: block;
+            margin-top: 40px;
+            margin-bottom: 25px;
+            padding-bottom: 5px;
+            border-bottom: 3px solid #f0f0f0;
+            background-image: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- Card Styles (Unchanged) --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease-in-out;
+            border-top: 5px solid var(--highlight-color);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h4 {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--highlight-color);
+            margin-top: 0;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .card ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 15px;
+        }
+
+        .card ul li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .card ul li .icon {
+            margin-right: 10px;
+            font-size: 1.3em;
+            color: #4CAF50; 
+            line-height: 1.5;
+        }
+
+        /* --- Plan Item (Core Module) Styling --- */
+        .plan-item {
+            background-color: #ffffff;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            overflow: hidden; /* เพื่อให้เนื้อหาที่ถูกยุบไม่เกินขอบ */
+        }
+        
+        .plan-item h4 {
+            padding: 20px;
+            color: #000;
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.15em;
+            display: flex;
+            align-items: center;
+            cursor: pointer; /* ทำให้คลิกได้ */
+            user-select: none;
+            transition: background-color 0.3s;
+            border-bottom: none;
+            background-color: #f7f7f7;
+        }
+
+        .plan-item h4:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .plan-item h4 .hour-tag {
+            background-color: #f9d423;
+            color: #333;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-right: 10px;
+            font-weight: 800;
+        }
+        
+        /* สัญลักษณ์ขยาย/ยุบ */
+        .plan-item h4::after {
+            content: '▼';
+            margin-left: auto;
+            font-size: 0.8em;
+            transition: transform 0.3s;
+        }
+
+        .plan-item h4.active::after {
+            content: '▲';
+            transform: rotate(0deg);
+        }
+        
+        /* --- Detail Content Styles (Accordion Body) --- */
+        .detail-content {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out;
+            background-color: var(--detail-bg);
+            border-top: 1px solid #eee;
+        }
+        
+        .detail-content-inner {
+            padding: 20px 0;
+        }
+        
+        .detail-content h5 {
+            font-size: 1.1em;
+            color: var(--highlight-color);
+            margin-top: 0;
+            margin-bottom: 10px;
+            border-left: 3px solid #ff523d;
+            padding-left: 10px;
+        }
+
+        .detail-content p {
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+        
+        .detail-content .task-list {
+            padding-left: 10px;
+        }
+        
+        .detail-content .task-list li {
+            border-bottom: none;
+            padding: 3px 0;
+            font-size: 1em;
+        }
+
+        /* --- Link Button Styles (Unchanged) --- */
+        .task-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 15px;
+        }
+
+        .task-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            padding: 5px 0;
+            border-bottom: 1px dotted #eee;
+        }
+
+        .task-list input[type="checkbox"] {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            accent-color: var(--highlight-color);
+        }
+
+        .link-button {
+            display: inline-block;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            margin-right: 10px;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 8px rgba(222, 72, 60, 0.4);
+        }
+        
+        .link-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(222, 72, 60, 0.6);
+        }
+        
+        /* --- Footer/Signature (Unchanged) --- */
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 3px solid var(--highlight-color);
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        .emoji {
+            font-size: 1.4em;
+            margin-right: 8px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-banner">
+        <h1>🚀 n8n SUPER BOOTCAMP (6 ชั่วโมงจบ)</h1>
+        <p>หลักสูตรเร่งรัดเพื่อสร้างระบบ Automation ที่สร้างรายได้ทันทีสำหรับผู้ประกอบการ</p>
+
+        <div class="profile-info">
+            <!-- ภาพ Profile อ.แทน -->
+            <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" alt="รูปภาพ อ.แทน">
+            <div class="profile-text">
+                <strong>อ.แทน [ธีรชัย โฉมทัพ]</strong>
+                <span>Head of Digital Transformation</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- ส่วนที่ 1: วัตถุประสงค์ (Unchanged) -->
+    <!-- ---------------------------------------------------- -->
+    <h2 class="section-heading">🎯 เป้าหมาย 6 ชั่วโมงนี้: พัฒนา Customer Workflow</h2>
+    <div class="card-grid">
+        <div class="card">
+            <h4><span class="emoji">📈</span> ROI Automation (สร้างรายได้/ลดต้นทุน)</h4>
+            <ul>
+                <li><span class="icon">✅</span> เข้าใจและสร้าง Workflow ที่ให้ผลตอบแทนสูงทันที</li>
+                <li><span class="icon">✅</span> หยุดงานซ้ำซาก หันไปเน้นงานเชิงกลยุทธ์</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h4><span class="emoji">📊</span> Customer Data Hub (การรวมข้อมูลลูกค้า)</h4>
+            <ul>
+                <li><span class="icon">✅</span> รวบรวมข้อมูล Lead จากทุกช่องทางสู่ศูนย์กลาง (Sheets/CRM)</li>
+                <li><span class="icon">✅</span> สร้างระบบแจ้งเตือน (LINE Notify) และการสื่อสารอัตโนมัติ</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h4><span class="emoji">🤖</span> AI Agent: Data Intelligence</h4>
+            <ul>
+                <li><span class="icon">✅</span> ใช้ AI คัดกรองและให้คะแนน Lead (Lead Scoring)</li>
+                <li><span class="icon">✅</span> ให้ AI สรุป/วิเคราะห์ข้อมูลจากอีเมลหรือรายงานแทนเรา</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- ส่วนที่ 2: แผนงาน 6 ชั่วโมง (Syllabus) - ACCORDION IMPLEMENTATION -->
+    <!-- ---------------------------------------------------- -->
+    <h2 class="section-heading">🗓️ แผนงาน 6 ชั่วโมง Super เร่งรัด (CRM Automation Focus)</h2>
+    
+    <div class="plan-item">
+        <h4 class="accordion-header"><span class="hour-tag">ชั่วโมงที่ 1</span> 💡 Module 1: Automation Mindset & Data Flow</h4>
+        <div class="detail-content">
+            <div class="detail-content-inner">
+                <h5>หัวใจสำคัญ: การทำความเข้าใจ "ภาษา" ของ Automation</h5>
+                <p>ก่อนลงมือทำ เราต้องเข้าใจว่า n8n มองข้อมูลอย่างไร และทำงานอย่างไร</p>
+                <ul class="task-list">
+                    <li><input type="checkbox" id="t1_1"><label for="t1_1">1.1 ภาพรวม: n8n ใน Customer Journey และการไหลของข้อมูล (JSON)</label>
+                        <p><strong>รายละเอียด:</strong> ทำไมข้อมูลต้องเป็น **JSON Object**? การทำความเข้าใจโครงสร้างข้อมูลนี้คือกุญแจสำคัญในการเขียน Expression และการจัดการข้อมูลระหว่าง Node</p>
+                    </li>
+                    <li><input type="checkbox" id="t1_2"><label for="t1_2">1.2 การเตรียมเครื่องมือ: Account n8n Cloud และ Credentials (Google/LINE)</label>
+                        <p><strong>รายละเอียด:</strong> แนะนำวิธีการสมัคร n8n Cloud และการตั้งค่า Credentials (API Key/Token) เบื้องต้น **อย่างปลอดภัย** เพื่อให้พร้อมเชื่อมต่อกับ Google และ LINE</p>
+                    </li>
+                    <li><input type="checkbox" id="t1_3"><label for="t1_3">1.3 ฝึกใช้ Node พื้นฐาน: Trigger (Manual/Schedule) และ Set Node</label>
+                        <p><strong>รายละเอียด:</strong> ทดลองสร้าง Workflow และส่งข้อมูลพื้นฐานผ่าน **Set Node** เพื่อเรียนรู้วิธีการกำหนดและเปลี่ยนชื่อ Field ข้อมูล</p>
+                    </li>
+                </ul>
+                <a href="https://n8n.io/cloud" target="_blank" class="link-button">
+                    🔗 สมัคร n8n Cloud / Login
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="plan-item">
+        <h4 class="accordion-header"><span class="hour-tag">ชั่วโมงที่ 2-3</span> 🤝 Module 2: Data Standardization & Centralization</h4>
+        <div class="detail-content">
+            <div class="detail-content-inner">
+                <h5>หัวใจสำคัญ: ทำให้ข้อมูล Lead "สะอาด" และ "เป็นมาตรฐาน"</h5>
+                <p>ปัญหาหลักของธุรกิจคือข้อมูลกระจัดกระจายและไม่เป็นมาตรฐาน Module นี้จะสอนการสร้างศูนย์กลางข้อมูลเดียว</p>
+                <ul class="task-list">
+                    <li><input type="checkbox" id="t2_1"><label for="t2_1">2.1 Webhook Node: การสร้างประตูรับ Lead จากทุกช่องทาง (Form/Web/Ads)</label>
+                        <p><strong>รายละเอียด:</strong> Webhook คืออะไร? สอนการสร้าง **URL เฉพาะ** เพื่อให้ระบบภายนอกส่งข้อมูลเข้ามาใน n8n ได้ทันที (Real-time)</p>
+                    </li>
+                    <li><input type="checkbox" id="t2_2"><label for="t2_2">2.2 Data Validation & Transformation: การใช้ Set Node เพื่อกำหนดมาตรฐานข้อมูลก่อนเข้า CRM</label>
+                        <p><strong>รายละเอียด:</strong> การใช้ Set Node ในการ **จัดเรียง Field** (เช่น `ชื่อ_ลูกค้า` → `customer_name`) และการ **แปลงค่า** (เช่น แปลงค่าสถานะจากภาษาไทยเป็น English Code) ให้พร้อมเข้า CRM/Google Sheets</p>
+                    </li>
+                    <li><input type="checkbox" id="t2_3"><label for="t2_3">2.3 Action Node: บันทึกข้อมูล Lead ลง Customer Data Hub (Google Sheets/CRM)</label>
+                        <p><strong>รายละเอียด:</strong> เชื่อมต่อ Google Sheets และตั้งค่า **Append Row** เพื่อบันทึกข้อมูลที่ผ่านการ Standardization แล้ว</p>
+                    </li>
+                    <li><input type="checkbox" id="t2_4"><label for="t2_4">2.4 การอ้างอิงข้อมูลด้วย Expression: การดึงและป้อนค่าอย่างแม่นยำ</label>
+                        <p><strong>รายละเอียด:</strong> ฝึกการเขียนโค้ดสั้นๆ เช่น <code>{{ $json["customer_name"] }}</code> เพื่อดึงค่า Field ที่เราต้องการไปใช้งานใน Node ถัดไป</p>
+                    </li>
+                </ul>
+                <a href="https://n8n.io/integrations/google-sheets" target="_blank" class="link-button">
+                    🛠️ คู่มือเชื่อม Google Sheets
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="plan-item">
+        <h4 class="accordion-header"><span class="hour-tag">ชั่วโมงที่ 4</span> 🚦 Module 3: Sales Triage & Instant Follow-up Logic</h4>
+        <div class="detail-content">
+            <div class="detail-content-inner">
+                <h5>หัวใจสำคัญ: สร้างระบบตัดสินใจตามความเร่งด่วน</h5>
+                <p>ทำให้ Workflow มีความฉลาด โดยใช้ Logic แยกแยะ Lead ว่าใครควรได้รับการดูแลด่วน ใครควรได้รับ Auto-Reply</p>
+                <ul class="task-list">
+                    <li><input type="checkbox" id="t3_1"><label for="t3_1">3.1 Logic Node: การใช้ **IF Node** เพื่อตัดสินใจแยก Lead ตามเงื่อนไข (Hot/Warm/Cold)</label>
+                        <p><strong>รายละเอียด:</strong> สอนการตั้งเงื่อนไข (Condition) เช่น ถ้า `งบประมาณ > 100,000` ให้ไปเส้นทาง Hot Lead, ถ้าเป็น **Hot Lead** ให้ทำงานต่อ ถ้าไม่ ให้ไปเส้นทาง Auto-Reply</p>
+                    </li>
+                    <li><input type="checkbox" id="t3_2"><label for="t3_2">3.2 Action Node: สร้างระบบแจ้งเตือนแบบ Real-time (LINE Notify) **เฉพาะ** Lead ด่วน</label>
+                        <p><strong>รายละเอียด:</strong> ตั้งค่า **LINE Notify Node** ในเส้นทาง Hot Lead เพื่อส่งข้อความแจ้งเตือนทีมขายทันที พร้อมแนบข้อมูลสำคัญ</p>
+                    </li>
+                    <li><input type="checkbox" id="t3_3"><label for="t3_3">3.3 Action Node: การส่ง Auto-Reply E-mail สำหรับ Lead ทั่วไป (Gmail/SendGrid)</label>
+                        <p><strong>รายละเอียด:</strong> ใช้ **Gmail Node** ในเส้นทาง Cold/Warm Lead เพื่อส่งอีเมลตอบกลับอัตโนมัติ เพื่อรักษา Engagement</p>
+                    </li>
+                    <li><input type="checkbox" id="t3_4"><label for="t3_4">3.4 สรุป Workshop: ทดสอบการทำงาน 3 ทิศทาง (เข้า Sheets, แจ้ง LINE, ส่ง Email)</label></li>
+                </ul>
+                <a href="https://n8n.io/integrations/line-notify" target="_blank" class="link-button">
+                    🛠️ คู่มือเชื่อม LINE Notify & Logic
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="plan-item">
+        <h4 class="accordion-header"><span class="hour-tag">ชั่วโมงที่ 5-6</span> 📈 Module 4: AI-Powered Insight & Scheduled Reporting</h4>
+        <div class="detail-content">
+            <div class="detail-content-inner">
+                <h5>หัวใจสำคัญ: ใช้ AI ทำงานเชิงวิเคราะห์และสร้างรายงาน</h5>
+                <p>ยกระดับ Automation จากแค่ "ทำซ้ำ" เป็น "คิดวิเคราะห์" เพื่อสร้าง Insight ที่ช่วยในการตัดสินใจทางธุรกิจ</p>
+                <ul class="task-list">
+                    <li><input type="checkbox" id="t4_1"><label for="t4_1">4.1 เชื่อมต่อ OpenAI/Gemini (สร้าง Credentials) และ Prompt Engineering เชิงวิเคราะห์</label>
+                        <p><strong>รายละเอียด:</strong> สอนการเขียน **Prompt** ที่ถูกต้องเพื่อสั่งให้ AI ดึง/วิเคราะห์ข้อมูลเฉพาะเจาะจง และการตั้งค่า **JSON Output** เพื่อให้ข้อมูลกลับมาเป็นมาตรฐาน</p>
+                    </li>
+                    <li><input type="checkbox" id="t4_2"><label for="t4_2">4.2 AI Node: การใช้ AI สรุปอีเมล/รีวิว/รายงานให้อยู่ในรูปแบบที่พร้อมใช้งาน</label>
+                        <p><strong>รายละเอียด:</strong> ตัวอย่างการให้ AI อ่าน Text Input (เช่น รีวิวจากลูกค้า) และสรุปเป็นคะแนน Sentiment (บวก/ลบ/กลาง) หรือสรุปเป็น 3 Key Takeaways</p>
+                    </li>
+                    <li><input type="checkbox" id="t4_3"><label for="t4_3">4.3 Cron Trigger: การสร้าง Workflow สำหรับดึงข้อมูลและรันรายงานอัตโนมัติตามกำหนดเวลา</label>
+                        <p><strong>รายละเอียด:</strong> สอนการใช้ **Cron Node** เพื่อตั้งเวลาให้ Workflow ทำงานทุกวัน/ทุกสัปดาห์ (เช่น ดึงยอดขายเมื่อวานนี้, ใช้ AI สรุป, และส่งเข้า LINE/Email ตอน 8 โมงเช้า)</p>
+                    </li>
+                    <li><input type="checkbox" id="t4_4"><label for="t4_4">4.4 สรุป & Q/A: การนำ Automation & AI ไปใช้แก้ปัญหาธุรกิจของท่าน</label></li>
+                </ul>
+                <a href="https://n8n.io/integrations/openai" target="_blank" class="link-button">
+                    🛠️ คู่มือเชื่อม AI Nodes
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ปุ่ม Add to Calendar (Placeholder Link) -->
+    <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=หลักสูตร n8n 6 ชั่วโมงจบ&dates=20251105T090000/20251105T150000&details=Workshop+Super+เร่งรัด+6+ชั่วโมง+สร้างระบบอัตโนมัติด้วย+n8n+และ+AI+สำหรับธุรกิจ+เน้น+Quick+Wins" target="_blank" class="link-button" style="background: linear-gradient(90deg, #107c10 0%, #17a949 100%);">
+        🗓️ คลิกเพิ่มหลักสูตร 6 ชม. เข้า Google Calendar
+    </a>
+    
+    <div class="footer">
+        เอกสารนี้จัดทำโดย MrTan:คู่หูเขียนโค้ด เพื่อใช้งานในหลักสูตรเร่งรัด n8n (อ.แทน) ณ วันที่: 4/11/2568
+    </div>
+
+</div>
+
+<script>
+    // JavaScript สำหรับฟังก์ชัน Accordion (ย่อ/ขยาย)
+    document.addEventListener('DOMContentLoaded', function() {
+        const headers = document.querySelectorAll('.accordion-header');
+        
+        headers.forEach(header => {
+            header.addEventListener('click', function() {
+                // Toggle active class on the header
+                this.classList.toggle('active');
+                
+                // Get the content panel immediately following the header
+                const content = this.nextElementSibling;
+                
+                if (content.style.maxHeight) {
+                    // ถ้ากำลังขยายอยู่ ให้ยุบกลับ
+                    content.style.maxHeight = null;
+                } else {
+                    // ถ้ายุบอยู่ ให้คำนวณความสูงและขยาย
+                    // ใช้ scrollHeight เพื่อให้รองรับเนื้อหาที่มีความสูงแตกต่างกัน
+                    content.style.maxHeight = content.scrollHeight + "px";
+                } 
+            });
+            // Initial setting: set max-height to 0 to start collapsed
+            const content = header.nextElementSibling;
+            if (content) {
+                content.style.maxHeight = null; // Ensure all are closed on load
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
