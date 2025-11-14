@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line OA Automation - Final Architecture</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for gradient text */
+        .gradient-text {
+            background-image: linear-gradient(45deg, #EF4444, #F97316, #F59E0B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        /* Flowchart styles */
+        .flow-connector {
+            position: relative;
+            margin: 0.75rem auto;
+            width: 0;
+            height: 25px;
+            border-left: 3px dashed #9CA3AF;
+            border-radius: 2px;
+        }
+        .flow-connector::after {
+            content: '▼';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #9CA3AF;
+            font-size: 10px;
+        }
+        
+        /* Split Path Divider */
+        .split-divider {
+            position: relative;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        .split-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            border-top: 2px dashed #D1D5DB;
+        }
+        .split-divider span {
+            position: relative;
+            background-color: #F9FAFB;
+            padding: 0 1rem;
+            font-weight: 500;
+            color: #6B7280;
+        }
+
+        /* Workflow Card base */
+        .workflow-card {
+            padding: 0.8rem 1rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 350px;
+            margin-left: auto;
+            margin-right: auto;
+            transition: transform 0.2s;
+            font-size: 0.95rem;
+        }
+        .workflow-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .main-flow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .multi-path-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .multi-path-container {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+        
+        /* Specific Flow Styling */
+        .caching-flow, .lead-flow, .normal-flow {
+            padding: 1rem;
+            border-radius: 1rem;
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .caching-flow { border: 2px dashed #3B82F6; background-color: #EFF6FF; }
+        .lead-flow { border: 2px dashed #10B981; background-color: #ECFDF5; }
+        .normal-flow { border: 2px dashed #F59E0B; background-color: #FFFBEB; }
+
+        .flow-label {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0 0.5rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .caching-flow .flow-label { background-color: #EFF6FF; color: #2563EB; }
+        .lead-flow .flow-label { background-color: #ECFDF5; color: #059669; }
+        .normal-flow .flow-label { background-color: #FFFBEB; color: #D97706; }
+        
+        /* Set default font to Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-4 md:p-8">
+
+    <!-- Header and Profile Card -->
+    <header class="max-w-6xl mx-auto mb-10">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-6 gradient-text text-center">
+            สถาปัตยกรรม Workflow: Final Architecture (vTiger + Cache + LIFF Form)
+        </h1>
+        
+        <!-- Profile Card -->
+        <div class="bg-white p-6 rounded-xl shadow-xl border border-gray-100 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
+            <img 
+                src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                alt="รูปภาพโปรไฟล์ อ.แทน" 
+                onerror="this.onerror=null;this.src='https://placehold.co/100x100/FEE2E2/EF4444?text=Profile';"
+                class="w-24 h-24 rounded-full object-cover ring-4 ring-orange-400/50"
+            >
+            <div>
+                <p class="text-2xl font-bold text-gray-800">อ.แทน [ธีรชัย โฉมทัพ] 🚀</p>
+                <p class="text-lg font-medium text-orange-600">Head of Digital Transformation</p>
+                <p class="text-sm text-gray-500 mt-1">ผังล่าสุด: เปลี่ยนเส้นทาง Normal เป็นการส่ง Link Form (LIFF) เพื่อเก็บ Lead ที่มีคุณภาพ</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Workflow Section -->
+    <main class="max-w-6xl mx-auto bg-white p-6 md:p-10 rounded-xl shadow-2xl">
+        
+        <h2 class="text-3xl font-bold mb-8 text-gray-900">
+            โครงสร้าง Workflow ล่าสุด (N8N Diagram)
+        </h2>
+
+        <!-- Main Flow -->
+        <div class="main-flow-container">
+            <!-- Step 1: Trigger -->
+            <div class="workflow-card bg-indigo-600">
+                <span class="font-bold">1. Line OA Webhook</span> (รับข้อความลูกค้า)
+                <span class="text-xl">📥</span>
+            </div>
+            <div class="flow-connector"></div>
+
+            <!-- Step 2: AI Agent -->
+            <div class="workflow-card bg-fuchsia-600">
+                <span class="font-bold">2. AI Agent (Gemini)</span> (Classify Intent: Normal/Lead/Stock)
+                <span class="text-xl">🤖</span>
+            </div>
+            <div class="flow-connector"></div>
+
+            <!-- Step 3: Switch Node -->
+            <div class="workflow-card bg-emerald-600 !max-w-md">
+                <span class="font-bold">3. Switch Node</span> (แยกเส้นทางตามค่า AI)
+                <span class="text-xl">🔄</span>
+            </div>
+        </div>
+        
+        <!-- Split Path -->
+        <div class="split-divider"><span>--- แยกเส้นทาง 3 แบบ (ProductStock, Lead Generation, Normal) ---</span></div>
+
+        <!-- Parallel Paths (ProductStock, Lead, Normal) -->
+        <div class="multi-path-container">
+            
+            <!-- Path 1: ProductStock (Case 1) - WITH CACHING LOGIC -->
+            <div class="flex flex-col items-center w-full">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Case 1: ProductStock (Caching)</h3>
+                <div class="caching-flow w-full">
+                    <span class="flow-label">เส้นทาง ProductStock (Caching Logic)</span>
+                    <!-- Node 3d -->
+                    <div class="workflow-card bg-sky-500">
+                        <span class="font-bold">3d. Redis: Get Cache</span> (ตรวจสอบ Product Catalog)
+                        <span class="text-xl">💾</span>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <!-- Node 3e -->
+                    <div class="workflow-card bg-amber-500">
+                        <span class="font-bold">3e. IF Node</span> (Cache Hit / Cache Miss)
+                        <span class="text-xl">❓</span>
+                    </div>
+
+                    <!-- Cache Branch -->
+                    <div class="flex items-start justify-center mt-4 space-x-2">
+                        <!-- Left side: Cache Miss Path (False) -->
+                        <div class="flex flex-col items-center w-1/2">
+                            <span class="text-sm font-semibold text-gray-600 mb-2">Cache Miss (FALSE)</span>
+                            <!-- Node 4a (vTiger) -->
+                            <div class="workflow-card bg-orange-600 !max-w-full">
+                                <span class="font-bold">4a. HTTP: vTiger (Get Products)</span> (ดึงข้อมูลจริง)
+                                <span class="text-xl">⚡</span>
+                            </div>
+                            <div class="flow-connector"></div>
+                             <!-- Node 4c -->
+                            <div class="workflow-card bg-sky-500 !max-w-full">
+                                <span class="font-bold">4c. Redis: Set Cache</span> (TTL: 1 ชม.)
+                                <span class="text-xl">✍️</span>
+                            </div>
+                        </div>
+
+                        <!-- Right side: Cache Hit Path (True) -->
+                        <div class="flex flex-col items-center w-1/2">
+                            <span class="text-sm font-semibold text-green-600 mb-2">Cache Hit (TRUE)</span>
+                             <div class="h-[100px] w-full"></div> 
+                        </div>
+                    </div>
+                    
+                    <!-- Final Reply Node (Merge Point) -->
+                    <div class="flow-connector !h-10"></div> 
+                    <div class="workflow-card bg-red-600 !max-w-full">
+                        <span class="font-bold">5a. Line Reply</span> (ตอบกลับด้วย Stock/รายการสินค้า)
+                        <span class="text-xl">🧾</span>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!-- Path 2: Lead Generation (Case 2) - DEDUPLICATION LOGIC -->
+            <div class="flex flex-col items-center w-full">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Case 2: Lead Generation</h3>
+                <div class="lead-flow w-full">
+                    <span class="flow-label">เส้นทาง Lead Generation (Deduplication)</span>
+                    
+                    <!-- Node 4b_check -->
+                    <div class="workflow-card bg-blue-500">
+                        <span class="font-bold">4b_check. HTTP: vTiger (Query Contact/Lead)</span> (ตรวจสอบ Line User ID)
+                        <span class="text-xl">🔍</span>
+                    </div>
+                    <div class="flow-connector"></div>
+                    
+                    <!-- Node 4b_if -->
+                    <div class="workflow-card bg-amber-500">
+                        <span class="font-bold">4b_if. IF Node</span> (พบลูกค้าแล้ว/ลูกค้าใหม่)
+                        <span class="text-xl">❓</span>
+                    </div>
+
+                    <!-- Deduplication Branch -->
+                    <div class="flex items-start justify-center mt-4 space-x-2">
+                        <!-- Left side: Found (FALSE) Path -->
+                        <div class="flex flex-col items-center w-1/2">
+                            <span class="text-sm font-semibold text-green-600 mb-2">Found (FALSE)</span>
+                            <!-- Node 4b_log -->
+                            <div class="workflow-card bg-purple-600 !max-w-full">
+                                <span class="font-bold">4b_log. HTTP: vTiger (Log Chat: ModComments)</span> (บันทึกการคุย)
+                                <span class="text-xl">💾</span>
+                            </div>
+                        </div>
+
+                        <!-- Right side: Not Found (TRUE) Path -->
+                        <div class="flex flex-col items-center w-1/2">
+                            <span class="text-sm font-semibold text-red-600 mb-2">Not Found (TRUE)</span>
+                            <!-- Node 4b -->
+                            <div class="workflow-card bg-blue-600 !max-w-full">
+                                <span class="font-bold">4b. HTTP: vTiger (Create Lead)</span> (สร้าง Lead ใหม่)
+                                <span class="text-xl">📝</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Final Reply Node (Merge Point) -->
+                    <div class="flow-connector !h-10"></div> 
+                    <div class="workflow-card bg-red-600 !max-w-full">
+                        <span class="font-bold">5b. Line Reply</span> (ตอบยืนยันการรับ Lead / แจ้งสถานะ)
+                        <span class="text-xl">✅</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Path 3: Normal (Default) - LIFF FORM LOGIC -->
+            <div class="flex flex-col items-center w-full">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Default: Normal (LIFF Form Nurturing)</h3>
+                <div class="normal-flow w-full">
+                    <span class="flow-label">เส้นทาง Normal (LIFF Form Nurturing)</span>
+                    
+                    <!-- Node 3c_form -->
+                    <div class="workflow-card bg-amber-600">
+                        <span class="font-bold">3c_form. HTTP: Line Reply (Send Form Link)</span> (ส่งลิงก์ LIFF Form)
+                        <span class="text-xl">🔗</span>
+                    </div>
+                    <div class="flow-connector"></div>
+
+                    <!-- Node 5c -->
+                    <div class="workflow-card bg-red-600">
+                        <span class="font-bold">5c. Line Reply</span> (ตอบยืนยันการส่งลิงก์)
+                        <span class="text-xl">📤</span>
+                    </div>
+                    
+                    <div class="flow-connector !h-10"></div>
+                    <div class="text-center text-sm font-medium text-gray-700">
+                        **💡 ข้อมูลจากฟอร์มจะเข้าสู่**<br>
+                        **"New Workflow: Form Submit"**
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-10 text-center text-sm text-gray-500 max-w-6xl mx-auto">
+            เอกสารนี้สร้างโดย "MrTan:คู่หูเขียนโค้ด" เพื่อจำลองการทำงานของ n8n Workflow
+        </footer>
+    </main>
+    <script>
+        // No functionality, retained for structural integrity
+    </script>
+</body>
+</html>

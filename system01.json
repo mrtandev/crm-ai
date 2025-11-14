@@ -1,0 +1,147 @@
+{
+  "name": "Line OA Lead & Stock Automation (Gemini Intent - Rev3)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "line-webhook",
+        "options": {}
+      },
+      "name": "Line OA Webhook (Trigger)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [ 250, 150 ],
+      "id": "e44449d0-8f20-410c-9945-8c76f2f98e8d"
+    },
+    {
+      "parameters": {
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+        "method": "POST",
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { 
+              "name": "X-goog-api-key", 
+              "value": "YOUR_GEMINI_API_KEY" // Placeholder: Please link to your Credential in UI
+            }
+          ]
+        },
+        "body": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"You are an expert intent classifier. Classify the user message into one of these categories only: [\\\"Stock Check\\\", \\\"Lead Generation\\\"] (If unsure, use \\\"Lead Generation\\\"). Output ONLY the classification word.\\n\\nUser Message: {{ $json.body.events[0].message.text }}\"\n        }\n      ]\n    }\n  ],\n  \"config\": {\n    \"temperature\": 0.1\n  }\n}",
+        "options": {
+          "sendBodyOnly": true
+        }
+      },
+      "name": "2. Gemini Agent - Classify Intent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [ 450, 150 ],
+      "id": "2d17c767-e982-411a-a1b7-7e67f08e5e8c"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$node['2. Gemini Agent - Classify Intent'].json.candidates[0].content.parts[0].text.trim().replace(/\\n/g, '')}}",
+              "value2": "Stock Check",
+              "operation": "stringEqual"
+            }
+          ]
+        }
+      },
+      "name": "3. IF Node: Check Intent (Stock/Lead)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [ 650, 150 ],
+      "id": "f5a9e334-0810-48f8-80e9-b547214e21a4"
+    },
+    {
+      "parameters": {
+        "url": "https://api.loyverse.com/v1/stock/{{$json.item_code}}",
+        "method": "GET",
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "Bearer YOUR_LOYVERSE_API_KEY" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "4a. HTTP Request: Get Stock from Loyverse API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [ 850, 50 ],
+      "id": "b0683a1d-a417-48f4-a034-7a911736b47c"
+    },
+    {
+      "parameters": {
+        "url": "https://api.line.me/v2/bot/message/reply",
+        "method": "POST",
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Authorization", "value": "Bearer YOUR_LINE_OA_ACCESS_TOKEN" }
+          ]
+        },
+        "body": "={\n  \"replyToken\": \"{{$json.body.events[0].replyToken}}\",\n  \"messages\": [\n    {\n      \"type\": \"text\",\n      \"text\": \"✅ สินค้าคงคลัง: {{$node['4a. HTTP Request: Get Stock from Loyverse API'].json['stock_level']}} ชิ้น\"\n    }\n  ]\n}",
+        "options": { "sendBodyOnly": true }
+      },
+      "name": "5a. Line Reply: Reply Stock Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [ 1050, 50 ],
+      "id": "217a58a9-4623-4411-9a74-9842512140a7"
+    },
+    {
+      "parameters": {
+        "url": "https://your-vtiger-crm.com/api/create/lead",
+        "method": "POST",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "leadsource", "value": "Line OA Chatbot" },
+            { "name": "description", "value": "={{$json.body.events[0].message.text}}" },
+            { "name": "line_user_id", "value": "={{$json.body.events[0].source.userId}}" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "4b. HTTP Request: vTiger CRM - Create Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [ 850, 250 ],
+      "id": "8482a20b-2224-419b-ab29-65231c55b111"
+    },
+    {
+      "parameters": {
+        "url": "https://api.line.me/v2/bot/message/reply",
+        "method": "POST",
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Authorization", "value": "Bearer YOUR_LINE_OA_ACCESS_TOKEN" }
+          ]
+        },
+        "body": "={\n  \"replyToken\": \"{{$json.body.events[0].replyToken}}\",\n  \"messages\": [\n    {\n      \"type\": \"text\",\n      \"text\": \"🙏 ระบบได้รับข้อมูลการติดต่อของคุณแล้ว ทีมงานจะรีบติดต่อกลับโดยเร็วที่สุด! (Lead ID: {{$node['4b. HTTP Request: vTiger CRM - Create Lead'].json['lead_id']}})\"\n    }\n  ]\n}",
+        "options": { "sendBodyOnly": true }
+      },
+      "name": "5b. Line Reply: Reply Lead Confirmation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [ 1050, 250 ],
+      "id": "97b1022d-3759-4d64-884d-2a81f377771"
+    }
+  ],
+  "connections": {
+    "Line OA Webhook (Trigger)": [ [ "2. Gemini Agent - Classify Intent", 0 ] ],
+    "2. Gemini Agent - Classify Intent": [ [ "3. IF Node: Check Intent (Stock/Lead)", 0 ] ],
+    "3. IF Node: Check Intent (Stock/Lead)": [
+      [ "4a. HTTP Request: Get Stock from Loyverse API", 0 ],
+      [ "4b. HTTP Request: vTiger CRM - Create Lead", 0 ]
+    ],
+    "4a. HTTP Request: Get Stock from Loyverse API": [ [ "5a. Line Reply: Reply Stock Status", 0 ] ],
+    "4b. HTTP Request: vTiger CRM - Create Lead": [ [ "5b. Line Reply: Reply Lead Confirmation", 0 ] ]
+  },
+  "settings": {},
+  "versionId": "f2a2f89f-8e43-455b-801a-3e54b6d0e6c3",
+  "id": "f2a2f89f-8e43-455b-801a-3e54b6d0e6c3",
+  "meta": { "template": true }
+}

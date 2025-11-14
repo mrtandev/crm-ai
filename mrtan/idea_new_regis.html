@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบฟอร์มลงทะเบียนสมาชิก IDEA</title>
+    
+    <link rel="icon" href="https://crm.idea.or.th/layouts/v7/skins/images/favicon.ico" type="image/x-icon">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+    <style>
+        /* CSS Styles (คงเดิม) */
+        body { font-family: 'Kanit', sans-serif; background-color: #f4f6f9; }
+        .card { border-top: 3px solid #1e88e5; border-radius: 0.5rem; margin-bottom: 1.5rem; }
+        .card-header { 
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 0.75rem 1.25rem;
+            cursor: pointer; 
+            transition: background-color 0.2s;
+        }
+        .card-header:hover { background-color: #e9ecef; }
+        .form-container { max-width: 800px; }
+        .input-group-text { background-color: #f8f9fa; color: #1e88e5; }
+        .logo-size { width: 70px; height: auto; }
+        .main-title-blue { color: #00008B; } 
+        .text-innovation-color { color: #d84340; }
+        .text-digital-color { color: #00008B; }
+        .header-tagline { 
+            font-size: 1.1rem; 
+            font-weight: 500; 
+            margin-top: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .btn-submit {
+            background-color: #1e88e5; 
+            border-color: #1e88e5;
+            transition: background-color 0.2s;
+        }
+        .btn-submit:hover {
+            background-color: #1a76c7;
+            border-color: #1a76c7;
+        }
+
+        /* Vue LIFF Profile Style */
+        .liff-profile-card-vue {
+            max-width: 350px;
+            margin: 0 auto 1.5rem auto;
+            text-align: center; 
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+            padding: 1rem;
+            background-color: #ffffff;
+        }
+        
+        .profile-content-vue {
+            display: flex; 
+            align-items: center;
+            justify-content: center; 
+            flex-direction: column;
+        }
+        
+        .profile-info-vue {
+            margin-top: 10px;
+        }
+
+        .profile-pic-vue {
+            border-radius: 50%;
+            width: 80px; 
+            height: 80px; 
+            object-fit: cover; 
+            border: 3px solid #1e88e5;
+        }
+        [v-cloak] { display: none; }
+        
+        /* 💥 Autocomplete Dropdown Style */
+        .autocomplete-container {
+            position: relative;
+        }
+        .autocomplete-results {
+            position: absolute;
+            z-index: 10;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-top: none;
+            background-color: #fff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            border-radius: 0 0 0.25rem 0.25rem;
+        }
+        .list-group-item-action {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+        }
+        .list-group-item-action:hover {
+            background-color: #f1f1f1;
+        }
+        /* Style for Debug Output */
+        .debug-output-box {
+            background-color: #fffde7; 
+            border: 1px solid #ffcc00;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-size: 0.85em;
+            text-align: left;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <div id="app" class="form-container mx-auto" v-cloak>
+
+            <div class="text-center mb-4">
+                <img src="https://idea.ass.in.th/assets/idea-logo.png" alt="โลโก้สมาคม IDEA" class="mx-auto mb-2 object-contain logo-size">
+                <h3 class="h4 fw-bold main-title-blue">สมัครสมาชิกสมาคม IDEA</h3> 
+                <p class="text-muted header-tagline mb-4">Innovation and Digital Economy Development Association</p>
+
+                <div v-if="form.line_user_id" class="liff-profile-card-vue">
+                    <div class="profile-content-vue">
+                        <img :src="form.picture_url" alt="Line Profile Picture" class="profile-pic-vue">
+                        <div class="profile-info-vue">
+                            <h5 class="fw-bolder mb-0 text-dark">👤 {{ form.display_name }}</h5>
+                            <p class="small text-muted mb-0"><i class="fab fa-line me-1"></i> {{ formatUserId(form.line_user_id) }}</p>
+                        </div>
+                    </div>
+                </div>
+                <p id="debug-status" class="mt-3 small text-muted">{{ statusMessage }}</p>
+            </div>
+            
+            <div v-if="DEBUG_MODE_ENABLED && debugDataOutput" class="debug-output-box">
+                **ข้อมูลที่จะถูกส่ง (Final Submit Data):**
+                {{ debugDataOutput }}
+                <button onclick="app.performActualSubmit()" class="btn btn-warning mt-3">✅ ยืนยันและส่งข้อมูลจริง (SUBMIT TO VTIGER)</button>
+            </div>
+            <form 
+                id="__vtigerWebForm" 
+                name="สมัครสมาชิกสมาคม IDEA" 
+                @submit.prevent="submitForm"
+            >
+                
+                <input type="hidden" name="__vtrftk" value="sid:18d8666666666666666666666666666666666666,1761550630">
+                <input type="hidden" name="publicid" value="18a2364ad93c265af185721be682bfcb">
+                <input type="hidden" name="urlencodeenable" value="1">
+                <input type="hidden" name="name" value="สมัครสมาชิกสมาคม IDEA">
+                <input type="hidden" name="redirecturl" :value="formAction.redirectUrl"> 
+                
+                <input type="hidden" name="firstname" :value="form.firstname"> 
+                <input type="hidden" name="lastname" :value="form.lastname"> 
+                <input type="hidden" name="cf_957" :value="form.line_user_id" id="cf_957_line_user_id"> 
+                <input type="hidden" name="cf_959" :value="form.line_user_id" id="cf_959_contact_line_user_id"> 
+                <input type="hidden" name="cf_941" :value="form.picture_url" id="cf_941_profile_pic"> 
+
+                <input type="hidden" name="cf_945" :value="form.cf_945_memberid"> 
+                
+                <input type="hidden" name="action_type" value="submit_lead">
+
+                <div class="card shadow-lg">
+                    <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <h5 class="card-title mb-0 section-header">
+                            <i class="fas fa-user me-2"></i> ข้อมูลทั่วไปของสมาชิก
+                        </h5>
+                    </div>
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                
+                                <div class="col-md-6">
+                                    <label for="cf_937" class="form-label small fw-bold">ชื่อ-นามสกุล <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                        <input type="text" id="cf_937" name="cf_937" data-label="Fullname*" required class="form-control" placeholder="กรอกชื่อ-นามสกุล" v-model="form.cf_937_fullname">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="cf_939" class="form-label small fw-bold">ชื่อเล่น</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-child"></i></span>
+                                        <input type="text" id="cf_939" name="cf_939" data-label="Nickname" class="form-control" placeholder="ชื่อเล่น" v-model="form.cf_939">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label small fw-bold">เบอร์มือถือ <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-phone-alt"></i></span>
+                                        <input type="tel" id="phone" name="phone" data-label="Primary Phone" required class="form-control" placeholder="0XX-XXX-XXXX" v-model="form.phone">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label small fw-bold">Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        <input type="email" id="email" name="email" data-label="Primary Email" class="form-control" placeholder="example@domain.com" v-model="form.email">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="cf_895_lineid" class="form-label small fw-bold">Line ID (ชื่อที่แสดง)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fab fa-line"></i></span>
+                                        <input type="text" id="cf_895_lineid" name="cf_895" data-label="Line ID" class="form-control" placeholder="Line Display Name" v-model="form.cf_895_lineid">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="cf_901_position" class="form-label small fw-bold">ตำแหน่งในสมาคม</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-building"></i></span>
+                                        <input type="text" id="cf_901_position" name="cf_901" data-label="Association Position" class="form-control" placeholder="ตำแหน่ง" v-model="form.cf_901_position">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="street" class="form-label small fw-bold">ที่อยู่ (บ้านเลขที่/ถนน)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-road"></i></span>
+                                        <input type="text" id="street" name="street" data-label="Street" class="form-control" placeholder="บ้านเลขที่/ซอย" v-model="form.street">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="city" class="form-label small fw-bold">อำเภอ/เมือง</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-city"></i></span>
+                                        <input type="text" id="city" name="city" data-label="City" class="form-control" placeholder="อำเภอ/เขต" v-model="form.city">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="postalcode" class="form-label small fw-bold">รหัสไปรษณีย์</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-map-pin"></i></span>
+                                        <input type="text" id="postalcode" name="postalcode" data-label="Postal Code" class="form-control" placeholder="รหัสไปรษณีย์" v-model="form.postalcode">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="cf_899" class="form-label small fw-bold">ประเภทสมาชิก <span class="text-danger">*</span></label>
+                                    <select id="cf_899" name="cf_899" data-label="label:Member+Type" required class="form-select" v-model="form.cf_899">
+                                        <option value="">-- เลือกประเภท --</option>
+                                        <option value="สามัญ">สามัญ</option>
+                                        <option value="วิสามัญ">วิสามัญ</option>
+                                        <option value="ที่ปรึกษา">ที่ปรึกษา</option>
+                                        <option value="สมทบ">สมทบ</option>
+                                        <option value="ทั่วไป">ทั่วไป</option>
+                                    </select>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-lg">
+                    <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                        <h5 class="card-title mb-0 section-header">
+                            <i class="fas fa-briefcase me-2"></i> ข้อมูลธุรกิจของสมาชิก
+                        </h5>
+                    </div>
+                    <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo">
+                        <div class="card-body">
+                            <div class="row g-3">
+
+                                <div class="col-md-6">
+                                    <label for="cf_903" class="form-label small fw-bold">ประเภทธุรกิจ</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-tags"></i></span>
+                                        <input type="text" id="cf_903" name="cf_903" data-label="Business Type" class="form-control" placeholder="ประเภทธุรกิจ" v-model="form.cf_903">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="company" class="form-label small fw-bold">บริษัท / แบรนด์</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-building"></i></span>
+                                        <input type="text" id="company" name="company" data-label="Company" class="form-control" placeholder="ชื่อบริษัท/แบรนด์" v-model="form.company">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label for="cf_935_expertise" class="form-label small fw-bold">ความเชี่ยวชาญ (Expertise)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-brain"></i></span>
+                                        <textarea id="cf_935_expertise" name="cf_935" data-label="Expertise" class="form-control" rows="2" placeholder="ความเชี่ยวชาญ" v-model="form.cf_935_expertise"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="cf_907_products" class="form-label small fw-bold">รายการสินค้า/บริการ</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-box-open"></i></span>
+                                        <textarea id="cf_907_products" name="cf_907" data-label="Area Size" class="form-control" rows="2" placeholder="รายการสินค้า/บริการ" v-model="form.cf_907_products"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="website" class="form-label small fw-bold">เว็บไซต์ / Facebook</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                                        <input type="url" id="website" name="website" data-label="Website" class="form-control" placeholder="URL" v-model="form.website">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="cf_913_capacity" class="form-label small fw-bold">จังหวัดที่ดำเนินธุรกิจ</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-map"></i></span>
+                                        <input type="text" id="cf_913_capacity" name="cf_913" data-label="Production Capacity" class="form-control" placeholder="จังหวัด" v-model="form.cf_913_capacity">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="cf_911_cert" class="form-label small fw-bold">ใบรับรอง/Certificate</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-certificate"></i></span>
+                                        <input type="text" id="cf_911_cert" name="cf_911" data-label="Certificate" class="form-control" placeholder="ใบรับรอง" v-model="form.cf_911_cert">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="cf_897_taxid" class="form-label small fw-bold">เลขประจำตัวผู้เสียภาษี (Tax ID)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                        <input type="text" id="cf_897_taxid" name="cf_897" data-label="Tax ID" class="form-control" placeholder="Tax ID" v-model="form.cf_897_taxid">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="cf_907_contact_channels" class="form-label small fw-bold">ช่องทางการติดต่อ</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-share-alt"></i></span>
+                                        <input type="text" id="cf_907_contact_channels" name="cf_907_contact_channels" data-label="Contact Channels" class="form-control" placeholder="ช่องทางติดต่อ" v-model="form.cf_907_channels">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="cf_949_ref" class="form-label small fw-bold">ผู้แนะนำ (Optional)</label>
+                                    <div class="autocomplete-container">
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-hands-helping"></i></span>
+                                            <input 
+                                                type="text" 
+                                                id="cf_949_ref" 
+                                                name="cf_949_text_display" 
+                                                data-label="Reference Member Display" 
+                                                class="form-control" 
+                                                placeholder="พิมพ์ชื่อผู้แนะนำ..." 
+                                                v-model="form.cf_949_ref"
+                                                @input="searchMember"
+                                            />
+                                        </div>
+                                        <ul v-if="searchResults.length" class="list-group autocomplete-results">
+                                            <li 
+                                                class="list-group-item list-group-item-action" 
+                                                v-for="item in searchResults" 
+                                                @click="selectRef(item)"
+                                            >
+                                                {{ item.name }} ({{ item.mobile || '-' }}) - {{ item.mid || '-' }}
+                                            </li>
+                                        </ul>
+                                        <input type="text" name="cf_949" id="cf_949_id" value="" class="d-none"> 
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="cf_909" class="form-label small fw-bold">ช่วยเหลือธุรกิจ</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-lightbulb"></i></span>
+                                        <input type="text" id="cf_909" name="cf_909" data-label="Business Goal" class="form-control" placeholder="การช่วยเหลือ" v-model="form.cf_909">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 text-center mt-5">
+                    <button class="btn btn-submit text-white btn-lg px-4" type="submit" :disabled="isSubmitting">
+                        <i class="fas fa-save me-2"></i> {{ isSubmitting ? 'กำลังบันทึก...' : 'บันทึกข้อมูล' }}
+                    </button>
+                </div>
+            </form>
+            </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script type="text/javascript">
+        const { createApp } = Vue;
+
+        // 🛑 NEW: Global Debug Toggle 🛑
+        const DEBUG_MODE_ENABLED = true; 
+
+        const app = createApp({
+            data() {
+                return {
+                    liffId: '2008486688-L5DBlNG3', 
+                    formAction: {
+                        apiUrl: 'process_lead.php', 
+                        searchApiUrl: 'process_lead.php', 
+                        redirectUrl: 'https://idea.ass.in.th/'
+                    },
+                    form: {
+                        cf_945_memberid: '',
+                        line_user_id: '',
+                        picture_url: 'https://via.placeholder.com/80/AAAAAA/FFFFFF?text=LIFF',
+                        display_name: '',
+                        cf_937_fullname: '',
+                        cf_939: '',
+                        firstname: '',
+                        lastname: '',
+                        phone: '',
+                        email: '',
+                        cf_895_lineid: '',
+                        cf_897_taxid: '',
+                        cf_899: '',
+                        cf_901_position: '',
+                        cf_903: '',
+                        cf_907_products: '',
+                        cf_907_channels: '',
+                        cf_909: '',
+                        cf_911_cert: '',
+                        cf_913_capacity: '',
+                        cf_935_expertise: '',
+                        cf_949_ref: '',
+                        company: '',
+                        website: '',
+                        designation: '',
+                        street: '',
+                        city: '',
+                        postalcode: '',
+                    },
+                    statusMessage: 'กำลังโหลด LIFF SDK...',
+                    isSubmitting: false,
+                    isLiffReady: false,
+                    isFormVisible: true,
+                    searchResults: [],
+                    refMid: '', // cf_949 (Referrer Member ID)
+                    debugDataOutput: null,
+                };
+            },
+            methods: {
+                formatUserId(userId) {
+                    if (!userId) return '';
+                    return `ID: ${userId.substring(0, 10)}...${userId.substring(userId.length - 6)}`;
+                },
+                splitName(fullName) {
+                    const parts = fullName.trim().split(/\s+/);
+                    const nickname = this.form.cf_939.trim();
+                    this.form.firstname = parts.length > 1 ? parts.shift() : '';
+                    let lastNamePart = parts.join(' ');
+                    if (lastNamePart) {
+                         this.form.lastname = `${lastNamePart} (${nickname})`.trim();
+                    } else if (this.form.cf_937_fullname) {
+                         this.form.lastname = `${this.form.cf_937_fullname.trim()} (${nickname})`.trim();
+                    }
+                    if (!this.form.lastname) {
+                        this.form.lastname = nickname;
+                    }
+                },
+                
+                async fetchMemberId() {
+                    try {
+                        const url = `${this.formAction.searchApiUrl}?action_type=get_member_id`;
+                        const res = await fetch(url);
+                        if (!res.ok) {
+                            throw new Error(`HTTP error! Status: ${res.status}`);
+                        }
+                        const json = await res.json();
+                        if (json.status === 'success' && json.member_id) {
+                            this.form.cf_945_memberid = json.member_id;
+                        } else {
+                            throw new Error(json.message || 'Failed to generate member ID.');
+                        }
+                    } catch (e) {
+                        console.error("❌ Member ID API Error:", e);
+                        document.getElementById('debug-status').innerHTML += `<p class="text-danger fw-bold mb-1">⚠️ Error: ดึง Member ID ล้มเหลว</p>`;
+                    }
+                },
+                
+                async searchMember(event) {
+                    const q = event.target.value;
+                    if (!q || q.length < 2) return this.searchResults = [];
+                    
+                    try {
+                        const url = `${this.formAction.searchApiUrl}?action_type=search_referrer_text&q=${encodeURIComponent(q)}`;
+                        const res = await fetch(url);
+                        if (!res.ok) {
+                            throw new Error(`HTTP error! Status: ${res.status}`);
+                        }
+                        const json = await res.json();
+                        this.searchResults = json.members || [];
+                    } catch (e) {
+                        console.error("❌ Search API Error:", e);
+                        this.searchResults = [];
+                    }
+                },
+                selectRef(member) {
+                    this.refMid = member.mid; // 💥 CRITICAL: Store Referrer MID (Member ID รันนิ่ง)
+                    this.form.cf_949_ref = `${member.name} (MID: ${member.mid || 'No MID'})`; // Text สำหรับแสดง
+                    this.searchResults = []; 
+                },
+                async initLiffAndFetch(liffObject) {
+                    try {
+                        this.statusMessage = 'กำลัง Initialise LIFF SDK...';
+                        await liffObject.init({ liffId: this.liffId });
+                        this.isLiffReady = true;
+                        if (!liffObject.isLoggedIn()) {
+                            this.statusMessage = '⚠️ ไม่พบการเข้าสู่ระบบ: กำลัง Redirect ไปหน้า Login...';
+                            return liffObject.login({ redirectUri: window.location.href });
+                        }
+                        this.statusMessage = '✅ เชื่อมต่อ LIFF สำเร็จ! กำลังดึงข้อมูลโปรไฟล์...';
+                        const profile = await liffObject.getProfile();
+                        this.form.line_user_id = profile.userId;
+                        this.form.display_name = profile.displayName;
+                        this.form.picture_url = profile.pictureUrl || this.form.picture_url;
+                        this.statusMessage = '🎉 เชื่อมต่อ LINE สำเร็จ! Profile ถูก Pre-fill แล้ว';
+                    } catch (e) {
+                        this.isLiffReady = false;
+                        console.error("❌ LIFF Error (Init Failed):", e);
+                        this.statusMessage = `<p class="text-danger fw-bold mb-1"><i class="fas fa-exclamation-triangle"></i> ข้อผิดพลาด: LIFF INIT ล้มเหลว</p><p class="small text-dark mb-0">โปรดตรวจสอบ: Whitelisting Domain/Console</p>`;
+                    }
+                },
+                displayFinalFormData(formElement) {
+                    const formData = new FormData(formElement);
+                    let output = 'Final Payload Sent to process_lead.php:\n\n';
+                    
+                    const cf949_input = document.getElementById("cf_949_id");
+                    const cf949_val = cf949_input ? cf949_input.value : this.refMid;
+                    const cf945_input = formElement.querySelector('input[name="cf_945"]');
+                    const cf945_val = cf945_input ? cf945_input.value : this.form.cf_945_memberid;
+
+                    output += `cf_945: ${cf945_val} (Generated Member ID - ดึงจาก Hidden Input)\n`;
+                    output += `cf_949: ${cf949_val || '*** EMPTY ***'} (Referrer MID - FINAL VALUE)\n`; 
+                    output += `---------------------------------\n`;
+
+                    formData.forEach((value, key) => {
+                        if (key === '__vtrftk' || key === 'publicid') {
+                            value = '*** OMITTED ***';
+                        }
+                        if (key !== 'cf_949') { 
+                            output += `${key}: ${value}\n`;
+                        }
+                    });
+                    
+                    this.debugDataOutput = output;
+                    console.log("Final Submitted Data (DEBUG):", output);
+
+                },
+                
+                performActualSubmit() {
+                     this.submitForm(true); 
+                },
+
+                async submitForm(forceSubmit = false) {
+                    this.isSubmitting = true;
+
+                    if (!window.vtigerValidate()) {
+                        this.isSubmitting = false;
+                        return;
+                    }
+
+                    if (!forceSubmit && !confirm("ยืนยันการส่งข้อมูลเพื่อบันทึกลง vTiger CRM หรือไม่?")) {
+                        this.isSubmitting = false;
+                        return;
+                    }
+                    
+                    this.splitName(this.form.cf_937_fullname); 
+                    
+                    const formElement = document.getElementById("__vtigerWebForm");
+                    
+                    formElement.querySelector('input[name="cf_945"]').value = this.form.cf_945_memberid; 
+                    
+                    const cf949_input = document.getElementById("cf_949_id");
+                    if(cf949_input) {
+                        cf949_input.value = this.refMid;
+                    } 
+
+                    formElement.querySelector('input[name="firstname"]').value = this.form.firstname;
+                    formElement.querySelector('input[name="lastname"]').value = this.form.lastname;
+                    formElement.querySelector('input[name="cf_957"]').value = this.form.line_user_id;
+                    formElement.querySelector('input[name="cf_959"]').value = this.form.line_user_id;
+
+
+                    if (DEBUG_MODE_ENABLED && !forceSubmit) {
+                        setTimeout(() => {
+                             const final_cf949_value = document.getElementById("cf_949_id") ? document.getElementById("cf_949_id").value : 'N/A';
+                             console.log(`Final DOM Check (cf_949.value after setTimeout): ${final_cf949_value}`);
+                             this.displayFinalFormData(formElement);
+                             this.isSubmitting = false;
+                        }, 50);
+                        return;
+                    }
+                    
+                    const submitUrl = this.formAction.apiUrl + '?action_type=submit_lead'; 
+                    const payload = new FormData(formElement);
+                    
+                    try {
+                        const response = await fetch(submitUrl, {
+                            method: 'POST',
+                            body: payload
+                        });
+
+                        if (response.ok) {
+                            window.location.href = this.formAction.redirectUrl;
+                        } else {
+                            console.error("Server Error:", response.statusText);
+                            alert(`Error submitting form via API. Status: ${response.status}`);
+                            this.isSubmitting = false;
+                        }
+
+                    } catch (error) {
+                        console.error('Submit failed:', error);
+                        alert("การส่งข้อมูลล้มเหลว (Network/CORS Error)");
+                        this.isSubmitting = false;
+                    }
+                },
+            },
+            mounted() {
+                this.statusMessage = 'กำลังโหลด LIFF SDK...';
+            }
+        }).mount("#app");
+
+        window.onload = function() {
+            setTimeout(() => {
+                const vueApp = app; 
+                if (typeof liff !== 'undefined') {
+                    vueApp.initLiffAndFetch(liff);
+                } else {
+                    const statusEl = document.getElementById('debug-status');
+                    statusEl.innerHTML = `<p class="text-danger fw-bold mb-1"><i class="fas fa-bomb"></i> ❌ ข้อผิดพลาด: LIFF SDK โหลดล้มเหลว</p><p class="small text-dark mb-0">โปรดกรอกข้อมูลด้วยตนเอง หรือลองเปิดผ่าน <a href="https://liff.line.me/${vueApp.liffId}" target="_blank">LIFF URL นี้</a> ในแอป LINE</p>`;
+                }
+                vueApp.fetchMemberId();
+            }, 500);
+        };
+        
+        window.vtigerValidate = function() {
+            var form = document.getElementById("__vtigerWebForm");
+            var inputs = form.elements;  
+            var required = [], att, val; 
+            for (var i = 0; i < inputs.length; i++) { 
+                att = inputs[i].getAttribute("required"); 
+                val = inputs[i].value; 
+                type = inputs[i].type; 
+                if(type == "email") {
+                    if(val != "") {
+                        var elemLabel = inputs[i].getAttribute("label");
+                        var emailFilter = /^[_/a-zA-Z0-9]+([!"#$%&()*+,./:;<=>?\^_`{|}~-]?[a-zA-Z0-9/_/-])*@[a-zA-Z0-9]+([\_\-\.]?[a-zA-Z0-9]+)*\.([\-\_]?[a-zA-Z0-9])+(\.?[a-zA-Z0-9]+)?$/;
+                        var illegalChars= /[\(\)\<\>\,\;\:\"\[\]]/ ;
+                        if (!emailFilter.test(val)) {alert("For "+ elemLabel +" field please enter valid email address"); return false;} 
+                        else if (val.match(illegalChars)) {alert(elemLabel +" field contains illegal characters");return false;}
+                    }
+                }
+                if (att != null) { 
+                    if (val.replace(/^\s+|\s+$/g, "") == "") { 
+                        required.push(inputs[i].getAttribute("label")); 
+                    } 
+                } 
+            } 
+            if (required.length > 0) { alert("The following fields are required: " + required.join()); return false; } 
+            
+            return true;
+        };
+
+    </script>
+</body>
+</html>

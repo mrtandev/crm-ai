@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 คู่มือ Workflow: AI Chatbot ผสาน vTiger และ LINE (ฉบับสมบูรณ์ทุกเส้นทาง)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* CSS หลัก */
+        body {
+            font-family: 'Sukhumvit Set', 'Kanit', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f9;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .header-bg {
+            background: linear-gradient(135deg, #00C4CC 0%, #16E65D 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header-bg h1 { margin: 0; font-size: 2.2em; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); }
+        .header-bg p { margin-top: 5px; font-size: 1em; opacity: 0.9; }
+        .author-info {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            font-size: 0.9em;
+        }
+        .section-heading {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            font-weight: bold;
+            border-left: 5px solid #00C4CC;
+            padding-left: 15px;
+            background-color: #f0f8ff;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        .node-card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .node-card {
+            flex: 1 1 calc(50% - 20px);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+            min-width: 300px;
+        }
+        .node-card h3 {
+            margin-top: 0;
+            color: #007bff;
+            display: flex;
+            align-items: center;
+            font-size: 1.1em;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        .node-card h3 i { margin-right: 10px; font-size: 1.2em; color: #00C4CC; }
+        .step-heading {
+            font-size: 1em;
+            font-weight: bold;
+            color: #FF6600;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+        .code-block {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+        .explanation {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-left: 3px solid #007bff;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-bg">
+        <h1>🛠️ คู่มือ Workflow: AI Chatbot & CRM Integration</h1>
+        <p>สร้างระบบอัจฉริยะบน LINE พร้อมการจัดการ Data Flow และ Logic ครบถ้วนทุกเส้นทาง</p>
+        <div class="author-info">
+            <img src="https://profile.line-scdn.net/0h0eGDNw66b0pqPX4GcyERNRptbCBJTDZYT190LFluMi9eCyscRwgpL1g_OHpWCHhIEghzeAhqYnNmLhgsdGuTfm0NMntWCy0aQ14hrA" 
+                 alt="ภาพโปรไฟล์ อ.แทน" 
+                 style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; vertical-align: middle; margin-right: 10px; border: 2px solid #fff;">
+            <span>อ.แทน [ธีรชัย โฉมทัพ] - Head of Digital Transformation</span>
+        </div>
+    </div>
+
+    <img src="https://drive.google.com/thumbnail?id=1-9nt1UmpWhfuq9HO3YtAxplFlNfVCq82&sz=w1200" 
+         alt="ภาพรวม Workflow" 
+         style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 30px; border: 1px solid #ccc;">
+
+    <div class="section-heading">I. การเริ่มต้นและการยืนยันตัวตนลูกค้า (Common Path)</div>
+    <div class="node-card-container">
+        
+        <div class="node-card">
+            <h3><i class="fas fa-plug"></i> Webhook: tr Lead Data & SetData</h3>
+            <p><strong>หน้าที่:</strong> รับข้อมูลจาก LINE และเตรียมค่าสำคัญ</p>
+            <p class="step-heading">Step 1: ตั้งค่า Webhook</p>
+            <div class="explanation">
+                กำหนด URL ที่ LINE Messaging API จะยิง Message Event เข้ามาที่ Node นี้ ซึ่งเป็นจุดรับข้อมูลหลัก (Trigger) ของ Workflow
+            </div>
+            <p class="step-heading">Step 2: SetData (เตรียม Token/ID)</p>
+            <div class="explanation">
+                ใช้ Node SetData เพื่อสกัดค่าที่จำเป็นสำหรับ Workflow ทั้งหมด เช่น Reply Token (ใช้สำหรับตอบกลับภายใน 30 วินาที) และ Line User ID (ใช้ในการค้นหาและบันทึกประวัติการสนทนา)
+            </div>
+            <p class="step-heading">💡 Data Flow: Output Keys</p>
+            <div class="code-block">
+                // Reply Token (สำหรับ Node Line Messaging)<br>
+                replyToken: {{ $json.body.events[0].replyToken }}<br><br>
+                // User ID (สำหรับ Dedupe และ Memory)<br>
+                lineUserId: {{ $json.body.events[0].source.userId }}<br><br>
+                // ข้อความล่าสุด<br>
+                lastMessage: {{ $json.body.events[0].message.text }}
+            </div>
+        </div>
+
+        <div class="node-card">
+            <h3><i class="fas fa-database"></i> PHP Dedupe API (Check Contact) & IF Node</h3>
+            <p><strong>หน้าที่:</strong> ตรวจสอบสถานะลูกค้าใน vTiger และแยกเส้นทาง</p>
+            <p class="step-heading">Step 3: Dedupe API Call</p>
+            <div class="explanation">
+                ยิง POST Request ไปยัง vTiger API Endpoint พร้อมส่ง <code>lineUserId</code> ไปตรวจสอบสถานะ<br>
+                Output คาดหวัง: <code>status: "success"</code> และ <code>action: "NEW_CUSTOMER"</code> หรือ <code>"FOUND_CUSTOMER"</code>
+            </div>
+            <p class="step-heading">Step 4: IF Node Condition</p>
+            <div class="explanation">
+                ตั้งเงื่อนไขเพื่อแยกผู้ใช้ใหม่ไปสู่การลงทะเบียน
+            </div>
+            <div class="code-block">
+                // Condition ที่ใช้ในการตรวจสอบ<br>
+                {{ $json.action }} == "NEW_CUSTOMER"
+            </div>
+            <p><strong>เส้นทาง True:</strong> ไปยัง Node **Line Regu** (ลงทะเบียน)<br>
+            <strong>เส้นทาง False:</strong> ไปยัง **Gemini Agent - Classify Intent** (ทำตามคำสั่ง)</p>
+        </div>
+
+        <div class="node-card">
+            <h3><i class="fab fa-line"></i> Line Regu (ส่ง Flex Card ลงทะเบียน)</h3>
+            <p><strong>หน้าที่:</strong> ส่ง Flex Message เชิญชวนไป **ลงทะเบียนสมาชิกใหม่** ผ่าน LIFF/External URL.</p>
+            <p class="step-heading">Step 5: ตั้งค่า Reply</p>
+            <div class="explanation">
+                Node นี้ใช้ <code>replyToken</code> ที่ดึงมาจาก Node SetData ในการส่งข้อความตอบกลับ<br>
+                Flex Message JSON คือ Bubble Card ที่มีปุ่มลิงก์ไปยังหน้า LIFF/Webform
+            </div>
+        </div>
+
+        <div class="node-card">
+            <h3><i class="fas fa-brain"></i> Gemini Agent - Classify Intent</h3>
+            <p><strong>หน้าที่:</strong> วิเคราะห์ข้อความผู้ใช้เพื่อจัดประเภท Intent ที่ถูกต้อง</p>
+            <p class="step-heading">Step 6: การตั้งค่า Prompt Instruction</p>
+            <div class="explanation">
+                กำหนด Instruction ให้ AI ส่ง JSON Key <code>intent_name</code> ออกมา โดยต้องรวมคำว่า **"บริการ"** และ **"สินค้า"** เป็น Intent **"PRODUCT_SEARCH"** เดียวกัน
+            </div>
+            <div class="code-block">
+                // ส่วนหนึ่งของ Prompt Instruction<br>
+                Intent Mapping:<br>
+                - PRODUCT_SEARCH: คำถามเกี่ยวกับสินค้า, บริการ, ราคา, แคตตาล็อก, รายการ, มีอะไรบ้าง<br>
+                - GENERAL_CHAT: คำทักทาย, ถามชื่อ, คุยเล่น<br><br>
+                Respond ONLY with a JSON object: {"intent_name": "..."}
+            </div>
+        </div>
+    </div>
+    
+    <hr style="border-top: 1px solid #ccc;">
+
+    <div class="section-heading">II. การจัดการ Intent และเส้นทางตอบกลับ (Switch Node)</div>
+    <div class="node-card-container">
+        
+        <div class="node-card">
+            <h3><i class="fas fa-sitemap"></i> Switch (Routing)</h3>
+            <p><strong>หน้าที่:</strong> แยกเส้นทางการทำงานหลักตาม Intent ที่ได้รับจาก Gemini</p>
+            <p class="step-heading">Step 7: การตั้งค่า Rule</p>
+            <div class="explanation">
+                ใช้ Output <code>{{ $json.intent_name }}</code> จาก Classify Intent เพื่อตัดสินใจ
+            </div>
+            <div class="code-block">
+                // Rule 1: Product Search (เส้นทางไปยัง vTiger)<br>
+                Condition: {{ $json.intent_name }} == "PRODUCT_SEARCH"<br><br>
+                // Rule 2: General Chat / Knowledge Base (เส้นทางขึ้นด้านบน)<br>
+                Condition: {{ $json.intent_name }} != "PRODUCT_SEARCH"
+            </div>
+        </div>
+
+        <div class="node-card">
+            <h3><i class="fas fa-comments"></i> เส้นทาง A: General Chat & KB Search</h3>
+            <p><strong>หน้าที่:</strong> จัดการคำถามทั่วไปและคำถามที่ต้องการข้อมูล</p>
+            <p class="step-heading">Step 8: AI Agent และ Memory</p>
+            <div class="explanation">
+                Node **AI Agent** ต้องตั้งค่า **Simple Memory** เพื่อ **บันทึกประวัติการสนทนา** โดยใช้ <code>lineUserId</code> เป็น Key เพื่อให้ AI สนทนาได้อย่างต่อเนื่อง
+            </div>
+            <p class="step-heading">Step 9: Search KB (Knowledge Base)</p>
+            <div class="explanation">
+                หากไม่ใช่การสนทนาทั่วไป (General Chat) Flow จะพยายามค้นหาคำตอบจากฐานความรู้ (KB) ก่อนที่จะส่งไป Prepare Reply Data
+            </div>
+        </div>
+        
+    </div>
+
+    <hr style="border-top: 1px solid #ccc;">
+
+    <div class="section-heading">III. เส้นทางค้นหาสินค้า (Deep Dive: Product Search)</div>
+    <div class="node-card-container">
+        
+        <div class="node-card">
+            <h3><i class="fas fa-calculator"></i> AIProductExtraction1 (Logic Node)</h3>
+            <p><strong>หน้าที่:</strong> กำหนด Business Logic **(action_type)** และ Clean Data</p>
+            <p class="step-heading">Step 11: โค้ด JavaScript (Logic)</p>
+            <div class="code-block">
+                // 1. ดึงข้อมูลจาก AI/ProductExtraction<br>
+                const rawInput = items[0].json; <br>
+                const productType = rawInput.product_type ? rawInput.product_type.trim() : '';<br>
+                let actionType = productType ? 'get_stock' : 'getAll'; // 💥 Logic หลัก<br><br>
+                // 2. สร้าง Output ที่สะอาด<br>
+                const vtigerParameters = {<br>
+                &nbsp;&nbsp;action_type: actionType,<br>
+                &nbsp;&nbsp;product_type: productType,<br>
+                &nbsp;&nbsp;brand: rawInput.brand ? rawInput.brand.trim() : '',<br>
+                &nbsp;&nbsp;max_price: parseFloat(rawInput.max_price) || 0,<br>
+                };<br>
+                return [{ json: vtigerParameters }];
+            </div>
+        </div>
+
+        <div class="node-card">
+            <h3><i class="fas fa-search-dollar"></i> vTiger:ProductSearch (API Call)</h3>
+            <p><strong>หน้าที่:</strong> ยิง API POST ไปยัง vTiger เพื่อค้นหาสินค้า/บริการ</p>
+            <p class="step-heading">Step 12: การตั้งค่า Request Body (สำคัญ)</p>
+            <div class="explanation">
+                ต้องใช้ Method <strong>POST</strong> และส่งข้อมูลเป็น JSON Body เพื่อให้ API ประมวลผลได้<br>
+                <strong>บันทึก:</strong> ต้องอัปเดตไฟล์ PHP API บน Server เพื่อแก้ไขปัญหา SQL <code>UNION ALL</code> และ <code>Unknown column</code>
+            </div>
+            <div class="code-block">
+                // Request Body JSON<br>
+                {<br>
+                &nbsp;&nbsp;"action_type": "{{ $json.action_type }}",<br>
+                &nbsp;&nbsp;"product_type": "{{ $json.product_type }}",<br>
+                // ... อื่นๆ<br>
+                }
+            </div>
+        </div>
+
+        <div class="node-card">
+            <h3><i class="fas fa-puzzle-piece"></i> Prepare Reply Data (สร้าง Flex Message)</h3>
+            <p><strong>หน้าที่:</strong> แปลง Array สินค้าเป็น Flex Message Carousel</p>
+            <p class="step-heading">Step 13: โค้ด JavaScript (Final Output Logic)</p>
+            <div class="explanation">
+                โค้ดจะวนลูป <code>product_data</code> สร้าง Bubble Card แต่ละใบ (ตามโครงสร้างสวยงามที่คุณให้มา) แล้วห่อด้วย **Contents Object** เพื่อให้ Node Line ยอมรับ
+            </div>
+            <div class="code-block">
+                // ... (โค้ดสร้าง array of Bubble JSON: carouselColumns)<br>
+                const flexContentsObject = {<br>
+                &nbsp;&nbsp;"type": "carousel",<br>
+                &nbsp;&nbsp;"contents": carouselColumns<br>
+                };<br>
+                // 💥 ส่ง Contents Object เดี่ยว<br>
+                return [{ json: { lineReply: flexContentsObject } }];
+            </div>
+        </div>
+        
+        <div class="node-card">
+            <h3><i class="fab fa-line"></i> Line Card (ส่งข้อความ)</h3>
+            <p><strong>หน้าที่:</strong> ส่ง Flex Message Carousel ไปยัง LINE User</p>
+            <p class="step-heading">Step 14: การตั้งค่า Flex Message JSON</p>
+            <div class="explanation">
+                ใช้ Expression เพื่อบังคับแปลง Object ให้เป็น JSON String ที่ถูกต้อง (แก้ไขปัญหา [Object Object] และ Error 400)
+            </div>
+            <div class="code-block">
+                // Expression ในช่อง Flex Message JSON<br>
+                {{ JSON.stringify($json.lineReply) }}
+            </div>
+        </div>
+    </div>
+
+    <hr style="border-top: 1px solid #ccc;">
+
+    <div style="text-align: center; margin-top: 30px; font-size: 0.9em; color: #666;">
+        <p>คู่มือนี้จัดทำโดย อ.แทน (Senior Full-Stack Developer) เพื่อการเรียนรู้และพัฒนาต่อยอด</p>
+    </div>
+</div>
+
+</body>
+</html>

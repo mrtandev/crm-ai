@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สรุป Workflow Line-vTiger และ AI Agent (อ.แทน)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Kanit', sans-serif; background-color: #f7f7f7; }
+        .container { max-width: 1200px; }
+        .step-card { 
+            transition: all 0.3s ease-in-out;
+            border-left: 5px solid #2563eb;
+        }
+        .step-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .data-flow { color: #10b981; font-weight: 600; }
+        .context-key { background-color: #e0f2f1; color: #00796b; padding: 2px 6px; border-radius: 4px; font-weight: 500; }
+        .master-fix { color: #f97316; font-weight: 700; }
+        .ai-branch { border-left-color: #3b82f6; }
+        .db-branch { border-left-color: #9333ea; }
+        .fallback-branch { border-left-color: #ef4444; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="container mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">สรุป Workflow N8N: LineOA-vTiger & AI Agent</h1>
+            <p class="text-xl text-blue-600">การจัดการ Context (Contextual Flow) และ Master Mapping สำหรับสมาคม IDEA</p>
+        </header>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-gray-700">1. โครงสร้างหลักและ Data Flow (Initial Steps)</h2>
+            
+            <div class="space-y-6">
+                <!-- Step 1: Webhook & Set Data -->
+                <div class="step-card bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2 flex items-center text-blue-800">
+                        <span class="bg-blue-100 text-blue-600 rounded-full w-8 h-8 flex items-center justify-center mr-3">1</span> Webhook & Set:Data
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-2">รับ Input จาก LineOA และจัดเตรียม Context ที่จำเป็นสำหรับทุก Node ถัดไป</p>
+                    <p class="text-sm">
+                        <span class="data-flow">Data Preserved:</span>
+                        <span class="context-key">reply_token</span> (สำหรับตอบกลับ Line), 
+                        <span class="context-key">user_message</span> (สำหรับ AI Agent),
+                        <span class="context-key">line_user_id</span>,
+                        <span class="context-key">action_type</span> ("dedupe")
+                    </p>
+                </div>
+
+                <!-- Step 2: Dedupe API -->
+                <div class="step-card bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2 flex items-center text-blue-800">
+                        <span class="bg-blue-100 text-blue-600 rounded-full w-8 h-8 flex items-center justify-center mr-3">2</span> PHP Dedupe API (process_lead.php)
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-2">
+                        **ฟังก์ชัน:** ตรวจสอบ Line User ID ใน Leads/Contacts (cf_957, cf_959) เพื่อหา `FOUND_CUSTOMER` หรือ `NEW_CUSTOMER`
+                        <span class="master-fix"> (FIX: แก้ปัญหา VARCHAR(20) และ Logic Input Handling/CURL)</span>
+                    </p>
+                    <p class="text-sm">
+                        <span class="data-flow">Critical Output:</span> <span class="context-key">action</span>, <span class="context-key">record_id</span>, และ <span class="context-key">input_context</span> (ทั้งหมดของ Input ถูก Pass Through กลับมา)
+                    </p>
+                </div>
+
+                <!-- Step 3: Conditional Branching -->
+                <div class="step-card bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2 flex items-center text-blue-800">
+                        <span class="bg-blue-100 text-blue-600 rounded-full w-8 h-8 flex items-center justify-center mr-3">3</span> If (แยก Branch)
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-2">
+                        **เงื่อนไข:** <code>{{ $json.action }} is equal to NEW_CUSTOMER</code>
+                    </p>
+                    <p class="text-sm">
+                        <span class="text-green-600 font-semibold">True Branch (ลูกค้าใหม่):</span> ไปสู่ Node Line Messaging (Reply/สร้าง Lead)
+                        <br>
+                        <span class="text-red-600 font-semibold">False Branch (ลูกค้าเก่า):</span> ไปสู่ Node AI Agent (วิเคราะห์ Intent) <span class="master-fix"> (FIX: Logic ถูกต้องแล้ว ต้องใช้ False Branch เพื่อส่งต่อไป Agent)</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-gray-700">2. False Branch: AI Agent & Intent Classification</h2>
+
+            <div class="space-y-6">
+                <!-- Step 4: AI Agent -->
+                <div class="step-card ai-branch bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2 flex items-center text-blue-800">
+                        <span class="bg-blue-200 text-blue-700 rounded-full w-8 h-8 flex items-center justify-center mr-3">4</span> Gemini Agent (Classify Intent)
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-2">
+                        **Input:** <code>{{ $json.input_context.text }}</code>
+                        <span class="master-fix">(FIX: แก้ปัญหา Context หายไปใน If Node)</span>
+                    </p>
+                    <p class="text-sm">
+                        **System Prompt:** "เจ้าหน้าที่สมาคม IDEA" (สุภาพ, รับฟัง, ไม่ให้ข้อมูลเฉพาะทาง)
+                    </p>
+                    <p class="text-sm font-semibold mt-2">
+                        <span class="data-flow">Output:</span> <span class="context-key">GENERAL_CHAT</span>, <span class="context-key">PRODUCT_INQUIRY</span>, หรือ <span class="context-key">REQUEST_QUOTE</span>
+                    </p>
+                </div>
+                
+                <!-- Step 5: Intent Switch -->
+                <div class="step-card bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2 flex items-center text-blue-800">
+                        <span class="bg-blue-100 text-blue-600 rounded-full w-8 h-8 flex items-center justify-center mr-3">5</span> Switch (แยกตาม Intent)
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-2">
+                        **เงื่อนไข:** ตรวจสอบ <code>{{ $json.output }}</code> (ค่า Intent ที่ Agent สร้าง)
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 border-b pb-2 text-gray-700">3. Output 1: GENERAL_CHAT (Knowledge Base & Scoring)</h2>
+
+            <div class="space-y-6">
+                <!-- Step 6: Extract Keyword & Translate -->
+                <div class="step-card db-branch bg-green-50 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2 flex items-center text-green-700">
+                        <span class="bg-green-200 text-green-700 rounded-full w-8 h-8 flex items-center justify-center mr-3">6</span> KB Search Prep (TH→EN)
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-2">
+                        <span class="font-semibold">Logic:</span> Extract Keyword (TH) → Translate Keyword (EN) → Search Sheet "Informations" (Column A)
+                    </p>
+                </div>
+                
+                <!-- Step 7: KB Found Check -->
+                <div class="step-card bg-yellow-50 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2 flex items-center text-yellow-800">
+                        <span class="bg-yellow-200 text-yellow-800 rounded-full w-8 h-8 flex items-center justify-center mr-3">7</span> If: KB Found?
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-2">
+                        **True:** ดึงค่าจาก Column "Result" ใน Sheet มาตอบ (Accurate Answer)
+                        <br>
+                        **False:** ไปยัง Node **Gemini Agent** (Fallback Response)
+                    </p>
+                </div>
+
+                <!-- Step 8: Log & Score -->
+                <div class="step-card bg-indigo-50 p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-2 flex items-center text-indigo-700">
+                        <span class="bg-indigo-200 text-indigo-700 rounded-full w-8 h-8 flex items-center justify-center mr-3">8</span> Log, Score & Reply
+                    </h3>
+                    <ul class="list-disc ml-5 text-sm text-gray-600">
+                        <li>Google Sheets (1): Log Chat + Timestamp</li>
+                        <li>Function: Calculate Score (New Logic: Member Type, Message Length)</li>
+                        <li>Google Sheets (2): Append Score Card (UserID, DisplayName, Score)</li>
+                        <li>Line Messaging: Reply (ใช้คำตอบจาก Sheet หรือ Agent)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>
